@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "source": "snapshot-proxy",
+    "generated": "2026-06-26",
+    "note": "Wartości metryczne (RC, handicapy, korelacje) są PROXY do walidacji logiki modelu. Rdzeń składu i pozycje — realne (publiczne profile 25/26). Tryb live podmienia ten plik danymi z FBref."
+  },
+  "squad": [
+    { "id": "gk",  "name": "Bramkarz (filar)",          "pos": "GK",  "line": "Bramka", "rc": 78, "real": false },
+    { "id": "rcb", "name": "Środk. obrońca P",           "pos": "RCB", "line": "Obrona", "rc": 74, "real": false },
+    { "id": "ccb", "name": "Stoper środkowy",            "pos": "CCB", "line": "Obrona", "rc": 76, "real": false },
+    { "id": "lcb", "name": "Środk. obrońca L",           "pos": "LCB", "line": "Obrona", "rc": 73, "real": false },
+    { "id": "rwb", "name": "Wahadłowy P",                "pos": "RWB", "line": "Obrona", "rc": 71, "real": false },
+    { "id": "lwb", "name": "Wahadłowy L",                "pos": "LWB", "line": "Obrona", "rc": 72, "real": false },
+    { "id": "dm",  "name": "Pomocnik defensywny",        "pos": "DM",  "line": "Pomoc",  "rc": 75, "real": false },
+    { "id": "cm",  "name": "Pomocnik środkowy",          "pos": "CM",  "line": "Pomoc",  "rc": 74, "real": false },
+    { "id": "am",  "name": "M. Cebula (ofens. pom.)",    "pos": "AM",  "line": "Pomoc",  "rc": 73, "real": true },
+    { "id": "st",  "name": "J. B. Brunes (napastnik)",   "pos": "ST",  "line": "Atak",   "rc": 79, "real": true },
+    { "id": "sw",  "name": "S. Kittel (skrzydło/pom.)",  "pos": "AM",  "line": "Pomoc",  "rc": 72, "real": true }
+  ],
+  "leagues": [
+    { "lg": "Ekstraklasa (PL)",   "base": true,  "Obrona": 0,  "Pomoc": 0,  "Atak": 0,  "Bramka": 0 },
+    { "lg": "Liga Belgijska",     "base": false, "Obrona": 8,  "Pomoc": 10, "Atak": 6,  "Bramka": 4 },
+    { "lg": "Eredivisie (NL)",    "base": false, "Obrona": 6,  "Pomoc": 12, "Atak": 9,  "Bramka": 5 },
+    { "lg": "Liga Portugalska",   "base": false, "Obrona": 11, "Pomoc": 9,  "Atak": 12, "Bramka": 7 },
+    { "lg": "Championship (EN)",  "base": false, "Obrona": 14, "Pomoc": 7,  "Atak": 8,  "Bramka": 9 },
+    { "lg": "2. Bundesliga (DE)", "base": false, "Obrona": 9,  "Pomoc": 8,  "Atak": 7,  "Bramka": 6 },
+    { "lg": "Superliga (DK)",     "base": false, "Obrona": 5,  "Pomoc": 6,  "Atak": 5,  "Bramka": 3 }
+  ],
+  "pool": [
+    { "id": "p1",  "lg": "Liga Belgijska",     "pos": "AM",  "raw": 70, "age": 23, "mv": 3.5, "contract": 2027 },
+    { "id": "p2",  "lg": "Eredivisie (NL)",    "pos": "AM",  "raw": 69, "age": 21, "mv": 4.0, "contract": 2028 },
+    { "id": "p3",  "lg": "Liga Portugalska",   "pos": "ST",  "raw": 72, "age": 25, "mv": 6.5, "contract": 2026 },
+    { "id": "p4",  "lg": "Championship (EN)",  "pos": "RCB", "raw": 71, "age": 27, "mv": 5.0, "contract": 2027 },
+    { "id": "p5",  "lg": "Superliga (DK)",     "pos": "DM",  "raw": 73, "age": 24, "mv": 4.8, "contract": 2027 },
+    { "id": "p6",  "lg": "Liga Belgijska",     "pos": "ST",  "raw": 74, "age": 22, "mv": 8.0, "contract": 2028 },
+    { "id": "p7",  "lg": "2. Bundesliga (DE)", "pos": "CM",  "raw": 72, "age": 26, "mv": 3.2, "contract": 2026 },
+    { "id": "p8",  "lg": "Eredivisie (NL)",    "pos": "LWB", "raw": 70, "age": 20, "mv": 2.8, "contract": 2029 },
+    { "id": "p9",  "lg": "Liga Portugalska",   "pos": "CCB", "raw": 73, "age": 28, "mv": 4.5, "contract": 2026 },
+    { "id": "p10", "lg": "Championship (EN)",  "pos": "DM",  "raw": 70, "age": 29, "mv": 2.5, "contract": 2026 },
+    { "id": "p11", "lg": "Superliga (DK)",     "pos": "RWB", "raw": 69, "age": 23, "mv": 2.2, "contract": 2027 },
+    { "id": "p12", "lg": "Liga Belgijska",     "pos": "CM",  "raw": 71, "age": 24, "mv": 3.9, "contract": 2028 }
+  ],
+  "correlations": {
+    "DM-CM": 0.72, "DM-AM": 0.41, "DM-CCB": 0.66, "CM-AM": 0.78,
+    "CM-ST": 0.39, "AM-ST": 0.81, "AM-LWB": 0.34, "AM-RWB": 0.36,
+    "LWB-RWB": 0.58, "LWB-AM": 0.34, "RWB-ST": 0.29, "CCB-DM": 0.66
+  }
+}
