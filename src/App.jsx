@@ -27,6 +27,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("fit"); // fit | price | level
   const [short, setShort] = useState([]); // shortlist of pool ids
+  const [help, setHelp] = useState(false); // instructions panel
+  const [hintSeen, setHintSeen] = useState(false);
   const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
   // Load snapshot on mount
@@ -141,6 +143,12 @@ export default function App() {
           <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
             <Tag color={C.good}>● realne</Tag>
             <Tag color={C.proxy}>● proxy</Tag>
+            <button onClick={() => setHelp((h) => !h)} style={{
+              background: help ? C.panel2 : "transparent", color: C.ink,
+              border: `1px solid ${help ? C.redSoft : C.line}`, padding: "7px 13px",
+              borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>
+              {help ? "✕ Zamknij" : "? Jak korzystać"}
+            </button>
             <button onClick={fetchLive} disabled={loading} style={{
               background: isLive ? C.good : "transparent", color: isLive ? "#04140D" : C.dim,
               border: `1px solid ${isLive ? C.good : C.line}`, padding: "7px 13px",
@@ -158,6 +166,45 @@ export default function App() {
         {err && <div style={{ marginTop: 10, fontSize: 12, color: C.warn }}>{err}</div>}
       </header>
 
+      {help && (
+        <div style={{ padding: "18px 32px 0", maxWidth: 1100 }}>
+          <div style={{ background: C.panel, border: `1px solid ${C.redSoft}`, borderRadius: 12, padding: "20px 22px" }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14 }}>
+              <span className="mono" style={{ fontSize: 13, color: C.redSoft, fontWeight: 700 }}>i</span>
+              <h2 className="mono" style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Jak korzystać z narzędzia</h2>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 16 }}>
+              <HelpStep n="1" t="Cyfrowy bliźniak"
+                d="Pierwsza zakładka to obecny skład Rakowa. Każda karta ma poziom RC (Ekstraklasa = baza odniesienia). Kliknij zawodnika, by przejść do jego odpowiedników." />
+              <HelpStep n="2" t="Odpowiednicy"
+                d="Lista kandydatów z lig europejskich na tej samej pozycji. Pokazujemy skorygowany poziom, dopasowanie (%), wiek, kontrakt i szacowaną cenę z widełkami. Sortuj po dopasowaniu, cenie lub poziomie." />
+              <HelpStep n="3" t="Lista obserwowanych"
+                d="Gwiazdka ☆ przy kandydacie dodaje go do listy na dole panelu. Narzędzie sumuje łączny szacowany koszt zaznaczonych zawodników." />
+              <HelpStep n="4" t="Handicapy lig"
+                d="Tabela pokazuje, o ile dana liga różni się poziomem od Ekstraklasy — osobno dla każdej linii (obrona / pomoc / atak). To te korekty przeliczają surowy poziom kandydata." />
+              <HelpStep n="5" t="Korelacje formacji"
+                d="Macierz pokazuje, które pozycje najsilniej współzależą w układzie. Ciemniejsze pole = silniejsza zależność. Pod spodem skrót najważniejszych wniosków." />
+              <HelpStep n="6" t="Tryb danych"
+                d="Banner u góry mówi, skąd są dane. „snapshot (proxy)” to wartości zastępcze do pokazania logiki. Przycisk live podpina realne dane, gdy źródło zostanie skonfigurowane." />
+            </div>
+
+            <div style={{ marginTop: 16, padding: "12px 14px", background: `${C.proxy}14`,
+              border: `1px solid ${C.proxy}44`, borderRadius: 10 }}>
+              <b style={{ color: C.proxy, fontSize: 12.5 }}>Ważne — czytanie liczb:</b>
+              <span style={{ fontSize: 12.5, color: C.dim }}> Wszystko oznaczone na bursztynowo (poziomy RC,
+              handicapy, ceny, korelacje) to obecnie wartości <b>zastępcze</b>, służące do pokazania, jak model
+              działa. Realne są nazwiska i pozycje rdzenia składu. To prototyp do walidacji koncepcji — liczby
+              nie są jeszcze rekomendacją transferową.</span>
+            </div>
+
+            <button onClick={() => setHelp(false)} style={{ marginTop: 14, background: "transparent",
+              color: C.dim, border: `1px solid ${C.line}`, padding: "7px 14px", borderRadius: 8,
+              cursor: "pointer", fontSize: 12, fontWeight: 600 }}>Rozumiem, zamknij</button>
+          </div>
+        </div>
+      )}
+
       <nav style={{ display: "flex", gap: 4, padding: "16px 32px 0", flexWrap: "wrap" }}>
         {tabs.map(([k, label]) => (
           <button key={k} onClick={() => setTab(k)} style={{
@@ -166,6 +213,27 @@ export default function App() {
             borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 600 }}>{label}</button>
         ))}
       </nav>
+
+      {!help && !hintSeen && (
+        <div style={{ padding: "12px 32px 0", maxWidth: 1100 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: `${C.redSoft}12`,
+            border: `1px solid ${C.redSoft}40`, borderRadius: 10, padding: "10px 14px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: 12.5, color: C.ink }}>
+              Pierwszy raz tutaj? Otwórz krótką instrukcję obsługi w prawym górnym rogu.
+            </span>
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+              <button onClick={() => { setHelp(true); setHintSeen(true); }} style={{ background: C.red, color: "#fff",
+                border: "none", padding: "6px 13px", borderRadius: 7, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>
+                Pokaż „Jak korzystać”
+              </button>
+              <button onClick={() => setHintSeen(true)} style={{ background: "transparent", color: C.dim,
+                border: `1px solid ${C.line}`, padding: "6px 11px", borderRadius: 7, cursor: "pointer", fontSize: 12 }}>
+                Ukryj
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main style={{ padding: "22px 32px 0", maxWidth: 1100 }}>
         {tab === "twin" && (
@@ -397,6 +465,20 @@ function Centered({ children }) {
     <div style={{ minHeight: "100vh", background: C.bg, color: C.dim, display: "flex",
       alignItems: "center", justifyContent: "center", fontFamily: "system-ui",
       fontSize: 14, padding: 24, textAlign: "center" }}>{children}</div>
+  );
+}
+
+function HelpStep({ n, t, d }) {
+  return (
+    <div style={{ display: "flex", gap: 11 }}>
+      <div className="mono" style={{ flexShrink: 0, width: 24, height: 24, borderRadius: 6,
+        background: "#C8102E", color: "#fff", fontSize: 12, fontWeight: 700,
+        display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</div>
+      <div>
+        <div style={{ fontSize: 13.5, fontWeight: 700, color: "#E8EDE9", marginBottom: 3 }}>{t}</div>
+        <div style={{ fontSize: 12, color: "#8FA39B", lineHeight: 1.5 }}>{d}</div>
+      </div>
+    </div>
   );
 }
 
