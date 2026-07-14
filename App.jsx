@@ -8,10 +8,20 @@ const C = {
   good: "#3ECF8E", warn: "#E8A13A", bad: "#E5544B", proxy: "#E8A13A",
 };
 
-const pctToRC = (p) => Math.round(p / 10);
-const lineOfPos = (pos) =>
-  ({ GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
-     LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" }[pos]);
+const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
+const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
+  LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
+// Domyślna linia dla pozycji spoza mapy (np. "W", "LW", "CF", "RB").
+// Bez tego nieznana pozycja dawała undefined → NaN w całym łańcuchu liczenia.
+const lineOfPos = (pos) => {
+  if (LINE_MAP[pos]) return LINE_MAP[pos];
+  const s = String(pos || "").toUpperCase();
+  if (s.includes("GK")) return "Bramka";
+  if (/B$/.test(s) || s.includes("CB") || s === "RB" || s === "LB") return "Obrona";
+  if (s.includes("ST") || s.includes("CF") || s === "FW") return "Atak";
+  if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc"; // skrzydła i pomoc
+  return "Pomoc";
+};
 
 // ============================ APP ============================
 export default function App() {
@@ -57,13 +67,15 @@ export default function App() {
   const adjusted = (p) => {
     const lg = data.leagues.find((l) => l.lg === p.lg);
     const line = lineOfPos(p.pos);
-    const hc = lg ? lg[line] : 0;
-    return { adj: p.raw + pctToRC(hc) * 2, hcRC: pctToRC(hc), pct: hc, line };
+    const hc = Number(lg ? lg[line] : 0) || 0;
+    const raw = Number(p.raw) || 0;
+    return { adj: raw + pctToRC(hc) * 2, hcRC: pctToRC(hc), pct: hc, line };
   };
   const matchScore = (player, p) => {
     if (p.pos !== player.pos) return null;
     const { adj } = adjusted(p);
-    const diff = adj - player.rc;
+    const rc = Number(player.rc) || 0;
+    const diff = adj - rc;
     // Koherencja z danych (nowy model). Fallback do starego "fit" gdy brak.
     const coherence = typeof p.coherence === "number" ? p.coherence
       : Math.max(0, 100 - Math.abs(diff) * 7);
@@ -73,8 +85,9 @@ export default function App() {
   };
   const estimatePrice = (player, p) => {
     const { adj } = adjusted(p);
-    const base = p.mv || 0;
-    const levelF = 1 + Math.max(-0.3, (adj - player.rc) * 0.04);
+    const base = Number(p.mv) || 0;
+    const rc = Number(player.rc) || 0;
+    const levelF = 1 + Math.max(-0.3, (adj - rc) * 0.04);
     const ageF = p.age <= 23 ? 1.25 : p.age <= 26 ? 1.05 : p.age <= 29 ? 0.85 : 0.65;
     const yearsLeft = Math.max(0, (p.contract || 2026) - 2026);
     const contractF = yearsLeft >= 3 ? 1.2 : yearsLeft === 2 ? 1.0 : yearsLeft === 1 ? 0.75 : 0.5;
