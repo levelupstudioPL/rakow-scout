@@ -20,7 +20,7 @@ export default function App() {
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState("fit");
+  const [sortBy, setSortBy] = useState("coherence");
   const [short, setShort] = useState([]);
   const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
@@ -64,7 +64,12 @@ export default function App() {
     if (p.pos !== player.pos) return null;
     const { adj } = adjusted(p);
     const diff = adj - player.rc;
-    return { adj, diff, fit: Math.max(0, 100 - Math.abs(diff) * 7) };
+    // Koherencja z danych (nowy model). Fallback do starego "fit" gdy brak.
+    const coherence = typeof p.coherence === "number" ? p.coherence
+      : Math.max(0, 100 - Math.abs(diff) * 7);
+    const level = typeof p.raw === "number" ? p.raw : adj;
+    return { adj, diff, level, coherence, ref: p.coherence_ref || null,
+             fit: coherence };
   };
   const estimatePrice = (player, p) => {
     const { adj } = adjusted(p);
@@ -83,9 +88,11 @@ export default function App() {
     if (!data || !sel) return [];
     const rows = data.pool.map((p) => ({ p, m: matchScore(sel, p) }))
       .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(sel, x.p) }));
-    const s = { fit: (a, b) => b.m.fit - a.m.fit, price: (a, b) => a.price.est - b.price.est,
-      level: (a, b) => b.m.adj - a.m.adj };
-    return rows.sort(s[sortBy]);
+    const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
+      coherence: (a, b) => b.m.coherence - a.m.coherence,
+      price: (a, b) => a.price.est - b.price.est,
+      level: (a, b) => b.m.level - a.m.level };
+    return rows.sort(s[sortBy] || s.coherence);
   }, [data, sel, sortBy]);
 
   const fmt = (v) => `€${v.toFixed(1)}M`;
@@ -263,7 +270,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </select>
         <div style={{ display: "flex", gap: 5, marginLeft: "auto", alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, color: C.steel }}>sortuj</span>
-          {[["fit", "dopasowanie"], ["price", "cena"], ["level", "poziom"]].map(([k, l]) => (
+          {[["coherence", "koherencja"], ["level", "poziom"], ["price", "cena"]].map(([k, l]) => (
             <button key={k} onClick={() => setSortBy(k)} style={{ background: sortBy === k ? C.panelHi : "transparent",
               color: sortBy === k ? C.bone : C.steel, border: `1px solid ${sortBy === k ? C.redHi : C.line}`,
               padding: "7px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{l}</button>
@@ -276,7 +283,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
           <Kpi l="Kandydatów" v={candidates.length} />
           <Kpi l="Najtańszy" v={fmt(Math.min(...candidates.map((c) => c.price.est)))} c={C.good} />
           <Kpi l="Mediana" v={fmt(median(candidates.map((c) => c.price.est)))} c={C.proxy} />
-          <Kpi l="Najlepsze" v={`${Math.round(Math.max(...candidates.map((c) => c.m.fit)))}%`} c={C.redHi} />
+          <Kpi l="Najlepsza koh." v={`${Math.round(Math.max(...candidates.map((c) => c.m.coherence)))}%`} c={C.redHi} />
         </div>
       )}
 
@@ -296,20 +303,20 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
                 <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
               </div>
               <div>
-                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{m.adj}</div>
-                <div style={{ fontSize: 10, color: C.steel }}>poziom · RC+{a.hcRC}</div>
+                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{m.level}</div>
+                <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
               </div>
               <div>
-                <div style={{ fontSize: 11.5, color: m.diff >= 0 ? C.good : C.warn, marginBottom: 5 }}>
-                  Δ vs RC <b className="mono">{m.diff >= 0 ? "+" : ""}{m.diff}</b>
+                <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 5 }}>
+                  koherencja{m.ref ? <span style={{ color: C.steelHi }}> · {m.ref}</span> : ""}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <div style={{ flex: 1, height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
-                    <div className="bar" style={{ width: `${m.fit}%`, height: "100%",
-                      background: m.fit > 70 ? C.good : m.fit > 45 ? C.warn : C.bad }} />
+                    <div className="bar" style={{ width: `${m.coherence}%`, height: "100%",
+                      background: m.coherence > 70 ? C.good : m.coherence > 45 ? C.warn : C.bad }} />
                   </div>
                   <span className="mono" style={{ fontSize: 11, fontWeight: 700,
-                    color: m.fit > 70 ? C.good : m.fit > 45 ? C.warn : C.bad }}>{Math.round(m.fit)}%</span>
+                    color: m.coherence > 70 ? C.good : m.coherence > 45 ? C.warn : C.bad }}>{Math.round(m.coherence)}%</span>
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
@@ -445,7 +452,7 @@ function CorrView({ data }) {
 function HelpView({ data, setView }) {
   const steps = [
     ["Skład", "Zakładka „Skład” to obecny zespół ułożony liniami, jak na tablicy taktycznej. Każda karta ma poziom RC (Ekstraklasa = baza). Klik przenosi do odpowiedników."],
-    ["Odpowiednicy", "Kandydaci z lig europejskich na tej samej pozycji. Widać skorygowany poziom, dopasowanie %, wiek, kontrakt i szacowaną cenę z widełkami. Sortuj po dopasowaniu, cenie lub poziomie."],
+    ["Odpowiednicy", "Kandydaci z lig europejskich na tej samej pozycji. Dwie miary obok siebie: poziom (jak dobry jest zawodnik) i koherencja (jak podobnie gra do zawodnika Rakowa, którego miałby zastąpić). Sortuj po koherencji, poziomie lub cenie."],
     ["Lista obserwowanych", "Gwiazdka przy kandydacie dodaje go do listy na dole. Aplikacja sumuje łączny szacowany koszt zaznaczonych zawodników."],
     ["Handicapy", "Tabela: o ile każda liga różni się od Ekstraklasy, osobno per linia. To te korekty podnoszą lub obniżają surowy poziom kandydata."],
     ["Formacja", "Macierz zależności między pozycjami — które role najsilniej ze sobą współgrają w układzie."],
