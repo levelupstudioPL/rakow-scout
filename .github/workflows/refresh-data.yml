@@ -1,4 +1,4 @@
-yamlname: Odśwież dane ze StatsBomb
+name: Odśwież dane ze StatsBomb
 
 on:
   workflow_dispatch:
