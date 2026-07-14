@@ -1,0 +1,40 @@
+yamlname: Odśwież dane ze StatsBomb
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod repo
+        uses: actions/checkout@v4
+
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Zainstaluj zależności
+        run: pip install statsbombpy pandas
+
+      - name: Pobierz dane i wygeneruj data.json
+        env:
+          SB_USERNAME: ${{ secrets.SB_USERNAME }}
+          SB_PASSWORD: ${{ secrets.SB_PASSWORD }}
+        run: python scripts/fetch_statsbomb.py
+
+      - name: Zapisz zmiany
+        run: |
+          if git diff --quiet -- public/data.json; then
+            echo "Brak zmian w data.json."
+          else
+            git config user.name "rakow-scout-bot"
+            git config user.email "actions@github.com"
+            git add public/data.json
+            git commit -m "Odswiezenie danych ze StatsBomb [auto]"
+            git push
+          fi
