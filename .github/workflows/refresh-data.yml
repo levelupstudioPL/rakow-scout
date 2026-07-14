@@ -36,5 +36,6 @@ jobs:
             git config user.email "actions@github.com"
             git add public/data.json
             git commit -m "Odswiezenie danych ze StatsBomb [auto]"
+            git pull --rebase origin main
             git push
           fi
