@@ -25,10 +25,11 @@ import sys
 import json
 from pathlib import Path
 
-# Nowe moduły: pełna metoda handicapów + dane z Transfermarktu.
+# Nowe moduły: handicapy, Transfermarkt, koherencja profili.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import handicap as hc
 import transfermarkt as tm
+import coherence as coh
 
 OUT = Path(__file__).resolve().parent.parent / "public" / "data.json"
 
@@ -133,21 +134,16 @@ def league_handicap(league_rows, base_rows) -> dict:
 
 def build_dataset(sb, creds):
     if not LEAGUE_CONFIG:
-        die(
-            "LEAGUE_CONFIG jest puste. Najpierw sprawdź, do których rozgrywek masz "
-            "dostęp:  uruchom  python scripts/list_statsbomb_competitions.py  i wpisz "
-            "competition_id/season_id do LEAGUE_CONFIG w tym pliku."
-        )
+        die("LEAGUE_CONFIG jest puste — uzupełnij competition_id/season_id.")
 
-    # --- Pass 1: pobierz surowe wiersze zawodników dla każdej ligi ---
-    league_rows = {}   # nazwa ligi -> lista wierszy zawodników
+    # --- Pass 1: pobierz pełne profile metryk dla każdej ligi ---
+    league_rows = {}
     base_name = None
     for lg in LEAGUE_CONFIG:
         try:
             stats = sb.player_season_stats(
                 competition_id=lg["competition_id"],
-                season_id=lg["season_id"],
-                creds=creds,
+                season_id=lg["season_id"], creds=creds,
             )
             rows = stats.to_dict("records")
         except Exception as e:
@@ -159,36 +155,21 @@ def build_dataset(sb, creds):
 
     base_rows = league_rows.get(base_name, []) if base_name else []
     if not base_rows:
-        print("[uwaga] Brak danych bazowej ligi (Ekstraklasa) — handicapy wyjdą zerowe.", file=sys.stderr)
+        print("[uwaga] Brak danych bazowej ligi — poziomy i koherencja będą neutralne.", file=sys.stderr)
 
-    # --- Pass 2: handicapy (PEŁNA metoda) + pula odpowiedników ---
-    leagues, pool = [], []
+    # --- Statystyki populacji ligi bazowej per linia (do normalizacji) ---
+    base_stats_by_line = {ln: coh.build_league_stats(base_rows, ln)
+                          for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
+
+    # --- Handicapy lig (bez zmian, realna metoda) ---
+    leagues = []
     for lg in LEAGUE_CONFIG:
         rows = league_rows[lg["name"]]
-        handicap = league_handicap(rows, base_rows)  # realne liczenie vs Ekstraklasa
+        handicap = league_handicap(rows, base_rows)
         leagues.append({"lg": lg["name"], "base": lg.get("base", False), **handicap})
 
-        if lg.get("base"):
-            continue  # z bazy nie budujemy puli odpowiedników
-        for row in rows:
-            raw_pos = row.get("primary_position") or row.get("position")
-            mapped = POS_TO_LINE.get(raw_pos)
-            if not mapped:
-                continue
-            pos, _line = mapped
-            pool.append({
-                "id": f"pl-{row.get('player_id')}",
-                "name": row.get("player_name", "?"),
-                "lg": lg["name"], "pos": pos,
-                "raw": player_rc_from_stats(row),
-                "age": int(row.get("age") or 0),
-                "mv": 0.0,       # uzupełniane z Transfermarktu poniżej (po nazwisku)
-                "contract": 0,
-            })
-
-    # --- Skład Rakowa + wartości rynkowe z Transfermarktu ---
-    squad = []
-    tm_squad = tm.fetch_rakow_squad()  # [{name, pos, age, mv, contract}]
+    # --- Skład Rakowa: nazwiska/wartości z TM, profile metryk ze StatsBomb ---
+    tm_squad = tm.fetch_rakow_squad()
     tm_pos_map = {
         "Goalkeeper": ("GK", "Bramka"), "Centre-Back": ("CCB", "Obrona"),
         "Right-Back": ("RWB", "Obrona"), "Left-Back": ("LWB", "Obrona"),
@@ -197,40 +178,109 @@ def build_dataset(sb, creds):
         "Left Winger": ("AM", "Pomoc"), "Centre-Forward": ("ST", "Atak"),
         "Second Striker": ("ST", "Atak"),
     }
-    # Poziom RC zawodnika Rakowa liczymy z metryk StatsBomb (dopasowanie po nazwisku),
-    # a jeśli brak dopasowania — neutralny placeholder do czasu kalibracji.
-    base_by_name = {r.get("player_name"): r for r in base_rows}
+    # Dopasowanie zawodnika Rakowa do jego wiersza metryk w Ekstraklasie (po nazwisku).
+    base_by_name = _name_index(base_rows)
+
+    squad = []
     for pl in tm_squad:
         mapped = tm_pos_map.get(pl["pos"])
         if not mapped:
             continue
         pos, line = mapped
-        sb_row = base_by_name.get(pl["name"])
-        rc = player_rc_from_stats(sb_row) if sb_row else 72
+        sb_row = base_by_name.get(_norm(pl["name"]))
+        rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else 72
         squad.append({
-            "id": f"rk-{pl['name'].replace(' ', '-').lower()}",
-            "name": pl["name"], "pos": pos, "line": line, "rc": rc, "real": True,
+            "id": f"rk-{_slug(pl['name'])}", "name": pl["name"],
+            "pos": pos, "line": line, "rc": rc, "real": True,
+            "_sb": sb_row,  # profil metryk (do liczenia koherencji), usuwany przed zapisem
         })
 
     if not squad:
-        print("[uwaga] Nie pobrano składu Rakowa z Transfermarktu — sprawdź moduł transfermarkt.py.", file=sys.stderr)
+        print("[uwaga] Nie pobrano składu Rakowa z Transfermarktu.", file=sys.stderr)
 
-    # Domiar wartości rynkowych do puli odpowiedników (po nazwisku, jeśli TM ma dane).
-    # Uwaga: to najlepsze-effort; nie każde nazwisko z TM zgra się 1:1 z StatsBomb.
+    # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
+    # Dla każdego kandydata: poziom (percentyl vs Ekstraklasa) oraz koherencja
+    # z NAJPODOBNIEJSZYM zawodnikiem Rakowa na tej samej pozycji.
+    squad_by_pos = {}
+    for s in squad:
+        squad_by_pos.setdefault(s["pos"], []).append(s)
+
+    pool = []
+    for lg in LEAGUE_CONFIG:
+        if lg.get("base"):
+            continue
+        for row in league_rows[lg["name"]]:
+            raw_pos = row.get("primary_position") or row.get("position")
+            mapped = POS_TO_LINE.get(raw_pos)
+            if not mapped:
+                continue
+            pos, line = mapped
+            level = coh.quality_level(row, line, base_stats_by_line[line])
+
+            # Koherencja: najlepsze dopasowanie profilu do zawodnika Rakowa z tej pozycji
+            best_coh, best_ref = 0, None
+            for s in squad_by_pos.get(pos, []):
+                if not s.get("_sb"):
+                    continue
+                c = coh.coherence(row, s["_sb"], line, base_stats_by_line[line])
+                if c > best_coh:
+                    best_coh, best_ref = c, s["name"]
+
+            pool.append({
+                "id": f"pl-{row.get('player_id')}",
+                "name": row.get("player_name", "?"),
+                "lg": lg["name"], "pos": pos,
+                "raw": level,                 # poziom jakości 0-100
+                "coherence": best_coh,        # koherencja z drużyną 0-100
+                "coherence_ref": best_ref,    # z kim najbardziej spójny
+                "age": _age(row.get("birth_date")),
+                "mv": 0.0, "contract": 0,     # domiar z Transfermarktu (opcjonalny)
+            })
+
+    # Usuń profile metryk ze składu przed zapisem (były tylko do liczenia)
+    for s in squad:
+        s.pop("_sb", None)
 
     return {
         "meta": {
             "source": "statsbomb+transfermarkt",
             "generated": __import__("datetime").date.today().isoformat(),
-            "note": ("Handicapy liczone realną metodą (handicap.py) vs Ekstraklasa. "
-                     "Skład i wartości z Transfermarktu. Wzór poziomu RC = do kalibracji "
-                     "przez analityka (LINE_METRICS i player_rc_from_stats)."),
+            "note": ("Poziom = percentyl metryk vs Ekstraklasa. Koherencja = podobieństwo "
+                     "profilu gry do zawodnika Rakowa (position-specific similarity). "
+                     "Handicapy realną metodą. Dane: StatsBomb + Transfermarkt."),
         },
         "squad": squad,
         "leagues": leagues,
         "pool": pool,
-        "correlations": {},  # do policzenia z współwystępowania akcji — osobny krok
+        "correlations": {},
     }
+
+
+# --- Pomocnicze ---
+def _norm(name):
+    return (name or "").strip().lower()
+
+def _slug(name):
+    return (name or "x").replace(" ", "-").lower()
+
+def _name_index(rows):
+    """Indeks wierszy po nazwisku i znanym nazwisku (dla dopasowania TM↔SB)."""
+    idx = {}
+    for r in rows:
+        for key in (r.get("player_name"), r.get("player_known_name")):
+            if key:
+                idx[_norm(key)] = r
+    return idx
+
+def _age(birth_date):
+    if not birth_date or not isinstance(birth_date, str) or len(birth_date) < 4:
+        return 0
+    try:
+        import datetime as _dt
+        y = int(birth_date[:4])
+        return max(0, _dt.date.today().year - y)
+    except Exception:
+        return 0
 
 
 def main():
