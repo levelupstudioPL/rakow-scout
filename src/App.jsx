@@ -8,10 +8,20 @@ const C = {
   good: "#3ECF8E", warn: "#E8A13A", bad: "#E5544B", proxy: "#E8A13A",
 };
 
-const pctToRC = (p) => Math.round(p / 10);
-const lineOfPos = (pos) =>
-  ({ GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
-     LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" }[pos]);
+const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
+const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
+  LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
+// Domyślna linia dla pozycji spoza mapy (np. "W", "LW", "CF", "RB").
+// Bez tego nieznana pozycja dawała undefined → NaN w całym łańcuchu liczenia.
+const lineOfPos = (pos) => {
+  if (LINE_MAP[pos]) return LINE_MAP[pos];
+  const s = String(pos || "").toUpperCase();
+  if (s.includes("GK")) return "Bramka";
+  if (/B$/.test(s) || s.includes("CB") || s === "RB" || s === "LB") return "Obrona";
+  if (s.includes("ST") || s.includes("CF") || s === "FW") return "Atak";
+  if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc"; // skrzydła i pomoc
+  return "Pomoc";
+};
 
 // ============================ APP ============================
 export default function App() {
@@ -20,7 +30,7 @@ export default function App() {
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState("fit");
+  const [sortBy, setSortBy] = useState("coherence");
   const [short, setShort] = useState([]);
   const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
@@ -29,33 +39,60 @@ export default function App() {
   function loadData(url, live = false) {
     setLoading(true); setErr(null);
     fetch(url)
-      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
-      .then((d) => { setData(d); setSel(d.squad.find((p) => p.real) || d.squad[0]); })
-      .catch(() => setErr(live
-        ? "Tryb live niedostępny na tym hostingu — pozostaję na zapisanych danych."
-        : "Nie udało się wczytać danych."))
+      .then((r) => {
+        const ct = r.headers.get("content-type") || "";
+        if (!r.ok || !ct.includes("json")) throw new Error(`Zła odpowiedź (${r.status})`);
+        return r.json();
+      })
+      .then((d) => {
+        // Waliduj PEŁNY kształt: brak któregokolwiek pola mógłby wygasić ekran
+        // przy .map() w widokach. Odrzucamy niekompletny payload w całości.
+        const ok = d && Array.isArray(d.squad) && d.squad.length > 0
+          && Array.isArray(d.leagues) && Array.isArray(d.pool)
+          && d.correlations && typeof d.correlations === "object";
+        if (!ok) throw new Error("Niekompletne dane");
+        setData(d);
+        setSel(d.squad.find((p) => p.real) || d.squad[0]);
+      })
+      .catch(() => {
+        // Nigdy nie czyścimy istniejących danych — tylko komunikat.
+        setErr(live
+          ? "Tryb live jest jeszcze niedostępny — zostają dane zapisane."
+          : "Nie udało się wczytać danych.");
+      })
       .finally(() => setLoading(false));
   }
-  const fetchLive = () => loadData("/.netlify/functions/fbref?team=rakow", true);
+
 
   const adjusted = (p) => {
     const lg = data.leagues.find((l) => l.lg === p.lg);
     const line = lineOfPos(p.pos);
-    const hc = lg ? lg[line] : 0;
-    return { adj: p.raw + pctToRC(hc) * 2, hcRC: pctToRC(hc), pct: hc, line };
+    const hc = Number(lg ? lg[line] : 0) || 0;
+    const raw = Number(p.raw) || 0;
+    return { adj: raw + pctToRC(hc) * 2, hcRC: pctToRC(hc), pct: hc, line };
   };
   const matchScore = (player, p) => {
     if (p.pos !== player.pos) return null;
     const { adj } = adjusted(p);
-    const diff = adj - player.rc;
-    return { adj, diff, fit: Math.max(0, 100 - Math.abs(diff) * 7) };
+    const rc = Number(player.rc) || 0;
+    const diff = adj - rc;
+    // Koherencja z danych (nowy model). Fallback do starego "fit" gdy brak.
+    const coherence = Number.isFinite(p.coherence) ? p.coherence
+      : Math.max(0, 100 - Math.abs(diff) * 7);
+    const level = Number.isFinite(p.raw) ? p.raw : adj;
+    return { adj, diff, level, coherence, ref: p.coherence_ref || null,
+             fit: coherence };
   };
   const estimatePrice = (player, p) => {
     const { adj } = adjusted(p);
-    const base = p.mv || 0;
-    const levelF = 1 + Math.max(-0.3, (adj - player.rc) * 0.04);
-    const ageF = p.age <= 23 ? 1.25 : p.age <= 26 ? 1.05 : p.age <= 29 ? 0.85 : 0.65;
-    const yearsLeft = Math.max(0, (p.contract || 2026) - 2026);
+    const base = Number(p.mv) || 0;
+    const rc = Number(player.rc) || 0;
+    const age = Number(p.age);
+    const contract = Number(p.contract);
+    const levelF = 1 + Math.max(-0.3, (adj - rc) * 0.04);
+    const ageF = !Number.isFinite(age) ? 1
+      : age <= 23 ? 1.25 : age <= 26 ? 1.05 : age <= 29 ? 0.85 : 0.65;
+    const yearsLeft = Math.max(0, (Number.isFinite(contract) ? contract : 2026) - 2026);
     const contractF = yearsLeft >= 3 ? 1.2 : yearsLeft === 2 ? 1.0 : yearsLeft === 1 ? 0.75 : 0.5;
     const ligF = { "Championship (EN)": 1.3, "Eredivisie (NL)": 1.15, "Liga Portugalska": 1.2,
       "Liga Belgijska": 1.1, "2. Bundesliga (DE)": 1.05, "Superliga (DK)": 0.95 }[p.lg] || 1;
@@ -67,12 +104,15 @@ export default function App() {
     if (!data || !sel) return [];
     const rows = data.pool.map((p) => ({ p, m: matchScore(sel, p) }))
       .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(sel, x.p) }));
-    const s = { fit: (a, b) => b.m.fit - a.m.fit, price: (a, b) => a.price.est - b.price.est,
-      level: (a, b) => b.m.adj - a.m.adj };
-    return rows.sort(s[sortBy]);
+    const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
+      coherence: (a, b) => b.m.coherence - a.m.coherence,
+      price: (a, b) => a.price.est - b.price.est,
+      price_desc: (a, b) => b.price.est - a.price.est,
+      level: (a, b) => b.m.level - a.m.level };
+    return rows.sort(s[sortBy] || s.coherence);
   }, [data, sel, sortBy]);
 
-  const fmt = (v) => `€${v.toFixed(1)}M`;
+  const fmt = (v) => Number.isFinite(v) ? `€${v.toFixed(1)}M` : "—";
   const shortRows = useMemo(() => candidates.filter((c) => short.includes(c.p.id)), [candidates, short]);
   const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y);
     const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
@@ -138,14 +178,10 @@ export default function App() {
         </nav>
 
         <div className="railfoot" style={{ marginTop: "auto", padding: "0 22px" }}>
-          <button onClick={fetchLive} disabled={loading} style={{ width: "100%",
-            background: isLive ? C.good : "transparent", color: isLive ? C.ink : C.steelHi,
-            border: `1px solid ${isLive ? C.good : C.line}`, padding: "9px", borderRadius: 8,
-            cursor: "pointer", fontSize: 11.5, fontWeight: 700, marginBottom: 10 }}>
-            {loading ? "…" : isLive ? "● DANE LIVE" : "Pobierz dane live"}
-          </button>
-          <div style={{ fontSize: 10, color: C.steel, lineHeight: 1.5 }}>
-            Źródło: <span style={{ color: isLive ? C.good : C.proxy }}>{isLive ? "live" : "zapis / proxy"}</span>
+          <div style={{ fontSize: 10, color: C.steel, lineHeight: 1.6,
+            border: `1px solid ${C.line}`, borderRadius: 8, padding: "10px 12px" }}>
+            <div className="mono" style={{ letterSpacing: 1, color: C.steelHi, marginBottom: 3 }}>ŹRÓDŁO DANYCH</div>
+            {isLive ? <span style={{ color: C.good }}>● live</span> : <span style={{ color: C.proxy }}>● zapis (snapshot)</span>}
           </div>
         </div>
       </aside>
@@ -194,11 +230,12 @@ export default function App() {
 // ============================ SUBVIEWS ============================
 function TwinView({ data, sel, setSel, setView }) {
   const byLine = { Bramka: [], Obrona: [], Pomoc: [], Atak: [] };
-  data.squad.forEach((p) => { (byLine[p.line] || byLine.Pomoc).push(p); });
+  data.squad.forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
   const order = ["Atak", "Pomoc", "Obrona", "Bramka"];
   return (
     <div>
       <Lead>Skład ułożony liniami — jak na tablicy taktycznej. Kliknij zawodnika, by znaleźć jego odpowiedników w Europie.</Lead>
+      <RcExplainer />
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 20 }}>
         {order.map((line) => (
           byLine[line].length > 0 && (
@@ -243,6 +280,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
   return (
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
+      <RcExplainer compact />
       <div style={{ display: "flex", gap: 10, margin: "18px 0", flexWrap: "wrap", alignItems: "center" }}>
         <select value={sel.id} onChange={(e) => setSel(data.squad.find((p) => p.id === e.target.value))}
           style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9,
@@ -251,11 +289,25 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </select>
         <div style={{ display: "flex", gap: 5, marginLeft: "auto", alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, color: C.steel }}>sortuj</span>
-          {[["fit", "dopasowanie"], ["price", "cena"], ["level", "poziom"]].map(([k, l]) => (
+          {[["coherence", "koherencja"], ["level", "poziom"]].map(([k, l]) => (
             <button key={k} onClick={() => setSortBy(k)} style={{ background: sortBy === k ? C.panelHi : "transparent",
               color: sortBy === k ? C.bone : C.steel, border: `1px solid ${sortBy === k ? C.redHi : C.line}`,
               padding: "7px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{l}</button>
           ))}
+          {(() => {
+            const active = sortBy === "price" || sortBy === "price_desc";
+            const next = sortBy === "price" ? "price_desc" : "price";
+            const arrow = sortBy === "price_desc" ? " ↓" : sortBy === "price" ? " ↑" : " ↑";
+            return (
+              <button onClick={() => setSortBy(next)}
+                title={sortBy === "price" ? "Od najtańszego — kliknij, by odwrócić" : sortBy === "price_desc" ? "Od najdroższego — kliknij, by odwrócić" : "Sortuj po cenie"}
+                style={{ background: active ? C.panelHi : "transparent",
+                  color: active ? C.bone : C.steel, border: `1px solid ${active ? C.redHi : C.line}`,
+                  padding: "7px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>
+                cena<span className="mono" style={{ marginLeft: 3 }}>{arrow}</span>
+              </button>
+            );
+          })()}
         </div>
       </div>
 
@@ -264,7 +316,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
           <Kpi l="Kandydatów" v={candidates.length} />
           <Kpi l="Najtańszy" v={fmt(Math.min(...candidates.map((c) => c.price.est)))} c={C.good} />
           <Kpi l="Mediana" v={fmt(median(candidates.map((c) => c.price.est)))} c={C.proxy} />
-          <Kpi l="Najlepsze" v={`${Math.round(Math.max(...candidates.map((c) => c.m.fit)))}%`} c={C.redHi} />
+          <Kpi l="Najlepsza koh." v={`${Math.round(Math.max(...candidates.map((c) => c.m.coherence)))}%`} c={C.redHi} />
         </div>
       )}
 
@@ -281,23 +333,23 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
               gridTemplateColumns: "1.5fr 0.9fr 1fr 1fr auto", gap: 16, alignItems: "center" }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name && p.name !== "?" ? p.name : p.lg}</div>
-                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {Number.isFinite(Number(p.age)) ? `${p.age} lat` : "wiek —"} · {Number.isFinite(Number(p.contract)) && Number(p.contract) > 0 ? `do ${p.contract}` : "kontrakt —"}</div>
               </div>
               <div>
-                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{m.adj}</div>
-                <div style={{ fontSize: 10, color: C.steel }}>poziom · RC+{a.hcRC}</div>
+                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{Number.isFinite(m.level) ? Math.round(m.level) : "—"}</div>
+                <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
               </div>
               <div>
-                <div style={{ fontSize: 11.5, color: m.diff >= 0 ? C.good : C.warn, marginBottom: 5 }}>
-                  Δ vs RC <b className="mono">{m.diff >= 0 ? "+" : ""}{m.diff}</b>
+                <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 5 }}>
+                  koherencja{m.ref ? <span style={{ color: C.steelHi }}> · {m.ref}</span> : ""}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <div style={{ flex: 1, height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
-                    <div className="bar" style={{ width: `${m.fit}%`, height: "100%",
-                      background: m.fit > 70 ? C.good : m.fit > 45 ? C.warn : C.bad }} />
+                    <div className="bar" style={{ width: `${m.coherence}%`, height: "100%",
+                      background: m.coherence > 70 ? C.good : m.coherence > 45 ? C.warn : C.bad }} />
                   </div>
                   <span className="mono" style={{ fontSize: 11, fontWeight: 700,
-                    color: m.fit > 70 ? C.good : m.fit > 45 ? C.warn : C.bad }}>{Math.round(m.fit)}%</span>
+                    color: m.coherence > 70 ? C.good : m.coherence > 45 ? C.warn : C.bad }}>{Math.round(m.coherence)}%</span>
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
@@ -433,7 +485,7 @@ function CorrView({ data }) {
 function HelpView({ data, setView }) {
   const steps = [
     ["Skład", "Zakładka „Skład” to obecny zespół ułożony liniami, jak na tablicy taktycznej. Każda karta ma poziom RC (Ekstraklasa = baza). Klik przenosi do odpowiedników."],
-    ["Odpowiednicy", "Kandydaci z lig europejskich na tej samej pozycji. Widać skorygowany poziom, dopasowanie %, wiek, kontrakt i szacowaną cenę z widełkami. Sortuj po dopasowaniu, cenie lub poziomie."],
+    ["Odpowiednicy", "Kandydaci z lig europejskich na tej samej pozycji. Dwie miary obok siebie: poziom (jak dobry jest zawodnik) i koherencja (jak podobnie gra do zawodnika Rakowa, którego miałby zastąpić). Sortuj po koherencji, poziomie lub cenie."],
     ["Lista obserwowanych", "Gwiazdka przy kandydacie dodaje go do listy na dole. Aplikacja sumuje łączny szacowany koszt zaznaczonych zawodników."],
     ["Handicapy", "Tabela: o ile każda liga różni się od Ekstraklasy, osobno per linia. To te korekty podnoszą lub obniżają surowy poziom kandydata."],
     ["Formacja", "Macierz zależności między pozycjami — które role najsilniej ze sobą współgrają w układzie."],
@@ -516,6 +568,42 @@ function Lead({ children }) {
 }
 function Note({ children }) {
   return <p style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.55, marginTop: 18, maxWidth: 760 }}>{children}</p>;
+}
+function RcExplainer({ compact }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginTop: compact ? 12 : 16, maxWidth: 760 }}>
+      <button onClick={() => setOpen((o) => !o)}
+        style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `${C.red}14`,
+          border: `1px solid ${C.red}44`, borderRadius: 9, padding: "8px 13px", cursor: "pointer",
+          color: C.bone, fontSize: 12.5, fontWeight: 600 }}>
+        <span className="mono" style={{ fontSize: 10, fontWeight: 800, color: C.redHi,
+          border: `1px solid ${C.red}`, borderRadius: 4, padding: "1px 5px" }}>RC</span>
+        Co oznacza RC?
+        <span className="mono" style={{ fontSize: 11, color: C.steel }}>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div style={{ marginTop: 8, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12,
+          padding: "15px 17px", fontSize: 13, color: C.steelHi, lineHeight: 1.6 }}>
+          <b style={{ color: C.bone }}>RC (Rating Class)</b> to poziom zawodnika w skali 0–100, gdzie punktem
+          odniesienia jest <b style={{ color: C.bone }}>Ekstraklasa</b> — polska liga stanowi bazę (handicap 0%).
+          Im wyższe RC, tym mocniejszy zawodnik.
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div>· <b style={{ color: C.bone }}>Surowy RC</b> — poziom zawodnika liczony w jego własnej lidze.</div>
+            <div>· <b style={{ color: C.bone }}>Handicap ligi</b> — o ile dana liga jest mocniejsza/słabsza od Ekstraklasy,
+              osobno per linia (bramka / obrona / pomoc / atak).</div>
+            <div>· <b style={{ color: C.bone }}>Poziom skorygowany</b> — surowy RC podniesiony lub obniżony o handicap.
+              Reguła: <span className="mono" style={{ color: C.proxy }}>10% różnicy ligi = RC+1</span>.</div>
+          </div>
+          {!compact && (
+            <div style={{ marginTop: 10, fontSize: 12, color: C.steel }}>
+              Przykład: zawodnik z RC 55 w lidze o handicapie pomocy +10% ma poziom skorygowany 57 względem Ekstraklasy.
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 function Empty({ children }) {
   return (
