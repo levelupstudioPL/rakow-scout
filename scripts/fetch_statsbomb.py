@@ -55,6 +55,11 @@ LEAGUE_CONFIG = [lg for lg in LEAGUE_CONFIG if lg["competition_id"] is not None]
 # Nazwa zespołu w danych StatsBomb (do wyfiltrowania składu Rakowa)
 RAKOW_TEAM_NAME = "Raków Częstochowa"
  
+# Minimalna liczba rozegranych minut, by zawodnik wszedł do analizy.
+# Odsiewa małe próbki, które zawyżają metryki per-90 (np. poziom 94/96
+# u zawodnika z jednym meczem). ~6 pełnych meczów.
+MIN_MINUTES = 540
+ 
  
 def die(msg: str, code: int = 1):
     print(f"[BŁĄD] {msg}", file=sys.stderr)
@@ -92,18 +97,31 @@ def load_statsbombpy():
 # =====================================================================
  
 # Mapowanie pozycji StatsBomb -> uproszczona pozycja i linia w modelu.
+# Pokrywa pełny zestaw etykiet StatsBomb (widziane w danych Ekstraklasy).
 POS_TO_LINE = {
     "Goalkeeper": ("GK", "Bramka"),
-    "Center Back": ("CCB", "Obrona"), "Right Center Back": ("RCB", "Obrona"),
-    "Left Center Back": ("LCB", "Obrona"),
-    "Right Wing Back": ("RWB", "Obrona"), "Left Wing Back": ("LWB", "Obrona"),
-    "Right Back": ("RWB", "Obrona"), "Left Back": ("LWB", "Obrona"),
+    # Obrona środkowa
+    "Center Back": ("CB", "Obrona"), "Centre Back": ("CB", "Obrona"),
+    "Right Center Back": ("CB", "Obrona"), "Left Center Back": ("CB", "Obrona"),
+    # Obrona boczna / wahadła
+    "Right Wing Back": ("WB", "Obrona"), "Left Wing Back": ("WB", "Obrona"),
+    "Right Back": ("WB", "Obrona"), "Left Back": ("WB", "Obrona"),
+    "Wing Back": ("WB", "Obrona"),
+    # Pomoc defensywna / centralna
     "Center Defensive Midfield": ("DM", "Pomoc"),
+    "Right Defensive Midfield": ("DM", "Pomoc"), "Left Defensive Midfield": ("DM", "Pomoc"),
     "Center Midfield": ("CM", "Pomoc"), "Right Center Midfield": ("CM", "Pomoc"),
     "Left Center Midfield": ("CM", "Pomoc"),
+    "Right Midfielder": ("WM", "Pomoc"), "Left Midfielder": ("WM", "Pomoc"),
+    "Right Midfield": ("WM", "Pomoc"), "Left Midfield": ("WM", "Pomoc"),
+    # Pomoc ofensywna / skrzydła
     "Center Attacking Midfield": ("AM", "Pomoc"),
-    "Right Wing": ("AM", "Pomoc"), "Left Wing": ("AM", "Pomoc"),
+    "Right Attacking Midfield": ("AM", "Pomoc"), "Left Attacking Midfield": ("AM", "Pomoc"),
+    "Right Wing": ("W", "Pomoc"), "Left Wing": ("W", "Pomoc"),
+    "Right Winger": ("W", "Pomoc"), "Left Winger": ("W", "Pomoc"),
+    # Atak
     "Center Forward": ("ST", "Atak"), "Striker": ("ST", "Atak"),
+    "Secondary Striker": ("ST", "Atak"), "Second Striker": ("ST", "Atak"),
 }
  
  
@@ -157,8 +175,14 @@ def build_dataset(sb, creds):
     if not base_rows:
         print("[uwaga] Brak danych bazowej ligi — poziomy i koherencja będą neutralne.", file=sys.stderr)
  
+    # Populacja do normalizacji percentyli: tylko zawodnicy z wystarczającą próbką.
+    def _enough_minutes(r):
+        m = r.get("player_season_minutes")
+        return isinstance(m, (int, float)) and m >= MIN_MINUTES
+    base_pop = [r for r in base_rows if _enough_minutes(r)] or base_rows
+ 
     # --- Statystyki populacji ligi bazowej per linia (do normalizacji) ---
-    base_stats_by_line = {ln: coh.build_league_stats(base_rows, ln)
+    base_stats_by_line = {ln: coh.build_league_stats(base_pop, ln)
                           for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
  
     # --- Handicapy lig (bez zmian, realna metoda) ---
@@ -170,46 +194,62 @@ def build_dataset(sb, creds):
  
     # --- Skład Rakowa: nazwiska/wartości z TM, profile metryk ze StatsBomb ---
     tm_squad = tm.fetch_rakow_squad()
+    # Mapowanie pozycji Transfermarktu -> te same kubełki co model (CB/WB/DM/CM/WM/AM/W/ST).
     tm_pos_map = {
-        "Goalkeeper": ("GK", "Bramka"), "Centre-Back": ("CCB", "Obrona"),
-        "Right-Back": ("RWB", "Obrona"), "Left-Back": ("LWB", "Obrona"),
+        "Goalkeeper": ("GK", "Bramka"),
+        "Centre-Back": ("CB", "Obrona"), "Center-Back": ("CB", "Obrona"),
+        "Right-Back": ("WB", "Obrona"), "Left-Back": ("WB", "Obrona"),
         "Defensive Midfield": ("DM", "Pomoc"), "Central Midfield": ("CM", "Pomoc"),
-        "Attacking Midfield": ("AM", "Pomoc"), "Right Winger": ("AM", "Pomoc"),
-        "Left Winger": ("AM", "Pomoc"), "Centre-Forward": ("ST", "Atak"),
-        "Second Striker": ("ST", "Atak"),
+        "Attacking Midfield": ("AM", "Pomoc"),
+        "Right Midfield": ("WM", "Pomoc"), "Left Midfield": ("WM", "Pomoc"),
+        "Right Winger": ("W", "Pomoc"), "Left Winger": ("W", "Pomoc"),
+        "Centre-Forward": ("ST", "Atak"), "Second Striker": ("ST", "Atak"),
     }
-    # Dopasowanie zawodnika Rakowa do jego wiersza metryk w Ekstraklasie (po nazwisku).
     base_by_name = _name_index(base_rows)
  
     squad = []
     for pl in tm_squad:
-        mapped = tm_pos_map.get(pl["pos"])
-        if not mapped:
-            continue
-        pos, line = mapped
         sb_row = base_by_name.get(_norm(pl["name"]))
+        # Preferuj pozycję ze StatsBomb (spójna z kandydatami); TM jako zapas.
+        pos, line = None, None
+        if sb_row:
+            sb_pos = sb_row.get("primary_position") or sb_row.get("position")
+            m = POS_TO_LINE.get(sb_pos)
+            if m:
+                pos, line = m
+        if not pos:
+            m = tm_pos_map.get(pl["pos"])
+            if m:
+                pos, line = m
+        if not pos:
+            continue  # pozycja nierozpoznana z obu źródeł
         rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else 72
         squad.append({
             "id": f"rk-{_slug(pl['name'])}", "name": pl["name"],
             "pos": pos, "line": line, "rc": rc, "real": True,
-            "_sb": sb_row,  # profil metryk (do liczenia koherencji), usuwany przed zapisem
+            "_sb": sb_row,
         })
  
     if not squad:
         print("[uwaga] Nie pobrano składu Rakowa z Transfermarktu.", file=sys.stderr)
  
     # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
-    # Dla każdego kandydata: poziom (percentyl vs Ekstraklasa) oraz koherencja
-    # z NAJPODOBNIEJSZYM zawodnikiem Rakowa na tej samej pozycji.
     squad_by_pos = {}
+    squad_by_line = {}
     for s in squad:
         squad_by_pos.setdefault(s["pos"], []).append(s)
+        squad_by_line.setdefault(s["line"], []).append(s)
  
     pool = []
     for lg in LEAGUE_CONFIG:
         if lg.get("base"):
             continue
         for row in league_rows[lg["name"]]:
+            # FILTR MINUT: pomiń zawodników z małą próbką (zawyżone per-90).
+            minutes = row.get("player_season_minutes")
+            if not isinstance(minutes, (int, float)) or minutes < MIN_MINUTES:
+                continue
+ 
             raw_pos = row.get("primary_position") or row.get("position")
             mapped = POS_TO_LINE.get(raw_pos)
             if not mapped:
@@ -217,9 +257,11 @@ def build_dataset(sb, creds):
             pos, line = mapped
             level = coh.quality_level(row, line, base_stats_by_line[line])
  
-            # Koherencja: najlepsze dopasowanie profilu do zawodnika Rakowa z tej pozycji
+            # Koherencja: najpierw z zawodnikiem Rakowa z tej samej pozycji;
+            # jeśli brak — porównaj do zawodników z tej samej LINII (szerszy kubełek).
+            refs = squad_by_pos.get(pos) or squad_by_line.get(line, [])
             best_coh, best_ref = 0, None
-            for s in squad_by_pos.get(pos, []):
+            for s in refs:
                 if not s.get("_sb"):
                     continue
                 c = coh.coherence(row, s["_sb"], line, base_stats_by_line[line])
@@ -230,11 +272,11 @@ def build_dataset(sb, creds):
                 "id": f"pl-{row.get('player_id')}",
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
                 "lg": lg["name"], "pos": pos,
-                "raw": level,                 # poziom jakości 0-100
-                "coherence": best_coh,        # koherencja z drużyną 0-100
-                "coherence_ref": best_ref,    # z kim najbardziej spójny
+                "raw": level,
+                "coherence": best_coh,
+                "coherence_ref": best_ref,
                 "age": _age(row.get("birth_date")),
-                "mv": 0.0, "contract": 0,     # domiar z Transfermarktu (opcjonalny)
+                "mv": 0.0, "contract": 0,
             })
  
     # Usuń profile metryk ze składu przed zapisem (były tylko do liczenia)
@@ -331,4 +373,4 @@ def main():
  
  
 if __name__ == "__main__":
-    main()
+    main(
