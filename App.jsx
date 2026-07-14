@@ -104,6 +104,7 @@ export default function App() {
     const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
       coherence: (a, b) => b.m.coherence - a.m.coherence,
       price: (a, b) => a.price.est - b.price.est,
+      price_desc: (a, b) => b.price.est - a.price.est,
       level: (a, b) => b.m.level - a.m.level };
     return rows.sort(s[sortBy] || s.coherence);
   }, [data, sel, sortBy]);
@@ -226,11 +227,12 @@ export default function App() {
 // ============================ SUBVIEWS ============================
 function TwinView({ data, sel, setSel, setView }) {
   const byLine = { Bramka: [], Obrona: [], Pomoc: [], Atak: [] };
-  data.squad.forEach((p) => { (byLine[p.line] || byLine.Pomoc).push(p); });
+  data.squad.forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
   const order = ["Atak", "Pomoc", "Obrona", "Bramka"];
   return (
     <div>
       <Lead>Skład ułożony liniami — jak na tablicy taktycznej. Kliknij zawodnika, by znaleźć jego odpowiedników w Europie.</Lead>
+      <RcExplainer />
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 20 }}>
         {order.map((line) => (
           byLine[line].length > 0 && (
@@ -275,6 +277,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
   return (
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
+      <RcExplainer compact />
       <div style={{ display: "flex", gap: 10, margin: "18px 0", flexWrap: "wrap", alignItems: "center" }}>
         <select value={sel.id} onChange={(e) => setSel(data.squad.find((p) => p.id === e.target.value))}
           style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9,
@@ -283,11 +286,25 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </select>
         <div style={{ display: "flex", gap: 5, marginLeft: "auto", alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, color: C.steel }}>sortuj</span>
-          {[["coherence", "koherencja"], ["level", "poziom"], ["price", "cena"]].map(([k, l]) => (
+          {[["coherence", "koherencja"], ["level", "poziom"]].map(([k, l]) => (
             <button key={k} onClick={() => setSortBy(k)} style={{ background: sortBy === k ? C.panelHi : "transparent",
               color: sortBy === k ? C.bone : C.steel, border: `1px solid ${sortBy === k ? C.redHi : C.line}`,
               padding: "7px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{l}</button>
           ))}
+          {(() => {
+            const active = sortBy === "price" || sortBy === "price_desc";
+            const next = sortBy === "price" ? "price_desc" : "price";
+            const arrow = sortBy === "price_desc" ? " ↓" : sortBy === "price" ? " ↑" : " ↑";
+            return (
+              <button onClick={() => setSortBy(next)}
+                title={sortBy === "price" ? "Od najtańszego — kliknij, by odwrócić" : sortBy === "price_desc" ? "Od najdroższego — kliknij, by odwrócić" : "Sortuj po cenie"}
+                style={{ background: active ? C.panelHi : "transparent",
+                  color: active ? C.bone : C.steel, border: `1px solid ${active ? C.redHi : C.line}`,
+                  padding: "7px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>
+                cena<span className="mono" style={{ marginLeft: 3 }}>{arrow}</span>
+              </button>
+            );
+          })()}
         </div>
       </div>
 
@@ -548,6 +565,42 @@ function Lead({ children }) {
 }
 function Note({ children }) {
   return <p style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.55, marginTop: 18, maxWidth: 760 }}>{children}</p>;
+}
+function RcExplainer({ compact }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginTop: compact ? 12 : 16, maxWidth: 760 }}>
+      <button onClick={() => setOpen((o) => !o)}
+        style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `${C.red}14`,
+          border: `1px solid ${C.red}44`, borderRadius: 9, padding: "8px 13px", cursor: "pointer",
+          color: C.bone, fontSize: 12.5, fontWeight: 600 }}>
+        <span className="mono" style={{ fontSize: 10, fontWeight: 800, color: C.redHi,
+          border: `1px solid ${C.red}`, borderRadius: 4, padding: "1px 5px" }}>RC</span>
+        Co oznacza RC?
+        <span className="mono" style={{ fontSize: 11, color: C.steel }}>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div style={{ marginTop: 8, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12,
+          padding: "15px 17px", fontSize: 13, color: C.steelHi, lineHeight: 1.6 }}>
+          <b style={{ color: C.bone }}>RC (Rating Class)</b> to poziom zawodnika w skali 0–100, gdzie punktem
+          odniesienia jest <b style={{ color: C.bone }}>Ekstraklasa</b> — polska liga stanowi bazę (handicap 0%).
+          Im wyższe RC, tym mocniejszy zawodnik.
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div>· <b style={{ color: C.bone }}>Surowy RC</b> — poziom zawodnika liczony w jego własnej lidze.</div>
+            <div>· <b style={{ color: C.bone }}>Handicap ligi</b> — o ile dana liga jest mocniejsza/słabsza od Ekstraklasy,
+              osobno per linia (bramka / obrona / pomoc / atak).</div>
+            <div>· <b style={{ color: C.bone }}>Poziom skorygowany</b> — surowy RC podniesiony lub obniżony o handicap.
+              Reguła: <span className="mono" style={{ color: C.proxy }}>10% różnicy ligi = RC+1</span>.</div>
+          </div>
+          {!compact && (
+            <div style={{ marginTop: 10, fontSize: 12, color: C.steel }}>
+              Przykład: zawodnik z RC 55 w lidze o handicapie pomocy +10% ma poziom skorygowany 57 względem Ekstraklasy.
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 function Empty({ children }) {
   return (
