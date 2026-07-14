@@ -20,10 +20,10 @@ from statistics import mean
 # Analityk podmienia nazwy na te faktycznie dostępne i sensowne dla linii.
 # Przykład: dla pomocy — udział/utrzymanie piłki; dla ataku — xG per 90 itd.
 LINE_METRICS = {
-    "Bramka": "gk_save_pct",              # np. skuteczność interwencji
-    "Obrona": "def_actions_per90",        # np. akcje obronne / 90
-    "Pomoc":  "possession_retention_pct", # np. utrzymanie piłki w środku
-    "Atak":   "xg_per90",                 # np. xG / 90
+    "Bramka": "player_season_op_passes_90",              # dystrybucja bramkarza (proxy poziomu gry)
+    "Obrona": "player_season_padj_tackles_and_interceptions_90",  # akcje obronne / 90
+    "Pomoc":  "player_season_op_xgchain_90",             # zaangażowanie w akcje bramkowe (środek)
+    "Atak":   "player_season_np_xg_90",                  # xG / 90
 }
 
 # Ile procent różnicy = jeden skok RC (wg przykładu: 10% -> RC+1).
