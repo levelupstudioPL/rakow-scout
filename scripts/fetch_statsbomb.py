@@ -247,6 +247,7 @@ def build_dataset(sb, creds):
     base_by_name = _name_index(base_rows)
 
     squad = []
+    rc_from_model = 0
     for pl in static_squad:
         name = pl.get("name")
         pos = pl.get("pos")
@@ -256,10 +257,31 @@ def build_dataset(sb, creds):
             continue
         # Dociagnij wiersz metryk StatsBomb po nazwisku (potrzebny do koherencji).
         sb_row = base_by_name.get(_norm(name))
-        # RC: uzyj wpisanego w squad.json; jesli brak, policz z metryk; ostatecznie 72.
-        rc = pl.get("rc")
-        if not isinstance(rc, (int, float)):
-            rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else 72
+        # RC — MODEL PIERWSZY:
+        # Poziom liczymy z realnych metryk StatsBomb (coh.quality_level, metoda
+        # percentylowa vs Ekstraklasa). To jest "model RC" — ta sama metoda, którą
+        # liczona jest pula kandydatów, więc skład i kandydaci są porównywalni.
+        #
+        # squad.json/"rc" służy już TYLKO jako awaryjny fallback: gdy zawodnik nie
+        # ma dopasowanego wiersza w StatsBomb (np. inny zapis nazwiska) albo metryki
+        # są puste (typowo bramkarze bez pól gsaa/save_ratio). Wpisana liczba NIE
+        # nadpisuje modelu, gdy dane są dostępne.
+        #
+        # UWAGA (uczciwość modelu): dobór metryk per pozycja (QUALITY_METRICS w
+        # coherence.py) to rozsądne domyślne, ale wciąż ZAŁOŻENIE — ktoś znający
+        # Ekstraklasę i te ligi powinien je kiedyś zweryfikować. Poziomy traktować
+        # jako orientacyjne, nie ostateczne.
+        model_rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else None
+        if isinstance(model_rc, (int, float)):
+            rc = model_rc
+            rc_source = "model"
+            rc_from_model += 1
+        else:
+            fallback = pl.get("rc")
+            rc = fallback if isinstance(fallback, (int, float)) else 72
+            rc_source = "squad.json" if isinstance(fallback, (int, float)) else "domyslne(72)"
+            print(f"[RC] {name}: brak metryk StatsBomb — uzyto {rc_source} (rc={rc})",
+                  file=sys.stderr)
         squad.append({
             "id": pl.get("id") or f"rk-{_slug(name)}", "name": name,
             "pos": pos, "line": line, "rc": rc, "real": True,
@@ -268,6 +290,9 @@ def build_dataset(sb, creds):
 
     if not squad:
         print("[uwaga] Sklad Rakowa jest pusty - sprawdz public/squad.json.", file=sys.stderr)
+    else:
+        print(f"RC skladu: {rc_from_model}/{len(squad)} policzone z modelu "
+              f"(reszta = fallback ze squad.json / domyslne).")
  
     # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
     squad_by_pos = {}
