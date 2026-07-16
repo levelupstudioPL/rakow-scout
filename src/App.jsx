@@ -11,19 +11,16 @@ const C = {
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
   LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
-// Domyślna linia dla pozycji spoza mapy (np. "W", "LW", "CF", "RB").
-// Bez tego nieznana pozycja dawała undefined → NaN w całym łańcuchu liczenia.
 const lineOfPos = (pos) => {
   if (LINE_MAP[pos]) return LINE_MAP[pos];
   const s = String(pos || "").toUpperCase();
   if (s.includes("GK")) return "Bramka";
   if (/B$/.test(s) || s.includes("CB") || s === "RB" || s === "LB") return "Obrona";
   if (s.includes("ST") || s.includes("CF") || s === "FW") return "Atak";
-  if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc"; // skrzydła i pomoc
+  if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc";
   return "Pomoc";
 };
 
-// ============================ APP ============================
 export default function App() {
   const [data, setData] = useState(null);
   const [err, setErr] = useState(null);
@@ -45,8 +42,6 @@ export default function App() {
         return r.json();
       })
       .then((d) => {
-        // Waliduj PEŁNY kształt: brak któregokolwiek pola mógłby wygasić ekran
-        // przy .map() w widokach. Odrzucamy niekompletny payload w całości.
         const ok = d && Array.isArray(d.squad) && d.squad.length > 0
           && Array.isArray(d.leagues) && Array.isArray(d.pool)
           && d.correlations && typeof d.correlations === "object";
@@ -55,7 +50,6 @@ export default function App() {
         setSel(d.squad.find((p) => p.real) || d.squad[0]);
       })
       .catch(() => {
-        // Nigdy nie czyścimy istniejących danych — tylko komunikat.
         setErr(live
           ? "Tryb live jest jeszcze niedostępny — zostają dane zapisane."
           : "Nie udało się wczytać danych.");
@@ -76,10 +70,9 @@ export default function App() {
     const { adj } = adjusted(p);
     const rc = Number(player.rc) || 0;
     const diff = adj - rc;
-    // Koherencja z danych (nowy model). Fallback do starego "fit" gdy brak.
-    const coherence = Number.isFinite(p.coherence) ? p.coherence
+    const coherence = typeof p.coherence === "number" ? p.coherence
       : Math.max(0, 100 - Math.abs(diff) * 7);
-    const level = Number.isFinite(p.raw) ? p.raw : adj;
+    const level = typeof p.raw === "number" ? p.raw : adj;
     return { adj, diff, level, coherence, ref: p.coherence_ref || null,
              fit: coherence };
   };
@@ -87,12 +80,9 @@ export default function App() {
     const { adj } = adjusted(p);
     const base = Number(p.mv) || 0;
     const rc = Number(player.rc) || 0;
-    const age = Number(p.age);
-    const contract = Number(p.contract);
     const levelF = 1 + Math.max(-0.3, (adj - rc) * 0.04);
-    const ageF = !Number.isFinite(age) ? 1
-      : age <= 23 ? 1.25 : age <= 26 ? 1.05 : age <= 29 ? 0.85 : 0.65;
-    const yearsLeft = Math.max(0, (Number.isFinite(contract) ? contract : 2026) - 2026);
+    const ageF = p.age <= 23 ? 1.25 : p.age <= 26 ? 1.05 : p.age <= 29 ? 0.85 : 0.65;
+    const yearsLeft = Math.max(0, (p.contract || 2026) - 2026);
     const contractF = yearsLeft >= 3 ? 1.2 : yearsLeft === 2 ? 1.0 : yearsLeft === 1 ? 0.75 : 0.5;
     const ligF = { "Championship (EN)": 1.3, "Eredivisie (NL)": 1.15, "Liga Portugalska": 1.2,
       "Liga Belgijska": 1.1, "2. Bundesliga (DE)": 1.05, "Superliga (DK)": 0.95 }[p.lg] || 1;
@@ -112,7 +102,7 @@ export default function App() {
     return rows.sort(s[sortBy] || s.coherence);
   }, [data, sel, sortBy]);
 
-  const fmt = (v) => Number.isFinite(v) ? `€${v.toFixed(1)}M` : "—";
+  const fmt = (v) => `€${v.toFixed(1)}M`;
   const shortRows = useMemo(() => candidates.filter((c) => short.includes(c.p.id)), [candidates, short]);
   const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y);
     const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
@@ -153,10 +143,8 @@ export default function App() {
         padding: "22px 0", flexShrink: 0 }}>
         <div style={{ padding: "0 22px 22px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: C.red, transform: "skewX(-8deg)",
-              display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span className="disp" style={{ fontSize: 18, color: "#fff", transform: "skewX(8deg)" }}>R</span>
-            </div>
+            <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
+              style={{ width: 34, height: 41, objectFit: "contain", display: "block" }} />
             <div>
               <div className="disp" style={{ fontSize: 15, lineHeight: 1 }}>RAKÓW</div>
               <div className="mono" style={{ fontSize: 9, color: C.steel, letterSpacing: 2, marginTop: 2 }}>SCOUT ENGINE</div>
@@ -333,10 +321,10 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
               gridTemplateColumns: "1.5fr 0.9fr 1fr 1fr auto", gap: 16, alignItems: "center" }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name && p.name !== "?" ? p.name : p.lg}</div>
-                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {Number.isFinite(Number(p.age)) ? `${p.age} lat` : "wiek —"} · {Number.isFinite(Number(p.contract)) && Number(p.contract) > 0 ? `do ${p.contract}` : "kontrakt —"}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
               </div>
               <div>
-                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{Number.isFinite(m.level) ? Math.round(m.level) : "—"}</div>
+                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{m.level}</div>
                 <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
               </div>
               <div>
