@@ -13,6 +13,7 @@
 # =====================================================================
  
 import time
+import os
 import sys
 import urllib.request
 import urllib.parse
@@ -22,9 +23,11 @@ import json
 # gdy publiczny zacznie limitować.
 BASE_URL = "https://transfermarkt-api.fly.dev"
  
-# ID klubu Raków Częstochowa na Transfermarkcie (do potwierdzenia w profilu klubu).
-# Zostaw None, by wyszukać po nazwie automatycznie.
-RAKOW_CLUB_ID = None
+# ID klubu Raków Częstochowa na Transfermarkcie: 9644
+# (z profilu klubu: /rakow-czestochowa/startseite/verein/9644).
+# Uwaga: 41149 to rezerwy "Raków II" — NIE używać.
+# Można nadpisać zmienną środowiskową RAKOW_CLUB_ID (bez zmiany kodu).
+RAKOW_CLUB_ID = os.getenv("RAKOW_CLUB_ID", "9644")
 RAKOW_NAME_QUERY = "Raków Częstochowa"
  
 # Grzeczne odstępy między zapytaniami (publiczna instancja ma limit).

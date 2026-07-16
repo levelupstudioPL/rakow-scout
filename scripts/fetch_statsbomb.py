@@ -415,6 +415,16 @@ def main():
     sb = load_statsbombpy()
     print("Łączę ze StatsBomb i pobieram dane…")
     dataset = build_dataset(sb, creds)
+    # ZABEZPIECZENIE: pusty skład = aplikacja się nie wczyta (czarny ekran).
+    # Nie nadpisujemy dobrego pliku śmieciem — przerywamy z błędem.
+    if not dataset.get("squad"):
+        print(
+            "[BŁĄD] Skład Rakowa jest pusty (najpewniej Transfermarkt nie odpowiedział).\n"
+            "       Plik NIE został zapisany, żeby nie nadpisać działających danych.\n"
+            "       Sprawdź log [TM] powyżej albo ustaw RAKOW_CLUB_ID.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     dataset = _sanitize(dataset)  # usuń NaN/inf zanim trafią do pliku
     # allow_nan=False => gdyby coś przeciekło, skrypt krzyknie zamiast po cichu
     # zapisać plik, którego przeglądarka nie wczyta.
