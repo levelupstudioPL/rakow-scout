@@ -1,0 +1,205 @@
+[
+  {
+    "id": "rk-kacper-trelowski",
+    "name": "Kacper Trelowski",
+    "pos": "GK",
+    "line": "Bramka",
+    "rc": 49
+  },
+  {
+    "id": "rk-tarik-karic",
+    "name": "Tarik Karic",
+    "pos": "GK",
+    "line": "Bramka",
+    "rc": 72
+  },
+  {
+    "id": "rk-wiktor-zolneczko",
+    "name": "Wiktor Zolneczko",
+    "pos": "GK",
+    "line": "Bramka",
+    "rc": 72
+  },
+  {
+    "id": "rk-dominik-czeremski",
+    "name": "Dominik Czeremski",
+    "pos": "GK",
+    "line": "Bramka",
+    "rc": 72
+  },
+  {
+    "id": "rk-stratos-svarnas",
+    "name": "Stratos Svarnas",
+    "pos": "CB",
+    "line": "Obrona",
+    "rc": 72
+  },
+  {
+    "id": "rk-bogdan-racovițan",
+    "name": "Bogdan Racovițan",
+    "pos": "CB",
+    "line": "Obrona",
+    "rc": 63
+  },
+  {
+    "id": "rk-dieudonné-gaucho-debohi",
+    "name": "Dieudonné Gaucho Debohi",
+    "pos": "CB",
+    "line": "Obrona",
+    "rc": 72
+  },
+  {
+    "id": "rk-jerzy-napieraj",
+    "name": "Jerzy Napieraj",
+    "pos": "CB",
+    "line": "Obrona",
+    "rc": 72
+  },
+  {
+    "id": "rk-marko-bulat",
+    "name": "Marko Bulat",
+    "pos": "DM",
+    "line": "Pomoc",
+    "rc": 73
+  },
+  {
+    "id": "rk-oskar-repka",
+    "name": "Oskar Repka",
+    "pos": "DM",
+    "line": "Pomoc",
+    "rc": 66
+  },
+  {
+    "id": "rk-vladyslav-kochergin",
+    "name": "Vladyslav Kochergin",
+    "pos": "DM",
+    "line": "Pomoc",
+    "rc": 65
+  },
+  {
+    "id": "rk-karol-struski",
+    "name": "Karol Struski",
+    "pos": "DM",
+    "line": "Pomoc",
+    "rc": 68
+  },
+  {
+    "id": "rk-abraham-ojo",
+    "name": "Abraham Ojo",
+    "pos": "DM",
+    "line": "Pomoc",
+    "rc": 33
+  },
+  {
+    "id": "rk-fran-tudor",
+    "name": "Fran Tudor",
+    "pos": "WM",
+    "line": "Pomoc",
+    "rc": 78
+  },
+  {
+    "id": "rk-michael-ameyaw",
+    "name": "Michael Ameyaw",
+    "pos": "WB",
+    "line": "Obrona",
+    "rc": 50
+  },
+  {
+    "id": "rk-ádin-molnár",
+    "name": "Ádin Molnár",
+    "pos": "WM",
+    "line": "Pomoc",
+    "rc": 72
+  },
+  {
+    "id": "rk-jakub-jendryka",
+    "name": "Jakub Jendryka",
+    "pos": "WM",
+    "line": "Pomoc",
+    "rc": 72
+  },
+  {
+    "id": "rk-adriano",
+    "name": "Adriano",
+    "pos": "WB",
+    "line": "Obrona",
+    "rc": 62
+  },
+  {
+    "id": "rk-jean-carlos-silva",
+    "name": "Jean Carlos Silva",
+    "pos": "WB",
+    "line": "Obrona",
+    "rc": 62
+  },
+  {
+    "id": "rk-erick-otieno",
+    "name": "Erick Otieno",
+    "pos": "WB",
+    "line": "Obrona",
+    "rc": 47
+  },
+  {
+    "id": "rk-lamine-diaby-fadiga",
+    "name": "Lamine Diaby-Fadiga",
+    "pos": "AM",
+    "line": "Pomoc",
+    "rc": 63
+  },
+  {
+    "id": "rk-tomasz-pieńko",
+    "name": "Tomasz Pieńko",
+    "pos": "AM",
+    "line": "Pomoc",
+    "rc": 59
+  },
+  {
+    "id": "rk-bogdan-mirčetić",
+    "name": "Bogdan Mirčetić",
+    "pos": "W",
+    "line": "Pomoc",
+    "rc": 48
+  },
+  {
+    "id": "rk-patryk-makuch",
+    "name": "Patryk Makuch",
+    "pos": "W",
+    "line": "Pomoc",
+    "rc": 52
+  },
+  {
+    "id": "rk-jesús-díaz",
+    "name": "Jesús Díaz",
+    "pos": "W",
+    "line": "Pomoc",
+    "rc": 66
+  },
+  {
+    "id": "rk-oliwier-kwiatkowski",
+    "name": "Oliwier Kwiatkowski",
+    "pos": "AM",
+    "line": "Pomoc",
+    "rc": 72
+  },
+  {
+    "id": "rk-jonatan-braut-brunes",
+    "name": "Jonatan Braut Brunes",
+    "pos": "ST",
+    "line": "Atak",
+    "rc": 83
+  },
+  {
+    "id": "rk-isak-brusberg",
+    "name": "Isak Brusberg",
+    "pos": "W",
+    "line": "Pomoc",
+    "rc": 35
+  },
+  {
+    "id": "rk-adam-basse",
+    "name": "Adam Basse",
+    "pos": "ST",
+    "line": "Atak",
+    "rc": 72
+  }
+]
