@@ -226,46 +226,43 @@ def build_dataset(sb, creds):
         handicap = league_handicap(rows, base_rows)
         leagues.append({"lg": lg["name"], "base": lg.get("base", False), **handicap})
  
-    # --- Skład Rakowa: nazwiska/wartości z TM, profile metryk ze StatsBomb ---
-    tm_squad = tm.fetch_rakow_squad()
-    # Mapowanie pozycji Transfermarktu -> te same kubełki co model (CB/WB/DM/CM/WM/AM/W/ST).
-    tm_pos_map = {
-        "Goalkeeper": ("GK", "Bramka"),
-        "Centre-Back": ("CB", "Obrona"), "Center-Back": ("CB", "Obrona"),
-        "Right-Back": ("WB", "Obrona"), "Left-Back": ("WB", "Obrona"),
-        "Defensive Midfield": ("DM", "Pomoc"), "Central Midfield": ("CM", "Pomoc"),
-        "Attacking Midfield": ("AM", "Pomoc"),
-        "Right Midfield": ("WM", "Pomoc"), "Left Midfield": ("WM", "Pomoc"),
-        "Right Winger": ("W", "Pomoc"), "Left Winger": ("W", "Pomoc"),
-        "Centre-Forward": ("ST", "Atak"), "Second Striker": ("ST", "Atak"),
-    }
+    # --- Skład Rakowa: wczytywany ze stałego pliku public/squad.json ---
+    # (Wcześniej pobierany ze scrapera Transfermarktu, który bywa niedostępny
+    #  i wywalał całą aplikację. Teraz skład jest trwały; Transfermarkt służy
+    #  wyłącznie do opcjonalnych wartości rynkowych kandydatów.)
+    # Format squad.json: lista {"id","name","pos","line","rc"}.
+    # Analityk edytuje ten plik (docelowo przez interfejs w aplikacji).
+    squad_path = OUT.parent / "squad.json"
+    try:
+        static_squad = json.loads(squad_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"[BŁĄD] Nie wczytano {squad_path}: {e}", file=sys.stderr)
+        static_squad = []
+
     base_by_name = _name_index(base_rows)
- 
+
     squad = []
-    for pl in tm_squad:
-        sb_row = base_by_name.get(_norm(pl["name"]))
-        # Preferuj pozycję ze StatsBomb (spójna z kandydatami); TM jako zapas.
-        pos, line = None, None
-        if sb_row:
-            sb_pos = sb_row.get("primary_position") or sb_row.get("position")
-            m = POS_TO_LINE.get(sb_pos)
-            if m:
-                pos, line = m
-        if not pos:
-            m = tm_pos_map.get(pl["pos"])
-            if m:
-                pos, line = m
-        if not pos:
-            continue  # pozycja nierozpoznana z obu źródeł
-        rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else 72
+    for pl in static_squad:
+        name = pl.get("name")
+        pos = pl.get("pos")
+        line = pl.get("line")
+        if not name or not pos or not line:
+            print(f"[uwaga] Pomijam niekompletny wpis skladu: {pl}", file=sys.stderr)
+            continue
+        # Dociagnij wiersz metryk StatsBomb po nazwisku (potrzebny do koherencji).
+        sb_row = base_by_name.get(_norm(name))
+        # RC: uzyj wpisanego w squad.json; jesli brak, policz z metryk; ostatecznie 72.
+        rc = pl.get("rc")
+        if not isinstance(rc, (int, float)):
+            rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else 72
         squad.append({
-            "id": f"rk-{_slug(pl['name'])}", "name": pl["name"],
+            "id": pl.get("id") or f"rk-{_slug(name)}", "name": name,
             "pos": pos, "line": line, "rc": rc, "real": True,
             "_sb": sb_row,
         })
- 
+
     if not squad:
-        print("[uwaga] Nie pobrano składu Rakowa z Transfermarktu.", file=sys.stderr)
+        print("[uwaga] Sklad Rakowa jest pusty - sprawdz public/squad.json.", file=sys.stderr)
  
     # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
     squad_by_pos = {}
@@ -419,9 +416,9 @@ def main():
     # Nie nadpisujemy dobrego pliku śmieciem — przerywamy z błędem.
     if not dataset.get("squad"):
         print(
-            "[BŁĄD] Skład Rakowa jest pusty (najpewniej Transfermarkt nie odpowiedział).\n"
+            "[BŁĄD] Skład Rakowa jest pusty.\n"
             "       Plik NIE został zapisany, żeby nie nadpisać działających danych.\n"
-            "       Sprawdź log [TM] powyżej albo ustaw RAKOW_CLUB_ID.",
+            "       Sprawdź public/squad.json (czy istnieje i ma poprawny format).",
             file=sys.stderr,
         )
         sys.exit(1)
