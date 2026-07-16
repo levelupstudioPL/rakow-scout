@@ -29,7 +29,12 @@ from pathlib import Path
 # Nowe moduły: handicapy, Transfermarkt, koherencja profili.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import handicap as hc
-import transfermarkt as tm
+# transfermarkt: już nieużywany do wartości (zastąpiony plikiem player_values.csv).
+# Import opcjonalny — brak modułu nie może wywalić skryptu.
+try:
+    import transfermarkt as tm  # noqa: F401
+except Exception:
+    tm = None
 import coherence as coh
  
 OUT = Path(__file__).resolve().parent.parent / "public" / "data.json"
@@ -314,34 +319,35 @@ def build_dataset(sb, creds):
     for s in squad:
         s.pop("_sb", None)
  
-    # --- Wartości transferowe: TYLKO dla pasujących wg modelu (próg koherencji) ---
-    # Model liczy koherencję dla całej puli ze StatsBomb (stabilnie). Cenę z
-    # Transfermarktu dociągamy oszczędnie — jedynie dla kandydatów >= progu,
-    # więc liczba zapytań jest mała (garstka, nie setki).
-    COHERENCE_THRESHOLD = 70
-    to_price = [c for c in pool if c.get("coherence", 0) >= COHERENCE_THRESHOLD]
-    # Ogranicznik bezpieczeństwa, by nie przeciążyć publicznego TM-api.
-    MAX_LOOKUPS = 40
-    if len(to_price) > MAX_LOOKUPS:
-        to_price = sorted(to_price, key=lambda c: c["coherence"], reverse=True)[:MAX_LOOKUPS]
- 
-    print(f"Dociągam wartości TM dla {len(to_price)} kandydatów (koherencja >= {COHERENCE_THRESHOLD}%)…")
-    for c in to_price:
-        try:
-            val = tm.fetch_player_value(c["name"])
-        except Exception as e:
-            print(f"[TM] {c['name']}: {e}", file=sys.stderr)
-            val = None
-        if val:
-            c["mv"] = val.get("mv", 0.0)
-            if val.get("age"):
-                c["age"] = val["age"]
-            if val.get("contract"):
-                c["contract"] = val["contract"]
- 
+    # --- Wartości transferowe: z lokalnego pliku CSV (dane z Kaggle) ---
+    # ZMIANA ARCHITEKTURY: wcześniej wartości dociągaliśmy na żywo z publicznego
+    # Transfermarkt-api, który bywał niedostępny (HTTP 500) i wieszał workflow na
+    # wiele minut. Teraz czytamy je ze STATYCZNEGO pliku scripts/player_values.csv
+    # (zrzut z Kaggle, dataset davidcariboo/player-scores). Plik nie może "paść"
+    # w trakcie uruchomienia — to plik, nie serwis. Aktualizuje się go ręcznie,
+    # wgrywając świeży zrzut co jakiś czas (wartości zmieniają się rzadko).
+    #
+    # DOPASOWANIE: kandydaci mają nazwiska ze StatsBomb, plik wartości ma nazwiska
+    # z Transfermarktu — łączymy po ZNORMALIZOWANYM nazwisku (bez znaków diakryt.,
+    # lowercase). Część zawodników się nie dopasuje (inne zapisy, zdrobnienia) —
+    # to NIE błąd, zostają z mv=0, tak jak było przy niedostępnym TM.
+    values_by_name = _load_values_csv(Path(__file__).resolve().parent / "player_values.csv")
+    matched = 0
+    for c in pool:
+        v = values_by_name.get(_norm_ascii(c["name"]))
+        if v:
+            c["mv"] = v["mv"]           # wartość w mln EUR
+            if v.get("age"):
+                c["age"] = v["age"]
+            if v.get("contract"):
+                c["contract"] = v["contract"]
+            matched += 1
+    print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
+          f"z pliku player_values.csv")
+
     return {
         "meta": {
-            "source": "statsbomb+transfermarkt",
+            "source": "statsbomb+kaggle-values",
             "generated": __import__("datetime").date.today().isoformat(),
             "note": ("Poziom = percentyl metryk vs Ekstraklasa. Koherencja = podobieństwo "
                      "profilu gry do zawodnika Rakowa (position-specific similarity). "
@@ -367,6 +373,60 @@ def _norm(name):
     if not isinstance(name, str):
         return ""
     return name.strip().lower()
+
+def _norm_ascii(name):
+    """Normalizacja do dopasowania nazwisk między StatsBomb a plikiem wartości.
+    Usuwa znaki diakrytyczne (Ivanović -> ivanovic), sprowadza do małych liter,
+    ścina nadmiarowe spacje. Dzięki temu 'Franjo Ivanović' (SB) dopasuje się do
+    'Franjo Ivanovic' (Kaggle)."""
+    import unicodedata
+    if not isinstance(name, str):
+        return ""
+    s = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
+    return " ".join(s.strip().lower().split())
+
+def _load_values_csv(path):
+    """Wczytuje wartości rynkowe z lokalnego CSV (zrzut Kaggle) do słownika
+    {znormalizowane_nazwisko: {mv, age, contract}}. Wartość przeliczana na mln EUR
+    (aplikacja pokazuje '€X.XM'). Gdy plik nie istnieje — zwraca pusty słownik i
+    kandydaci zostają z mv=0 (aplikacja działa dalej, po prostu bez cen)."""
+    import csv, datetime as _dt
+    result = {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                key = row.get("name_norm") or _norm_ascii(row.get("name", ""))
+                if not key:
+                    continue
+                # Wartość: EUR -> mln EUR
+                try:
+                    mv_eur = float(row.get("mv_eur") or 0)
+                except (ValueError, TypeError):
+                    mv_eur = 0.0
+                mv_mln = round(mv_eur / 1_000_000.0, 2)
+                # Wiek z daty urodzenia
+                age = 0
+                dob = row.get("dob") or ""
+                if len(dob) >= 4 and dob[:4].isdigit():
+                    age = max(0, _dt.date.today().year - int(dob[:4]))
+                # Rok wygaśnięcia kontraktu
+                contract = 0
+                con = row.get("contract") or ""
+                if len(con) >= 4 and con[:4].isdigit():
+                    contract = int(con[:4])
+                # Gdy nazwisko powtarza się w pliku, bierz wyższą wartość
+                # (zwykle to ten "właściwy", aktywny zawodnik).
+                prev = result.get(key)
+                if prev and prev["mv"] >= mv_mln:
+                    continue
+                result[key] = {"mv": mv_mln, "age": age, "contract": contract}
+    except FileNotFoundError:
+        print(f"[uwaga] Nie znaleziono {path} — kandydaci zostaną bez wartości "
+              f"rynkowych (mv=0). Wgraj scripts/player_values.csv.", file=sys.stderr)
+    except Exception as e:
+        print(f"[uwaga] Błąd czytania {path}: {e} — pomijam wartości.", file=sys.stderr)
+    return result
  
 def _slug(name):
     if not isinstance(name, str) or not name.strip():
