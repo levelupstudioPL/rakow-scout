@@ -11,19 +11,16 @@ const C = {
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
   LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
-// Domyślna linia dla pozycji spoza mapy (np. "W", "LW", "CF", "RB").
-// Bez tego nieznana pozycja dawała undefined → NaN w całym łańcuchu liczenia.
 const lineOfPos = (pos) => {
   if (LINE_MAP[pos]) return LINE_MAP[pos];
   const s = String(pos || "").toUpperCase();
   if (s.includes("GK")) return "Bramka";
   if (/B$/.test(s) || s.includes("CB") || s === "RB" || s === "LB") return "Obrona";
   if (s.includes("ST") || s.includes("CF") || s === "FW") return "Atak";
-  if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc"; // skrzydła i pomoc
+  if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc";
   return "Pomoc";
 };
 
-// ============================ APP ============================
 export default function App() {
   const [data, setData] = useState(null);
   const [err, setErr] = useState(null);
@@ -45,8 +42,6 @@ export default function App() {
         return r.json();
       })
       .then((d) => {
-        // Waliduj PEŁNY kształt: brak któregokolwiek pola mógłby wygasić ekran
-        // przy .map() w widokach. Odrzucamy niekompletny payload w całości.
         const ok = d && Array.isArray(d.squad) && d.squad.length > 0
           && Array.isArray(d.leagues) && Array.isArray(d.pool)
           && d.correlations && typeof d.correlations === "object";
@@ -55,7 +50,6 @@ export default function App() {
         setSel(d.squad.find((p) => p.real) || d.squad[0]);
       })
       .catch(() => {
-        // Nigdy nie czyścimy istniejących danych — tylko komunikat.
         setErr(live
           ? "Tryb live jest jeszcze niedostępny — zostają dane zapisane."
           : "Nie udało się wczytać danych.");
@@ -76,7 +70,6 @@ export default function App() {
     const { adj } = adjusted(p);
     const rc = Number(player.rc) || 0;
     const diff = adj - rc;
-    // Koherencja z danych (nowy model). Fallback do starego "fit" gdy brak.
     const coherence = typeof p.coherence === "number" ? p.coherence
       : Math.max(0, 100 - Math.abs(diff) * 7);
     const level = typeof p.raw === "number" ? p.raw : adj;
@@ -149,9 +142,9 @@ export default function App() {
         borderRight: `1px solid ${C.line}`, display: "flex", flexDirection: "column",
         padding: "22px 0", flexShrink: 0 }}>
         <div style={{ padding: "0 22px 22px" }}>
-         <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
               style={{ width: 34, height: 41, objectFit: "contain", display: "block" }} />
-            </div>
             <div>
               <div className="disp" style={{ fontSize: 15, lineHeight: 1 }}>RAKÓW</div>
               <div className="mono" style={{ fontSize: 9, color: C.steel, letterSpacing: 2, marginTop: 2 }}>SCOUT ENGINE</div>
