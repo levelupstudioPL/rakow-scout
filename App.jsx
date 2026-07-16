@@ -149,10 +149,8 @@ export default function App() {
         borderRight: `1px solid ${C.line}`, display: "flex", flexDirection: "column",
         padding: "22px 0", flexShrink: 0 }}>
         <div style={{ padding: "0 22px 22px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: C.red, transform: "skewX(-8deg)",
-              display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span className="disp" style={{ fontSize: 18, color: "#fff", transform: "skewX(8deg)" }}>R</span>
+         <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
+              style={{ width: 34, height: 41, objectFit: "contain", display: "block" }} />
             </div>
             <div>
               <div className="disp" style={{ fontSize: 15, lineHeight: 1 }}>RAKÓW</div>
