@@ -14,6 +14,7 @@
 # =====================================================================
 
 from statistics import mean
+import math
 
 # --- Które metryki reprezentują "poziom" danej linii ---
 # Klucz = linia w modelu; wartość = nazwa kolumny metryki w danych StatsBomb.
@@ -45,7 +46,10 @@ def line_average(player_rows, line: str, pos_to_line: dict) -> float:
         mapped = pos_to_line.get(raw_pos)
         if mapped and mapped[1] == line:
             v = row.get(metric)
-            if isinstance(v, (int, float)):
+            # Uwaga: NaN jest technicznie typem float, więc isinstance go przepuszcza.
+            # StatsBomb zwraca NaN dla brakujących metryk (np. xG dla obrońcy),
+            # a NaN w liście zatruwa mean() -> NaN -> round(NaN) wywala skrypt.
+            if isinstance(v, (int, float)) and not math.isnan(v) and not math.isinf(v):
                 vals.append(float(v))
     return mean(vals) if vals else 0.0
 
@@ -64,11 +68,11 @@ def compute_handicaps(base_rows, league_rows, pos_to_line: dict) -> dict:
     for line in ("Bramka", "Obrona", "Pomoc", "Atak"):
         base_avg = line_average(base_rows, line, pos_to_line)
         lg_avg = line_average(league_rows, line, pos_to_line)
-        if base_avg <= 0:
+        if base_avg <= 0 or math.isnan(base_avg) or math.isnan(lg_avg):
             out[line] = 0
             continue
-        pct = round((lg_avg - base_avg) / base_avg * 100)
-        out[line] = pct
+        ratio = (lg_avg - base_avg) / base_avg * 100
+        out[line] = round(ratio) if not (math.isnan(ratio) or math.isinf(ratio)) else 0
     return out
 
 
