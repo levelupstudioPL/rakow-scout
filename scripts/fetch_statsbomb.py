@@ -23,6 +23,7 @@
 import os
 import sys
 import json
+import math
 from pathlib import Path
  
 # Nowe moduły: handicapy, Transfermarkt, koherencja profili.
@@ -395,12 +396,32 @@ def _age(birth_date):
         return 0
  
  
+def _sanitize(obj):
+    """Rekurencyjnie zamienia NaN / nieskończoności na 0 w całej strukturze.
+    KLUCZOWE: Python domyślnie zapisuje NaN do JSON-a, ale przeglądarka NIE
+    umie go wczytać (NaN nie jest legalnym JSON-em) — efektem jest czarny
+    ekran 'Nie udało się wczytać danych'. Ta funkcja temu zapobiega."""
+    if isinstance(obj, float):
+        return 0 if (math.isnan(obj) or math.isinf(obj)) else obj
+    if isinstance(obj, dict):
+        return {k: _sanitize(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize(v) for v in obj]
+    return obj
+
+
 def main():
     creds = get_credentials()
     sb = load_statsbombpy()
     print("Łączę ze StatsBomb i pobieram dane…")
     dataset = build_dataset(sb, creds)
-    OUT.write_text(json.dumps(dataset, ensure_ascii=False, indent=2), encoding="utf-8")
+    dataset = _sanitize(dataset)  # usuń NaN/inf zanim trafią do pliku
+    # allow_nan=False => gdyby coś przeciekło, skrypt krzyknie zamiast po cichu
+    # zapisać plik, którego przeglądarka nie wczyta.
+    OUT.write_text(
+        json.dumps(dataset, ensure_ascii=False, indent=2, allow_nan=False),
+        encoding="utf-8",
+    )
     print(f"Zapisano: {OUT}")
     print(f"  skład: {len(dataset['squad'])}, ligi: {len(dataset['leagues'])}, pula: {len(dataset['pool'])}")
  
