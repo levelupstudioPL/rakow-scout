@@ -98,29 +98,62 @@ def load_statsbombpy():
  
 # Mapowanie pozycji StatsBomb -> uproszczona pozycja i linia w modelu.
 # Pokrywa pełny zestaw etykiet StatsBomb (widziane w danych Ekstraklasy).
+#
+# UWAGA: nazwy poniżej to REALNE etykiety zwracane przez StatsBomb
+# (potwierdzone na danych Ekstraklasy 25/26 — 23 unikalne wartości
+# primary_position). StatsBomb używa brytyjskiej pisowni "Centre"
+# (nie "Center") oraz końcówek "Midfielder"/"Forward". Wcześniejsza
+# wersja słownika miała amerykańskie "Center" i "Midfield", przez co
+# środek pola i napastnicy (AM/DM/ST) nie mapowali się i wypadali z puli.
+# Dla odporności trzymamy OBIE pisownie.
 POS_TO_LINE = {
+    # --- Bramka ---
     "Goalkeeper": ("GK", "Bramka"),
-    # Obrona środkowa
-    "Center Back": ("CB", "Obrona"), "Centre Back": ("CB", "Obrona"),
+
+    # --- Obrona środkowa ---
+    "Centre Back": ("CB", "Obrona"),
+    "Right Centre Back": ("CB", "Obrona"), "Left Centre Back": ("CB", "Obrona"),
+    # (warianty amerykańskie — na wszelki wypadek)
+    "Center Back": ("CB", "Obrona"),
     "Right Center Back": ("CB", "Obrona"), "Left Center Back": ("CB", "Obrona"),
-    # Obrona boczna / wahadła
-    "Right Wing Back": ("WB", "Obrona"), "Left Wing Back": ("WB", "Obrona"),
+
+    # --- Obrona boczna / wahadła ---
     "Right Back": ("WB", "Obrona"), "Left Back": ("WB", "Obrona"),
+    "Right Wing Back": ("WB", "Obrona"), "Left Wing Back": ("WB", "Obrona"),
     "Wing Back": ("WB", "Obrona"),
-    # Pomoc defensywna / centralna
+
+    # --- Pomoc defensywna / centralna ---
+    "Centre Defensive Midfielder": ("DM", "Pomoc"),
+    "Right Defensive Midfielder": ("DM", "Pomoc"),
+    "Left Defensive Midfielder": ("DM", "Pomoc"),
+    "Centre Midfielder": ("CM", "Pomoc"),
+    "Right Centre Midfielder": ("CM", "Pomoc"),
+    "Left Centre Midfielder": ("CM", "Pomoc"),
+    "Right Midfielder": ("WM", "Pomoc"), "Left Midfielder": ("WM", "Pomoc"),
+    # (warianty amerykańskie / bez "-er")
     "Center Defensive Midfield": ("DM", "Pomoc"),
     "Right Defensive Midfield": ("DM", "Pomoc"), "Left Defensive Midfield": ("DM", "Pomoc"),
     "Center Midfield": ("CM", "Pomoc"), "Right Center Midfield": ("CM", "Pomoc"),
     "Left Center Midfield": ("CM", "Pomoc"),
-    "Right Midfielder": ("WM", "Pomoc"), "Left Midfielder": ("WM", "Pomoc"),
     "Right Midfield": ("WM", "Pomoc"), "Left Midfield": ("WM", "Pomoc"),
-    # Pomoc ofensywna / skrzydła
+
+    # --- Pomoc ofensywna / skrzydła ---
+    "Centre Attacking Midfielder": ("AM", "Pomoc"),
+    "Right Attacking Midfielder": ("AM", "Pomoc"),
+    "Left Attacking Midfielder": ("AM", "Pomoc"),
+    "Right Wing": ("W", "Pomoc"), "Left Wing": ("W", "Pomoc"),
+    # (warianty)
     "Center Attacking Midfield": ("AM", "Pomoc"),
     "Right Attacking Midfield": ("AM", "Pomoc"), "Left Attacking Midfield": ("AM", "Pomoc"),
-    "Right Wing": ("W", "Pomoc"), "Left Wing": ("W", "Pomoc"),
     "Right Winger": ("W", "Pomoc"), "Left Winger": ("W", "Pomoc"),
-    # Atak
-    "Center Forward": ("ST", "Atak"), "Striker": ("ST", "Atak"),
+
+    # --- Atak ---
+    "Centre Forward": ("ST", "Atak"),
+    "Right Centre Forward": ("ST", "Atak"), "Left Centre Forward": ("ST", "Atak"),
+    # (warianty)
+    "Center Forward": ("ST", "Atak"),
+    "Right Center Forward": ("ST", "Atak"), "Left Center Forward": ("ST", "Atak"),
+    "Striker": ("ST", "Atak"),
     "Secondary Striker": ("ST", "Atak"), "Second Striker": ("ST", "Atak"),
 }
  
