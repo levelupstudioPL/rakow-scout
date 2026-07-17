@@ -11,9 +11,9 @@
 #
 # Metryki dobrane per linia — profil gry definiują akcje typowe dla roli.
 # =====================================================================
- 
+
 import math
- 
+
 # --- Metryki definiujące PROFIL GRY per linia ---
 # Do koherencji (podobieństwa) i do poziomu. Nazwy = pola StatsBomb.
 LINE_METRICS = {
@@ -45,14 +45,33 @@ LINE_METRICS = {
         "player_season_op_xgchain_90",
     ],
 }
- 
+
 # Podzbiór metryk "jakościowych" (wyższa wartość = lepszy) do liczenia POZIOMU.
 # Metryki proporcjonalne (ratio, proportion) pomijamy w poziomie — opisują styl,
 # nie jakość. Zostają za to w profilu koherencji.
+#
+# WARIANT OSTROŻNY (rozszerzenie obrony + bramki):
+#   - Obrona: do czystej defensywy (odbiory, powietrze, wybicia) DODANO wymiar
+#     gry w wyprowadzeniu piłki: op_passes_90 (wolumen gry nogą) i op_f3_passes_90
+#     (podania w tercję ofensywną). Powód: nowoczesny stoper to też pierwszy
+#     rozgrywający — poprzedni zestaw tego wymiaru w ogóle nie widział. To NIE są
+#     metryki proporcjonalne, więc uczciwie wchodzą do poziomu.
+#   - Bramka: dodano op_passes_90 (gra nogą bramkarza). Danych stricte bramkarskich
+#     (gsaa/save_ratio) w tych ligach zwykle brak; to daje modelowi cokolwiek do
+#     policzenia zamiast pustki. UWAGA: to i tak nie mierzy obron strzałów — tych
+#     danych po prostu nie ma w źródle.
+#   - Pomoc i Atak: BEZ ZMIAN — zestawy zrównoważone, dokładanie rozcieńczyłoby
+#     sygnał.
+#
+# UCZCIWOŚĆ: dobór i waga tych metryk to założenie piłkarskie — do weryfikacji
+# przez kogoś znającego Ekstraklasę i te ligi. Rozszerzenie pogłębia model, ale
+# nie zmniejsza potrzeby jego walidacji.
 QUALITY_METRICS = {
-    "Bramka": ["player_season_gsaa_90", "player_season_save_ratio"],
+    "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
+               "player_season_op_passes_90"],
     "Obrona": ["player_season_padj_tackles_and_interceptions_90",
-               "player_season_aerial_wins_90", "player_season_clearance_90"],
+               "player_season_aerial_wins_90", "player_season_clearance_90",
+               "player_season_op_passes_90", "player_season_op_f3_passes_90"],
     "Pomoc": ["player_season_op_xgchain_90", "player_season_xgbuildup_90",
               "player_season_key_passes_90", "player_season_xa_90",
               "player_season_passes_into_box_90",
@@ -61,8 +80,8 @@ QUALITY_METRICS = {
              "player_season_np_shots_90", "player_season_touches_inside_box_90",
              "player_season_xa_90"],
 }
- 
- 
+
+
 def _val(row, key):
     v = row.get(key)
     if not isinstance(v, (int, float)):
@@ -71,8 +90,8 @@ def _val(row, key):
     if math.isnan(fv) or math.isinf(fv):  # puste/niepoprawne metryki -> brak
         return None
     return fv
- 
- 
+
+
 def build_league_stats(rows, line):
     """Dla każdej metryki linii liczy min/max/średnią/odchylenie w populacji ligi.
     Służy do normalizacji (percentyl / z-score)."""
@@ -89,16 +108,16 @@ def build_league_stats(rows, line):
                     "min": min(vals), "max": max(vals),
                     "sorted": sorted(vals)}
     return stats
- 
- 
+
+
 def _percentile(value, sorted_vals):
     """Percentyl wartości w posortowanej populacji (0-100)."""
     if not sorted_vals:
         return 50.0
     below = sum(1 for v in sorted_vals if v < value)
     return 100.0 * below / len(sorted_vals)
- 
- 
+
+
 def quality_level(row, line, league_stats):
     """POZIOM 0-100: średni percentyl metryk jakościowych względem ligi bazowej."""
     metrics = QUALITY_METRICS.get(line, [])
@@ -115,8 +134,8 @@ def quality_level(row, line, league_stats):
     if math.isnan(avg) or math.isinf(avg):
         return 72
     return max(0, min(100, round(avg)))
- 
- 
+
+
 def _zprofile(row, line, base_stats):
     """Profil zawodnika jako wektor z-score względem ligi bazowej."""
     metrics = LINE_METRICS.get(line, [])
@@ -129,8 +148,8 @@ def _zprofile(row, line, base_stats):
         else:
             vec.append((v - st["mean"]) / st["std"])
     return vec
- 
- 
+
+
 def coherence(candidate_row, rakow_row, line, base_stats):
     """KOHERENCJA 0-100: podobieństwo profili gry (kandydat vs zawodnik Rakowa).
     Liczone jako podobieństwo kosinusowe wektorów z-score, przeskalowane 0-100."""
@@ -148,8 +167,8 @@ def coherence(candidate_row, rakow_row, line, base_stats):
     if math.isnan(result) or math.isinf(result):
         return 50
     return max(0, min(100, round(result)))  # 0..100, zabezpieczone
- 
- 
+
+
 if __name__ == "__main__":
     # Test na danych syntetycznych
     base = [
