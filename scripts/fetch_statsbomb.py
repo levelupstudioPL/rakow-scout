@@ -321,6 +321,14 @@ def build_dataset(sb, creds):
                 continue
             pos, line = mapped
             level = coh.quality_level(row, line, base_stats_by_line[line])
+            # level_estimated: True gdy kandydat NIE ma metryk jakosciowych dla
+            # swojej linii — wtedy quality_level zwrocil fallback (nie realny
+            # percentyl). Front pokazuje wtedy znacznik "niepelne dane".
+            _qm = coh.QUALITY_METRICS.get(line, [])
+            _has_metrics = any(
+                isinstance(row.get(m), (int, float)) for m in _qm
+            )
+            level_estimated = not _has_metrics
  
             # Koherencja: najpierw z zawodnikiem Rakowa z tej samej pozycji;
             # jeśli brak — porównaj do zawodników z tej samej LINII (szerszy kubełek).
@@ -338,6 +346,7 @@ def build_dataset(sb, creds):
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
                 "lg": lg["name"], "pos": pos,
                 "raw": level,
+                "level_estimated": level_estimated,
                 "coherence": best_coh,
                 "coherence_ref": best_ref,
                 "age": _age(row.get("birth_date")),
