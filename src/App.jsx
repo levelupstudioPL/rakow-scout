@@ -223,6 +223,14 @@ function TwinView({ data, sel, setSel, setView }) {
   return (
     <div>
       <Lead>Skład ułożony liniami — jak na tablicy taktycznej. Kliknij zawodnika, by znaleźć jego odpowiedników w Europie.</Lead>
+      {data.squad.some((p) => p.rc_estimated) && (
+        <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 7,
+          background: `${C.warn}14`, border: `1px solid ${C.warn}44`, borderRadius: 9,
+          padding: "7px 12px", fontSize: 12, color: C.steelHi }}>
+          <span style={{ color: C.warn, fontSize: 14 }}>⚠</span>
+          Znacznik przy RC oznacza <b style={{ color: C.bone }}>niepełne dane</b> — poziom szacowany, bo zawodnik nie ma jeszcze wystarczającej próbki meczowej. Traktuj orientacyjnie.
+        </div>
+      )}
       <RcExplainer />
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 20 }}>
         {order.map((line) => (
@@ -243,12 +251,18 @@ function TwinView({ data, sel, setSel, setView }) {
                       <div className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{p.pos}</div>
                       <div style={{ fontSize: 14, fontWeight: 600, marginTop: 4, lineHeight: 1.2 }}>{p.name}</div>
                     </div>
-                    <div className="disp" style={{ fontSize: 34, lineHeight: 0.8, color: C.bone, flexShrink: 0 }}>
+                    <div className="disp" style={{ fontSize: 34, lineHeight: 0.8, color: C.bone, flexShrink: 0,
+                      display: "flex", alignItems: "flex-start", gap: 3 }}>
                       {p.rc}<span style={{ fontSize: 11, color: C.steel }}> RC</span>
+                      {p.rc_estimated && (
+                        <span title="Niepełne dane — poziom szacowany (zawodnik nie ma jeszcze wystarczającej próbki meczowej w StatsBomb). Traktuj orientacyjnie."
+                          style={{ fontSize: 13, color: C.warn, cursor: "help", lineHeight: 1 }}>⚠</span>
+                      )}
                     </div>
                   </div>
                   <div style={{ height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden", marginTop: 12 }}>
-                    <div className="bar" style={{ width: `${p.rc}%`, height: "100%", background: C.red }} />
+                    <div className="bar" style={{ width: `${p.rc}%`, height: "100%",
+                      background: p.rc_estimated ? C.warn : C.red }} />
                   </div>
                   {p.real && <div style={{ position: "absolute", top: 0, right: 0, background: C.good,
                     color: C.ink, fontSize: 8.5, fontWeight: 800, padding: "2px 7px", letterSpacing: 0.5 }}>REAL</div>}
