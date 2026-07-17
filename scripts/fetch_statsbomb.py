@@ -285,6 +285,10 @@ def build_dataset(sb, creds):
         squad.append({
             "id": pl.get("id") or f"rk-{_slug(name)}", "name": name,
             "pos": pos, "line": line, "rc": rc, "real": True,
+            # rc_estimated = True gdy RC NIE pochodzi z modelu (brak metryk
+            # StatsBomb -> fallback ze squad.json lub domyslne 72). Front pokazuje
+            # wtedy flage "niepelne dane", zeby nie mylic braku danych z ocena.
+            "rc_estimated": (rc_source != "model"),
             "_sb": sb_row,
         })
 
