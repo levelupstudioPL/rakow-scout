@@ -887,16 +887,16 @@
       "contract": 0
     },
     {
-      "id": "pl-212489",
-      "name": "Oumar Diakité",
+      "id": "pl-439120",
+      "name": "Valy Konaté",
       "lg": "Jupiler Pro League (BE)",
-      "pos": "ST",
-      "raw": 87,
-      "coherence": 95,
-      "coherence_ref": "Jonatan Braut Brunes",
-      "age": 23,
-      "mv": 5.0,
-      "contract": 2028
+      "pos": "CB",
+      "raw": 82,
+      "coherence": 63,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 20,
+      "mv": 0.0,
+      "contract": 0
     },
     {
       "id": "pl-431527",
@@ -911,16 +911,16 @@
       "contract": 2027
     },
     {
-      "id": "pl-439120",
-      "name": "Valy Konaté",
+      "id": "pl-212489",
+      "name": "Oumar Diakité",
       "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 82,
-      "coherence": 63,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 20,
-      "mv": 0.0,
-      "contract": 0
+      "pos": "ST",
+      "raw": 87,
+      "coherence": 95,
+      "coherence_ref": "Jonatan Braut Brunes",
+      "age": 23,
+      "mv": 5.0,
+      "contract": 2028
     },
     {
       "id": "pl-348757",
@@ -1715,18 +1715,6 @@
       "contract": 0
     },
     {
-      "id": "pl-29337",
-      "name": "Youssef Maziz",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "AM",
-      "raw": 71,
-      "coherence": 71,
-      "coherence_ref": "Tomasz Pieńko",
-      "age": 28,
-      "mv": 1.0,
-      "contract": 0
-    },
-    {
       "id": "pl-7234",
       "name": "Maxence Andre Prévôt",
       "lg": "Jupiler Pro League (BE)",
@@ -1739,15 +1727,15 @@
       "contract": 0
     },
     {
-      "id": "pl-232180",
-      "name": "Edan Miloud Diop",
+      "id": "pl-29337",
+      "name": "Youssef Maziz",
       "lg": "Jupiler Pro League (BE)",
-      "pos": "WM",
-      "raw": 83,
-      "coherence": 84,
-      "coherence_ref": "Fran Tudor",
-      "age": 22,
-      "mv": 0.0,
+      "pos": "AM",
+      "raw": 71,
+      "coherence": 71,
+      "coherence_ref": "Tomasz Pieńko",
+      "age": 28,
+      "mv": 1.0,
       "contract": 0
     },
     {
@@ -1759,6 +1747,18 @@
       "coherence": 90,
       "coherence_ref": "Jonatan Braut Brunes",
       "age": 21,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-232180",
+      "name": "Edan Miloud Diop",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "WM",
+      "raw": 83,
+      "coherence": 84,
+      "coherence_ref": "Fran Tudor",
+      "age": 22,
       "mv": 0.0,
       "contract": 0
     },
@@ -1811,18 +1811,6 @@
       "contract": 2026
     },
     {
-      "id": "pl-163950",
-      "name": "Mihajlo Ilić",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 69,
-      "coherence": 87,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 23,
-      "mv": 4.0,
-      "contract": 2028
-    },
-    {
       "id": "pl-396574",
       "name": "Mihajlo Cvetković",
       "lg": "Jupiler Pro League (BE)",
@@ -1833,6 +1821,18 @@
       "age": 19,
       "mv": 0.0,
       "contract": 0
+    },
+    {
+      "id": "pl-163950",
+      "name": "Mihajlo Ilić",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 69,
+      "coherence": 87,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 23,
+      "mv": 4.0,
+      "contract": 2028
     },
     {
       "id": "pl-38862",
@@ -1871,18 +1871,6 @@
       "contract": 0
     },
     {
-      "id": "pl-397068",
-      "name": "Tochukwu Nnadi",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "DM",
-      "raw": 39,
-      "coherence": 77,
-      "coherence_ref": "Karol Struski",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-406655",
       "name": "Charles Chukwubuikem Ikwuemesi",
       "lg": "Jupiler Pro League (BE)",
@@ -1891,6 +1879,18 @@
       "coherence": 94,
       "coherence_ref": "Jonatan Braut Brunes",
       "age": 25,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-397068",
+      "name": "Tochukwu Nnadi",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "DM",
+      "raw": 39,
+      "coherence": 77,
+      "coherence_ref": "Karol Struski",
+      "age": 23,
       "mv": 0.0,
       "contract": 0
     },
@@ -2231,18 +2231,6 @@
       "contract": 2029
     },
     {
-      "id": "pl-95368",
-      "name": "Takahiro Akimoto",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "WB",
-      "raw": 61,
-      "coherence": 60,
-      "coherence_ref": "Jean Carlos Silva",
-      "age": 28,
-      "mv": 0.9,
-      "contract": 0
-    },
-    {
       "id": "pl-42888",
       "name": "Takuma Ominami",
       "lg": "Jupiler Pro League (BE)",
@@ -2252,6 +2240,18 @@
       "coherence_ref": "Bogdan Racovițan",
       "age": 29,
       "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-95368",
+      "name": "Takahiro Akimoto",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "WB",
+      "raw": 61,
+      "coherence": 60,
+      "coherence_ref": "Jean Carlos Silva",
+      "age": 28,
+      "mv": 0.9,
       "contract": 0
     },
     {
@@ -2483,18 +2483,6 @@
       "contract": 2028
     },
     {
-      "id": "pl-404083",
-      "name": "Jakob Kiilerich Rask",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 73,
-      "coherence": 92,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 26,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-121717",
       "name": "Lucas Boel Hey",
       "lg": "Jupiler Pro League (BE)",
@@ -2514,6 +2502,18 @@
       "raw": 76,
       "coherence": 67,
       "coherence_ref": "Tomasz Pieńko",
+      "age": 26,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-404083",
+      "name": "Jakob Kiilerich Rask",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 73,
+      "coherence": 92,
+      "coherence_ref": "Bogdan Racovițan",
       "age": 26,
       "mv": 0.0,
       "contract": 0
@@ -3743,18 +3743,6 @@
       "contract": 0
     },
     {
-      "id": "pl-18741",
-      "name": "Siebe Schrijvers",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "DM",
-      "raw": 69,
-      "coherence": 84,
-      "coherence_ref": "Marko Bulat",
-      "age": 30,
-      "mv": 1.5,
-      "contract": 2027
-    },
-    {
       "id": "pl-25365",
       "name": "Colin Maurice Coosemans",
       "lg": "Jupiler Pro League (BE)",
@@ -3764,174 +3752,6 @@
       "coherence_ref": "Kacper Trelowski",
       "age": 34,
       "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-146895",
-      "name": "Lukas Willen",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 69,
-      "coherence": 83,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 23,
-      "mv": 0.8,
-      "contract": 0
-    },
-    {
-      "id": "pl-166662",
-      "name": "Dirk Junior Asare",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "DM",
-      "raw": 64,
-      "coherence": 90,
-      "coherence_ref": "Karol Struski",
-      "age": 22,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-416735",
-      "name": "Yannick Cappelle",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "WB",
-      "raw": 63,
-      "coherence": 82,
-      "coherence_ref": "Adriano",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-473015",
-      "name": "Benoit De Jaegere",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 67,
-      "coherence": 77,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 22,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-23787",
-      "name": "Ewoud Pletinckx",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 61,
-      "coherence": 88,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 26,
-      "mv": 2.0,
-      "contract": 2029
-    },
-    {
-      "id": "pl-8656",
-      "name": "Noë Georges Dussenne",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 71,
-      "coherence": 89,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 34,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-52203",
-      "name": "Wouter George",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "DM",
-      "raw": 55,
-      "coherence": 63,
-      "coherence_ref": "Marko Bulat",
-      "age": 24,
-      "mv": 0.7,
-      "contract": 2028
-    },
-    {
-      "id": "pl-432562",
-      "name": "Davis Opoku",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "WB",
-      "raw": 52,
-      "coherence": 88,
-      "coherence_ref": "Michael Ameyaw",
-      "age": 19,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-62051",
-      "name": "Gary Jean Paul Fernand Magnée",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "WB",
-      "raw": 69,
-      "coherence": 79,
-      "coherence_ref": "Jean Carlos Silva",
-      "age": 27,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-16310",
-      "name": "Pieter Tom Gerkens",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "DM",
-      "raw": 58,
-      "coherence": 66,
-      "coherence_ref": "Karol Struski",
-      "age": 31,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-29022",
-      "name": "Dante Vanzeir",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "ST",
-      "raw": 90,
-      "coherence": 81,
-      "coherence_ref": "Jonatan Braut Brunes",
-      "age": 28,
-      "mv": 2.0,
-      "contract": 2027
-    },
-    {
-      "id": "pl-46173",
-      "name": "Maxime Delanghe",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "GK",
-      "raw": 36,
-      "coherence": 99,
-      "coherence_ref": "Kacper Trelowski",
-      "age": 25,
-      "mv": 2.0,
-      "contract": 2028
-    },
-    {
-      "id": "pl-196549",
-      "name": "Christiaan Ravych",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 59,
-      "coherence": 86,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 24,
-      "mv": 3.5,
-      "contract": 2027
-    },
-    {
-      "id": "pl-22109",
-      "name": "Yari Verschaeren",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "AM",
-      "raw": 77,
-      "coherence": 80,
-      "coherence_ref": "Tomasz Pieńko",
-      "age": 25,
-      "mv": 3.0,
       "contract": 0
     },
     {
@@ -3945,30 +3765,6 @@
       "age": 24,
       "mv": 5.0,
       "contract": 2028
-    },
-    {
-      "id": "pl-422482",
-      "name": "Nathan De Cat",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "DM",
-      "raw": 56,
-      "coherence": 69,
-      "coherence_ref": "Karol Struski",
-      "age": 18,
-      "mv": 17.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-406213",
-      "name": "Adriano Bertaccini",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "ST",
-      "raw": 87,
-      "coherence": 96,
-      "coherence_ref": "Jonatan Braut Brunes",
-      "age": 26,
-      "mv": 6.0,
-      "contract": 2029
     },
     {
       "id": "pl-29577",
@@ -3995,6 +3791,126 @@
       "contract": 0
     },
     {
+      "id": "pl-432562",
+      "name": "Davis Opoku",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "WB",
+      "raw": 52,
+      "coherence": 88,
+      "coherence_ref": "Michael Ameyaw",
+      "age": 19,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-52203",
+      "name": "Wouter George",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "DM",
+      "raw": 55,
+      "coherence": 63,
+      "coherence_ref": "Marko Bulat",
+      "age": 24,
+      "mv": 0.7,
+      "contract": 2028
+    },
+    {
+      "id": "pl-8656",
+      "name": "Noë Georges Dussenne",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 71,
+      "coherence": 89,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 34,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-23787",
+      "name": "Ewoud Pletinckx",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 61,
+      "coherence": 88,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 26,
+      "mv": 2.0,
+      "contract": 2029
+    },
+    {
+      "id": "pl-18741",
+      "name": "Siebe Schrijvers",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "DM",
+      "raw": 69,
+      "coherence": 84,
+      "coherence_ref": "Marko Bulat",
+      "age": 30,
+      "mv": 1.5,
+      "contract": 2027
+    },
+    {
+      "id": "pl-46173",
+      "name": "Maxime Delanghe",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "GK",
+      "raw": 36,
+      "coherence": 99,
+      "coherence_ref": "Kacper Trelowski",
+      "age": 25,
+      "mv": 2.0,
+      "contract": 2028
+    },
+    {
+      "id": "pl-29022",
+      "name": "Dante Vanzeir",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "ST",
+      "raw": 90,
+      "coherence": 81,
+      "coherence_ref": "Jonatan Braut Brunes",
+      "age": 28,
+      "mv": 2.0,
+      "contract": 2027
+    },
+    {
+      "id": "pl-16310",
+      "name": "Pieter Tom Gerkens",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "DM",
+      "raw": 58,
+      "coherence": 66,
+      "coherence_ref": "Karol Struski",
+      "age": 31,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-62051",
+      "name": "Gary Jean Paul Fernand Magnée",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "WB",
+      "raw": 69,
+      "coherence": 79,
+      "coherence_ref": "Jean Carlos Silva",
+      "age": 27,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-196549",
+      "name": "Christiaan Ravych",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 59,
+      "coherence": 86,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 24,
+      "mv": 3.5,
+      "contract": 2027
+    },
+    {
       "id": "pl-354368",
       "name": "Tristan Degreef",
       "lg": "Jupiler Pro League (BE)",
@@ -4007,28 +3923,52 @@
       "contract": 2028
     },
     {
-      "id": "pl-57054",
-      "name": "Laurent Lemoine",
-      "lg": "Jupiler Pro League (BE)",
-      "pos": "CB",
-      "raw": 69,
-      "coherence": 93,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 28,
-      "mv": 0.25,
-      "contract": 2027
-    },
-    {
-      "id": "pl-16280",
-      "name": "Jelle Vossen",
+      "id": "pl-406213",
+      "name": "Adriano Bertaccini",
       "lg": "Jupiler Pro League (BE)",
       "pos": "ST",
-      "raw": 80,
-      "coherence": 91,
+      "raw": 87,
+      "coherence": 96,
       "coherence_ref": "Jonatan Braut Brunes",
-      "age": 37,
-      "mv": 0.4,
-      "contract": 2027
+      "age": 26,
+      "mv": 6.0,
+      "contract": 2029
+    },
+    {
+      "id": "pl-422482",
+      "name": "Nathan De Cat",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "DM",
+      "raw": 56,
+      "coherence": 69,
+      "coherence_ref": "Karol Struski",
+      "age": 18,
+      "mv": 17.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-22109",
+      "name": "Yari Verschaeren",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "AM",
+      "raw": 77,
+      "coherence": 80,
+      "coherence_ref": "Tomasz Pieńko",
+      "age": 25,
+      "mv": 3.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-406209",
+      "name": "Benoît Vivian Nyssen",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "WB",
+      "raw": 59,
+      "coherence": 92,
+      "coherence_ref": "Michael Ameyaw",
+      "age": 29,
+      "mv": 0.0,
+      "contract": 0
     },
     {
       "id": "pl-209237",
@@ -4043,15 +3983,75 @@
       "contract": 2028
     },
     {
-      "id": "pl-406209",
-      "name": "Benoît Vivian Nyssen",
+      "id": "pl-16280",
+      "name": "Jelle Vossen",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "ST",
+      "raw": 80,
+      "coherence": 91,
+      "coherence_ref": "Jonatan Braut Brunes",
+      "age": 37,
+      "mv": 0.4,
+      "contract": 2027
+    },
+    {
+      "id": "pl-57054",
+      "name": "Laurent Lemoine",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 69,
+      "coherence": 93,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 28,
+      "mv": 0.25,
+      "contract": 2027
+    },
+    {
+      "id": "pl-473015",
+      "name": "Benoit De Jaegere",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 67,
+      "coherence": 77,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 22,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-416735",
+      "name": "Yannick Cappelle",
       "lg": "Jupiler Pro League (BE)",
       "pos": "WB",
-      "raw": 59,
-      "coherence": 92,
-      "coherence_ref": "Michael Ameyaw",
-      "age": 29,
+      "raw": 63,
+      "coherence": 82,
+      "coherence_ref": "Adriano",
+      "age": 23,
       "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-166662",
+      "name": "Dirk Junior Asare",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "DM",
+      "raw": 64,
+      "coherence": 90,
+      "coherence_ref": "Karol Struski",
+      "age": 22,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-146895",
+      "name": "Lukas Willen",
+      "lg": "Jupiler Pro League (BE)",
+      "pos": "CB",
+      "raw": 69,
+      "coherence": 83,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 23,
+      "mv": 0.8,
       "contract": 0
     },
     {
@@ -4319,18 +4319,6 @@
       "contract": 2028
     },
     {
-      "id": "pl-26151",
-      "name": "Ricardo Daniel Pepi",
-      "lg": "Eredivisie (NL)",
-      "pos": "ST",
-      "raw": 92,
-      "coherence": 98,
-      "coherence_ref": "Jonatan Braut Brunes",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-21881",
       "name": "Sergino Dest",
       "lg": "Eredivisie (NL)",
@@ -4341,6 +4329,18 @@
       "age": 26,
       "mv": 18.0,
       "contract": 2028
+    },
+    {
+      "id": "pl-26151",
+      "name": "Ricardo Daniel Pepi",
+      "lg": "Eredivisie (NL)",
+      "pos": "ST",
+      "raw": 92,
+      "coherence": 98,
+      "coherence_ref": "Jonatan Braut Brunes",
+      "age": 23,
+      "mv": 0.0,
+      "contract": 0
     },
     {
       "id": "pl-300623",
@@ -4919,16 +4919,16 @@
       "contract": 2027
     },
     {
-      "id": "pl-39174",
-      "name": "Ismael Saibari",
+      "id": "pl-47665",
+      "name": "Couhaib Driouech",
       "lg": "Eredivisie (NL)",
-      "pos": "AM",
-      "raw": 93,
+      "pos": "W",
+      "raw": 87,
       "coherence": 70,
-      "coherence_ref": "Tomasz Pieńko",
-      "age": 25,
-      "mv": 32.0,
-      "contract": 2031
+      "coherence_ref": "Jesús Díaz",
+      "age": 24,
+      "mv": 6.0,
+      "contract": 2029
     },
     {
       "id": "pl-34236",
@@ -4943,16 +4943,16 @@
       "contract": 2028
     },
     {
-      "id": "pl-47665",
-      "name": "Couhaib Driouech",
+      "id": "pl-39174",
+      "name": "Ismael Saibari",
       "lg": "Eredivisie (NL)",
-      "pos": "W",
-      "raw": 87,
+      "pos": "AM",
+      "raw": 93,
       "coherence": 70,
-      "coherence_ref": "Jesús Díaz",
-      "age": 24,
-      "mv": 6.0,
-      "contract": 2029
+      "coherence_ref": "Tomasz Pieńko",
+      "age": 25,
+      "mv": 32.0,
+      "contract": 2031
     },
     {
       "id": "pl-8425",
@@ -7019,63 +7019,51 @@
       "contract": 0
     },
     {
-      "id": "pl-7833",
-      "name": "Guus Berend Til",
+      "id": "pl-38835",
+      "name": "Julius Dirksen",
       "lg": "Eredivisie (NL)",
-      "pos": "AM",
-      "raw": 79,
-      "coherence": 66,
-      "coherence_ref": "Lamine Diaby-Fadiga",
-      "age": 29,
+      "pos": "CB",
+      "raw": 65,
+      "coherence": 88,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 23,
+      "mv": 0.35,
+      "contract": 2029
+    },
+    {
+      "id": "pl-22165",
+      "name": "Henricus Gerardus Hubertus Maria Linthorst",
+      "lg": "Eredivisie (NL)",
+      "pos": "DM",
+      "raw": 51,
+      "coherence": 90,
+      "coherence_ref": "Karol Struski",
+      "age": 26,
       "mv": 0.0,
       "contract": 0
     },
     {
-      "id": "pl-21177",
-      "name": "Mats Deijl",
-      "lg": "Eredivisie (NL)",
-      "pos": "WB",
-      "raw": 61,
-      "coherence": 73,
-      "coherence_ref": "Adriano",
-      "age": 29,
-      "mv": 2.0,
-      "contract": 2028
-    },
-    {
-      "id": "pl-21776",
-      "name": "Melle Meulensteen",
-      "lg": "Eredivisie (NL)",
-      "pos": "DM",
-      "raw": 52,
-      "coherence": 90,
-      "coherence_ref": "Karol Struski",
-      "age": 27,
-      "mv": 0.9,
-      "contract": 2029
-    },
-    {
-      "id": "pl-16368",
-      "name": "Joris Kramer",
+      "id": "pl-114312",
+      "name": "Giovanni van Zwam",
       "lg": "Eredivisie (NL)",
       "pos": "CB",
-      "raw": 72,
-      "coherence": 94,
+      "raw": 64,
+      "coherence": 95,
       "coherence_ref": "Bogdan Racovițan",
-      "age": 30,
-      "mv": 1.8,
-      "contract": 2028
+      "age": 22,
+      "mv": 0.1,
+      "contract": 2027
     },
     {
-      "id": "pl-21581",
-      "name": "Kenzo Goudmijn",
+      "id": "pl-50920",
+      "name": "Calvin Twigt",
       "lg": "Eredivisie (NL)",
-      "pos": "AM",
-      "raw": 72,
-      "coherence": 73,
-      "coherence_ref": "Tomasz Pieńko",
-      "age": 25,
-      "mv": 1.8,
+      "pos": "DM",
+      "raw": 54,
+      "coherence": 86,
+      "coherence_ref": "Karol Struski",
+      "age": 23,
+      "mv": 0.75,
       "contract": 2028
     },
     {
@@ -7091,52 +7079,64 @@
       "contract": 2030
     },
     {
-      "id": "pl-50920",
-      "name": "Calvin Twigt",
+      "id": "pl-21581",
+      "name": "Kenzo Goudmijn",
       "lg": "Eredivisie (NL)",
-      "pos": "DM",
-      "raw": 54,
-      "coherence": 86,
-      "coherence_ref": "Karol Struski",
-      "age": 23,
-      "mv": 0.75,
+      "pos": "AM",
+      "raw": 72,
+      "coherence": 73,
+      "coherence_ref": "Tomasz Pieńko",
+      "age": 25,
+      "mv": 1.8,
       "contract": 2028
     },
     {
-      "id": "pl-114312",
-      "name": "Giovanni van Zwam",
+      "id": "pl-16368",
+      "name": "Joris Kramer",
       "lg": "Eredivisie (NL)",
       "pos": "CB",
-      "raw": 64,
-      "coherence": 95,
+      "raw": 72,
+      "coherence": 94,
       "coherence_ref": "Bogdan Racovițan",
-      "age": 22,
-      "mv": 0.1,
-      "contract": 2027
+      "age": 30,
+      "mv": 1.8,
+      "contract": 2028
     },
     {
-      "id": "pl-22165",
-      "name": "Henricus Gerardus Hubertus Maria Linthorst",
+      "id": "pl-21776",
+      "name": "Melle Meulensteen",
       "lg": "Eredivisie (NL)",
       "pos": "DM",
-      "raw": 51,
+      "raw": 52,
       "coherence": 90,
       "coherence_ref": "Karol Struski",
-      "age": 26,
-      "mv": 0.0,
-      "contract": 0
+      "age": 27,
+      "mv": 0.9,
+      "contract": 2029
     },
     {
-      "id": "pl-38835",
-      "name": "Julius Dirksen",
+      "id": "pl-21177",
+      "name": "Mats Deijl",
       "lg": "Eredivisie (NL)",
-      "pos": "CB",
-      "raw": 65,
-      "coherence": 88,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 23,
-      "mv": 0.35,
-      "contract": 2029
+      "pos": "WB",
+      "raw": 61,
+      "coherence": 73,
+      "coherence_ref": "Adriano",
+      "age": 29,
+      "mv": 2.0,
+      "contract": 2028
+    },
+    {
+      "id": "pl-21633",
+      "name": "Joey Veerman",
+      "lg": "Eredivisie (NL)",
+      "pos": "DM",
+      "raw": 99,
+      "coherence": 92,
+      "coherence_ref": "Marko Bulat",
+      "age": 28,
+      "mv": 27.0,
+      "contract": 2028
     },
     {
       "id": "pl-88560",
@@ -7151,16 +7151,16 @@
       "contract": 2029
     },
     {
-      "id": "pl-21633",
-      "name": "Joey Veerman",
+      "id": "pl-7833",
+      "name": "Guus Berend Til",
       "lg": "Eredivisie (NL)",
-      "pos": "DM",
-      "raw": 99,
-      "coherence": 92,
-      "coherence_ref": "Marko Bulat",
-      "age": 28,
-      "mv": 27.0,
-      "contract": 2028
+      "pos": "AM",
+      "raw": 79,
+      "coherence": 66,
+      "coherence_ref": "Lamine Diaby-Fadiga",
+      "age": 29,
+      "mv": 0.0,
+      "contract": 0
     },
     {
       "id": "pl-31317",
@@ -7787,18 +7787,6 @@
       "contract": 0
     },
     {
-      "id": "pl-40973",
-      "name": "Jakob Breum Martinsen",
-      "lg": "Eredivisie (NL)",
-      "pos": "DM",
-      "raw": 82,
-      "coherence": 86,
-      "coherence_ref": "Marko Bulat",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-292226",
       "name": "Aske Adelgaard",
       "lg": "Eredivisie (NL)",
@@ -7809,6 +7797,18 @@
       "age": 23,
       "mv": 0.7,
       "contract": 2030
+    },
+    {
+      "id": "pl-40973",
+      "name": "Jakob Breum Martinsen",
+      "lg": "Eredivisie (NL)",
+      "pos": "DM",
+      "raw": 82,
+      "coherence": 86,
+      "coherence_ref": "Marko Bulat",
+      "age": 23,
+      "mv": 0.0,
+      "contract": 0
     },
     {
       "id": "pl-33555",
@@ -10919,18 +10919,6 @@
       "contract": 0
     },
     {
-      "id": "pl-143854",
-      "name": "António João Pereira de Albuquerque Tavares da Silva",
-      "lg": "Primeira Liga (PT)",
-      "pos": "CB",
-      "raw": 85,
-      "coherence": 85,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-39562",
       "name": "Tomás Lemos Araújo",
       "lg": "Primeira Liga (PT)",
@@ -10951,6 +10939,18 @@
       "coherence": 79,
       "coherence_ref": "Lamine Diaby-Fadiga",
       "age": 33,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-143854",
+      "name": "António João Pereira de Albuquerque Tavares da Silva",
+      "lg": "Primeira Liga (PT)",
+      "pos": "CB",
+      "raw": 85,
+      "coherence": 85,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 23,
       "mv": 0.0,
       "contract": 0
     },
@@ -12515,18 +12515,6 @@
       "contract": 0
     },
     {
-      "id": "pl-246790",
-      "name": "Gianluca Prestianni Gross",
-      "lg": "Primeira Liga (PT)",
-      "pos": "W",
-      "raw": 90,
-      "coherence": 82,
-      "coherence_ref": "Jesús Díaz",
-      "age": 20,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-44622",
       "name": "Enzo Alan Tomás Barrenechea",
       "lg": "Primeira Liga (PT)",
@@ -12547,6 +12535,18 @@
       "coherence": 88,
       "coherence_ref": "Bogdan Racovițan",
       "age": 38,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-246790",
+      "name": "Gianluca Prestianni Gross",
+      "lg": "Primeira Liga (PT)",
+      "pos": "W",
+      "raw": 90,
+      "coherence": 82,
+      "coherence_ref": "Jesús Díaz",
+      "age": 20,
       "mv": 0.0,
       "contract": 0
     },
@@ -19655,18 +19655,6 @@
       "contract": 0
     },
     {
-      "id": "pl-38996",
-      "name": "Victor Bak Jensen",
-      "lg": "Superliga (DK)",
-      "pos": "WB",
-      "raw": 63,
-      "coherence": 86,
-      "coherence_ref": "Jean Carlos Silva",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-144876",
       "name": "Valdemar Byskov Andreasen",
       "lg": "Superliga (DK)",
@@ -19675,30 +19663,6 @@
       "coherence": 91,
       "coherence_ref": "Marko Bulat",
       "age": 21,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-27576",
-      "name": "Mads Emil Møller Madsen",
-      "lg": "Superliga (DK)",
-      "pos": "DM",
-      "raw": 73,
-      "coherence": 97,
-      "coherence_ref": "Oskar Repka",
-      "age": 28,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-7090",
-      "name": "Nicolai Søberg Poulsen",
-      "lg": "Superliga (DK)",
-      "pos": "DM",
-      "raw": 79,
-      "coherence": 93,
-      "coherence_ref": "Oskar Repka",
-      "age": 33,
       "mv": 0.0,
       "contract": 0
     },
@@ -19715,6 +19679,42 @@
       "contract": 2030
     },
     {
+      "id": "pl-7090",
+      "name": "Nicolai Søberg Poulsen",
+      "lg": "Superliga (DK)",
+      "pos": "DM",
+      "raw": 79,
+      "coherence": 93,
+      "coherence_ref": "Oskar Repka",
+      "age": 33,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-27576",
+      "name": "Mads Emil Møller Madsen",
+      "lg": "Superliga (DK)",
+      "pos": "DM",
+      "raw": 73,
+      "coherence": 97,
+      "coherence_ref": "Oskar Repka",
+      "age": 28,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-3331",
+      "name": "Philip Anyanwu Billing",
+      "lg": "Superliga (DK)",
+      "pos": "DM",
+      "raw": 67,
+      "coherence": 85,
+      "coherence_ref": "Karol Struski",
+      "age": 30,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
       "id": "pl-24220",
       "name": "Mads Bech Sørensen",
       "lg": "Superliga (DK)",
@@ -19727,14 +19727,14 @@
       "contract": 2027
     },
     {
-      "id": "pl-3331",
-      "name": "Philip Anyanwu Billing",
+      "id": "pl-38996",
+      "name": "Victor Bak Jensen",
       "lg": "Superliga (DK)",
-      "pos": "DM",
-      "raw": 67,
-      "coherence": 85,
-      "coherence_ref": "Karol Struski",
-      "age": 30,
+      "pos": "WB",
+      "raw": 63,
+      "coherence": 86,
+      "coherence_ref": "Jean Carlos Silva",
+      "age": 23,
       "mv": 0.0,
       "contract": 0
     },
@@ -23567,84 +23567,12 @@
       "contract": 0
     },
     {
-      "id": "pl-44299",
-      "name": "Martin Jedlička",
-      "lg": "Czech Liga (CZ)",
-      "pos": "GK",
-      "raw": 74,
-      "coherence": 90,
-      "coherence_ref": "Kacper Trelowski",
-      "age": 28,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-316054",
-      "name": "Jan Paluska",
-      "lg": "Czech Liga (CZ)",
-      "pos": "CB",
-      "raw": 64,
-      "coherence": 75,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 21,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-45598",
-      "name": "Matej Valenta",
-      "lg": "Czech Liga (CZ)",
-      "pos": "DM",
-      "raw": 65,
-      "coherence": 81,
-      "coherence_ref": "Karol Struski",
-      "age": 26,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-28302",
-      "name": "Tomáš Ladra",
-      "lg": "Czech Liga (CZ)",
-      "pos": "AM",
-      "raw": 80,
-      "coherence": 72,
-      "coherence_ref": "Tomasz Pieńko",
-      "age": 29,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-4809",
-      "name": "Matěj Vydra",
-      "lg": "Czech Liga (CZ)",
-      "pos": "ST",
-      "raw": 94,
-      "coherence": 78,
-      "coherence_ref": "Jonatan Braut Brunes",
-      "age": 34,
-      "mv": 1.3,
-      "contract": 2027
-    },
-    {
       "id": "pl-316060",
       "name": "Alexandr Sojka",
       "lg": "Czech Liga (CZ)",
       "pos": "W",
       "raw": 73,
       "coherence": 58,
-      "coherence_ref": "Jesús Díaz",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-52025",
-      "name": "Denis Višinský",
-      "lg": "Czech Liga (CZ)",
-      "pos": "W",
-      "raw": 82,
-      "coherence": 69,
       "coherence_ref": "Jesús Díaz",
       "age": 23,
       "mv": 0.0,
@@ -23671,6 +23599,78 @@
       "coherence": 79,
       "coherence_ref": "Bogdan Racovițan",
       "age": 23,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-52025",
+      "name": "Denis Višinský",
+      "lg": "Czech Liga (CZ)",
+      "pos": "W",
+      "raw": 82,
+      "coherence": 69,
+      "coherence_ref": "Jesús Díaz",
+      "age": 23,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-4809",
+      "name": "Matěj Vydra",
+      "lg": "Czech Liga (CZ)",
+      "pos": "ST",
+      "raw": 94,
+      "coherence": 78,
+      "coherence_ref": "Jonatan Braut Brunes",
+      "age": 34,
+      "mv": 1.3,
+      "contract": 2027
+    },
+    {
+      "id": "pl-28302",
+      "name": "Tomáš Ladra",
+      "lg": "Czech Liga (CZ)",
+      "pos": "AM",
+      "raw": 80,
+      "coherence": 72,
+      "coherence_ref": "Tomasz Pieńko",
+      "age": 29,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-45598",
+      "name": "Matej Valenta",
+      "lg": "Czech Liga (CZ)",
+      "pos": "DM",
+      "raw": 65,
+      "coherence": 81,
+      "coherence_ref": "Karol Struski",
+      "age": 26,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-316054",
+      "name": "Jan Paluska",
+      "lg": "Czech Liga (CZ)",
+      "pos": "CB",
+      "raw": 64,
+      "coherence": 75,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 21,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-44299",
+      "name": "Martin Jedlička",
+      "lg": "Czech Liga (CZ)",
+      "pos": "GK",
+      "raw": 74,
+      "coherence": 90,
+      "coherence_ref": "Kacper Trelowski",
+      "age": 28,
       "mv": 0.0,
       "contract": 0
     },
@@ -25295,18 +25295,6 @@
       "contract": 2028
     },
     {
-      "id": "pl-30684",
-      "name": "Hugo Sebastien Guenael Vandermersch",
-      "lg": "Super League (CH)",
-      "pos": "WB",
-      "raw": 44,
-      "coherence": 59,
-      "coherence_ref": "Michael Ameyaw",
-      "age": 27,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-156476",
       "name": "Malamine Efekele",
       "lg": "Super League (CH)",
@@ -25317,6 +25305,18 @@
       "age": 22,
       "mv": 0.5,
       "contract": 2027
+    },
+    {
+      "id": "pl-30684",
+      "name": "Hugo Sebastien Guenael Vandermersch",
+      "lg": "Super League (CH)",
+      "pos": "WB",
+      "raw": 44,
+      "coherence": 59,
+      "coherence_ref": "Michael Ameyaw",
+      "age": 27,
+      "mv": 0.0,
+      "contract": 0
     },
     {
       "id": "pl-58050",
@@ -25787,38 +25787,14 @@
       "contract": 0
     },
     {
-      "id": "pl-18129",
-      "name": "Lukas Daschner",
-      "lg": "Super League (CH)",
-      "pos": "DM",
-      "raw": 76,
-      "coherence": 71,
-      "coherence_ref": "Vladyslav Kochergin",
-      "age": 28,
-      "mv": 0.7,
-      "contract": 2028
-    },
-    {
-      "id": "pl-45161",
-      "name": "Colin Noah Kleine-Bekel",
-      "lg": "Super League (CH)",
-      "pos": "CB",
-      "raw": 62,
-      "coherence": 72,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-48642",
-      "name": "Carlo Gregor Boukhalfa",
+      "id": "pl-8503",
+      "name": "Lukas Maria Görtler",
       "lg": "Super League (CH)",
       "pos": "CM",
-      "raw": 56,
-      "coherence": 82,
-      "coherence_ref": "Patryk Makuch",
-      "age": 27,
+      "raw": 84,
+      "coherence": 74,
+      "coherence_ref": "Marko Bulat",
+      "age": 32,
       "mv": 0.0,
       "contract": 0
     },
@@ -25835,16 +25811,40 @@
       "contract": 0
     },
     {
-      "id": "pl-8503",
-      "name": "Lukas Maria Görtler",
+      "id": "pl-48642",
+      "name": "Carlo Gregor Boukhalfa",
       "lg": "Super League (CH)",
       "pos": "CM",
-      "raw": 84,
-      "coherence": 74,
-      "coherence_ref": "Marko Bulat",
-      "age": 32,
+      "raw": 56,
+      "coherence": 82,
+      "coherence_ref": "Patryk Makuch",
+      "age": 27,
       "mv": 0.0,
       "contract": 0
+    },
+    {
+      "id": "pl-45161",
+      "name": "Colin Noah Kleine-Bekel",
+      "lg": "Super League (CH)",
+      "pos": "CB",
+      "raw": 62,
+      "coherence": 72,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 23,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-18129",
+      "name": "Lukas Daschner",
+      "lg": "Super League (CH)",
+      "pos": "DM",
+      "raw": 76,
+      "coherence": 71,
+      "coherence_ref": "Vladyslav Kochergin",
+      "age": 28,
+      "mv": 0.7,
+      "contract": 2028
     },
     {
       "id": "pl-196110",
@@ -27047,18 +27047,6 @@
       "contract": 0
     },
     {
-      "id": "pl-162900",
-      "name": "Christian Witzig",
-      "lg": "Super League (CH)",
-      "pos": "WB",
-      "raw": 44,
-      "coherence": 79,
-      "coherence_ref": "Michael Ameyaw",
-      "age": 25,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
       "id": "pl-18610",
       "name": "Leonardo Fabrizio Bertone",
       "lg": "Super League (CH)",
@@ -27107,98 +27095,14 @@
       "contract": 0
     },
     {
-      "id": "pl-105185",
-      "name": "Niklas Steffen",
+      "id": "pl-425953",
+      "name": "Alessandro Vogt",
       "lg": "Super League (CH)",
-      "pos": "GK",
-      "raw": 74,
-      "coherence": 75,
-      "coherence_ref": "Kacper Trelowski",
-      "age": 25,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-120722",
-      "name": "Michael Heule",
-      "lg": "Super League (CH)",
-      "pos": "WB",
-      "raw": 61,
-      "coherence": 82,
-      "coherence_ref": "Erick Otieno",
-      "age": 25,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-341266",
-      "name": "Valmir Matoshi",
-      "lg": "Super League (CH)",
-      "pos": "WM",
-      "raw": 61,
-      "coherence": 30,
-      "coherence_ref": "Fran Tudor",
-      "age": 23,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-48942",
-      "name": "Fabio Fehr",
-      "lg": "Super League (CH)",
-      "pos": "WB",
-      "raw": 58,
-      "coherence": 73,
-      "coherence_ref": "Erick Otieno",
-      "age": 26,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-23780",
-      "name": "Marco Bürki",
-      "lg": "Super League (CH)",
-      "pos": "CB",
-      "raw": 58,
-      "coherence": 85,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 33,
-      "mv": 0.25,
-      "contract": 2028
-    },
-    {
-      "id": "pl-42719",
-      "name": "Nils Ramiro Mettler Reichmuth",
-      "lg": "Super League (CH)",
-      "pos": "WM",
-      "raw": 87,
-      "coherence": 59,
-      "coherence_ref": "Fran Tudor",
-      "age": 24,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-28947",
-      "name": "Kastriot Imeri",
-      "lg": "Super League (CH)",
-      "pos": "AM",
-      "raw": 87,
-      "coherence": 62,
-      "coherence_ref": "Lamine Diaby-Fadiga",
-      "age": 26,
-      "mv": 0.0,
-      "contract": 0
-    },
-    {
-      "id": "pl-32110",
-      "name": "Justin Roth",
-      "lg": "Super League (CH)",
-      "pos": "DM",
-      "raw": 43,
-      "coherence": 41,
-      "coherence_ref": "Karol Struski",
-      "age": 26,
+      "pos": "ST",
+      "raw": 88,
+      "coherence": 99,
+      "coherence_ref": "Jonatan Braut Brunes",
+      "age": 21,
       "mv": 0.0,
       "contract": 0
     },
@@ -27215,14 +27119,110 @@
       "contract": 0
     },
     {
-      "id": "pl-43603",
-      "name": "Mihailo Stevanovic",
+      "id": "pl-32110",
+      "name": "Justin Roth",
       "lg": "Super League (CH)",
       "pos": "DM",
-      "raw": 67,
+      "raw": 43,
+      "coherence": 41,
+      "coherence_ref": "Karol Struski",
+      "age": 26,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-28947",
+      "name": "Kastriot Imeri",
+      "lg": "Super League (CH)",
+      "pos": "AM",
+      "raw": 87,
       "coherence": 62,
-      "coherence_ref": "Abraham Ojo",
+      "coherence_ref": "Lamine Diaby-Fadiga",
+      "age": 26,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-42719",
+      "name": "Nils Ramiro Mettler Reichmuth",
+      "lg": "Super League (CH)",
+      "pos": "WM",
+      "raw": 87,
+      "coherence": 59,
+      "coherence_ref": "Fran Tudor",
       "age": 24,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-23780",
+      "name": "Marco Bürki",
+      "lg": "Super League (CH)",
+      "pos": "CB",
+      "raw": 58,
+      "coherence": 85,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 33,
+      "mv": 0.25,
+      "contract": 2028
+    },
+    {
+      "id": "pl-48942",
+      "name": "Fabio Fehr",
+      "lg": "Super League (CH)",
+      "pos": "WB",
+      "raw": 58,
+      "coherence": 73,
+      "coherence_ref": "Erick Otieno",
+      "age": 26,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-341266",
+      "name": "Valmir Matoshi",
+      "lg": "Super League (CH)",
+      "pos": "WM",
+      "raw": 61,
+      "coherence": 30,
+      "coherence_ref": "Fran Tudor",
+      "age": 23,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-120722",
+      "name": "Michael Heule",
+      "lg": "Super League (CH)",
+      "pos": "WB",
+      "raw": 61,
+      "coherence": 82,
+      "coherence_ref": "Erick Otieno",
+      "age": 25,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-105185",
+      "name": "Niklas Steffen",
+      "lg": "Super League (CH)",
+      "pos": "GK",
+      "raw": 74,
+      "coherence": 75,
+      "coherence_ref": "Kacper Trelowski",
+      "age": 25,
+      "mv": 0.0,
+      "contract": 0
+    },
+    {
+      "id": "pl-475633",
+      "name": "Cyrill May",
+      "lg": "Super League (CH)",
+      "pos": "CB",
+      "raw": 42,
+      "coherence": 60,
+      "coherence_ref": "Bogdan Racovițan",
+      "age": 19,
       "mv": 0.0,
       "contract": 0
     },
@@ -27239,26 +27239,26 @@
       "contract": 0
     },
     {
-      "id": "pl-425953",
-      "name": "Alessandro Vogt",
+      "id": "pl-43603",
+      "name": "Mihailo Stevanovic",
       "lg": "Super League (CH)",
-      "pos": "ST",
-      "raw": 88,
-      "coherence": 99,
-      "coherence_ref": "Jonatan Braut Brunes",
-      "age": 21,
+      "pos": "DM",
+      "raw": 67,
+      "coherence": 62,
+      "coherence_ref": "Abraham Ojo",
+      "age": 24,
       "mv": 0.0,
       "contract": 0
     },
     {
-      "id": "pl-475633",
-      "name": "Cyrill May",
+      "id": "pl-162900",
+      "name": "Christian Witzig",
       "lg": "Super League (CH)",
-      "pos": "CB",
-      "raw": 42,
-      "coherence": 60,
-      "coherence_ref": "Bogdan Racovițan",
-      "age": 19,
+      "pos": "WB",
+      "raw": 44,
+      "coherence": 79,
+      "coherence_ref": "Michael Ameyaw",
+      "age": 25,
       "mv": 0.0,
       "contract": 0
     },
