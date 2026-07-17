@@ -338,7 +338,14 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
                 <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
               </div>
               <div>
-                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9 }}>{m.level}</div>
+                <div className="disp" style={{ fontSize: 26, lineHeight: 0.9,
+                  display: "flex", alignItems: "flex-start", gap: 2 }}>
+                  {m.level}
+                  {p.level_estimated && (
+                    <span title="Niepełne dane — poziom szacowany (zawodnik nie ma jeszcze wystarczającej próbki meczowej). Traktuj orientacyjnie."
+                      style={{ fontSize: 11, color: C.warn, cursor: "help", lineHeight: 1 }}>⚠</span>
+                  )}
+                </div>
                 <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
               </div>
               <div>
@@ -442,6 +449,12 @@ function CorrView({ data }) {
   return (
     <div>
       <Lead>Które pozycje najsilniej współzależą w układzie. Ciemniejsze pole = silniejsza zależność między parą pozycji.</Lead>
+      <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8,
+        background: `${C.warn}14`, border: `1px solid ${C.warn}66`, borderRadius: 9,
+        padding: "9px 13px", fontSize: 12.5, color: C.steelHi, maxWidth: 760 }}>
+        <span style={{ color: C.warn, fontSize: 15 }}>⚠</span>
+        <span><b style={{ color: C.warn }}>DANE PRZYKŁADOWE.</b> Wartości w tej macierzy są poglądowe — pokazują, jak sekcja będzie działać. Realne korelacje wymagają policzenia ze współwystępowania akcji w danych meczowych (osobny etap). Nie interpretuj tych liczb jako faktycznych zależności.</span>
+      </div>
       <div style={{ display: "flex", gap: 24, marginTop: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
         <div style={{ overflowX: "auto" }}>
           <table style={{ borderCollapse: "collapse" }}>
@@ -495,7 +508,7 @@ function HelpView({ data, setView }) {
   ];
   const sources = [
     ["StatsBomb", "Metryki zawodników i podstawa poziomów RC oraz handicapów lig.", C.good],
-    ["Transfermarkt", "Skład Rakowa oraz wartości rynkowe i kontrakty kandydatów.", C.proxy],
+    ["Wartości rynkowe (Kaggle)", "Wartości rynkowe, wiek i kontrakty kandydatów — ze stabilnego, okresowo aktualizowanego zbioru danych.", C.proxy],
     ["Metoda handicapów", "Porównuje metrykę danej linii z Ekstraklasą i przelicza na skok RC (10% = RC+1).", C.redHi],
   ];
   return (
@@ -530,7 +543,7 @@ function HelpView({ data, setView }) {
 
       <div style={{ marginTop: 18, background: `${C.proxy}12`, border: `1px solid ${C.proxy}44`, borderRadius: 12, padding: "16px 18px" }}>
         <b style={{ color: C.proxy, fontSize: 13 }}>Jak czytać liczby.</b>
-        <span style={{ fontSize: 13, color: C.steelHi }}> Dopóki analityk nie skalibruje wzoru poziomu RC, wartości liczbowe traktuj jako orientacyjne — pokazują, jak działa model, a nie gotową rekomendację transferową. Realne są nazwiska, pozycje i struktura zależności.</span>
+        <span style={{ fontSize: 13, color: C.steelHi }}> Poziom RC jest liczony automatycznie z realnych metryk StatsBomb (percentyl względem Ekstraklasy) — to działający model, nie wpisywane ręcznie wartości. Dobór metryk oceniających zawodnika na danej pozycji to jednak przyjęte założenie, które warto potwierdzić od strony sportowej, zanim liczby posłużą za podstawę decyzji transferowych. Zawodnicy bez wystarczającej próbki meczowej mają poziom szacowany (znacznik ⚠). Macierz „Formacja" zawiera na razie dane przykładowe. Traktuj liczby jako mocną wersję roboczą, nie ostateczną.</span>
       </div>
 
       <button onClick={() => setView("twin")} style={{ marginTop: 18, background: C.red, color: "#fff",
