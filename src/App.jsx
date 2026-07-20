@@ -29,6 +29,19 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("coherence");
   const [short, setShort] = useState([]);
+  // --- FILTRY kandydatów (widok "Odpowiednicy") ---
+  const FILTERS_DEFAULT = {
+    ageMin: 16, ageMax: 45,
+    priceMax: 50,          // mln EUR; 50 = bez ograniczenia
+    showUnpriced: true,    // wariant C: pokazywać kandydatów bez wyceny
+    cohMin: 0,             // minimalna koherencja %
+    levelMin: 0,           // minimalny poziom
+    onlyReliable: false,   // ukryj kandydatów z niepełnymi danymi
+    leagues: [],           // [] = wszystkie
+  };
+  const [filters, setFilters] = useState(FILTERS_DEFAULT);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const setF = (patch) => setFilters((f) => ({ ...f, ...patch }));
   const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
   useEffect(() => { loadData("data.json"); }, []);
@@ -92,15 +105,30 @@ export default function App() {
 
   const candidates = useMemo(() => {
     if (!data || !sel) return [];
-    const rows = data.pool.map((p) => ({ p, m: matchScore(sel, p) }))
+    let rows = data.pool.map((p) => ({ p, m: matchScore(sel, p) }))
       .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(sel, x.p) }));
+    // --- filtrowanie ---
+    const F = filters;
+    rows = rows.filter(({ p, m, price }) => {
+      const age = Number(p.age) || 0;
+      if (age > 0 && (age < F.ageMin || age > F.ageMax)) return false;
+      // Cena: kandydaci BEZ wyceny (mv=0) traktowani osobno — wariant C.
+      const hasPrice = Number(p.mv) > 0;
+      if (!hasPrice && !F.showUnpriced) return false;
+      if (hasPrice && F.priceMax < 50 && price.est > F.priceMax) return false;
+      if (m.coherence < F.cohMin) return false;
+      if (m.level < F.levelMin) return false;
+      if (F.onlyReliable && p.level_estimated) return false;
+      if (F.leagues.length > 0 && !F.leagues.includes(p.lg)) return false;
+      return true;
+    });
     const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
       coherence: (a, b) => b.m.coherence - a.m.coherence,
       price: (a, b) => a.price.est - b.price.est,
       price_desc: (a, b) => b.price.est - a.price.est,
       level: (a, b) => b.m.level - a.m.level };
     return rows.sort(s[sortBy] || s.coherence);
-  }, [data, sel, sortBy]);
+  }, [data, sel, sortBy, filters]);
 
   const fmt = (v) => `€${v.toFixed(1)}M`;
   const shortRows = useMemo(() => candidates.filter((c) => short.includes(c.p.id)), [candidates, short]);
@@ -205,7 +233,8 @@ export default function App() {
         <div style={{ padding: "26px 34px 0", maxWidth: 1180 }}>
           {view === "twin" && <TwinView data={data} sel={sel} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
-            short, toggleShort, shortRows, adjusted, fmt, median }} />}
+            short, toggleShort, shortRows, adjusted, fmt, median,
+            filters, setF, setFilters, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -277,8 +306,11 @@ function TwinView({ data, sel, setSel, setView }) {
   );
 }
 
-function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median }) {
+function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
+  filters, setF, setFilters, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
   if (!sel) return null;
+  const totalForPos = data.pool.filter((p) => p.pos === sel.pos).length;
+  const activeCount = countActiveFilters(filters, FILTERS_DEFAULT);
   return (
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
@@ -313,6 +345,9 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </div>
       </div>
 
+      <FilterPanel {...{ data, filters, setF, setFilters, FILTERS_DEFAULT,
+        filtersOpen, setFiltersOpen, activeCount, shown: candidates.length, total: totalForPos }} />
+
       {candidates.length > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 18 }}>
           <Kpi l="Kandydatów" v={candidates.length} />
@@ -323,7 +358,17 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
       )}
 
       {candidates.length === 0 && (
-        <Empty>Brak kandydatów na pozycji <b className="mono">{sel.pos}</b> w obecnej puli. Po podpięciu pełnych danych pula obejmie więcej lig.</Empty>
+        <Empty>
+          {activeCount > 0 ? (
+            <>Żaden kandydat na pozycji <b className="mono">{sel.pos}</b> nie spełnia ustawionych filtrów
+            {totalForPos > 0 ? <> (w puli jest ich {totalForPos})</> : null}.{" "}
+            <button onClick={() => setFilters(FILTERS_DEFAULT)}
+              style={{ background: "none", border: "none", color: C.redHi, cursor: "pointer",
+                fontSize: 13.5, textDecoration: "underline", padding: 0 }}>Wyczyść filtry</button></>
+          ) : (
+            <>Brak kandydatów na pozycji <b className="mono">{sel.pos}</b> w obecnej puli.</>
+          )}
+        </Empty>
       )}
 
       <div style={{ display: "grid", gap: 9 }}>
@@ -342,7 +387,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
                   display: "flex", alignItems: "flex-start", gap: 2 }}>
                   {m.level}
                   {p.level_estimated && (
-                    <span title="Niepełne dane — poziom szacowany (zawodnik nie ma jeszcze wystarczającej próbki meczowej). Traktuj orientacyjnie."
+                    <span title="Niepełne dane — poziom szacowany (brak wystarczającej próbki meczowej)."
                       style={{ fontSize: 11, color: C.warn, cursor: "help", lineHeight: 1 }}>⚠</span>
                   )}
                 </div>
@@ -362,8 +407,17 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div className="disp" style={{ fontSize: 22, color: C.proxy, lineHeight: 0.9 }}>{fmt(price.est)}</div>
-                <div style={{ fontSize: 10, color: C.steel }}>{fmt(price.lo)}–{fmt(price.hi)}</div>
+                {Number(p.mv) > 0 ? (
+                  <>
+                    <div className="disp" style={{ fontSize: 22, color: C.proxy, lineHeight: 0.9 }}>{fmt(price.est)}</div>
+                    <div style={{ fontSize: 10, color: C.steel }}>{fmt(price.lo)}–{fmt(price.hi)}</div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: 12.5, color: C.steel, lineHeight: 1.2 }}>brak wyceny</div>
+                    <div style={{ fontSize: 10, color: C.steel, opacity: 0.7 }}>nie w bazie</div>
+                  </>
+                )}
               </div>
               <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
                 style={{ background: short.includes(p.id) ? C.red : "transparent",
@@ -543,7 +597,7 @@ function HelpView({ data, setView }) {
 
       <div style={{ marginTop: 18, background: `${C.proxy}12`, border: `1px solid ${C.proxy}44`, borderRadius: 12, padding: "16px 18px" }}>
         <b style={{ color: C.proxy, fontSize: 13 }}>Jak czytać liczby.</b>
-        <span style={{ fontSize: 13, color: C.steelHi }}> Poziom RC jest liczony automatycznie z realnych metryk StatsBomb (percentyl względem Ekstraklasy) — to działający model, nie wpisywane ręcznie wartości. Dobór metryk oceniających zawodnika na danej pozycji to jednak przyjęte założenie, które warto potwierdzić od strony sportowej, zanim liczby posłużą za podstawę decyzji transferowych. Zawodnicy bez wystarczającej próbki meczowej mają poziom szacowany (znacznik ⚠). Macierz „Formacja" zawiera na razie dane przykładowe. Traktuj liczby jako mocną wersję roboczą, nie ostateczną.</span>
+        <span style={{ fontSize: 13, color: C.steelHi }}> Poziom RC jest liczony automatycznie z realnych metryk StatsBomb (percentyl względem Ekstraklasy) — to działający model, nie wpisywane ręcznie wartości. Dobór metryk oceniających zawodnika na danej pozycji to jednak przyjęte założenie, które warto potwierdzić od strony sportowej. Zawodnicy bez wystarczającej próbki meczowej mają poziom szacowany (znacznik ⚠). Macierz „Formacja" zawiera na razie dane przykładowe. Traktuj liczby jako mocną wersję roboczą, nie ostateczną.</span>
       </div>
 
       <button onClick={() => setView("twin")} style={{ marginTop: 18, background: C.red, color: "#fff",
@@ -552,6 +606,147 @@ function HelpView({ data, setView }) {
       </button>
     </div>
   );
+}
+
+// ============================ FILTRY ============================
+function countActiveFilters(f, d) {
+  let n = 0;
+  if (f.ageMin !== d.ageMin || f.ageMax !== d.ageMax) n++;
+  if (f.priceMax !== d.priceMax) n++;
+  if (f.showUnpriced !== d.showUnpriced) n++;
+  if (f.cohMin !== d.cohMin) n++;
+  if (f.levelMin !== d.levelMin) n++;
+  if (f.onlyReliable !== d.onlyReliable) n++;
+  if (f.leagues.length > 0) n++;
+  return n;
+}
+
+function FilterPanel({ data, filters, setF, setFilters, FILTERS_DEFAULT,
+  filtersOpen, setFiltersOpen, activeCount, shown, total }) {
+  const F = filters;
+  const leagues = [...new Set(data.pool.map((p) => p.lg))].filter(Boolean).sort();
+  const AGE_PRESETS = [["do 23", { ageMin: 16, ageMax: 23 }], ["24-28", { ageMin: 24, ageMax: 28 }],
+    ["29+", { ageMin: 29, ageMax: 45 }], ["każdy", { ageMin: 16, ageMax: 45 }]];
+  const isPreset = (p) => F.ageMin === p.ageMin && F.ageMax === p.ageMax;
+
+  return (
+    <div style={{ marginBottom: 18, background: C.panel, border: `1px solid ${activeCount > 0 ? C.redHi : C.line}`,
+      borderRadius: 12, overflow: "hidden" }}>
+      <button onClick={() => setFiltersOpen(!filtersOpen)}
+        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, background: "transparent",
+          border: "none", color: C.bone, padding: "12px 16px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+        <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: activeCount > 0 ? C.redHi : C.steel }}>
+          FILTRY
+        </span>
+        {activeCount > 0 && (
+          <span className="mono" style={{ fontSize: 10, fontWeight: 800, background: C.red, color: "#fff",
+            borderRadius: 20, padding: "2px 8px" }}>{activeCount}</span>
+        )}
+        <span style={{ marginLeft: "auto", fontSize: 12, color: C.steel, fontWeight: 500 }}>
+          {shown} z {total} kandydatów
+        </span>
+        <span className="mono" style={{ fontSize: 11, color: C.steel }}>{filtersOpen ? "▲" : "▼"}</span>
+      </button>
+
+      {filtersOpen && (
+        <div style={{ padding: "4px 16px 16px", borderTop: `1px solid ${C.line}`,
+          display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 18 }}>
+
+          {/* WIEK */}
+          <div style={{ paddingTop: 14 }}>
+            <FLabel>Wiek: <b style={{ color: C.bone }}>{F.ageMin}-{F.ageMax}</b> lat</FLabel>
+            <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: 9 }}>
+              {AGE_PRESETS.map(([lbl, p]) => (
+                <button key={lbl} onClick={() => setF(p)} style={{
+                  background: isPreset(p) ? C.red : "transparent", color: isPreset(p) ? "#fff" : C.steel,
+                  border: `1px solid ${isPreset(p) ? C.red : C.line}`, borderRadius: 7,
+                  padding: "4px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>{lbl}</button>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <input type="range" min={16} max={45} value={F.ageMin}
+                onChange={(e) => setF({ ageMin: Math.min(+e.target.value, F.ageMax) })}
+                style={{ flex: 1, accentColor: C.red }} />
+              <input type="range" min={16} max={45} value={F.ageMax}
+                onChange={(e) => setF({ ageMax: Math.max(+e.target.value, F.ageMin) })}
+                style={{ flex: 1, accentColor: C.red }} />
+            </div>
+          </div>
+
+          {/* CENA */}
+          <div style={{ paddingTop: 14 }}>
+            <FLabel>Cena maks.: <b style={{ color: C.bone }}>
+              {F.priceMax >= 50 ? "bez limitu" : `€${F.priceMax}M`}</b></FLabel>
+            <input type="range" min={0} max={50} step={0.5} value={F.priceMax}
+              onChange={(e) => setF({ priceMax: +e.target.value })}
+              style={{ width: "100%", accentColor: C.red, marginBottom: 8 }} />
+            <label style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12,
+              color: C.steelHi, cursor: "pointer" }}>
+              <input type="checkbox" checked={F.showUnpriced}
+                onChange={(e) => setF({ showUnpriced: e.target.checked })}
+                style={{ accentColor: C.red, cursor: "pointer" }} />
+              Pokaż też bez wyceny
+            </label>
+            <div style={{ fontSize: 10.5, color: C.steel, marginTop: 4, lineHeight: 1.4 }}>
+              Część kandydatów nie ma wartości rynkowej w bazie — filtr ceny ich nie dotyczy.
+            </div>
+          </div>
+
+          {/* KOHERENCJA + POZIOM */}
+          <div style={{ paddingTop: 14 }}>
+            <FLabel>Min. koherencja: <b style={{ color: C.bone }}>{F.cohMin}%</b></FLabel>
+            <input type="range" min={0} max={100} value={F.cohMin}
+              onChange={(e) => setF({ cohMin: +e.target.value })}
+              style={{ width: "100%", accentColor: C.red, marginBottom: 12 }} />
+            <FLabel>Min. poziom: <b style={{ color: C.bone }}>{F.levelMin}</b></FLabel>
+            <input type="range" min={0} max={100} value={F.levelMin}
+              onChange={(e) => setF({ levelMin: +e.target.value })}
+              style={{ width: "100%", accentColor: C.red }} />
+          </div>
+
+          {/* JAKOSC DANYCH + LIGI */}
+          <div style={{ paddingTop: 14 }}>
+            <FLabel>Jakość danych</FLabel>
+            <label style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12,
+              color: C.steelHi, cursor: "pointer", marginBottom: 12 }}>
+              <input type="checkbox" checked={F.onlyReliable}
+                onChange={(e) => setF({ onlyReliable: e.target.checked })}
+                style={{ accentColor: C.red, cursor: "pointer" }} />
+              Tylko pełne dane (bez ⚠)
+            </label>
+            <FLabel>Ligi {F.leagues.length > 0 && <span style={{ color: C.redHi }}>({F.leagues.length})</span>}</FLabel>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5, maxHeight: 108, overflowY: "auto" }}>
+              {leagues.map((lg) => {
+                const on = F.leagues.includes(lg);
+                return (
+                  <button key={lg} onClick={() => setF({
+                    leagues: on ? F.leagues.filter((x) => x !== lg) : [...F.leagues, lg] })}
+                    title={lg} style={{ background: on ? C.red : "transparent", color: on ? "#fff" : C.steel,
+                      border: `1px solid ${on ? C.red : C.line}`, borderRadius: 7, padding: "4px 9px",
+                      fontSize: 11, cursor: "pointer", fontWeight: 600, maxWidth: 190,
+                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lg}</button>
+                );
+              })}
+            </div>
+          </div>
+
+          {activeCount > 0 && (
+            <div style={{ gridColumn: "1 / -1", paddingTop: 4 }}>
+              <button onClick={() => setFilters(FILTERS_DEFAULT)}
+                style={{ background: "transparent", color: C.redHi, border: `1px solid ${C.red}66`,
+                  borderRadius: 8, padding: "7px 14px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>
+                Wyczyść filtry ({activeCount})
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+function FLabel({ children }) {
+  return <div className="mono" style={{ fontSize: 10, letterSpacing: 1, color: C.steel,
+    textTransform: "uppercase", marginBottom: 7 }}>{children}</div>;
 }
 
 // ============================ PRIMITIVES ============================
