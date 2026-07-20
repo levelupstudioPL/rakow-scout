@@ -115,19 +115,19 @@ def load_statsbombpy():
 POS_TO_LINE = {
     # --- Bramka ---
     "Goalkeeper": ("GK", "Bramka"),
- 
+
     # --- Obrona środkowa ---
     "Centre Back": ("CB", "Obrona"),
     "Right Centre Back": ("CB", "Obrona"), "Left Centre Back": ("CB", "Obrona"),
     # (warianty amerykańskie — na wszelki wypadek)
     "Center Back": ("CB", "Obrona"),
     "Right Center Back": ("CB", "Obrona"), "Left Center Back": ("CB", "Obrona"),
- 
+
     # --- Obrona boczna / wahadła ---
     "Right Back": ("WB", "Obrona"), "Left Back": ("WB", "Obrona"),
     "Right Wing Back": ("WB", "Obrona"), "Left Wing Back": ("WB", "Obrona"),
     "Wing Back": ("WB", "Obrona"),
- 
+
     # --- Pomoc defensywna / centralna ---
     "Centre Defensive Midfielder": ("DM", "Pomoc"),
     "Right Defensive Midfielder": ("DM", "Pomoc"),
@@ -142,7 +142,7 @@ POS_TO_LINE = {
     "Center Midfield": ("CM", "Pomoc"), "Right Center Midfield": ("CM", "Pomoc"),
     "Left Center Midfield": ("CM", "Pomoc"),
     "Right Midfield": ("WM", "Pomoc"), "Left Midfield": ("WM", "Pomoc"),
- 
+
     # --- Pomoc ofensywna / skrzydła ---
     "Centre Attacking Midfielder": ("AM", "Pomoc"),
     "Right Attacking Midfielder": ("AM", "Pomoc"),
@@ -152,7 +152,7 @@ POS_TO_LINE = {
     "Center Attacking Midfield": ("AM", "Pomoc"),
     "Right Attacking Midfield": ("AM", "Pomoc"), "Left Attacking Midfield": ("AM", "Pomoc"),
     "Right Winger": ("W", "Pomoc"), "Left Winger": ("W", "Pomoc"),
- 
+
     # --- Atak ---
     "Centre Forward": ("ST", "Atak"),
     "Right Centre Forward": ("ST", "Atak"), "Left Centre Forward": ("ST", "Atak"),
@@ -243,9 +243,9 @@ def build_dataset(sb, creds):
     except Exception as e:
         print(f"[BŁĄD] Nie wczytano {squad_path}: {e}", file=sys.stderr)
         static_squad = []
- 
+
     base_by_name = _name_index(base_rows)
- 
+
     squad = []
     rc_from_model = 0
     for pl in static_squad:
@@ -291,7 +291,7 @@ def build_dataset(sb, creds):
             "rc_estimated": (rc_source != "model"),
             "_sb": sb_row,
         })
- 
+
     if not squad:
         print("[uwaga] Sklad Rakowa jest pusty - sprawdz public/squad.json.", file=sys.stderr)
     else:
@@ -382,7 +382,7 @@ def build_dataset(sb, creds):
             matched += 1
     print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
           f"z pliku player_values.csv")
- 
+
     return {
         "meta": {
             "source": "statsbomb+kaggle-values",
@@ -411,7 +411,7 @@ def _norm(name):
     if not isinstance(name, str):
         return ""
     return name.strip().lower()
- 
+
 def _norm_ascii(name):
     """Normalizacja do dopasowania nazwisk między StatsBomb a plikiem wartości.
     Usuwa znaki diakrytyczne (Ivanović -> ivanovic), sprowadza do małych liter,
@@ -422,7 +422,7 @@ def _norm_ascii(name):
         return ""
     s = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
     return " ".join(s.strip().lower().split())
- 
+
 def _load_values_csv(path):
     """Wczytuje wartości rynkowe z lokalnego CSV (zrzut Kaggle) do słownika
     {znormalizowane_nazwisko: {mv, age, contract}}. Wartość przeliczana na mln EUR
@@ -503,8 +503,8 @@ def _sanitize(obj):
     if isinstance(obj, list):
         return [_sanitize(v) for v in obj]
     return obj
- 
- 
+
+
 def main():
     creds = get_credentials()
     sb = load_statsbombpy()
@@ -527,6 +527,19 @@ def main():
         json.dumps(dataset, ensure_ascii=False, indent=2, allow_nan=False),
         encoding="utf-8",
     )
+    # DIAGNOSTYKA metryk: ile realnie weszlo do liczenia poziomu per linia.
+    try:
+        import coherence as _c
+        if getattr(_c, "DIAG", None):
+            print("\n--- DIAGNOSTYKA METRYK (ile z QUALITY_METRICS realnie policzono) ---")
+            for line, d in _c.DIAG.items():
+                total = len(_c.QUALITY_METRICS.get(line, []))
+                print(f"  {line}: zdefiniowano {total} metryk | rozklad uzytych: {d['counts']}")
+                if d["used"] is not None:
+                    print(f"      przyklad -> uzyte: {d['used']}")
+                    print(f"                  brak: {d['missing'] or '(zadnych)'}")
+    except Exception as _e:
+        print(f"[diag] {_e}")
     print(f"Zapisano: {OUT}")
     print(f"  skład: {len(dataset['squad'])}, ligi: {len(dataset['leagues'])}, pula: {len(dataset['pool'])}")
  
