@@ -1,9 +1,9 @@
 name: SkillCorner — pobierz dane
-
+ 
 # Uruchamiane ręcznie z zakładki Actions. Wymaga sekretów repo:
 #   SKILLCORNER_USERNAME, SKILLCORNER_PASSWORD
 # (klucz API SkillCorner wpisz zwykle jako SKILLCORNER_PASSWORD)
-
+ 
 on:
   workflow_dispatch:
     inputs:
@@ -19,25 +19,25 @@ on:
         description: "Dla trybu 'physical': competition_edition id"
         required: false
         default: ""
-
+ 
 permissions:
   contents: write
-
+ 
 jobs:
   skillcorner:
     runs-on: ubuntu-latest
     steps:
       - name: Pobierz kod repo
         uses: actions/checkout@v4
-
+ 
       - name: Ustaw Pythona
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
+ 
       - name: Zainstaluj zależności
         run: pip install skillcorner pandas
-
+ 
       - name: Uruchom SkillCorner
         env:
           SKILLCORNER_USERNAME: ${{ secrets.SKILLCORNER_USERNAME }}
@@ -48,16 +48,17 @@ jobs:
           else
             python scripts/fetch_skillcorner.py discover
           fi
-
+ 
       - name: Zapisz wyniki (jeśli są)
         run: |
-          if git diff --quiet -- scripts/skillcorner_*.csv 2>/dev/null; then
+          git add scripts/skillcorner_*.csv 2>/dev/null || true
+          if git diff --cached --quiet; then
             echo "Brak zmian w plikach SkillCorner."
           else
             git config user.name "rakow-scout-bot"
             git config user.email "actions@github.com"
-            git add scripts/skillcorner_*.csv 2>/dev/null || true
-            git commit -m "SkillCorner: aktualizacja danych [auto]" || echo "Nic do commitu."
+            git commit -m "SkillCorner: aktualizacja danych [auto]"
             git pull --rebase origin main
             git push
           fi
+ 
