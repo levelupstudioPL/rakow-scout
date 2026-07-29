@@ -195,6 +195,75 @@ def physical_all(group="player"):
  
  
 # ---------------------------------------------------------------------
+# GAME INTELLIGENCE — agregaty sezonowe (styl gry, drugi wymiar obok fizyki).
+# Każdy endpoint to osobna rodzina metryk. Zapis: skillcorner_gi_<key>_<eid>.csv
+# + zbiorczy skillcorner_gi_<key>_all.csv (z tagiem ligi) do spięcia z modelem.
+GI_ENDPOINTS = {
+    "off_ball_runs":       "get_metrics_gi_ip_off_ball_runs",       # biegi bez piłki
+    "passes":              "get_metrics_gi_ip_passes",              # podania (GI)
+    "passing_options":     "get_metrics_gi_ip_passing_options",     # opcje podań
+    "possessions":         "get_metrics_gi_ip_player_possessions",  # posiadanie
+    "on_ball_engagements": "get_metrics_gi_oop_on_ball_engagements", # angażowanie (bez piłki u rywala)
+}
+ 
+ 
+def _pull_gi(client, method, eid, group="player"):
+    """Jeden endpoint GI dla jednej edycji. Błąd auth = stop; inny błąd = pomiń."""
+    fn = getattr(client, method, None)
+    if fn is None:
+        print(f"[uwaga] Klient nie ma metody {method} — pomijam.", file=sys.stderr)
+        return None
+    try:
+        data = fn(params={"competition_edition": eid, "group_by": group})
+    except Exception as e:  # noqa
+        status = getattr(getattr(e, "response", None), "status_code", None)
+        if status in (401, 403):
+            die(f"{status} przy {method}. Sprawdź SKILLCORNER_USERNAME/PASSWORD "
+                f"i czy konto ma dostęp do Game Intelligence.")
+        print(f"[uwaga] {method} edycja {eid}: {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+    df = to_frame(data)
+    if len(df) == 0:
+        return None
+    df.insert(0, "competition_edition", eid)
+    df.insert(1, "league", EDITIONS.get(eid, ""))
+    return df
+ 
+ 
+def gi(edition_ids, group="player"):
+    client = make_client()
+    eids = []
+    for raw in edition_ids:
+        try:
+            eids.append(int(raw))
+        except (ValueError, TypeError):
+            print(f"[pomijam] '{raw}' nie jest liczbą (edition id).", file=sys.stderr)
+    for key, method in GI_ENDPOINTS.items():
+        frames = []
+        for eid in eids:
+            df = _pull_gi(client, method, eid, group)
+            if df is None:
+                print(f"[uwaga] GI {key} edycja {eid}: brak danych/pominięto.")
+                continue
+            out = HERE / f"skillcorner_gi_{key}_{eid}.csv"
+            df.to_csv(out, index=False)
+            frames.append(df)
+            print(f"[OK] GI {key} {eid} ({EDITIONS.get(eid, '?')}): "
+                  f"{len(df)} wierszy, {len(df.columns)} kolumn → {out.name}")
+        if len(frames) > 1:
+            import pandas as pd
+            comb = pd.concat(frames, ignore_index=True)
+            out = HERE / f"skillcorner_gi_{key}_all.csv"
+            comb.to_csv(out, index=False)
+            print(f"[OK] GI {key} zbiorczo: {len(comb)} wierszy z {len(frames)} lig → {out.name}")
+ 
+ 
+def gi_all(group="player"):
+    """Pobierz Game Intelligence dla wszystkich 8 lig modelu (EDITIONS)."""
+    gi(list(EDITIONS.keys()), group)
+ 
+ 
+# ---------------------------------------------------------------------
 def main():
     args = sys.argv[1:]
     mode = args[0] if args else "discover"
@@ -207,8 +276,15 @@ def main():
             die("Podaj co najmniej jeden competition_edition id "
                 "(albo użyj trybu 'physical-all').")
         physical(args[1:])
+    elif mode == "gi-all":
+        gi_all()
+    elif mode == "gi":
+        if len(args) < 2:
+            die("Podaj co najmniej jeden competition_edition id (albo użyj 'gi-all').")
+        gi(args[1:])
     else:
-        die(f"Nieznany tryb '{mode}'. Użyj: discover | physical-all | physical <id> [id...]")
+        die(f"Nieznany tryb '{mode}'. Użyj: discover | physical-all | physical <id> [...] "
+            f"| gi-all | gi <id> [...]")
  
  
 if __name__ == "__main__":
