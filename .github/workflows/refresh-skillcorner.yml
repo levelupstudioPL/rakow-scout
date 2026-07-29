@@ -36,7 +36,7 @@ jobs:
           python-version: "3.12"
 
       - name: Zainstaluj zależności
-        run: pip install skillcorner
+        run: pip install skillcorner pandas
 
       - name: Uruchom SkillCorner
         env:
