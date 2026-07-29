@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Tryb: discover | physical-all (8 lig modelu) | physical (wybrane id)"
+        description: "Tryb: discover | physical-all | physical | gi-all | gi (wybrane id)"
         required: true
         default: "discover"
         type: choice
@@ -16,8 +16,10 @@ on:
           - discover
           - physical-all
           - physical
+          - gi-all
+          - gi
       edition:
-        description: "Dla trybu 'physical': competition_edition id (można kilka, oddzielone spacją)"
+        description: "Dla trybu 'physical'/'gi': competition_edition id (można kilka, spacja)"
         required: false
         default: ""
  
@@ -49,6 +51,10 @@ jobs:
             python scripts/fetch_skillcorner.py physical-all
           elif [ "$M" = "physical" ]; then
             python scripts/fetch_skillcorner.py physical ${{ github.event.inputs.edition }}
+          elif [ "$M" = "gi-all" ]; then
+            python scripts/fetch_skillcorner.py gi-all
+          elif [ "$M" = "gi" ]; then
+            python scripts/fetch_skillcorner.py gi ${{ github.event.inputs.edition }}
           else
             python scripts/fetch_skillcorner.py discover
           fi
@@ -65,4 +71,3 @@ jobs:
             git pull --rebase origin main
             git push
           fi
- 
