@@ -8,15 +8,16 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Tryb: 'discover' (co obejmuje licencja) lub 'physical' (dane fizyczne)"
+        description: "Tryb: discover | physical-all (8 lig modelu) | physical (wybrane id)"
         required: true
         default: "discover"
         type: choice
         options:
           - discover
+          - physical-all
           - physical
       edition:
-        description: "Dla trybu 'physical': competition_edition id"
+        description: "Dla trybu 'physical': competition_edition id (można kilka, oddzielone spacją)"
         required: false
         default: ""
  
@@ -43,7 +44,10 @@ jobs:
           SKILLCORNER_USERNAME: ${{ secrets.SKILLCORNER_USERNAME }}
           SKILLCORNER_PASSWORD: ${{ secrets.SKILLCORNER_PASSWORD }}
         run: |
-          if [ "${{ github.event.inputs.mode }}" = "physical" ]; then
+          M="${{ github.event.inputs.mode }}"
+          if [ "$M" = "physical-all" ]; then
+            python scripts/fetch_skillcorner.py physical-all
+          elif [ "$M" = "physical" ]; then
             python scripts/fetch_skillcorner.py physical ${{ github.event.inputs.edition }}
           else
             python scripts/fetch_skillcorner.py discover
