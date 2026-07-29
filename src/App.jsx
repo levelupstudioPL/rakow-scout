@@ -9,6 +9,7 @@ const C = {
 };
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
+const tmUrl = (name) => `https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(name || "")}`;
 const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
   LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
 const lineOfPos = (pos) => {
@@ -29,6 +30,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("coherence");
   const [short, setShort] = useState([]);
+  const [query, setQuery] = useState("");   // wyszukiwarka ręczna (po nazwisku, cała pula)
   // --- FILTRY kandydatów (widok "Odpowiednicy") ---
   const FILTERS_DEFAULT = {
     ageMin: 16, ageMax: 45,
@@ -39,9 +41,14 @@ export default function App() {
     onlyReliable: false,   // ukryj kandydatów z niepełnymi danymi
     leagues: [],           // [] = wszystkie
   };
+  // Filtry aplikowane na przycisk „Szukaj": draft = edycja, filters = zastosowane.
   const [filters, setFilters] = useState(FILTERS_DEFAULT);
+  const [draft, setDraft] = useState(FILTERS_DEFAULT);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const setF = (patch) => setFilters((f) => ({ ...f, ...patch }));
+  const setF = (patch) => setDraft((f) => ({ ...f, ...patch }));
+  const applyFilters = () => setFilters(draft);
+  const resetFilters = () => { setDraft(FILTERS_DEFAULT); setFilters(FILTERS_DEFAULT); };
+  const filtersDirty = JSON.stringify(draft) !== JSON.stringify(filters);
   const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
   useEffect(() => { loadData("data.json"); }, []);
@@ -59,8 +66,20 @@ export default function App() {
           && Array.isArray(d.leagues) && Array.isArray(d.pool)
           && d.correlations && typeof d.correlations === "object";
         if (!ok) throw new Error("Niekompletne dane");
-        setData(d);
-        setSel(d.squad.find((p) => p.real) || d.squad[0]);
+        // Deduplikacja puli: ten sam zawodnik potrafi wystąpić w dwóch ligach
+        // (transfer w trakcie sezonu) → zostawiamy jeden wpis, z wyższym poziomem
+        // (a przy remisie — ten z wyceną). Naprawia duplikaty kandydatów.
+        const seen = new Map();
+        for (const p of d.pool) {
+          const prev = seen.get(p.id);
+          const rNew = Number(p.raw) || 0, rOld = prev ? (Number(prev.raw) || 0) : -1;
+          const better = !prev || rNew > rOld
+            || (rNew === rOld && (Number(p.mv) || 0) > (Number(prev.mv) || 0));
+          if (better) seen.set(p.id, p);
+        }
+        const dd = { ...d, pool: [...seen.values()] };
+        setData(dd);
+        setSel(dd.squad.find((p) => p.real) || dd.squad[0]);
       })
       .catch(() => {
         setErr(live
@@ -130,6 +149,16 @@ export default function App() {
     return rows.sort(s[sortBy] || s.coherence);
   }, [data, sel, sortBy, filters]);
 
+  // Wyszukiwarka ręczna: po nazwisku, w CAŁEJ puli (niezależnie od pozycji).
+  const searchResults = useMemo(() => {
+    if (!data || !query.trim()) return null;
+    const q = query.trim().toLowerCase();
+    return data.pool
+      .filter((p) => p.name && p.name !== "?" && p.name.toLowerCase().includes(q))
+      .sort((a, b) => (Number(b.coherence) || 0) - (Number(a.coherence) || 0))
+      .slice(0, 60);
+  }, [data, query]);
+
   const fmt = (v) => `€${v.toFixed(1)}M`;
   const shortRows = useMemo(() => candidates.filter((c) => short.includes(c.p.id)), [candidates, short]);
   const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y);
@@ -142,7 +171,8 @@ export default function App() {
   const realCount = data.squad.filter((p) => p.real).length;
   const NAV = [
     ["twin", "Skład", "01"], ["match", "Odpowiednicy", "02"],
-    ["leagues", "Handicapy", "03"], ["corr", "Formacja", "04"], ["help", "Instrukcja", "—"],
+    ["leagues", "Handicapy", "03"], ["corr", "Formacja", "04"],
+    ["search", "Szukaj", "05"], ["help", "Instrukcja", "—"],
   ];
 
   return (
@@ -217,6 +247,7 @@ export default function App() {
               {view === "match" && "Odpowiednicy z Europy"}
               {view === "leagues" && "Handicapy lig"}
               {view === "corr" && "Zależności formacji"}
+              {view === "search" && "Wyszukiwarka zawodników"}
               {view === "help" && "Jak korzystać"}
             </h1>
             <div style={{ display: "flex", gap: 26, marginTop: 18, flexWrap: "wrap" }}>
@@ -234,7 +265,9 @@ export default function App() {
           {view === "twin" && <TwinView data={data} sel={sel} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
-            filters, setF, setFilters, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
+            filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
+            FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
+          {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -307,10 +340,10 @@ function TwinView({ data, sel, setSel, setView }) {
 }
 
 function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
-  filters, setF, setFilters, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
+  filters, applied, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
   if (!sel) return null;
   const totalForPos = data.pool.filter((p) => p.pos === sel.pos).length;
-  const activeCount = countActiveFilters(filters, FILTERS_DEFAULT);
+  const activeCount = countActiveFilters(applied, FILTERS_DEFAULT);
   return (
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
@@ -345,7 +378,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </div>
       </div>
 
-      <FilterPanel {...{ data, filters, setF, setFilters, FILTERS_DEFAULT,
+      <FilterPanel {...{ data, filters, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT,
         filtersOpen, setFiltersOpen, activeCount, shown: candidates.length, total: totalForPos }} />
 
       {candidates.length > 0 && (
@@ -362,7 +395,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
           {activeCount > 0 ? (
             <>Żaden kandydat na pozycji <b className="mono">{sel.pos}</b> nie spełnia ustawionych filtrów
             {totalForPos > 0 ? <> (w puli jest ich {totalForPos})</> : null}.{" "}
-            <button onClick={() => setFilters(FILTERS_DEFAULT)}
+            <button onClick={resetFilters}
               style={{ background: "none", border: "none", color: C.redHi, cursor: "pointer",
                 fontSize: 13.5, textDecoration: "underline", padding: 0 }}>Wyczyść filtry</button></>
           ) : (
@@ -381,6 +414,12 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name && p.name !== "?" ? p.name : p.lg}</div>
                 <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
+                {p.name && p.name !== "?" && (
+                  <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>
+                    Transfermarkt ↗
+                  </a>
+                )}
               </div>
               <div>
                 <div className="disp" style={{ fontSize: 26, lineHeight: 0.9,
@@ -457,6 +496,82 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
   );
 }
 
+function SearchView({ data, query, setQuery, searchResults, short, toggleShort, fmt }) {
+  const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
+  return (
+    <div>
+      <Lead>Wyszukaj dowolnego zawodnika po nazwisku — w całej puli, niezależnie od pozycji. Poziom i koherencja pochodzą z modelu; „Transfermarkt" otwiera profil.</Lead>
+      <div style={{ display: "flex", gap: 10, margin: "18px 0", alignItems: "center", flexWrap: "wrap" }}>
+        <input value={query} onChange={(e) => setQuery(e.target.value)} autoFocus
+          placeholder="Wpisz nazwisko zawodnika…"
+          style={{ flex: "1 1 320px", background: C.panel, color: C.bone, border: `1px solid ${C.line}`,
+            borderRadius: 9, padding: "11px 14px", fontSize: 14 }} />
+        {query && (
+          <button onClick={() => setQuery("")}
+            style={{ background: "transparent", color: C.steel, border: `1px solid ${C.line}`,
+              borderRadius: 8, padding: "9px 14px", cursor: "pointer", fontSize: 12 }}>Wyczyść</button>
+        )}
+      </div>
+
+      {!query.trim() && <Empty>Zacznij pisać, by wyszukać zawodnika po nazwisku.</Empty>}
+      {query.trim() && searchResults && searchResults.length === 0 && (
+        <Empty>Brak zawodnika „{query}" w puli {data.pool.length} kandydatów.</Empty>
+      )}
+
+      {searchResults && searchResults.length > 0 && (
+        <>
+          <div className="mono" style={{ fontSize: 11, color: C.steel, marginBottom: 10 }}>
+            {searchResults.length}{searchResults.length === 60 ? "+" : ""} wynik(ów)
+          </div>
+          <div style={{ display: "grid", gap: 9 }}>
+            {searchResults.map((p) => (
+              <div key={p.id} className="rowh" style={{ background: C.panel, border: `1px solid ${C.line}`,
+                borderRadius: 12, padding: "14px 18px", display: "grid",
+                gridTemplateColumns: "1.6fr 0.7fr 1fr 1fr auto", gap: 14, alignItems: "center" }}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</div>
+                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
+                  <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
+                </div>
+                <div>
+                  <div className="disp" style={{ fontSize: 24, lineHeight: 0.9, display: "flex", gap: 2 }}>
+                    {p.raw}{p.level_estimated && <span title="Niepełne dane — poziom szacowany." style={{ fontSize: 10, color: C.warn, cursor: "help" }}>⚠</span>}
+                  </div>
+                  <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 5 }}>
+                    koherencja{p.coherence_ref ? <span style={{ color: C.steelHi }}> · {p.coherence_ref}</span> : ""}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                    <div style={{ flex: 1, height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
+                      <div style={{ width: `${p.coherence || 0}%`, height: "100%", background: cohColor(p.coherence || 0) }} />
+                    </div>
+                    <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: cohColor(p.coherence || 0) }}>{Math.round(p.coherence || 0)}%</span>
+                  </div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  {Number(p.mv) > 0
+                    ? <div className="disp" style={{ fontSize: 20, color: C.proxy }}>{fmt(Number(p.mv))}</div>
+                    : <div style={{ fontSize: 12, color: C.steel }}>brak wyceny</div>}
+                  <div style={{ fontSize: 10, color: C.steel }}>wartość rynkowa</div>
+                </div>
+                <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
+                  style={{ background: short.includes(p.id) ? C.red : "transparent",
+                    color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
+                    borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
+                  {short.includes(p.id) ? "★" : "☆"}
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function LeaguesView({ data }) {
   return (
     <div>
@@ -509,7 +624,10 @@ function CorrView({ data }) {
         <span style={{ color: C.warn, fontSize: 15 }}>⚠</span>
         <span><b style={{ color: C.warn }}>DANE PRZYKŁADOWE.</b> Wartości w tej macierzy są poglądowe — pokazują, jak sekcja będzie działać. Realne korelacje wymagają policzenia ze współwystępowania akcji w danych meczowych (osobny etap). Nie interpretuj tych liczb jako faktycznych zależności.</span>
       </div>
-      <div style={{ display: "flex", gap: 24, marginTop: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
+      <div style={{ position: "relative", display: "flex", gap: 24, marginTop: 20, flexWrap: "wrap",
+        alignItems: "flex-start", opacity: 0.5, filter: "grayscale(0.4)" }}>
+        <span style={{ position: "absolute", top: -10, left: 8, zIndex: 2, background: C.warn, color: C.ink,
+          fontSize: 9, fontWeight: 800, letterSpacing: 1, padding: "2px 8px", borderRadius: 4 }}>PRZYKŁADOWE</span>
         <div style={{ overflowX: "auto" }}>
           <table style={{ borderCollapse: "collapse" }}>
             <thead><tr><th></th>{POS.map((p) => <th key={p} className="mono" style={{ padding: 7, color: C.steel, fontSize: 11 }}>{p}</th>)}</tr></thead>
@@ -554,16 +672,27 @@ function CorrView({ data }) {
 function HelpView({ data, setView }) {
   const steps = [
     ["Skład", "Zakładka „Skład” to obecny zespół ułożony liniami, jak na tablicy taktycznej. Każda karta ma poziom RC (Ekstraklasa = baza). Klik przenosi do odpowiedników."],
-    ["Odpowiednicy", "Kandydaci z lig europejskich na tej samej pozycji. Dwie miary obok siebie: poziom (jak dobry jest zawodnik) i koherencja (jak podobnie gra do zawodnika Rakowa, którego miałby zastąpić). Sortuj po koherencji, poziomie lub cenie."],
+    ["Odpowiednicy", "Kandydaci z lig europejskich na tej samej pozycji. Dwie miary obok siebie: poziom (jak dobry jest zawodnik) i koherencja (jak podobnie gra do zawodnika Rakowa). Filtry (wiek, cena, koherencja, ligi) oraz preset Fragmentator (≤3 mln €, ≤26 lat) zatwierdzasz przyciskiem Szukaj — wyniki nie odświeżają się, dopóki nie klikniesz."],
+    ["Szukaj", "Wyszukiwarka ręczna: wpisz nazwisko, a znajdziesz dowolnego zawodnika w całej puli, niezależnie od pozycji — z poziomem, koherencją, wartością rynkową i linkiem do Transfermarktu."],
     ["Lista obserwowanych", "Gwiazdka przy kandydacie dodaje go do listy na dole. Aplikacja sumuje łączny szacowany koszt zaznaczonych zawodników."],
     ["Handicapy", "Tabela: o ile każda liga różni się od Ekstraklasy, osobno per linia. To te korekty podnoszą lub obniżają surowy poziom kandydata."],
     ["Formacja", "Macierz zależności między pozycjami — które role najsilniej ze sobą współgrają w układzie."],
     ["Dane live", "Przycisk w lewym panelu pobiera świeże dane, gdy źródło jest podpięte. Bez tego działają dane zapisane."],
   ];
   const sources = [
-    ["StatsBomb", "Metryki zawodników i podstawa poziomów RC oraz handicapów lig.", C.good],
+    ["StatsBomb", "Metryki techniczne zawodników — podstawa poziomów RC, handicapów lig i profilu koherencji.", C.good],
+    ["SkillCorner", "Fizyka (dystans, sprinty, prędkość, dynamika) i Game Intelligence (biegi bez piłki, styl podań, pressing). Zasila koherencję (styl gry), NIE poziom RC.", C.redHi],
     ["Wartości rynkowe (Kaggle)", "Wartości rynkowe, wiek i kontrakty kandydatów — ze stabilnego, okresowo aktualizowanego zbioru danych.", C.proxy],
-    ["Metoda handicapów", "Porównuje metrykę danej linii z Ekstraklasą i przelicza na skok RC (10% = RC+1).", C.redHi],
+  ];
+  const defs = [
+    ["RC / poziom", "Skala 0–100. Percentyl metryk jakościowych zawodnika względem Ekstraklasy (baza). Wyższy = mocniejszy. Liczony automatycznie z metryk StatsBomb."],
+    ["Poziom surowy vs skorygowany", "Surowy — poziom liczony w lidze zawodnika. Skorygowany — surowy podniesiony/obniżony o handicap jego ligi względem Ekstraklasy."],
+    ["Handicap ligi", "O ile dana liga jest mocniejsza/słabsza od Ekstraklasy, osobno per linia (bramka/obrona/pomoc/atak). Reguła: 10% różnicy = RC ± 1."],
+    ["Koherencja", "Skala 0–100. Jak podobnie kandydat GRA do konkretnego zawodnika Rakowa (podobieństwo profili). Obejmuje technikę (StatsBomb), fizykę i taktykę ruchu (SkillCorner). Nie myl z poziomem — to podobieństwo stylu, nie jakość."],
+    ["Fizyka (SkillCorner)", "Dystans, biegi wysokiej intensywności, sprinty, prędkość szczytowa, przyspieszenia, zwroty. Wchodzi do koherencji (styl), nie do RC."],
+    ["Game Intelligence (SkillCorner)", "Biegi bez piłki, styl i zasięg podań, oferowanie się, prowadzenie pod presją, pressing/odbiory. Wchodzi do koherencji (styl), nie do RC."],
+    ["⚠ Niepełne dane", "Zawodnik nie ma jeszcze wystarczającej próbki meczowej — poziom jest szacowany. Traktuj orientacyjnie."],
+    ["Cena (estymacja)", "Wartość rynkowa skorygowana o poziom vs RC, wiek, długość kontraktu i mnożnik ligi. Zwraca punkt i widełki (−20% / +25%). Placeholder do kalibracji na zrealizowanych transferach."],
   ];
   return (
     <div>
@@ -595,6 +724,16 @@ function HelpView({ data, setView }) {
         ))}
       </div>
 
+      <SectionLabel>Definicje</SectionLabel>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10 }}>
+        {defs.map(([t, d]) => (
+          <div key={t} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, marginBottom: 4, color: C.bone }}>{t}</div>
+            <div style={{ fontSize: 12.5, color: C.steel, lineHeight: 1.5 }}>{d}</div>
+          </div>
+        ))}
+      </div>
+
       <div style={{ marginTop: 18, background: `${C.proxy}12`, border: `1px solid ${C.proxy}44`, borderRadius: 12, padding: "16px 18px" }}>
         <b style={{ color: C.proxy, fontSize: 13 }}>Jak czytać liczby.</b>
         <span style={{ fontSize: 13, color: C.steelHi }}> Poziom RC jest liczony automatycznie z realnych metryk StatsBomb (percentyl względem Ekstraklasy) — to działający model, nie wpisywane ręcznie wartości. Dobór metryk oceniających zawodnika na danej pozycji to jednak przyjęte założenie, które warto potwierdzić od strony sportowej. Zawodnicy bez wystarczającej próbki meczowej mają poziom szacowany (znacznik ⚠). Macierz „Formacja" zawiera na razie dane przykładowe. Traktuj liczby jako mocną wersję roboczą, nie ostateczną.</span>
@@ -621,7 +760,7 @@ function countActiveFilters(f, d) {
   return n;
 }
 
-function FilterPanel({ data, filters, setF, setFilters, FILTERS_DEFAULT,
+function FilterPanel({ data, filters, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT,
   filtersOpen, setFiltersOpen, activeCount, shown, total }) {
   const F = filters;
   const leagues = [...new Set(data.pool.map((p) => p.lg))].filter(Boolean).sort();
@@ -632,25 +771,46 @@ function FilterPanel({ data, filters, setF, setFilters, FILTERS_DEFAULT,
   return (
     <div style={{ marginBottom: 18, background: C.panel, border: `1px solid ${activeCount > 0 ? C.redHi : C.line}`,
       borderRadius: 12, overflow: "hidden" }}>
-      <button onClick={() => setFiltersOpen(!filtersOpen)}
-        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, background: "transparent",
-          border: "none", color: C.bone, padding: "12px 16px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
-        <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: activeCount > 0 ? C.redHi : C.steel }}>
-          FILTRY
-        </span>
-        {activeCount > 0 && (
-          <span className="mono" style={{ fontSize: 10, fontWeight: 800, background: C.red, color: "#fff",
-            borderRadius: 20, padding: "2px 8px" }}>{activeCount}</span>
+      <div style={{ display: "flex", alignItems: "stretch" }}>
+        <button onClick={() => setFiltersOpen(!filtersOpen)}
+          style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, background: "transparent",
+            border: "none", color: C.bone, padding: "12px 16px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+          <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: activeCount > 0 ? C.redHi : C.steel }}>
+            FILTRY
+          </span>
+          {activeCount > 0 && (
+            <span className="mono" style={{ fontSize: 10, fontWeight: 800, background: C.red, color: "#fff",
+              borderRadius: 20, padding: "2px 8px" }}>{activeCount}</span>
+          )}
+          <span style={{ marginLeft: "auto", fontSize: 12, color: C.steel, fontWeight: 500 }}>
+            {shown} z {total} kandydatów
+          </span>
+          <span className="mono" style={{ fontSize: 11, color: C.steel }}>{filtersOpen ? "▲" : "▼"}</span>
+        </button>
+        {filtersDirty && (
+          <button onClick={applyFilters} title="Zastosuj zmienione filtry"
+            style={{ background: C.red, color: "#fff", border: "none", padding: "0 18px",
+              cursor: "pointer", fontSize: 13, fontWeight: 700, whiteSpace: "nowrap" }}>
+            Szukaj ↵
+          </button>
         )}
-        <span style={{ marginLeft: "auto", fontSize: 12, color: C.steel, fontWeight: 500 }}>
-          {shown} z {total} kandydatów
-        </span>
-        <span className="mono" style={{ fontSize: 11, color: C.steel }}>{filtersOpen ? "▲" : "▼"}</span>
-      </button>
+      </div>
 
       {filtersOpen && (
         <div style={{ padding: "4px 16px 16px", borderTop: `1px solid ${C.line}`,
           display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 18 }}>
+
+          {/* PRESETY */}
+          <div style={{ gridColumn: "1 / -1", display: "flex", flexWrap: "wrap", gap: 8,
+            alignItems: "center", paddingTop: 12 }}>
+            <span className="mono" style={{ fontSize: 10, letterSpacing: 1, color: C.steel, textTransform: "uppercase" }}>Preset</span>
+            <button onClick={() => setF({ ageMin: 16, ageMax: 26, priceMax: 3, showUnpriced: true })}
+              style={{ background: C.red, color: "#fff", border: "none", borderRadius: 8,
+                padding: "6px 12px", fontSize: 12, cursor: "pointer", fontWeight: 700 }}>
+              Fragmentator · ≤3 mln € · ≤26 lat
+            </button>
+            <span style={{ fontSize: 11, color: C.steel }}>ustawia filtry — zatwierdź „Szukaj"</span>
+          </div>
 
           {/* WIEK */}
           <div style={{ paddingTop: 14 }}>
@@ -730,15 +890,27 @@ function FilterPanel({ data, filters, setF, setFilters, FILTERS_DEFAULT,
             </div>
           </div>
 
-          {activeCount > 0 && (
-            <div style={{ gridColumn: "1 / -1", paddingTop: 4 }}>
-              <button onClick={() => setFilters(FILTERS_DEFAULT)}
+          <div style={{ gridColumn: "1 / -1", paddingTop: 4, display: "flex", gap: 10,
+            alignItems: "center", flexWrap: "wrap" }}>
+            <button onClick={applyFilters} disabled={!filtersDirty}
+              style={{ background: filtersDirty ? C.red : C.panel2, color: filtersDirty ? "#fff" : C.steel,
+                border: `1px solid ${filtersDirty ? C.red : C.line}`, borderRadius: 8, padding: "8px 20px",
+                fontSize: 13, cursor: filtersDirty ? "pointer" : "default", fontWeight: 700 }}>
+              Szukaj
+            </button>
+            {activeCount > 0 && (
+              <button onClick={resetFilters}
                 style={{ background: "transparent", color: C.redHi, border: `1px solid ${C.red}66`,
-                  borderRadius: 8, padding: "7px 14px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>
-                Wyczyść filtry ({activeCount})
+                  borderRadius: 8, padding: "8px 14px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>
+                Wyczyść ({activeCount})
               </button>
-            </div>
-          )}
+            )}
+            {filtersDirty && (
+              <span style={{ fontSize: 11.5, color: C.warn }}>
+                Zmieniono filtry — kliknij „Szukaj", by zastosować.
+              </span>
+            )}
+          </div>
         </div>
       )}
     </div>
