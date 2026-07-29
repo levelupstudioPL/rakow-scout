@@ -1,0 +1,1511 @@
+id,name,competition.id,competition.area,competition.name,competition.gender,competition.age_group,season.id,season.start_year,season.end_year,season.name
+0,FIFA - World Cup - 2014,0,FIFA,World Cup,male,adult,10,2014,2014,2014
+1,ENG - Premier League - 2015/2016,1,ENG,Premier League,male,adult,2,2015,2016,2015/2016
+2,UEFA - European Championship - 2016,2,UEFA,European Championship,male,adult,12,2016,2016,2016
+3,ENG - Premier League - 2016/2017,1,ENG,Premier League,male,adult,3,2016,2017,2016/2017
+4,ENG - Premier League - 2017/2018,1,ENG,Premier League,male,adult,4,2017,2018,2017/2018
+5,FRA - Ligue 1 - 2016/2017,3,FRA,Ligue 1,male,adult,3,2016,2017,2016/2017
+6,FRA - Ligue 1 - 2017/2018,3,FRA,Ligue 1,male,adult,4,2017,2018,2017/2018
+7,ESP - LaLiga - 2016/2017,4,ESP,LaLiga,male,adult,3,2016,2017,2016/2017
+8,ESP - LaLiga - 2017/2018,4,ESP,LaLiga,male,adult,4,2017,2018,2017/2018
+9,ITA - Serie A - 2016/2017,5,ITA,Serie A,male,adult,3,2016,2017,2016/2017
+10,ITA - Serie A - 2017/2018,5,ITA,Serie A,male,adult,4,2017,2018,2017/2018
+11,GER - Bundesliga - 2016/2017,6,GER,Bundesliga,male,adult,3,2016,2017,2016/2017
+12,GER - Bundesliga - 2017/2018,6,GER,Bundesliga,male,adult,4,2017,2018,2017/2018
+13,FRA - Ligue 2 - 2016/2017,12,FRA,Ligue 2,male,adult,3,2016,2017,2016/2017
+14,FRA - Ligue 2 - 2017/2018,12,FRA,Ligue 2,male,adult,4,2017,2018,2017/2018
+15,FRA - Coupe de France - 2016/2017,7,FRA,Coupe de France,male,adult,3,2016,2017,2016/2017
+16,FRA - Coupe de France - 2017/2018,7,FRA,Coupe de France,male,adult,4,2017,2018,2017/2018
+17,FRA - Coupe de la Ligue - 2017/2018,8,FRA,Coupe de la Ligue,male,adult,4,2017,2018,2017/2018
+18,UEFA - Europa League - 2016/2017,9,UEFA,Europa League,male,adult,3,2016,2017,2016/2017
+19,UEFA - Europa League - 2017/2018,9,UEFA,Europa League,male,adult,4,2017,2018,2017/2018
+20,UEFA - Champions League - 2016/2017,10,UEFA,Champions League,male,adult,3,2016,2017,2016/2017
+21,UEFA - Champions League - 2017/2018,10,UEFA,Champions League,male,adult,4,2017,2018,2017/2018
+24,UEFA - Super Cup - 2017,13,UEFA,Super Cup,male,adult,13,2017,2017,2017
+25,UEFA - FIFA World Cup Qualifier - 2018,15,UEFA,FIFA World Cup Qualifier,male,adult,14,2018,2018,2018
+26,BEL - Pro League - 2017/2018,16,BEL,Pro League,male,adult,4,2017,2018,2017/2018
+27,NED - Eredivisie - 2017/2018,17,NED,Eredivisie,male,adult,4,2017,2018,2017/2018
+28,SCO - Premiership - 2017/2018,18,SCO,Premiership,male,adult,4,2017,2018,2017/2018
+29,ENG - FA Cup - 2017/2018,19,ENG,FA Cup,male,adult,4,2017,2018,2017/2018
+30,FIFA - World Cup - 2018,0,FIFA,World Cup,male,adult,14,2018,2018,2018
+31,INT - Friendly International - 2017,20,INT,Friendly International,male,adult,13,2017,2017,2017
+42,ENG - Premier League - 2018/2019,1,ENG,Premier League,male,adult,5,2018,2019,2018/2019
+43,FRA - Ligue 1 - 2018/2019,3,FRA,Ligue 1,male,adult,5,2018,2019,2018/2019
+44,ESP - LaLiga - 2018/2019,4,ESP,LaLiga,male,adult,5,2018,2019,2018/2019
+45,ITA - Serie A - 2018/2019,5,ITA,Serie A,male,adult,5,2018,2019,2018/2019
+46,GER - Bundesliga - 2018/2019,6,GER,Bundesliga,male,adult,5,2018,2019,2018/2019
+47,FRA - Ligue 2 - 2018/2019,12,FRA,Ligue 2,male,adult,5,2018,2019,2018/2019
+48,FRA - Coupe de France - 2018/2019,7,FRA,Coupe de France,male,adult,5,2018,2019,2018/2019
+49,FRA - Coupe de la Ligue - 2018/2019,8,FRA,Coupe de la Ligue,male,adult,5,2018,2019,2018/2019
+50,UEFA - Europa League - 2018/2019,9,UEFA,Europa League,male,adult,5,2018,2019,2018/2019
+51,UEFA - Champions League - 2018/2019,10,UEFA,Champions League,male,adult,5,2018,2019,2018/2019
+52,UEFA - Super Cup - 2018,13,UEFA,Super Cup,male,adult,14,2018,2018,2018
+53,BEL - Pro League - 2018/2019,16,BEL,Pro League,male,adult,5,2018,2019,2018/2019
+54,NED - Eredivisie - 2018/2019,17,NED,Eredivisie,male,adult,5,2018,2019,2018/2019
+55,SCO - Premiership - 2018/2019,18,SCO,Premiership,male,adult,5,2018,2019,2018/2019
+56,ENG - FA Cup - 2018/2019,19,ENG,FA Cup,male,adult,5,2018,2019,2018/2019
+57,UEFA - Nation`s League - League A - 2018/2019,21,UEFA,Nation`s League - League A,male,adult,5,2018,2019,2018/2019
+61,INT - Friendly International - 2018,20,INT,Friendly International,male,adult,14,2018,2018,2018
+62,ESP - Copa del Rey - 2018/2019,44,ESP,Copa del Rey,male,adult,5,2018,2019,2018/2019
+63,UEFA - European Championship Qualifiers - 2019,34,UEFA,European Championship Qualifiers,male,adult,15,2019,2019,2019
+64,TUR - Super Lig - 2018/2019,29,TUR,Super Lig,male,adult,5,2018,2019,2018/2019
+65,CHN - Super League - 2019,47,CHN,Super League,male,adult,15,2019,2019,2019
+66,"FIFA - World Cup, Women - 2019",48,FIFA,"World Cup, Women",female,adult,15,2019,2019,2019
+67,UEFA - U21 European Championship - 2019,49,UEFA,U21 European Championship,male,U21,15,2019,2019,2019
+68,CAF - Africa Cup of Nations - 2019,37,CAF,Africa Cup of Nations,male,adult,15,2019,2019,2019
+69,CONMEBOL - Copa America - 2019,51,CONMEBOL,Copa America,male,adult,15,2019,2019,2019
+70,FRA - Ligue 2 - 2019/2020,12,FRA,Ligue 2,male,adult,6,2019,2020,2019/2020
+71,UEFA - Europa League - 2019/2020,9,UEFA,Europa League,male,adult,6,2019,2020,2019/2020
+72,FRA - Trophée des Champions - 2019/2020,52,FRA,Trophée des Champions,male,adult,6,2019,2020,2019/2020
+73,GER - DFL-Supercup - 2019,53,GER,DFL-Supercup,male,adult,15,2019,2019,2019
+74,ENG - Community Shield - 2019,54,ENG,Community Shield,male,adult,15,2019,2019,2019
+75,FRA - Ligue 1 - 2019/2020,3,FRA,Ligue 1,male,adult,6,2019,2020,2019/2020
+76,ITA - Serie A - 2019/2020,5,ITA,Serie A,male,adult,6,2019,2020,2019/2020
+77,GER - Bundesliga - 2019/2020,6,GER,Bundesliga,male,adult,6,2019,2020,2019/2020
+78,ESP - LaLiga - 2019/2020,4,ESP,LaLiga,male,adult,6,2019,2020,2019/2020
+79,ENG - Premier League - 2019/2020,1,ENG,Premier League,male,adult,6,2019,2020,2019/2020
+80,INT - International Champions Cup - 2019,55,INT,International Champions Cup,male,adult,15,2019,2019,2019
+81,UEFA - Champions League - 2019/2020,10,UEFA,Champions League,male,adult,6,2019,2020,2019/2020
+82,FRA - Coupe de la Ligue - 2019/2020,8,FRA,Coupe de la Ligue,male,adult,6,2019,2020,2019/2020
+83,UEFA - Super Cup - 2019,13,UEFA,Super Cup,male,adult,15,2019,2019,2019
+84,MEX - Liga MX - 2016/2017,97,MEX,Liga MX,male,adult,3,2016,2017,2016/2017
+85,CHI - Primera Division - 2017,57,CHI,Primera Division,male,adult,13,2017,2017,2017
+86,BEL - Pro League - 2016/2017,16,BEL,Pro League,male,adult,3,2016,2017,2016/2017
+87,"BEL - Belgium First Division A, Playoffs 2A - 2016/2017",58,BEL,"Belgium First Division A, Playoffs 2A",male,adult,3,2016,2017,2016/2017
+88,BRA - Série D - 2019,59,BRA,Série D,male,adult,15,2019,2019,2019
+89,USA - Major League Soccer - 2017,60,USA,Major League Soccer,male,adult,13,2017,2017,2017
+90,AUS - A-League - 2016/2017,61,AUS,A-League,male,adult,3,2016,2017,2016/2017
+91,UEFA - U21 European Championship Qualifiers - 2019/2020,62,UEFA,U21 European Championship Qualifiers,male,U21,6,2019,2020,2019/2020
+92,CONCACAF - Nations League - League A - 2019/2020,63,CONCACAF,Nations League - League A,male,adult,6,2019,2020,2019/2020
+93,GER - 3. Liga - 2019/2020,64,GER,3. Liga,male,adult,6,2019,2020,2019/2020
+95,ENG - Championship - 2019/2020,31,ENG,Championship,male,adult,6,2019,2020,2019/2020
+96,IND - Indian Super League - 2019/2020,65,IND,Indian Super League,male,adult,6,2019,2020,2019/2020
+97,ENG - FA Cup - 2019/2020,19,ENG,FA Cup,male,adult,6,2019,2020,2019/2020
+98,ENG - Carabao Cup - 2019/2020,66,ENG,Carabao Cup,male,adult,6,2019,2020,2019/2020
+99,USA - Major League Soccer - 2018,60,USA,Major League Soccer,male,adult,14,2018,2018,2018
+101,INT - Friendly International - 2019,20,INT,Friendly International,male,adult,15,2019,2019,2019
+102,"BRA - Paulista, Serie A1 - 2020",68,BRA,"Paulista, Serie A1",male,adult,16,2020,2020,2020
+103,BRA - Campeonato Baiano - 2019,69,BRA,Campeonato Baiano,male,adult,15,2019,2019,2019
+104,NED - Eredivisie - 2019/2020,17,NED,Eredivisie,male,adult,6,2019,2020,2019/2020
+105,NED - Eredivisie - 2013/2014,17,NED,Eredivisie,male,adult,0,2013,2014,2013/2014
+106,FRA - Coupe de France - 2019/2020,7,FRA,Coupe de France,male,adult,6,2019,2020,2019/2020
+107,ARG - Primera Division - 1st Phase - 2019,70,ARG,Primera Division - 1st Phase,male,adult,15,2019,2019,2019
+108,SCO - FA Cup - 2019/2020,74,SCO,FA Cup,male,adult,6,2019,2020,2019/2020
+109,SCO - Premiership - 2019/2020,18,SCO,Premiership,male,adult,6,2019,2020,2019/2020
+110,SCO - League Cup - 2019/2020,76,SCO,League Cup,male,adult,6,2019,2020,2019/2020
+111,UKR - Premier League - 2019/2020,26,UKR,Premier League,male,adult,6,2019,2020,2019/2020
+112,GER - 2nd Bundesliga - 2018/2019,40,GER,2nd Bundesliga,male,adult,5,2018,2019,2018/2019
+113,GER - 2nd Bundesliga - 2019/2020,40,GER,2nd Bundesliga,male,adult,6,2019,2020,2019/2020
+114,BEL - Pro League - 2019/2020,16,BEL,Pro League,male,adult,6,2019,2020,2019/2020
+115,GRE - Super League - 2019/2020,28,GRE,Super League,male,adult,6,2019,2020,2019/2020
+116,POL - Ekstraklasa - 2019/2020,43,POL,Ekstraklasa,male,adult,6,2019,2020,2019/2020
+117,BRA - Série A - 2019,77,BRA,Série A,male,adult,15,2019,2019,2019
+118,UEFA - Youth League - 2019/2020,78,UEFA,Youth League,male,U19,6,2019,2020,2019/2020
+119,ENG - Premier League 2 Division One - 2019/2020,79,ENG,Premier League 2 Division One,male,U21,6,2019,2020,2019/2020
+120,BRA - Série B - 2019,80,BRA,Série B,male,adult,15,2019,2019,2019
+122,SUI - Super League - 2019/2020,82,SUI,Super League,male,adult,6,2019,2020,2019/2020
+124,GER - DFB-Pokal - 2019/2020,84,GER,DFB-Pokal,male,adult,6,2019,2020,2019/2020
+125,ESP - LaLiga 2 - 2019/2020,42,ESP,LaLiga 2,male,adult,6,2019,2020,2019/2020
+126,CONMEBOL - Pre-Olympic Tournament - 2020,85,CONMEBOL,Pre-Olympic Tournament,male,adult,16,2020,2020,2020
+127,ISR - Ligat Al - 2017/2018,86,ISR,Ligat Al,male,adult,4,2017,2018,2017/2018
+128,ENG - Premier League 2 Division One - 2017/2018,79,ENG,Premier League 2 Division One,male,U21,4,2017,2018,2017/2018
+129,ENG - Premier League 2 Division One - 2018/2019,79,ENG,Premier League 2 Division One,male,U21,5,2018,2019,2018/2019
+130,JPN - J1 League - 2019,87,JPN,J1 League,male,adult,15,2019,2019,2019
+131,AUT - Bundesliga - 2019/2020,88,AUT,Bundesliga,male,adult,6,2019,2020,2019/2020
+132,DEN - Superliga - 2019/2020,89,DEN,Superliga,male,adult,6,2019,2020,2019/2020
+133,SWE - Allsvenskan - 2020,90,SWE,Allsvenskan,male,adult,16,2020,2020,2020
+134,BEL - Beker Van Belgie - 2019/2020,91,BEL,Beker Van Belgie,male,adult,6,2019,2020,2019/2020
+135,RUS - Premier League - 2019/2020,27,RUS,Premier League,male,adult,6,2019,2020,2019/2020
+136,TUR - Super Lig - 2019/2020,29,TUR,Super Lig,male,adult,6,2019,2020,2019/2020
+137,RUS - Premier League - 2018/2019,27,RUS,Premier League,male,adult,5,2018,2019,2018/2019
+138,POR - Primeira Liga - 2019/2020,25,POR,Primeira Liga,male,adult,6,2019,2020,2019/2020
+139,ITA - Serie B - 2019/2020,41,ITA,Serie B,male,adult,6,2019,2020,2019/2020
+140,ARG - Primera Division - 1st Phase - 2018,70,ARG,Primera Division - 1st Phase,male,adult,14,2018,2018,2018
+141,FRA - Ligue 1 - 2020/2021,3,FRA,Ligue 1,male,adult,7,2020,2021,2020/2021
+142,FRA - Ligue 2 - 2020/2021,12,FRA,Ligue 2,male,adult,7,2020,2021,2020/2021
+143,ESP - LaLiga - 2020/2021,4,ESP,LaLiga,male,adult,7,2020,2021,2020/2021
+144,ESP - LaLiga 2 - 2020/2021,42,ESP,LaLiga 2,male,adult,7,2020,2021,2020/2021
+145,GER - Bundesliga - 2020/2021,6,GER,Bundesliga,male,adult,7,2020,2021,2020/2021
+146,ITA - Serie A - 2020/2021,5,ITA,Serie A,male,adult,7,2020,2021,2020/2021
+147,ENG - Premier League - 2020/2021,1,ENG,Premier League,male,adult,7,2020,2021,2020/2021
+148,UEFA - Champions League - 2020/2021,10,UEFA,Champions League,male,adult,7,2020,2021,2020/2021
+149,UEFA - Europa League - 2020/2021,9,UEFA,Europa League,male,adult,7,2020,2021,2020/2021
+150,FRA - Trophée des Champions - 2020/2021,52,FRA,Trophée des Champions,male,adult,7,2020,2021,2020/2021
+151,FRA - Coupe de France - 2020/2021,7,FRA,Coupe de France,male,adult,7,2020,2021,2020/2021
+152,UEFA - Nation`s League - League A - 2020/2021,21,UEFA,Nation`s League - League A,male,adult,7,2020,2021,2020/2021
+153,AUT - Bundesliga - 2020/2021,88,AUT,Bundesliga,male,adult,7,2020,2021,2020/2021
+154,JPN - J1 League - 2020,87,JPN,J1 League,male,adult,16,2020,2020,2020
+155,ENG - Premier League 2 Division One - 2020/2021,79,ENG,Premier League 2 Division One,male,U21,7,2020,2021,2020/2021
+156,UEFA - Youth League - 2020/2021,78,UEFA,Youth League,male,U19,7,2020,2021,2020/2021
+157,ARG - Primera Division - 1st Phase - 2020,70,ARG,Primera Division - 1st Phase,male,adult,16,2020,2020,2020
+159,CHN - Super League - 2020,47,CHN,Super League,male,adult,16,2020,2020,2020
+160,ITA - Serie B - 2020/2021,41,ITA,Serie B,male,adult,7,2020,2021,2020/2021
+161,ENG - Championship - 2020/2021,31,ENG,Championship,male,adult,7,2020,2021,2020/2021
+162,NED - Eredivisie - 2020/2021,17,NED,Eredivisie,male,adult,7,2020,2021,2020/2021
+163,BEL - Pro League - 2020/2021,16,BEL,Pro League,male,adult,7,2020,2021,2020/2021
+164,GER - 2nd Bundesliga - 2020/2021,40,GER,2nd Bundesliga,male,adult,7,2020,2021,2020/2021
+165,GER - 3. Liga - 2020/2021,64,GER,3. Liga,male,adult,7,2020,2021,2020/2021
+166,RUS - Premier League - 2020/2021,27,RUS,Premier League,male,adult,7,2020,2021,2020/2021
+168,USA - Major League Soccer - 2019,60,USA,Major League Soccer,male,adult,15,2019,2019,2019
+169,ENG - U18 Premier League - 2019/2020,92,ENG,U18 Premier League,male,U18,6,2019,2020,2019/2020
+170,SWE - Allsvenskan - 2019,90,SWE,Allsvenskan,male,adult,15,2019,2019,2019
+171,BRA - Série A - 2020,77,BRA,Série A,male,adult,16,2020,2020,2020
+172,AUT - Bundesliga - 2018/2019,88,AUT,Bundesliga,male,adult,5,2018,2019,2018/2019
+173,CRO - 1.HNL - 2019/2020,93,CRO,1.HNL,male,adult,6,2019,2020,2019/2020
+174,CRO - 1.HNL - 2020/2021,93,CRO,1.HNL,male,adult,7,2020,2021,2020/2021
+176,CONCACAF - Nations League - League A - 2020/2021,63,CONCACAF,Nations League - League A,male,adult,7,2020,2021,2020/2021
+177,UEFA - European Championship Qualifiers - 2020,34,UEFA,European Championship Qualifiers,male,adult,16,2020,2020,2020
+182,CZE - First League - 2019/2020,94,CZE,First League,male,adult,6,2019,2020,2019/2020
+183,CZE - First League - 2020/2021,94,CZE,First League,male,adult,7,2020,2021,2020/2021
+184,SUI - Super League - 2020/2021,82,SUI,Super League,male,adult,7,2020,2021,2020/2021
+185,GRE - Super League - 2020/2021,28,GRE,Super League,male,adult,7,2020,2021,2020/2021
+186,TUR - Super Lig - 2020/2021,29,TUR,Super Lig,male,adult,7,2020,2021,2020/2021
+187,SCO - Premiership - 2020/2021,18,SCO,Premiership,male,adult,7,2020,2021,2020/2021
+188,DEN - Superliga - 2020/2021,89,DEN,Superliga,male,adult,7,2020,2021,2020/2021
+190,POR - Primeira Liga - 2020/2021,25,POR,Primeira Liga,male,adult,7,2020,2021,2020/2021
+191,POL - Ekstraklasa - 2020/2021,43,POL,Ekstraklasa,male,adult,7,2020,2021,2020/2021
+192,UEFA - FIFA World Cup Qualifier - 2021,15,UEFA,FIFA World Cup Qualifier,male,adult,17,2021,2021,2021
+193,CAF - FIFA World Cup Qualifier - 2020/2021,32,CAF,FIFA World Cup Qualifier,male,adult,7,2020,2021,2020/2021
+194,CONCACAF - FIFA World Cup Qualifier - 2020/2021,33,CONCACAF,FIFA World Cup Qualifier,male,adult,7,2020,2021,2020/2021
+195,CONMEBOL - FIFA World Cup Qualifier - 2020/2021,39,CONMEBOL,FIFA World Cup Qualifier,male,adult,7,2020,2021,2020/2021
+196,URY - Primera Division - 2020,95,URY,Primera Division,male,adult,16,2020,2020,2020
+197,URY - Primera Division - 2019,95,URY,Primera Division,male,adult,15,2019,2019,2019
+198,USA - Major League Soccer - 2020,60,USA,Major League Soccer,male,adult,16,2020,2020,2020
+199,ENG - National League - 2020/2021,96,ENG,National League,male,adult,7,2020,2021,2020/2021
+200,MEX - Liga MX - 2020/2021,97,MEX,Liga MX,male,adult,7,2020,2021,2020/2021
+201,INT - Friendly International - 2020,20,INT,Friendly International,male,adult,16,2020,2020,2020
+202,HUN - Nemzeti Bajnokság - 2020/2021,98,HUN,Nemzeti Bajnokság,male,adult,7,2020,2021,2020/2021
+203,ISR - Ligat Al - 2020/2021,86,ISR,Ligat Al,male,adult,7,2020,2021,2020/2021
+205,COL - Liga Dimayor - 2020,100,COL,Liga Dimayor,male,adult,16,2020,2020,2020
+206,ENG - League One - 2020/2021,101,ENG,League One,male,adult,7,2020,2021,2020/2021
+207,POR - Segunda Liga - 2020/2021,102,POR,Segunda Liga,male,adult,7,2020,2021,2020/2021
+208,AUT - 2. Liga - 2020/2021,103,AUT,2. Liga,male,adult,7,2020,2021,2020/2021
+209,UKR - Premier League - 2020/2021,26,UKR,Premier League,male,adult,7,2020,2021,2020/2021
+210,ENG - Carabao Cup - 2017/2018,66,ENG,Carabao Cup,male,adult,4,2017,2018,2017/2018
+211,UEFA - U21 European Championship Qualifiers - 2021,62,UEFA,U21 European Championship Qualifiers,male,U21,17,2021,2021,2021
+212,ROU - Liga 1 - 2020/2021,104,ROU,Liga 1,male,adult,7,2020,2021,2020/2021
+213,SRB - Superliga - 2020/2021,105,SRB,Superliga,male,adult,7,2020,2021,2020/2021
+214,NED - Eerste Divisie - 2020/2021,106,NED,Eerste Divisie,male,adult,7,2020,2021,2020/2021
+215,NED - KNVB Beker - 2020/2021,107,NED,KNVB Beker,male,adult,7,2020,2021,2020/2021
+216,CONMEBOL - Copa Libertadores U20 - 2020,108,CONMEBOL,Copa Libertadores U20,male,U20,16,2020,2020,2020
+217,CONMEBOL - Copa Libertadores U20 - 2021,108,CONMEBOL,Copa Libertadores U20,male,U20,17,2021,2021,2021
+218,CONMEBOL - Copa Libertadores - 2020,109,CONMEBOL,Copa Libertadores,male,adult,16,2020,2020,2020
+219,CONMEBOL - Copa Sudamericana - 2020,110,CONMEBOL,Copa Sudamericana,male,adult,16,2020,2020,2020
+220,DEN - Superliga - 2018/2019,89,DEN,Superliga,male,adult,5,2018,2019,2018/2019
+221,NED - Eerste Divisie - 2019/2020,106,NED,Eerste Divisie,male,adult,6,2019,2020,2019/2020
+222,FRA - National - 2020/2021,30,FRA,National,male,adult,7,2020,2021,2020/2021
+224,ITA - Coppa Italia - 2020/2021,112,ITA,Coppa Italia,male,adult,7,2020,2021,2020/2021
+225,ITA - Serie C - 2020/2021,113,ITA,Serie C,male,adult,7,2020,2021,2020/2021
+226,ITA - Serie C - 2019/2020,113,ITA,Serie C,male,adult,6,2019,2020,2019/2020
+227,"ITA - Serie C, Promotion Playoffs - 2020",114,ITA,"Serie C, Promotion Playoffs",male,adult,16,2020,2020,2020
+228,AFC - AFF Suzuki Cup - 2018,115,AFC,AFF Suzuki Cup,male,adult,14,2018,2018,2018
+229,ESP - Segunda B - 2020/2021,116,ESP,Segunda B,male,adult,7,2020,2021,2020/2021
+230,AFC - AFC Olympic Qualification Women Playoffs - 2020,117,AFC,AFC Olympic Qualification Women Playoffs,female,adult,16,2020,2020,2020
+231,CAF - U20 Africa Cup of Nations - 2021,118,CAF,U20 Africa Cup of Nations,male,U20,17,2021,2021,2021
+232,SWE - Allsvenskan - 2021,90,SWE,Allsvenskan,male,adult,17,2021,2021,2021
+233,CONMEBOL - Copa Libertadores - 2021,109,CONMEBOL,Copa Libertadores,male,adult,17,2021,2021,2021
+234,CONMEBOL - Copa Sudamericana - 2021,110,CONMEBOL,Copa Sudamericana,male,adult,17,2021,2021,2021
+235,USA - Major League Soccer - 2021,60,USA,Major League Soccer,male,adult,17,2021,2021,2021
+237,ESP - LaLiga 2 - 2021/2022,42,ESP,LaLiga 2,male,adult,8,2021,2022,2021/2022
+238,ESP - LaLiga - 2021/2022,4,ESP,LaLiga,male,adult,8,2021,2022,2021/2022
+239,ITA - Serie A - 2021/2022,5,ITA,Serie A,male,adult,8,2021,2022,2021/2022
+240,UKR - Premier League - 2021/2022,26,UKR,Premier League,male,adult,8,2021,2022,2021/2022
+241,ENG - Championship - 2021/2022,31,ENG,Championship,male,adult,8,2021,2022,2021/2022
+242,FRA - Ligue 1 - 2021/2022,3,FRA,Ligue 1,male,adult,8,2021,2022,2021/2022
+243,FRA - Ligue 2 - 2021/2022,12,FRA,Ligue 2,male,adult,8,2021,2022,2021/2022
+244,GER - Bundesliga - 2021/2022,6,GER,Bundesliga,male,adult,8,2021,2022,2021/2022
+245,GER - 2nd Bundesliga - 2021/2022,40,GER,2nd Bundesliga,male,adult,8,2021,2022,2021/2022
+246,ITA - Serie B - 2021/2022,41,ITA,Serie B,male,adult,8,2021,2022,2021/2022
+247,UEFA - Champions League - 2021/2022,10,UEFA,Champions League,male,adult,8,2021,2022,2021/2022
+248,UEFA - Europa League - 2021/2022,9,UEFA,Europa League,male,adult,8,2021,2022,2021/2022
+249,BEL - Pro League - 2021/2022,16,BEL,Pro League,male,adult,8,2021,2022,2021/2022
+250,POR - Primeira Liga - 2021/2022,25,POR,Primeira Liga,male,adult,8,2021,2022,2021/2022
+251,NED - Eredivisie - 2021/2022,17,NED,Eredivisie,male,adult,8,2021,2022,2021/2022
+252,RUS - Premier League - 2021/2022,27,RUS,Premier League,male,adult,8,2021,2022,2021/2022
+253,TUR - Super Lig - 2021/2022,29,TUR,Super Lig,male,adult,8,2021,2022,2021/2022
+254,SUI - Super League - 2021/2022,82,SUI,Super League,male,adult,8,2021,2022,2021/2022
+255,GRE - Super League - 2021/2022,28,GRE,Super League,male,adult,8,2021,2022,2021/2022
+256,SRB - Superliga - 2021/2022,105,SRB,Superliga,male,adult,8,2021,2022,2021/2022
+257,DEN - Superliga - 2021/2022,89,DEN,Superliga,male,adult,8,2021,2022,2021/2022
+258,SCO - Premiership - 2021/2022,18,SCO,Premiership,male,adult,8,2021,2022,2021/2022
+260,AUT - Bundesliga - 2021/2022,88,AUT,Bundesliga,male,adult,8,2021,2022,2021/2022
+261,BRA - Série A - 2021,77,BRA,Série A,male,adult,17,2021,2021,2021
+262,POL - Ekstraklasa - 2021/2022,43,POL,Ekstraklasa,male,adult,8,2021,2022,2021/2022
+263,CRO - 1.HNL - 2021/2022,93,CRO,1.HNL,male,adult,8,2021,2022,2021/2022
+264,CZE - First League - 2021/2022,94,CZE,First League,male,adult,8,2021,2022,2021/2022
+267,MEX - Liga MX - 2021/2022,97,MEX,Liga MX,male,adult,8,2021,2022,2021/2022
+268,ENG - League One - 2021/2022,101,ENG,League One,male,adult,8,2021,2022,2021/2022
+269,ESP - Segunda B - 2021/2022,116,ESP,Segunda B,male,adult,8,2021,2022,2021/2022
+270,FRA - National - 2021/2022,30,FRA,National,male,adult,8,2021,2022,2021/2022
+271,GER - 3. Liga - 2021/2022,64,GER,3. Liga,male,adult,8,2021,2022,2021/2022
+272,ITA - Serie C - 2021/2022,113,ITA,Serie C,male,adult,8,2021,2022,2021/2022
+273,POR - Segunda Liga - 2021/2022,102,POR,Segunda Liga,male,adult,8,2021,2022,2021/2022
+274,NED - Eerste Divisie - 2021/2022,106,NED,Eerste Divisie,male,adult,8,2021,2022,2021/2022
+275,RUS - FNL - 2021/2022,121,RUS,FNL,male,adult,8,2021,2022,2021/2022
+276,RUS - FNL - 2020/2021,121,RUS,FNL,male,adult,7,2020,2021,2020/2021
+277,TUR - 1. Lig - 2021/2022,120,TUR,1. Lig,male,adult,8,2021,2022,2021/2022
+278,TUR - 1. Lig - 2020/2021,120,TUR,1. Lig,male,adult,7,2020,2021,2020/2021
+279,BEL - 1B Pro League - 2021/2022,119,BEL,1B Pro League,male,adult,8,2021,2022,2021/2022
+280,BEL - 1B Pro League - 2020/2021,119,BEL,1B Pro League,male,adult,7,2020,2021,2020/2021
+281,SUI - Challenge League - 2021/2022,122,SUI,Challenge League,male,adult,8,2021,2022,2021/2022
+282,SUI - Challenge League - 2020/2021,122,SUI,Challenge League,male,adult,7,2020,2021,2020/2021
+283,AUS - A-League - 2020/2021,61,AUS,A-League,male,adult,7,2020,2021,2020/2021
+284,UEFA - European Championship - 2021,2,UEFA,European Championship,male,adult,17,2021,2021,2021
+285,AUS - A-League - 2019/2020,61,AUS,A-League,male,adult,6,2019,2020,2019/2020
+286,INT - Women Friendly International - 2020/2021,123,INT,Women Friendly International,female,adult,7,2020,2021,2020/2021
+287,ENG - Premier League - 2021/2022,1,ENG,Premier League,male,adult,8,2021,2022,2021/2022
+288,NOR - Eliteserien - 2020,124,NOR,Eliteserien,male,adult,16,2020,2020,2020
+289,CHI - Primera Division - 2020,57,CHI,Primera Division,male,adult,16,2020,2020,2020
+290,MEX - Liga MX - 2019/2020,97,MEX,Liga MX,male,adult,6,2019,2020,2019/2020
+291,USA - NWSL - 2021,126,USA,NWSL,female,adult,17,2021,2021,2021
+292,ENG - FA Women`s Super League - 2020/2021,127,ENG,FA Women`s Super League,female,adult,7,2020,2021,2020/2021
+293,ARG - Primera Division - 1st Phase - 2021,70,ARG,Primera Division - 1st Phase,male,adult,17,2021,2021,2021
+294,CONCACAF - Gold Cup - 2021,36,CONCACAF,Gold Cup,male,adult,17,2021,2021,2021
+295,COL - Liga Dimayor - 2021,100,COL,Liga Dimayor,male,adult,17,2021,2021,2021
+297,INT - Olympic Games Women - 2020,128,INT,Olympic Games Women,female,adult,16,2020,2020,2020
+298,FIFA - Confederations Cup - 2016/2017,130,FIFA,Confederations Cup,male,adult,3,2016,2017,2016/2017
+299,UEFA - Europa Conference League - 2021/2022,131,UEFA,Europa Conference League,male,adult,8,2021,2022,2021/2022
+300,ENG - Carabao Cup - 2021/2022,66,ENG,Carabao Cup,male,adult,8,2021,2022,2021/2022
+301,ENG - Premier League 2 Division One - 2021/2022,79,ENG,Premier League 2 Division One,male,U21,8,2021,2022,2021/2022
+302,ESP - Primera División Femenina - 2021/2022,132,ESP,Primera División Femenina,female,adult,8,2021,2022,2021/2022
+303,ESP - Primera Division RFEF - 2021/2022,133,ESP,Primera Division RFEF,male,adult,8,2021,2022,2021/2022
+304,ESP - Supercopa - 2020/2021,134,ESP,Supercopa,male,adult,7,2020,2021,2020/2021
+305,ESP - Copa del Rey - 2020/2021,44,ESP,Copa del Rey,male,adult,7,2020,2021,2020/2021
+306,ENG - FA Women`s Super League - 2021/2022,127,ENG,FA Women`s Super League,female,adult,8,2021,2022,2021/2022
+307,GER - U19 Bundesliga - 2021/2022,136,GER,U19 Bundesliga,male,U19,8,2021,2022,2021/2022
+308,GER - U17 Bundesliga - 2021/2022,135,GER,U17 Bundesliga,male,U17,8,2021,2022,2021/2022
+309,INT - Syrenka Cup U17 - 2021,137,INT,Syrenka Cup U17,male,U17,17,2021,2021,2021
+310,ENG - U18 Premier League - 2020/2021,92,ENG,U18 Premier League,male,U18,7,2020,2021,2020/2021
+311,ENG - U18 Premier League - 2021/2022,92,ENG,U18 Premier League,male,U18,8,2021,2022,2021/2022
+312,URY - Primera Division - 2021,95,URY,Primera Division,male,adult,17,2021,2021,2021
+313,ECU - Liga Pro - 2021,138,ECU,Liga Pro,male,adult,17,2021,2021,2021
+314,PER - Primera Division - 2021,139,PER,Primera Division,male,adult,17,2021,2021,2021
+315,PAR - Division Profesional - 2021,140,PAR,Division Profesional,male,adult,17,2021,2021,2021
+316,CHI - Primera Division - 2021,57,CHI,Primera Division,male,adult,17,2021,2021,2021
+317,UEFA - Women`s Champions League - 2021/2022,141,UEFA,Women`s Champions League,female,adult,8,2021,2022,2021/2022
+318,UEFA - Women`s Champions League - 2020/2021,141,UEFA,Women`s Champions League,female,adult,7,2020,2021,2020/2021
+319,GER - Regionalliga - 2021/2022,142,GER,Regionalliga,male,adult,8,2021,2022,2021/2022
+320,UEFA - Youth League - 2021/2022,78,UEFA,Youth League,male,U19,8,2021,2022,2021/2022
+321,ENG - EFL Trophy - 2021/2022,143,ENG,EFL Trophy,male,adult,8,2021,2022,2021/2022
+322,UEFA - U17 Championship Qualification - 2021/2022,144,UEFA,U17 Championship Qualification,male,U17,8,2021,2022,2021/2022
+323,DEN - 1st Division - 2021/2022,145,DEN,1st Division,male,adult,8,2021,2022,2021/2022
+324,NOR - Eliteserien - 2021,124,NOR,Eliteserien,male,adult,17,2021,2021,2021
+325,KSA - Pro League - 2021/2022,146,KSA,Pro League,male,adult,8,2021,2022,2021/2022
+326,AFC - Champions League - 2021,147,AFC,Champions League,male,adult,17,2021,2021,2021
+327,CAF - Champions League - 2021/2022,148,CAF,Champions League,male,adult,8,2021,2022,2021/2022
+328,INT - Club Friendlies - 2021,149,INT,Club Friendlies,male,adult,17,2021,2021,2021
+329,CHN - Super League - 2021,47,CHN,Super League,male,adult,17,2021,2021,2021
+330,AFC - Champions League - 2022,147,AFC,Champions League,male,adult,20,2022,2022,2022
+331,ARG - Primera Division - 1st Phase - 2022,70,ARG,Primera Division - 1st Phase,male,adult,20,2022,2022,2022
+332,AUS - A-League - 2021/2022,61,AUS,A-League,male,adult,8,2021,2022,2021/2022
+333,AUT - 2. Liga - 2021/2022,103,AUT,2. Liga,male,adult,8,2021,2022,2021/2022
+334,BRA - Série A - 2022,77,BRA,Série A,male,adult,20,2022,2022,2022
+335,BRA - Série B - 2022,80,BRA,Série B,male,adult,20,2022,2022,2022
+336,CAF - Africa Cup of Nations - 2022,37,CAF,Africa Cup of Nations,male,adult,20,2022,2022,2022
+337,CAF - FIFA World Cup Qualifier - 2021/2022,32,CAF,FIFA World Cup Qualifier,male,adult,8,2021,2022,2021/2022
+338,CHI - Primera Division - 2022,57,CHI,Primera Division,male,adult,20,2022,2022,2022
+339,CHN - Super League - 2022,47,CHN,Super League,male,adult,20,2022,2022,2022
+340,COL - Liga Dimayor - 2022,100,COL,Liga Dimayor,male,adult,20,2022,2022,2022
+341,CONCACAF - FIFA World Cup Qualifier - 2021/2022,33,CONCACAF,FIFA World Cup Qualifier,male,adult,8,2021,2022,2021/2022
+342,CONCACAF - Gold Cup - 2022,36,CONCACAF,Gold Cup,male,adult,20,2022,2022,2022
+343,CONMEBOL - Copa Libertadores - 2022,109,CONMEBOL,Copa Libertadores,male,adult,20,2022,2022,2022
+344,CONMEBOL - Copa Sudamericana - 2022,110,CONMEBOL,Copa Sudamericana,male,adult,20,2022,2022,2022
+345,ECU - Liga Pro - 2022,138,ECU,Liga Pro,male,adult,20,2022,2022,2022
+346,ESP - Copa del Rey - 2021/2022,44,ESP,Copa del Rey,male,adult,8,2021,2022,2021/2022
+347,FIFA - World Cup - 2022,0,FIFA,World Cup,male,adult,20,2022,2022,2022
+348,HUN - Nemzeti Bajnokság - 2021/2022,98,HUN,Nemzeti Bajnokság,male,adult,8,2021,2022,2021/2022
+349,INT - Club Friendlies - 2022,149,INT,Club Friendlies,male,adult,20,2022,2022,2022
+350,INT - Friendly International - 2021,20,INT,Friendly International,male,adult,17,2021,2021,2021
+351,ISR - Ligat Al - 2021/2022,86,ISR,Ligat Al,male,adult,8,2021,2022,2021/2022
+352,JPN - J1 League - 2021,87,JPN,J1 League,male,adult,17,2021,2021,2021
+353,NOR - Eliteserien - 2022,124,NOR,Eliteserien,male,adult,20,2022,2022,2022
+354,PAR - Division Profesional - 2022,140,PAR,Division Profesional,male,adult,20,2022,2022,2022
+355,PER - Primera Division - 2022,139,PER,Primera Division,male,adult,20,2022,2022,2022
+356,ROU - Liga 1 - 2021/2022,104,ROU,Liga 1,male,adult,8,2021,2022,2021/2022
+357,SWE - Allsvenskan - 2022,90,SWE,Allsvenskan,male,adult,20,2022,2022,2022
+358,UEFA - Nation`s League - League A - 2021/2022,21,UEFA,Nation`s League - League A,male,adult,8,2021,2022,2021/2022
+359,URY - Primera Division - 2022,95,URY,Primera Division,male,adult,20,2022,2022,2022
+360,USA - Major League Soccer - 2022,60,USA,Major League Soccer,male,adult,20,2022,2022,2022
+361,USA - NWSL - 2022,126,USA,NWSL,female,adult,20,2022,2022,2022
+362,ENG - FA Cup - 2021/2022,19,ENG,FA Cup,male,adult,8,2021,2022,2021/2022
+363,INT - Torneio Internacional Algarve U17 - 2022,150,INT,Torneio Internacional Algarve U17,male,U17,20,2022,2022,2022
+364,UAE - Pro League - 2021/2022,151,UAE,Pro League,male,adult,8,2021,2022,2021/2022
+365,QAT - Qatar Stars League - 2021/2022,152,QAT,Qatar Stars League,male,adult,8,2021,2022,2021/2022
+366,OFC - FIFA World Cup Qualifier - 2022,153,OFC,FIFA World Cup Qualifier,male,adult,20,2022,2022,2022
+367,USA - NWSL Challenge Cup - 2022,154,USA,NWSL Challenge Cup,female,adult,20,2022,2022,2022
+368,ENG - Premier League 2 - 2021/2022,155,ENG,Premier League 2,male,U23,8,2021,2022,2021/2022
+369,ESP - Supercopa - 2021/2022,134,ESP,Supercopa,male,adult,8,2021,2022,2021/2022
+370,POR - Liga Revelação Sub 23 - 2021/2022,156,POR,Liga Revelação Sub 23,male,U23,8,2021,2022,2021/2022
+371,ESP - Copa del Rey - 2022/2023,44,ESP,Copa del Rey,male,adult,21,2022,2023,2022/2023
+372,ESP - Supercopa - 2022/2023,134,ESP,Supercopa,male,adult,21,2022,2023,2022/2023
+374,ARG - Primera Division - 1st Phase - 2023,70,ARG,Primera Division - 1st Phase,male,adult,22,2023,2023,2023
+375,AUT - Bundesliga - 2022/2023,88,AUT,Bundesliga,male,adult,21,2022,2023,2022/2023
+376,BEL - Pro League - 2022/2023,16,BEL,Pro League,male,adult,21,2022,2023,2022/2023
+377,BRA - Série A - 2023,77,BRA,Série A,male,adult,22,2023,2023,2023
+378,CAF - Champions League - 2022/2023,148,CAF,Champions League,male,adult,21,2022,2023,2022/2023
+379,CHI - Primera Division - 2023,57,CHI,Primera Division,male,adult,22,2023,2023,2023
+380,COL - Liga Dimayor - 2023,100,COL,Liga Dimayor,male,adult,22,2023,2023,2023
+381,CONMEBOL - Copa Libertadores - 2023,109,CONMEBOL,Copa Libertadores,male,adult,22,2023,2023,2023
+382,CONMEBOL - Copa Sudamericana - 2023,110,CONMEBOL,Copa Sudamericana,male,adult,22,2023,2023,2023
+383,CRO - 1.HNL - 2022/2023,93,CRO,1.HNL,male,adult,21,2022,2023,2022/2023
+384,CZE - First League - 2022/2023,94,CZE,First League,male,adult,21,2022,2023,2022/2023
+385,DEN - Superliga - 2022/2023,89,DEN,Superliga,male,adult,21,2022,2023,2022/2023
+386,ECU - Liga Pro - 2023,138,ECU,Liga Pro,male,adult,22,2023,2023,2023
+387,ENG - Premier League - 2022/2023,1,ENG,Premier League,male,adult,21,2022,2023,2022/2023
+388,ENG - Championship - 2022/2023,31,ENG,Championship,male,adult,21,2022,2023,2022/2023
+389,ENG - League One - 2022/2023,101,ENG,League One,male,adult,21,2022,2023,2022/2023
+390,ESP - LaLiga - 2022/2023,4,ESP,LaLiga,male,adult,21,2022,2023,2022/2023
+391,ESP - LaLiga 2 - 2022/2023,42,ESP,LaLiga 2,male,adult,21,2022,2023,2022/2023
+392,FRA - Ligue 1 - 2022/2023,3,FRA,Ligue 1,male,adult,21,2022,2023,2022/2023
+393,FRA - Ligue 2 - 2022/2023,12,FRA,Ligue 2,male,adult,21,2022,2023,2022/2023
+394,GER - Bundesliga - 2022/2023,6,GER,Bundesliga,male,adult,21,2022,2023,2022/2023
+395,GER - 2nd Bundesliga - 2022/2023,40,GER,2nd Bundesliga,male,adult,21,2022,2023,2022/2023
+396,GER - 3. Liga - 2022/2023,64,GER,3. Liga,male,adult,21,2022,2023,2022/2023
+397,GRE - Super League - 2022/2023,28,GRE,Super League,male,adult,21,2022,2023,2022/2023
+398,ITA - Serie A - 2022/2023,5,ITA,Serie A,male,adult,21,2022,2023,2022/2023
+399,ITA - Serie B - 2022/2023,41,ITA,Serie B,male,adult,21,2022,2023,2022/2023
+400,MEX - Liga MX - 2022/2023,97,MEX,Liga MX,male,adult,21,2022,2023,2022/2023
+401,NED - Eredivisie - 2022/2023,17,NED,Eredivisie,male,adult,21,2022,2023,2022/2023
+402,NED - Eerste Divisie - 2022/2023,106,NED,Eerste Divisie,male,adult,21,2022,2023,2022/2023
+403,NOR - Eliteserien - 2023,124,NOR,Eliteserien,male,adult,22,2023,2023,2023
+404,PAR - Division Profesional - 2023,140,PAR,Division Profesional,male,adult,22,2023,2023,2023
+405,PER - Primera Division - 2023,139,PER,Primera Division,male,adult,22,2023,2023,2023
+406,POL - Ekstraklasa - 2022/2023,43,POL,Ekstraklasa,male,adult,21,2022,2023,2022/2023
+407,POR - Primeira Liga - 2022/2023,25,POR,Primeira Liga,male,adult,21,2022,2023,2022/2023
+408,RUS - FNL - 2022/2023,121,RUS,FNL,male,adult,21,2022,2023,2022/2023
+409,RUS - Premier League - 2022/2023,27,RUS,Premier League,male,adult,21,2022,2023,2022/2023
+410,SCO - Premiership - 2022/2023,18,SCO,Premiership,male,adult,21,2022,2023,2022/2023
+411,SUI - Super League - 2022/2023,82,SUI,Super League,male,adult,21,2022,2023,2022/2023
+412,SWE - Allsvenskan - 2023,90,SWE,Allsvenskan,male,adult,22,2023,2023,2023
+413,TUR - Super Lig - 2022/2023,29,TUR,Super Lig,male,adult,21,2022,2023,2022/2023
+414,UEFA - Champions League - 2022/2023,10,UEFA,Champions League,male,adult,21,2022,2023,2022/2023
+415,UEFA - Europa League - 2022/2023,9,UEFA,Europa League,male,adult,21,2022,2023,2022/2023
+416,UEFA - Europa Conference League - 2022/2023,131,UEFA,Europa Conference League,male,adult,21,2022,2023,2022/2023
+417,UKR - Premier League - 2022/2023,26,UKR,Premier League,male,adult,21,2022,2023,2022/2023
+418,URY - Primera Division - 2023,95,URY,Primera Division,male,adult,22,2023,2023,2023
+419,USA - Major League Soccer - 2023,60,USA,Major League Soccer,male,adult,22,2023,2023,2023
+421,UEFA - FIFA World Cup Qualifier - 2020,15,UEFA,FIFA World Cup Qualifier,male,adult,16,2020,2020,2020
+422,MLT - Premier League - 2021/2022,157,MLT,Premier League,male,adult,8,2021,2022,2021/2022
+423,IRL - First Division - 2022,158,IRL,First Division,male,adult,20,2022,2022,2022
+424,CONCACAF - Champions League - 2022,159,CONCACAF,Champions League,male,adult,20,2022,2022,2022
+425,UEFA - Nation`s League - League A - 2022/2023,21,UEFA,Nation`s League - League A,male,adult,21,2022,2023,2022/2023
+426,UEFA - Nation`s League - League B - 2022/2023,160,UEFA,Nation`s League - League B,male,adult,21,2022,2023,2022/2023
+427,INT - U19 National Team Friendlies - 2021,161,INT,U19 National Team Friendlies,male,U19,17,2021,2021,2021
+428,POR - Liga 3 - 2021/2022,162,POR,Liga 3,male,adult,8,2021,2022,2021/2022
+429,UEFA - U17 European Championship - 2022,163,UEFA,U17 European Championship,male,U17,20,2022,2022,2022
+430,UEFA - U19 European Championship - 2022,164,UEFA,U19 European Championship,male,U19,20,2022,2022,2022
+431,RSA - PSL - 2021/2022,165,RSA,PSL,male,adult,8,2021,2022,2021/2022
+432,RSA - PSL - 2020/2021,165,RSA,PSL,male,adult,7,2020,2021,2020/2021
+433,UEFA - Women`s European Championship - 2022,166,UEFA,Women`s European Championship,female,adult,20,2022,2022,2022
+434,BRA - CBF Brasileiro U20 - 2022,167,BRA,CBF Brasileiro U20,male,U20,20,2022,2022,2022
+435,BRA - CBF Brasileiro U20 - 2021,167,BRA,CBF Brasileiro U20,male,U20,17,2021,2021,2021
+436,BRA - Carioca 1 - 2022,168,BRA,Carioca 1,male,adult,20,2022,2022,2022
+437,BRA - Carioca 1 - 2021,168,BRA,Carioca 1,male,adult,17,2021,2021,2021
+438,BRA - São Paulo Youth Cup - 2022,169,BRA,São Paulo Youth Cup,male,U20,20,2022,2022,2022
+439,RSA - PSL - 2022/2023,165,RSA,PSL,male,adult,21,2022,2023,2022/2023
+440,SCO - Play-offs 1/2 - 2021/2022,170,SCO,Play-offs 1/2,male,adult,8,2021,2022,2021/2022
+441,SCO - Scottish Championship - 2021/2022,459,SCO,Scottish Championship,male,adult,8,2021,2022,2021/2022
+442,MLT - Challenge League - 2021/2022,172,MLT,Challenge League,male,adult,8,2021,2022,2021/2022
+443,MEX - U20 League - 2022/2023,173,MEX,U20 League,male,U20,21,2022,2023,2022/2023
+444,ENG - Community Shield - 2018,54,ENG,Community Shield,male,adult,14,2018,2018,2018
+445,ENG - FA Women`s Super League - 2022/2023,127,ENG,FA Women`s Super League,female,adult,21,2022,2023,2022/2023
+446,BRA - Série B - 2023,80,BRA,Série B,male,adult,22,2023,2023,2023
+447,UEFA - Women`s Champions League - 2022/2023,141,UEFA,Women`s Champions League,female,adult,21,2022,2023,2022/2023
+448,USA - NWSL - 2023,126,USA,NWSL,female,adult,22,2023,2023,2023
+449,HUN - Nemzeti Bajnokság - 2022/2023,98,HUN,Nemzeti Bajnokság,male,adult,21,2022,2023,2022/2023
+450,GER - Regionalliga - 2022/2023,142,GER,Regionalliga,male,adult,21,2022,2023,2022/2023
+451,NOR - Obos Ligaen - 2022,174,NOR,Obos Ligaen,male,adult,20,2022,2022,2022
+452,GER - U19 Bundesliga - 2022/2023,136,GER,U19 Bundesliga,male,U19,21,2022,2023,2022/2023
+453,GER - U17 Bundesliga - 2022/2023,135,GER,U17 Bundesliga,male,U17,21,2022,2023,2022/2023
+454,UEFA - Women U17 Championship - 2022,176,UEFA,Women U17 Championship,female,U17,20,2022,2022,2022
+455,UEFA - Women U19 Championship - 2022,177,UEFA,Women U19 Championship,female,U19,20,2022,2022,2022
+456,POR - Segunda Liga - 2022/2023,102,POR,Segunda Liga,male,adult,21,2022,2023,2022/2023
+457,FIFA - U20 Women's World Cup - 2022,178,FIFA,U20 Women's World Cup,female,U20,20,2022,2022,2022
+458,INT - Kirin Cup - 2022,179,INT,Kirin Cup,male,adult,20,2022,2022,2022
+459,INT - Friendly International - 2022,20,INT,Friendly International,male,adult,20,2022,2022,2022
+460,UEFA - FIFA World Cup Qualifier - 2022,15,UEFA,FIFA World Cup Qualifier,male,adult,20,2022,2022,2022
+461,JPN - J1 League - 2022,87,JPN,J1 League,male,adult,20,2022,2022,2022
+462,ENG - Carabao Cup - 2022/2023,66,ENG,Carabao Cup,male,adult,21,2022,2023,2022/2023
+463,DEN - 1st Division - 2022/2023,145,DEN,1st Division,male,adult,21,2022,2023,2022/2023
+464,ISR - Ligat Al - 2022/2023,86,ISR,Ligat Al,male,adult,21,2022,2023,2022/2023
+465,AFC - WC Qualification Asia - 2021/2022,181,AFC,WC Qualification Asia,male,adult,8,2021,2022,2021/2022
+466,SRB - Superliga - 2022/2023,105,SRB,Superliga,male,adult,21,2022,2023,2022/2023
+467,AFC - WC Qualification Asia - 2022,181,AFC,WC Qualification Asia,male,adult,20,2022,2022,2022
+468,AFC - EAFF E-1 Football Championship - 2022,182,AFC,EAFF E-1 Football Championship,male,adult,20,2022,2022,2022
+469,INT - U20 National Team Friendlies - 2022,183,INT,U20 National Team Friendlies,male,U20,20,2022,2022,2022
+470,INT - Arab Cup - 2021,184,INT,Arab Cup,male,adult,17,2021,2021,2021
+471,INT - Women Friendly International - 2022,123,INT,Women Friendly International,female,adult,20,2022,2022,2022
+472,CONCACAF - Nations League - League A - 2022/2023,63,CONCACAF,Nations League - League A,male,adult,21,2022,2023,2022/2023
+473,CONCACAF - U20 - 2022,185,CONCACAF,U20,male,U20,20,2022,2022,2022
+474,INT - Women Friendly International - 2021,123,INT,Women Friendly International,female,adult,17,2021,2021,2021
+475,INT - SheBelieves Cup - 2021,186,INT,SheBelieves Cup,female,adult,17,2021,2021,2021
+476,INT - SheBelieves Cup - 2022,186,INT,SheBelieves Cup,female,adult,20,2022,2022,2022
+477,CONCACAF - Women's WC Qualification - 2022,187,CONCACAF,Women's WC Qualification,female,adult,20,2022,2022,2022
+478,INT - Sud Ladies Cup - 2022,188,INT,Sud Ladies Cup,female,U20,20,2022,2022,2022
+479,FIFA - U17 Women's World Cup - 2022,189,FIFA,U17 Women's World Cup,female,U17,20,2022,2022,2022
+480,USA - MLS Next Pro - 2022,190,USA,MLS Next Pro,male,adult,20,2022,2022,2022
+481,USA - USL Championship - 2022,191,USA,USL Championship,male,adult,20,2022,2022,2022
+482,USA - USL Championship - 2021,191,USA,USL Championship,male,adult,17,2021,2021,2021
+483,TUR - 1. Lig - 2022/2023,120,TUR,1. Lig,male,adult,21,2022,2023,2022/2023
+484,INT - WC Qualification Intercontinental Play-offs - 2022,192,INT,WC Qualification Intercontinental Play-offs,male,adult,20,2022,2022,2022
+485,FIFA - World Cup - 2006,0,FIFA,World Cup,male,adult,23,2006,2006,2006
+486,FIFA - World Cup - 1998,0,FIFA,World Cup,male,adult,24,1998,1998,1998
+487,INT - SheBelieves Cup - 2020,186,INT,SheBelieves Cup,female,adult,16,2020,2020,2020
+488,CAF - Africa Cup of Nations Qualification - 2022,193,CAF,Africa Cup of Nations Qualification,male,adult,20,2022,2022,2022
+489,UEFA - Youth League - 2022/2023,78,UEFA,Youth League,male,U19,21,2022,2023,2022/2023
+490,ENG - EFL Trophy - 2022/2023,143,ENG,EFL Trophy,male,adult,21,2022,2023,2022/2023
+491,KOR - K League 1 - 2022,194,KOR,K League 1,male,adult,20,2022,2022,2022
+492,CONMEBOL - FIFA World Cup Qualifier - 2022,39,CONMEBOL,FIFA World Cup Qualifier,male,adult,20,2022,2022,2022
+493,CAF - COSAFA Cup - 2022,195,CAF,COSAFA Cup,male,adult,20,2022,2022,2022
+494,CONCACAF - Champions League - 2023,159,CONCACAF,Champions League,male,adult,22,2023,2023,2023
+495,USA - USL Championship - 2023,191,USA,USL Championship,male,adult,22,2023,2023,2023
+496,USA - MLS Next Pro - 2023,190,USA,MLS Next Pro,male,adult,22,2023,2023,2023
+497,FIFA - World Cup - 1990,0,FIFA,World Cup,male,adult,25,1990,1990,1990
+498,FIFA - World Cup - 1966,0,FIFA,World Cup,male,adult,26,1966,1966,1966
+499,CAF - African Nations Championship Qualification - 2022,197,CAF,African Nations Championship Qualification,male,adult,20,2022,2022,2022
+500,INT - U19 National Team Friendlies - 2022,161,INT,U19 National Team Friendlies,male,U19,20,2022,2022,2022
+501,INT - U18 Friendly International - 2021,199,INT,U18 Friendly International,male,U18,17,2021,2021,2021
+502,UEFA - U19 European Championship Qualifiers - 2022,200,UEFA,U19 European Championship Qualifiers,male,U19,20,2022,2022,2022
+503,CAF - African Olympic Qualifiers - 2022,201,CAF,African Olympic Qualifiers,male,adult,20,2022,2022,2022
+504,INT - Finalissima - 2022,202,INT,Finalissima,male,adult,20,2022,2022,2022
+505,CAN - Canadian Premier League - 2022,203,CAN,Canadian Premier League,male,adult,20,2022,2022,2022
+506,CAN - Canadian Premier League - 2023,203,CAN,Canadian Premier League,male,adult,22,2023,2023,2023
+507,ENG - League Two - 2022/2023,204,ENG,League Two,male,adult,21,2022,2023,2022/2023
+508,DEN - U19 Ligaen - 2022/2023,205,DEN,U19 Ligaen,male,U19,21,2022,2023,2022/2023
+509,JPN - J1 League - 2023,87,JPN,J1 League,male,adult,22,2023,2023,2023
+510,AUT - 2. Liga - 2022/2023,103,AUT,2. Liga,male,adult,21,2022,2023,2022/2023
+511,EGY - Premier League - 2022/2023,207,EGY,Premier League,male,adult,21,2022,2023,2022/2023
+512,EGY - Premier League - 2021/2022,207,EGY,Premier League,male,adult,8,2021,2022,2021/2022
+513,ESP - División de Honor Juvenil - 2022/2023,208,ESP,División de Honor Juvenil,male,U19,21,2022,2023,2022/2023
+514,POR - Liga Revelação Sub 23 - 2022/2023,156,POR,Liga Revelação Sub 23,male,U23,21,2022,2023,2022/2023
+515,ENG - Premier League 2 Division One - 2022/2023,79,ENG,Premier League 2 Division One,male,U21,21,2022,2023,2022/2023
+516,ISR - State Cup - 2022/2023,209,ISR,State Cup,male,adult,21,2022,2023,2022/2023
+517,DEN - DBU Pokalen - 2022/2023,210,DEN,DBU Pokalen,male,adult,21,2022,2023,2022/2023
+518,ESP - Primera Division RFEF - 2022/2023,133,ESP,Primera Division RFEF,male,adult,21,2022,2023,2022/2023
+519,"BRA - Paulista, Serie A1 - 2023",68,BRA,"Paulista, Serie A1",male,adult,22,2023,2023,2023
+520,INT - Friendly International - 2023,20,INT,Friendly International,male,adult,22,2023,2023,2023
+521,INT - Women Friendly International - 2023,123,INT,Women Friendly International,female,adult,22,2023,2023,2023
+522,KOR - K League 1 - 2023,194,KOR,K League 1,male,adult,22,2023,2023,2023
+523,INT - Club Friendlies - 2023,149,INT,Club Friendlies,male,adult,22,2023,2023,2023
+524,KOR - K League 2 - 2022,211,KOR,K League 2,male,adult,20,2022,2022,2022
+525,CONMEBOL - Sudamericano U20 - 2023,212,CONMEBOL,Sudamericano U20,male,U20,22,2023,2023,2023
+526,FIFA - World Cup - 2002,0,FIFA,World Cup,male,adult,27,2002,2002,2002
+527,INT - SheBelieves Cup - 2023,186,INT,SheBelieves Cup,female,adult,22,2023,2023,2023
+528,AUS - A-League - 2022/2023,61,AUS,A-League,male,adult,21,2022,2023,2022/2023
+529,CAF - Africa Women Cup of Nations - 2022,213,CAF,Africa Women Cup of Nations,female,adult,20,2022,2022,2022
+530,CONMEBOL - Copa America Femenina - 2022,214,CONMEBOL,Copa America Femenina,female,adult,20,2022,2022,2022
+531,INT - Arnold Clark Cup - 2023,215,INT,Arnold Clark Cup,female,adult,22,2023,2023,2023
+532,BEL - 1B Pro League - 2022/2023,119,BEL,1B Pro League,male,adult,21,2022,2023,2022/2023
+533,FRA - National - 2022/2023,30,FRA,National,male,adult,21,2022,2023,2022/2023
+534,INT - U21 National Team Friendlies - 2023,216,INT,U21 National Team Friendlies,male,U21,22,2023,2023,2023
+535,AFC - Champions League - 2023,147,AFC,Champions League,male,adult,22,2023,2023,2023
+536,AUT - Bundesliga - 2023/2024,88,AUT,Bundesliga,male,adult,28,2023,2024,2023/2024
+537,AUT - 2. Liga - 2023/2024,103,AUT,2. Liga,male,adult,28,2023,2024,2023/2024
+538,BEL - Pro League - 2023/2024,16,BEL,Pro League,male,adult,28,2023,2024,2023/2024
+539,CAF - Champions League - 2023/2024,148,CAF,Champions League,male,adult,28,2023,2024,2023/2024
+540,CRO - 1.HNL - 2023/2024,93,CRO,1.HNL,male,adult,28,2023,2024,2023/2024
+541,CZE - First League - 2023/2024,94,CZE,First League,male,adult,28,2023,2024,2023/2024
+542,DEN - Superliga - 2023/2024,89,DEN,Superliga,male,adult,28,2023,2024,2023/2024
+543,ENG - Premier League - 2023/2024,1,ENG,Premier League,male,adult,28,2023,2024,2023/2024
+544,ENG - Championship - 2023/2024,31,ENG,Championship,male,adult,28,2023,2024,2023/2024
+545,ENG - League One - 2023/2024,101,ENG,League One,male,adult,28,2023,2024,2023/2024
+546,ESP - LaLiga - 2023/2024,4,ESP,LaLiga,male,adult,28,2023,2024,2023/2024
+547,ESP - LaLiga 2 - 2023/2024,42,ESP,LaLiga 2,male,adult,28,2023,2024,2023/2024
+548,FRA - Ligue 1 - 2023/2024,3,FRA,Ligue 1,male,adult,28,2023,2024,2023/2024
+549,FRA - Ligue 2 - 2023/2024,12,FRA,Ligue 2,male,adult,28,2023,2024,2023/2024
+550,ESP - Primera Division RFEF - 2023/2024,133,ESP,Primera Division RFEF,male,adult,28,2023,2024,2023/2024
+551,GER - Bundesliga - 2023/2024,6,GER,Bundesliga,male,adult,28,2023,2024,2023/2024
+552,GER - 2nd Bundesliga - 2023/2024,40,GER,2nd Bundesliga,male,adult,28,2023,2024,2023/2024
+553,GER - 3. Liga - 2023/2024,64,GER,3. Liga,male,adult,28,2023,2024,2023/2024
+554,GRE - Super League - 2023/2024,28,GRE,Super League,male,adult,28,2023,2024,2023/2024
+555,ITA - Serie A - 2023/2024,5,ITA,Serie A,male,adult,28,2023,2024,2023/2024
+556,ITA - Serie B - 2023/2024,41,ITA,Serie B,male,adult,28,2023,2024,2023/2024
+557,ENG - League Two - 2023/2024,204,ENG,League Two,male,adult,28,2023,2024,2023/2024
+558,MEX - Liga MX - 2023/2024,97,MEX,Liga MX,male,adult,28,2023,2024,2023/2024
+559,NED - Eredivisie - 2023/2024,17,NED,Eredivisie,male,adult,28,2023,2024,2023/2024
+560,NED - Eerste Divisie - 2023/2024,106,NED,Eerste Divisie,male,adult,28,2023,2024,2023/2024
+561,POL - Ekstraklasa - 2023/2024,43,POL,Ekstraklasa,male,adult,28,2023,2024,2023/2024
+562,POR - Primeira Liga - 2023/2024,25,POR,Primeira Liga,male,adult,28,2023,2024,2023/2024
+563,RUS - Premier League - 2023/2024,27,RUS,Premier League,male,adult,28,2023,2024,2023/2024
+564,RUS - FNL - 2023/2024,121,RUS,FNL,male,adult,28,2023,2024,2023/2024
+565,SCO - Premiership - 2023/2024,18,SCO,Premiership,male,adult,28,2023,2024,2023/2024
+566,SUI - Super League - 2023/2024,82,SUI,Super League,male,adult,28,2023,2024,2023/2024
+567,TUR - Super Lig - 2023/2024,29,TUR,Super Lig,male,adult,28,2023,2024,2023/2024
+568,TUR - 1. Lig - 2023/2024,120,TUR,1. Lig,male,adult,28,2023,2024,2023/2024
+569,UEFA - Champions League - 2023/2024,10,UEFA,Champions League,male,adult,28,2023,2024,2023/2024
+570,UEFA - Europa League - 2023/2024,9,UEFA,Europa League,male,adult,28,2023,2024,2023/2024
+571,UEFA - Europa Conference League - 2023/2024,131,UEFA,Europa Conference League,male,adult,28,2023,2024,2023/2024
+572,UKR - Premier League - 2023/2024,26,UKR,Premier League,male,adult,28,2023,2024,2023/2024
+573,RSA - PSL - 2023/2024,165,RSA,PSL,male,adult,28,2023,2024,2023/2024
+574,ENG - FA Women`s Super League - 2023/2024,127,ENG,FA Women`s Super League,female,adult,28,2023,2024,2023/2024
+575,UEFA - Women`s Champions League - 2023/2024,141,UEFA,Women`s Champions League,female,adult,28,2023,2024,2023/2024
+576,UEFA - European Championship Qualifiers - 2023/2024,34,UEFA,European Championship Qualifiers,male,adult,28,2023,2024,2023/2024
+577,UEFA - Women's WC Qualification Europe - 2021/2022,217,UEFA,Women's WC Qualification Europe,female,adult,8,2021,2022,2021/2022
+578,UEFA - U20 Elite League - 2022/2023,218,UEFA,U20 Elite League,male,U20,21,2022,2023,2022/2023
+579,INT - U18 Friendly International - 2022,199,INT,U18 Friendly International,male,U18,20,2022,2022,2022
+580,ENG - U18 Premier League - 2022/2023,92,ENG,U18 Premier League,male,U18,21,2022,2023,2022/2023
+581,INT - Arnold Clark Cup - 2022,215,INT,Arnold Clark Cup,female,adult,20,2022,2022,2022
+582,INT - Women's Finalissima - 2022,219,INT,Women's Finalissima,female,adult,20,2022,2022,2022
+583,INT - U20 National Team Friendlies - 2023,183,INT,U20 National Team Friendlies,male,U20,22,2023,2023,2023
+584,INT - Youth Friendlies - 2023,220,INT,Youth Friendlies,male,adult,22,2023,2023,2023
+585,INT - Pinatar National Team Friendlies - 2023,221,INT,Pinatar National Team Friendlies,male,U21,22,2023,2023,2023
+586,LVA - Virsliga - 2023,222,LVA,Virsliga,male,adult,22,2023,2023,2023
+587,CYP - 1. Division - 2022/2023,223,CYP,1. Division,male,adult,21,2022,2023,2022/2023
+588,CYP - 1. Division - 2023/2024,223,CYP,1. Division,male,adult,28,2023,2024,2023/2024
+589,UEFA - U19 European Championship Qualifiers - 2023,200,UEFA,U19 European Championship Qualifiers,male,U19,22,2023,2023,2023
+590,ITA - Campionato Primavera 1 - 2022/2023,224,ITA,Campionato Primavera 1,male,U19,21,2022,2023,2022/2023
+591,SUI - Challenge League - 2022/2023,122,SUI,Challenge League,male,adult,21,2022,2023,2022/2023
+592,ROU - Liga 1 - 2022/2023,104,ROU,Liga 1,male,adult,21,2022,2023,2022/2023
+593,AFC - Gulf Cup of Nations - 2023,225,AFC,Gulf Cup of Nations,male,adult,22,2023,2023,2023
+594,INT - Torneio Internacional Algarve U17 - 2023,150,INT,Torneio Internacional Algarve U17,male,U17,22,2023,2023,2023
+595,INT - U16 National Team Friendlies - 2023,226,INT,U16 National Team Friendlies,male,U16,22,2023,2023,2023
+596,DEN - Kvindeligaen - 2022/2023,227,DEN,Kvindeligaen,female,adult,21,2022,2023,2022/2023
+597,DEN - Kvindeligaen - 2023/2024,227,DEN,Kvindeligaen,female,adult,28,2023,2024,2023/2024
+598,NOR - Toppserien - 2023,228,NOR,Toppserien,female,adult,22,2023,2023,2023
+599,SWE - Damallsvenskan - 2023,229,SWE,Damallsvenskan,female,adult,22,2023,2023,2023
+600,FRA - Feminine Division 1 - 2022/2023,230,FRA,Feminine Division 1,female,adult,21,2022,2023,2022/2023
+601,FRA - Feminine Division 1 - 2023/2024,230,FRA,Feminine Division 1,female,adult,28,2023,2024,2023/2024
+602,UEFA - U17 European Championship - 2023,163,UEFA,U17 European Championship,male,U17,22,2023,2023,2023
+603,KSA - Pro League - 2022/2023,146,KSA,Pro League,male,adult,21,2022,2023,2022/2023
+604,KSA - Pro League - 2023/2024,146,KSA,Pro League,male,adult,28,2023,2024,2023/2024
+605,CHN - Super League - 2023,47,CHN,Super League,male,adult,22,2023,2023,2023
+606,KSA - Division 1 - 2022/2023,231,KSA,Division 1,male,adult,21,2022,2023,2022/2023
+607,KSA - Division 1 - 2023/2024,231,KSA,Division 1,male,adult,28,2023,2024,2023/2024
+608,UEFA - U21 European Championship - 2023,49,UEFA,U21 European Championship,male,U21,22,2023,2023,2023
+609,INT - Tournoi de France - 2023,232,INT,Tournoi de France,female,adult,22,2023,2023,2023
+610,INT - Women's WC Qualification Intercontinental Play-off - 2023,233,INT,Women's WC Qualification Intercontinental Play-off,female,adult,22,2023,2023,2023
+611,CONCACAF - Gold Cup Qualification - 2023,234,CONCACAF,Gold Cup Qualification,male,adult,22,2023,2023,2023
+612,SVN - 1. SNL - 2022/2023,235,SVN,1. SNL,male,adult,21,2022,2023,2022/2023
+613,CONCACAF - Gold Cup - 2023,36,CONCACAF,Gold Cup,male,adult,22,2023,2023,2023
+614,FIFA - U20 World Cup - 2023,237,FIFA,U20 World Cup,male,U20,22,2023,2023,2023
+615,POR - Segunda Liga - 2023/2024,102,POR,Segunda Liga,male,adult,28,2023,2024,2023/2024
+616,CONCACAF - Women's U20 Championship - 2023,238,CONCACAF,Women's U20 Championship,female,U20,22,2023,2023,2023
+617,QAT - Qatar Stars League - 2023/2024,152,QAT,Qatar Stars League,male,adult,28,2023,2024,2023/2024
+618,AUS - A-League - 2023/2024,61,AUS,A-League,male,adult,28,2023,2024,2023/2024
+619,UAE - Pro League - 2023/2024,151,UAE,Pro League,male,adult,28,2023,2024,2023/2024
+620,"FIFA - World Cup, Women - 2023",48,FIFA,"World Cup, Women",female,adult,22,2023,2023,2023
+621,ROU - Liga 1 - 2023/2024,104,ROU,Liga 1,male,adult,28,2023,2024,2023/2024
+622,BRA - Mineiro 1 - 2023,239,BRA,Mineiro 1,male,adult,22,2023,2023,2023
+623,BRA - Mineiro 1 - 2022,239,BRA,Mineiro 1,male,adult,20,2022,2022,2022
+624,JPN - J2 League - 2023,240,JPN,J2 League,male,adult,22,2023,2023,2023
+625,ENG - Carabao Cup - 2023/2024,66,ENG,Carabao Cup,male,adult,28,2023,2024,2023/2024
+626,QAT - Qatar Stars League - 2022/2023,152,QAT,Qatar Stars League,male,adult,21,2022,2023,2022/2023
+627,GER - DFB-Pokal - 2023/2024,84,GER,DFB-Pokal,male,adult,28,2023,2024,2023/2024
+628,SVK - Niké Liga - 2022/2023,241,SVK,Niké Liga,male,adult,21,2022,2023,2022/2023
+629,SVK - Niké Liga - 2023/2024,241,SVK,Niké Liga,male,adult,28,2023,2024,2023/2024
+660,CONMEBOL - Copa America - 2024,51,CONMEBOL,Copa America,male,adult,29,2024,2024,2024
+661,CONMEBOL - FIFA World Cup Qualifier - 2023/2024,39,CONMEBOL,FIFA World Cup Qualifier,male,adult,28,2023,2024,2023/2024
+662,POR - Taça da Liga - 2023/2024,274,POR,Taça da Liga,male,adult,28,2023,2024,2023/2024
+663,POR - Play-offs 2/3 - 2022/2023,275,POR,Play-offs 2/3,male,adult,21,2022,2023,2022/2023
+693,ENG - U18 Premier League - 2023/2024,92,ENG,U18 Premier League,male,U18,28,2023,2024,2023/2024
+726,GER - Regionalliga - 2023/2024,142,GER,Regionalliga,male,adult,28,2023,2024,2023/2024
+727,POR - Super Cup - 2023/2024,307,POR,Super Cup,male,adult,28,2023,2024,2023/2024
+728,USA - NWSL Challenge Cup - 2023,154,USA,NWSL Challenge Cup,female,adult,22,2023,2023,2023
+729,ENG - Premier League 2 Division One - 2023/2024,79,ENG,Premier League 2 Division One,male,U21,28,2023,2024,2023/2024
+730,ENG - Premier League 2 - 2023/2024,155,ENG,Premier League 2,male,U23,28,2023,2024,2023/2024
+731,FIFA - World Cup - 2010,0,FIFA,World Cup,male,adult,62,2010,2010,2010
+732,SRB - Superliga - 2023/2024,105,SRB,Superliga,male,adult,28,2023,2024,2023/2024
+733,BRA - Copa do Brasil - 2023,308,BRA,Copa do Brasil,male,adult,22,2023,2023,2023
+734,ISL - Cup - 2023,309,ISL,Cup,male,adult,22,2023,2023,2023
+735,ISL - Besta-deild karla - 2023,310,ISL,Besta-deild karla,male,adult,22,2023,2023,2023
+736,ARG - Copa Argentina - 2023,311,ARG,Copa Argentina,male,adult,22,2023,2023,2023
+737,THA - Thai League - 2023/2024,312,THA,Thai League,male,adult,28,2023,2024,2023/2024
+738,SUI - Challenge League - 2023/2024,122,SUI,Challenge League,male,adult,28,2023,2024,2023/2024
+739,DEN - 1st Division - 2023/2024,145,DEN,1st Division,male,adult,28,2023,2024,2023/2024
+740,MEX - Liga Premier Serie A - 2023/2024,314,MEX,Liga Premier Serie A,male,adult,28,2023,2024,2023/2024
+741,MEX - Liga de Expansión MX - 2023/2024,315,MEX,Liga de Expansión MX,male,adult,28,2023,2024,2023/2024
+742,ENG - EFL Trophy - 2023/2024,143,ENG,EFL Trophy,male,adult,28,2023,2024,2023/2024
+743,SUI - 1. Liga Promotion - 2023/2024,316,SUI,1. Liga Promotion,male,adult,28,2023,2024,2023/2024
+744,CAF - African Super League - 2023/2024,317,CAF,African Super League,male,adult,28,2023,2024,2023/2024
+746,QAT - QSL Cup - 2023/2024,318,QAT,QSL Cup,male,adult,28,2023,2024,2023/2024
+747,BOL - LFPB - 2023,319,BOL,LFPB,male,adult,22,2023,2023,2023
+748,GRE - Super League 2 - 2023/2024,320,GRE,Super League 2,male,adult,28,2023,2024,2023/2024
+749,GRE - Super League K19 - 2023/2024,321,GRE,Super League K19,male,U19,28,2023,2024,2023/2024
+750,CONCACAF - Nations League - League A - 2023/2024,63,CONCACAF,Nations League - League A,male,adult,28,2023,2024,2023/2024
+751,CAF - Africa Cup of Nations Qualification - 2023,193,CAF,Africa Cup of Nations Qualification,male,adult,22,2023,2023,2023
+752,HUN - Nemzeti Bajnokság - 2023/2024,98,HUN,Nemzeti Bajnokság,male,adult,28,2023,2024,2023/2024
+753,POR - Liga 3 - 2023/2024,162,POR,Liga 3,male,adult,28,2023,2024,2023/2024
+754,FIFA - U17 World Cup - 2023,327,FIFA,U17 World Cup,male,U17,22,2023,2023,2023
+756,POR - Taça de Portugal - 2023/2024,328,POR,Taça de Portugal,male,adult,28,2023,2024,2023/2024
+757,KAZ - Freedom QJ League U18 - 2023,329,KAZ,Freedom QJ League U18,male,U18,22,2023,2023,2023
+758,CAF - Champions League - Preliminary Rounds - 2023/2024,330,CAF,Champions League - Preliminary Rounds,male,adult,28,2023,2024,2023/2024
+759,ESP - Copa del Rey - 2023/2024,44,ESP,Copa del Rey,male,adult,28,2023,2024,2023/2024
+761,UEFA - Women's Nations League - League A - 2023/2024,331,UEFA,Women's Nations League - League A,female,adult,28,2023,2024,2023/2024
+762,CAF - Africa Cup of Nations - 2023,37,CAF,Africa Cup of Nations,male,adult,22,2023,2023,2023
+763,BGR - First League - 2023/2024,332,BGR,First League,male,adult,28,2023,2024,2023/2024
+764,CZE - FNL - 2023/2024,333,CZE,FNL,male,adult,28,2023,2024,2023/2024
+765,AFC - Champions League - 2024/2025,147,AFC,Champions League,male,adult,95,2024,2025,2024/2025
+766,ARG - Copa Argentina - 2024,311,ARG,Copa Argentina,male,adult,29,2024,2024,2024
+767,ARG - Primera Division - 1st Phase - 2024,70,ARG,Primera Division - 1st Phase,male,adult,29,2024,2024,2024
+768,BOL - LFPB - 2024,319,BOL,LFPB,male,adult,29,2024,2024,2024
+769,BRA - Copa do Brasil - 2024,308,BRA,Copa do Brasil,male,adult,29,2024,2024,2024
+771,BRA - Mineiro 1 - 2024,239,BRA,Mineiro 1,male,adult,29,2024,2024,2024
+772,BRA - Série A - 2024,77,BRA,Série A,male,adult,29,2024,2024,2024
+773,BRA - Série B - 2024,80,BRA,Série B,male,adult,29,2024,2024,2024
+774,CAN - Canadian Premier League - 2024,203,CAN,Canadian Premier League,male,adult,29,2024,2024,2024
+775,CHI - Primera Division - 2024,57,CHI,Primera Division,male,adult,29,2024,2024,2024
+776,CHN - Super League - 2024,47,CHN,Super League,male,adult,29,2024,2024,2024
+777,COL - Liga Dimayor - 2024,100,COL,Liga Dimayor,male,adult,29,2024,2024,2024
+778,CONCACAF - Champions League - 2024,159,CONCACAF,Champions League,male,adult,29,2024,2024,2024
+779,CONCACAF - Gold Cup - 2024,36,CONCACAF,Gold Cup,male,adult,29,2024,2024,2024
+780,CONCACAF - Gold Cup Qualification - 2024,234,CONCACAF,Gold Cup Qualification,male,adult,29,2024,2024,2024
+781,CONMEBOL - Copa Libertadores - 2024,109,CONMEBOL,Copa Libertadores,male,adult,29,2024,2024,2024
+782,CONMEBOL - Copa Sudamericana - 2024,110,CONMEBOL,Copa Sudamericana,male,adult,29,2024,2024,2024
+783,ECU - Liga Pro - 2024,138,ECU,Liga Pro,male,adult,29,2024,2024,2024
+784,INT - Friendly International - 2024,20,INT,Friendly International,male,adult,29,2024,2024,2024
+785,INT - Club Friendlies - 2024,149,INT,Club Friendlies,male,adult,29,2024,2024,2024
+786,INT - Women Friendly International - 2024,123,INT,Women Friendly International,female,adult,29,2024,2024,2024
+787,JPN - J1 League - 2024,87,JPN,J1 League,male,adult,29,2024,2024,2024
+788,JPN - J2 League - 2024,240,JPN,J2 League,male,adult,29,2024,2024,2024
+789,KOR - K League 1 - 2024,194,KOR,K League 1,male,adult,29,2024,2024,2024
+790,LVA - Virsliga - 2024,222,LVA,Virsliga,male,adult,29,2024,2024,2024
+791,NOR - Eliteserien - 2024,124,NOR,Eliteserien,male,adult,29,2024,2024,2024
+792,NOR - Toppserien - 2024,228,NOR,Toppserien,female,adult,29,2024,2024,2024
+793,PAR - Division Profesional - 2024,140,PAR,Division Profesional,male,adult,29,2024,2024,2024
+794,PER - Primera Division - 2024,139,PER,Primera Division,male,adult,29,2024,2024,2024
+795,SWE - Allsvenskan - 2024,90,SWE,Allsvenskan,male,adult,29,2024,2024,2024
+796,SWE - Damallsvenskan - 2024,229,SWE,Damallsvenskan,female,adult,29,2024,2024,2024
+797,URY - Primera Division - 2024,95,URY,Primera Division,male,adult,29,2024,2024,2024
+798,USA - Major League Soccer - 2024,60,USA,Major League Soccer,male,adult,29,2024,2024,2024
+799,USA - MLS Next Pro - 2024,190,USA,MLS Next Pro,male,adult,29,2024,2024,2024
+800,USA - NWSL - 2024,126,USA,NWSL,female,adult,29,2024,2024,2024
+801,USA - NWSL Challenge Cup - 2024,154,USA,NWSL Challenge Cup,female,adult,29,2024,2024,2024
+802,USA - USL Championship - 2024,191,USA,USL Championship,male,adult,29,2024,2024,2024
+803,"BRA - Paulista, Serie A1 - 2024",68,BRA,"Paulista, Serie A1",male,adult,29,2024,2024,2024
+804,ISR - Ligat Al - 2023/2024,86,ISR,Ligat Al,male,adult,28,2023,2024,2023/2024
+805,INT - U16 National Team Friendlies - 2024,226,INT,U16 National Team Friendlies,male,U16,29,2024,2024,2024
+806,BRA - Supercopa do Brasil - 2024,335,BRA,Supercopa do Brasil,male,adult,29,2024,2024,2024
+807,MEX - Liga MX Femenil - 2022/2023,336,MEX,Liga MX Femenil,female,adult,21,2022,2023,2022/2023
+808,CONCACAF - Women's U17 Championship - 2024,337,CONCACAF,Women's U17 Championship,female,U17,29,2024,2024,2024
+809,GER - Frauen Bundesliga - 2023/2024,338,GER,Frauen Bundesliga,female,adult,28,2023,2024,2023/2024
+810,AFC - Asian Cup - 2023,35,AFC,Asian Cup,male,adult,22,2023,2023,2023
+811,BRA - Carioca 1 - 2023,168,BRA,Carioca 1,male,adult,22,2023,2023,2023
+812,BRA - Carioca 1 - 2024,168,BRA,Carioca 1,male,adult,29,2024,2024,2024
+814,INT - Torneio Internacional Algarve U17 - 2024,150,INT,Torneio Internacional Algarve U17,male,U17,29,2024,2024,2024
+815,FRA - Championnat National U19 - 2023/2024,340,FRA,Championnat National U19,male,U19,28,2023,2024,2023/2024
+816,FRA - Championnat National U19 - 2022/2023,340,FRA,Championnat National U19,male,U19,21,2022,2023,2022/2023
+817,BRA - Gaúcho 1 - 2024,341,BRA,Gaúcho 1,male,adult,29,2024,2024,2024
+818,CONCACAF - Women's Gold Cup - 2024,342,CONCACAF,Women's Gold Cup,female,adult,29,2024,2024,2024
+819,CONCACAF - Road to W Gold Cup - Play-Offs - 2024,343,CONCACAF,Road to W Gold Cup - Play-Offs,female,adult,29,2024,2024,2024
+820,CONMEBOL - Recopa Sudamericana - 2024,344,CONMEBOL,Recopa Sudamericana,male,adult,29,2024,2024,2024
+821,MEX - Liga MX Femenil - 2023/2024,336,MEX,Liga MX Femenil,female,adult,28,2023,2024,2023/2024
+822,INT - Football Federations Cup U16 - 2024,345,INT,Football Federations Cup U16,male,U16,29,2024,2024,2024
+823,CONCACAF - Leagues Cup - 2024,346,CONCACAF,Leagues Cup,male,adult,29,2024,2024,2024
+824,CAF - FIFA World Cup Qualifier - 2023/2024,32,CAF,FIFA World Cup Qualifier,male,adult,28,2023,2024,2023/2024
+825,CAF - COSAFA Cup - 2023,195,CAF,COSAFA Cup,male,adult,22,2023,2023,2023
+826,CAF - Women's Olympic Qualifying - 2023/2024,347,CAF,Women's Olympic Qualifying,female,adult,28,2023,2024,2023/2024
+827,JPN - WE League - 2023/2024,348,JPN,WE League,female,adult,28,2023,2024,2023/2024
+858,AFC - WC Qualification Asia - 2023/2024,181,AFC,WC Qualification Asia,male,adult,28,2023,2024,2023/2024
+859,AFC - West Asia Championship U23 - 2024,373,AFC,West Asia Championship U23,male,U23,29,2024,2024,2024
+860,INT - U19 National Team Friendlies - 2024,161,INT,U19 National Team Friendlies,male,U19,29,2024,2024,2024
+861,INT - U19 National Team Friendlies Women - 2024,374,INT,U19 National Team Friendlies Women,female,adult,29,2024,2024,2024
+862,INT - U17 National Team Friendlies Women - 2024,375,INT,U17 National Team Friendlies Women,female,U17,29,2024,2024,2024
+863,INT - SheBelieves Cup - 2024,186,INT,SheBelieves Cup,female,adult,29,2024,2024,2024
+864,FRA - National - 2023/2024,30,FRA,National,male,adult,28,2023,2024,2023/2024
+865,ARG - Primera Division - 2nd Phase - 2024,376,ARG,Primera Division - 2nd Phase,male,adult,29,2024,2024,2024
+866,UEFA - European Championship - 2024,2,UEFA,European Championship,male,adult,29,2024,2024,2024
+867,RSA - Nedbank Cup - 2024,377,RSA,Nedbank Cup,male,adult,29,2024,2024,2024
+868,UEFA - Baltic Cup - 2024,378,UEFA,Baltic Cup,male,adult,29,2024,2024,2024
+870,AUS - A-League - 2024/2025,61,AUS,A-League,male,adult,95,2024,2025,2024/2025
+871,AUT - 2. Liga - 2024/2025,103,AUT,2. Liga,male,adult,95,2024,2025,2024/2025
+872,AUT - Bundesliga - 2024/2025,88,AUT,Bundesliga,male,adult,95,2024,2025,2024/2025
+873,BEL - Pro League - 2024/2025,16,BEL,Pro League,male,adult,95,2024,2025,2024/2025
+874,BGR - First League - 2024/2025,332,BGR,First League,male,adult,95,2024,2025,2024/2025
+875,CAF - African Super League - 2024/2025,317,CAF,African Super League,male,adult,95,2024,2025,2024/2025
+876,CAF - Champions League - 2024/2025,148,CAF,Champions League,male,adult,95,2024,2025,2024/2025
+877,CAF - Champions League - Preliminary Rounds - 2024/2025,330,CAF,Champions League - Preliminary Rounds,male,adult,95,2024,2025,2024/2025
+878,CAF - FIFA World Cup Qualifier - 2024/2025,32,CAF,FIFA World Cup Qualifier,male,adult,95,2024,2025,2024/2025
+879,CAF - Women's Olympic Qualifying - 2024/2025,347,CAF,Women's Olympic Qualifying,female,adult,95,2024,2025,2024/2025
+880,CONCACAF - FIFA World Cup Qualifier - 2024/2025,33,CONCACAF,FIFA World Cup Qualifier,male,adult,95,2024,2025,2024/2025
+881,CONCACAF - Nations League - League A - 2024/2025,63,CONCACAF,Nations League - League A,male,adult,95,2024,2025,2024/2025
+882,CRO - 1.HNL - 2024/2025,93,CRO,1.HNL,male,adult,95,2024,2025,2024/2025
+883,CYP - 1. Division - 2024/2025,223,CYP,1. Division,male,adult,95,2024,2025,2024/2025
+884,CZE - FNL - 2024/2025,333,CZE,FNL,male,adult,95,2024,2025,2024/2025
+885,CZE - First League - 2024/2025,94,CZE,First League,male,adult,95,2024,2025,2024/2025
+886,DEN - 1st Division - 2024/2025,145,DEN,1st Division,male,adult,95,2024,2025,2024/2025
+887,DEN - Kvindeligaen - 2024/2025,227,DEN,Kvindeligaen,female,adult,95,2024,2025,2024/2025
+888,DEN - Superliga - 2024/2025,89,DEN,Superliga,male,adult,95,2024,2025,2024/2025
+889,ENG - Carabao Cup - 2024/2025,66,ENG,Carabao Cup,male,adult,95,2024,2025,2024/2025
+890,ENG - Championship - 2024/2025,31,ENG,Championship,male,adult,95,2024,2025,2024/2025
+891,ENG - EFL Trophy - 2024/2025,143,ENG,EFL Trophy,male,adult,95,2024,2025,2024/2025
+892,ENG - FA Women`s Super League - 2024/2025,127,ENG,FA Women`s Super League,female,adult,95,2024,2025,2024/2025
+893,ENG - League One - 2024/2025,101,ENG,League One,male,adult,95,2024,2025,2024/2025
+894,ENG - League Two - 2024/2025,204,ENG,League Two,male,adult,95,2024,2025,2024/2025
+895,ENG - Premier League - 2024/2025,1,ENG,Premier League,male,adult,95,2024,2025,2024/2025
+896,ENG - Premier League 2 Division One - 2024/2025,79,ENG,Premier League 2 Division One,male,U21,95,2024,2025,2024/2025
+897,ENG - Premier League 2 - 2024/2025,155,ENG,Premier League 2,male,U23,95,2024,2025,2024/2025
+898,ENG - U18 Premier League - 2024/2025,92,ENG,U18 Premier League,male,U18,95,2024,2025,2024/2025
+899,ESP - Copa del Rey - 2024/2025,44,ESP,Copa del Rey,male,adult,95,2024,2025,2024/2025
+900,ESP - LaLiga - 2024/2025,4,ESP,LaLiga,male,adult,95,2024,2025,2024/2025
+901,ESP - LaLiga 2 - 2024/2025,42,ESP,LaLiga 2,male,adult,95,2024,2025,2024/2025
+902,ESP - Primera Division RFEF - 2024/2025,133,ESP,Primera Division RFEF,male,adult,95,2024,2025,2024/2025
+903,FRA - National - 2024/2025,30,FRA,National,male,adult,95,2024,2025,2024/2025
+904,FRA - Feminine Division 1 - 2024/2025,230,FRA,Feminine Division 1,female,adult,95,2024,2025,2024/2025
+905,FRA - Ligue 2 - 2024/2025,12,FRA,Ligue 2,male,adult,95,2024,2025,2024/2025
+906,FRA - Ligue 1 - 2024/2025,3,FRA,Ligue 1,male,adult,95,2024,2025,2024/2025
+907,GER - 2nd Bundesliga - 2024/2025,40,GER,2nd Bundesliga,male,adult,95,2024,2025,2024/2025
+908,GER - 3. Liga - 2024/2025,64,GER,3. Liga,male,adult,95,2024,2025,2024/2025
+909,GER - Bundesliga - 2024/2025,6,GER,Bundesliga,male,adult,95,2024,2025,2024/2025
+910,GER - Frauen Bundesliga - 2024/2025,338,GER,Frauen Bundesliga,female,adult,95,2024,2025,2024/2025
+911,GER - Regionalliga - 2024/2025,142,GER,Regionalliga,male,adult,95,2024,2025,2024/2025
+912,GRE - Super League - 2024/2025,28,GRE,Super League,male,adult,95,2024,2025,2024/2025
+913,HUN - Nemzeti Bajnokság - 2024/2025,98,HUN,Nemzeti Bajnokság,male,adult,95,2024,2025,2024/2025
+914,ISR - Ligat Al - 2024/2025,86,ISR,Ligat Al,male,adult,95,2024,2025,2024/2025
+915,ITA - Serie A - 2024/2025,5,ITA,Serie A,male,adult,95,2024,2025,2024/2025
+916,ITA - Serie B - 2024/2025,41,ITA,Serie B,male,adult,95,2024,2025,2024/2025
+918,JPN - WE League - 2024/2025,348,JPN,WE League,female,adult,95,2024,2025,2024/2025
+919,KSA - Division 1 - 2024/2025,231,KSA,Division 1,male,adult,95,2024,2025,2024/2025
+920,KSA - Pro League - 2024/2025,146,KSA,Pro League,male,adult,95,2024,2025,2024/2025
+921,MEX - Liga de Expansión MX - 2024/2025,315,MEX,Liga de Expansión MX,male,adult,95,2024,2025,2024/2025
+922,MEX - Liga MX - 2024/2025,97,MEX,Liga MX,male,adult,95,2024,2025,2024/2025
+923,MEX - Liga MX Femenil - 2024/2025,336,MEX,Liga MX Femenil,female,adult,95,2024,2025,2024/2025
+924,NED - Eerste Divisie - 2024/2025,106,NED,Eerste Divisie,male,adult,95,2024,2025,2024/2025
+925,NED - Eredivisie - 2024/2025,17,NED,Eredivisie,male,adult,95,2024,2025,2024/2025
+926,POL - Ekstraklasa - 2024/2025,43,POL,Ekstraklasa,male,adult,95,2024,2025,2024/2025
+927,POR - Liga 3 - 2024/2025,162,POR,Liga 3,male,adult,95,2024,2025,2024/2025
+928,POR - Primeira Liga - 2024/2025,25,POR,Primeira Liga,male,adult,95,2024,2025,2024/2025
+929,POR - Segunda Liga - 2024/2025,102,POR,Segunda Liga,male,adult,95,2024,2025,2024/2025
+930,POR - Super Cup - 2024/2025,307,POR,Super Cup,male,adult,95,2024,2025,2024/2025
+931,POR - Taça da Liga - 2024/2025,274,POR,Taça da Liga,male,adult,95,2024,2025,2024/2025
+932,QAT - Qatar Stars League - 2024/2025,152,QAT,Qatar Stars League,male,adult,95,2024,2025,2024/2025
+933,ROU - Liga 1 - 2024/2025,104,ROU,Liga 1,male,adult,95,2024,2025,2024/2025
+934,RSA - PSL - 2024/2025,165,RSA,PSL,male,adult,95,2024,2025,2024/2025
+935,RUS - FNL - 2024/2025,121,RUS,FNL,male,adult,95,2024,2025,2024/2025
+936,RUS - Premier League - 2024/2025,27,RUS,Premier League,male,adult,95,2024,2025,2024/2025
+937,SCO - Premiership - 2024/2025,18,SCO,Premiership,male,adult,95,2024,2025,2024/2025
+938,SRB - Superliga - 2024/2025,105,SRB,Superliga,male,adult,95,2024,2025,2024/2025
+939,SUI - Challenge League - 2024/2025,122,SUI,Challenge League,male,adult,95,2024,2025,2024/2025
+940,SUI - Super League - 2024/2025,82,SUI,Super League,male,adult,95,2024,2025,2024/2025
+941,SVK - Niké Liga - 2024/2025,241,SVK,Niké Liga,male,adult,95,2024,2025,2024/2025
+942,TUR - 1. Lig - 2024/2025,120,TUR,1. Lig,male,adult,95,2024,2025,2024/2025
+943,TUR - Super Lig - 2024/2025,29,TUR,Super Lig,male,adult,95,2024,2025,2024/2025
+944,UAE - Pro League - 2024/2025,151,UAE,Pro League,male,adult,95,2024,2025,2024/2025
+945,UEFA - Women`s Champions League - 2024/2025,141,UEFA,Women`s Champions League,female,adult,95,2024,2025,2024/2025
+946,UEFA - Youth League - 2024/2025,78,UEFA,Youth League,male,U19,95,2024,2025,2024/2025
+947,UEFA - Europa League - 2024/2025,9,UEFA,Europa League,male,adult,95,2024,2025,2024/2025
+948,UEFA - Champions League - 2024/2025,10,UEFA,Champions League,male,adult,95,2024,2025,2024/2025
+949,UEFA - Europa Conference League - 2024/2025,131,UEFA,Europa Conference League,male,adult,95,2024,2025,2024/2025
+950,UKR - Premier League - 2024/2025,26,UKR,Premier League,male,adult,95,2024,2025,2024/2025
+951,ITA - Serie A Women - 2023/2024,379,ITA,Serie A Women,female,adult,28,2023,2024,2023/2024
+952,ITA - Serie A Women - 2024/2025,379,ITA,Serie A Women,female,adult,95,2024,2025,2024/2025
+953,ESP - Primera División Femenina - 2023/2024,132,ESP,Primera División Femenina,female,adult,28,2023,2024,2023/2024
+954,ESP - Primera División Femenina - 2024/2025,132,ESP,Primera División Femenina,female,adult,95,2024,2025,2024/2025
+957,BEL - 1B Pro League - 2024/2025,119,BEL,1B Pro League,male,adult,95,2024,2025,2024/2025
+959,IRL - First Division - 2024,158,IRL,First Division,male,adult,29,2024,2024,2024
+960,UEFA - Women U19 Championship - 2024,177,UEFA,Women U19 Championship,female,U19,29,2024,2024,2024
+961,IRL - Premier Division - 2024,406,IRL,Premier Division,male,adult,29,2024,2024,2024
+962,THA - Thai League - 2024/2025,312,THA,Thai League,male,adult,95,2024,2025,2024/2025
+963,KAZ - Freedom QJ League U18 - 2024,329,KAZ,Freedom QJ League U18,male,U18,29,2024,2024,2024
+964,QAT - QSL Cup - 2024/2025,318,QAT,QSL Cup,male,adult,95,2024,2025,2024/2025
+965,POL - I liga - 2024/2025,407,POL,I liga,male,adult,95,2024,2025,2024/2025
+966,BIH - Premier League - 2024/2025,408,BIH,Premier League,male,adult,95,2024,2025,2024/2025
+967,MAR - Botola Pro - 2024/2025,409,MAR,Botola Pro,male,adult,95,2024,2025,2024/2025
+968,AUS - A-League Women - 2024/2025,410,AUS,A-League Women,female,adult,95,2024,2025,2024/2025
+969,ARG - Primera Nacional - 2024,412,ARG,Primera Nacional,male,adult,29,2024,2024,2024
+970,ISL - Besta-deild karla - 2024,310,ISL,Besta-deild karla,male,adult,29,2024,2024,2024
+971,ISL - Cup - 2024,309,ISL,Cup,male,adult,29,2024,2024,2024
+972,ITA - Serie C - 2024/2025,113,ITA,Serie C,male,adult,95,2024,2025,2024/2025
+973,SVN - 1. SNL - 2024/2025,235,SVN,1. SNL,male,adult,95,2024,2025,2024/2025
+974,INT - Olympic Games Women - 2024,128,INT,Olympic Games Women,female,adult,29,2024,2024,2024
+976,BRA - Paulista Women - 2024,413,BRA,Paulista Women,female,adult,29,2024,2024,2024
+990,GER - U19 Bundesliga - 2024/2025,136,GER,U19 Bundesliga,male,U19,95,2024,2025,2024/2025
+991,NOR - Obos Ligaen - 2023,174,NOR,Obos Ligaen,male,adult,22,2023,2023,2023
+992,NOR - Obos Ligaen - 2024,174,NOR,Obos Ligaen,male,adult,29,2024,2024,2024
+993,ITA - Serie D - Girone D - 2023/2024,439,ITA,Serie D - Girone D,male,adult,28,2023,2024,2023/2024
+994,KSA - Super Cup - 2024/2025,440,KSA,Super Cup,male,adult,95,2024,2025,2024/2025
+995,GER - DFB-Pokal - 2024/2025,84,GER,DFB-Pokal,male,adult,95,2024,2025,2024/2025
+996,ENG - National League - 2023/2024,96,ENG,National League,male,adult,28,2023,2024,2023/2024
+997,ENG - National League - 2024/2025,96,ENG,National League,male,adult,95,2024,2025,2024/2025
+998,FIFA - U20 Women's World Cup - 2024,178,FIFA,U20 Women's World Cup,female,U20,29,2024,2024,2024
+999,UEFA - Nation`s League - League A - 2024/2025,21,UEFA,Nation`s League - League A,male,adult,95,2024,2025,2024/2025
+1000,CAF - Africa Cup of Nations Qualification - 2024/2025,193,CAF,Africa Cup of Nations Qualification,male,adult,95,2024,2025,2024/2025
+1001,NED - Super Cup - 2024/2025,442,NED,Super Cup,male,adult,95,2024,2025,2024/2025
+1002,UEFA - Nations League - League C - 2024/2025,443,UEFA,Nations League - League C,male,adult,95,2024,2025,2024/2025
+1003,HKG - Premier League - 2024/2025,444,HKG,Premier League,male,adult,95,2024,2025,2024/2025
+1004,HKG - Premier League - 2023/2024,444,HKG,Premier League,male,adult,28,2023,2024,2023/2024
+1005,AFC - ASEAN Club Championship - 2024/2025,445,AFC,ASEAN Club Championship,male,adult,95,2024,2025,2024/2025
+1006,PHL - Philippines Football League - 2023/2024,446,PHL,Philippines Football League,male,adult,28,2023,2024,2023/2024
+1007,PHL - Philippines Football League - 2024/2025,446,PHL,Philippines Football League,male,adult,95,2024,2025,2024/2025
+1008,JPN - J3 League - 2024,447,JPN,J3 League,male,adult,29,2024,2024,2024
+1009,AFC - Champions League Two - 2024/2025,448,AFC,Champions League Two,male,adult,95,2024,2025,2024/2025
+1010,FRA - National 3 - 2023/2024,449,FRA,National 3,male,adult,28,2023,2024,2023/2024
+1011,FRA - National 3 - 2024/2025,449,FRA,National 3,male,adult,95,2024,2025,2024/2025
+1012,MYS - Super League - 2024/2025,450,MYS,Super League,male,adult,95,2024,2025,2024/2025
+1013,ENG - Barclays Womens Championship - 2024/2025,451,ENG,Barclays Womens Championship,female,adult,95,2024,2025,2024/2025
+1015,ITA - Campionato Primavera 1 - 2024/2025,224,ITA,Campionato Primavera 1,male,U19,95,2024,2025,2024/2025
+1016,UKR - U19 League - 2024/2025,453,UKR,U19 League,male,U19,95,2024,2025,2024/2025
+1017,UEFA - Nation`s League - League B - 2023/2024,160,UEFA,Nation`s League - League B,male,adult,28,2023,2024,2023/2024
+1018,UEFA - Nation`s League - League B - 2024/2025,160,UEFA,Nation`s League - League B,male,adult,95,2024,2025,2024/2025
+1019,USA - USL League 1 - 2024,454,USA,USL League 1,male,adult,29,2024,2024,2024
+1020,DZA - Ligue 1 - 2024/2025,452,DZA,Ligue 1,male,adult,95,2024,2025,2024/2025
+1021,CRI - Primera División - 2024/2025,455,CRI,Primera División,male,adult,95,2024,2025,2024/2025
+1022,INT - U21 National Team Friendlies - 2024,216,INT,U21 National Team Friendlies,male,U21,29,2024,2024,2024
+1023,INT - U21 National Team Friendlies - 2022,216,INT,U21 National Team Friendlies,male,U21,20,2022,2022,2022
+1024,UEFA - U21 European Championship Qualifiers - 2023/2024,62,UEFA,U21 European Championship Qualifiers,male,U21,28,2023,2024,2023/2024
+1025,UEFA - U21 European Championship Qualifiers - 2021/2022,62,UEFA,U21 European Championship Qualifiers,male,U21,8,2021,2022,2021/2022
+1026,CRI - Liga de Ascenso - 2024/2025,456,CRI,Liga de Ascenso,male,adult,95,2024,2025,2024/2025
+1027,ISR - Leumit Youth - 2024/2025,457,ISR,Leumit Youth,male,adult,95,2024,2025,2024/2025
+1028,LVA - 1. Liga - 2024/2025,458,LVA,1. Liga,male,adult,95,2024,2025,2024/2025
+1029,EGY - Premier League - 2024/2025,207,EGY,Premier League,male,adult,95,2024,2025,2024/2025
+1030,ENG - FA Cup - 2024/2025,19,ENG,FA Cup,male,adult,95,2024,2025,2024/2025
+1031,SCO - Scottish Championship - 2024/2025,459,SCO,Scottish Championship,male,adult,95,2024,2025,2024/2025
+1032,CONMEBOL - Pre-Olympic Tournament U23 - 2024,460,CONMEBOL,Pre-Olympic Tournament U23,male,U23,29,2024,2024,2024
+1033,UEFA - Women's Championship Qualification - League A - 2024/2025,461,UEFA,Women's Championship Qualification - League A,female,adult,95,2024,2025,2024/2025
+1034,INT - U23 National Team Friendlies - 2023,462,INT,U23 National Team Friendlies,male,U23,22,2023,2023,2023
+1035,UEFA - Women's Championship Qualification - Play-off - 2024/2025,463,UEFA,Women's Championship Qualification - Play-off,female,adult,95,2024,2025,2024/2025
+1037,FRA - Coupe de France - 2024/2025,7,FRA,Coupe de France,male,adult,95,2024,2025,2024/2025
+1038,FRA - Trophée des Champions - 2023/2024,52,FRA,Trophée des Champions,male,adult,28,2023,2024,2023/2024
+1039,MNE - Prva Liga - 2024/2025,466,MNE,Prva Liga,male,adult,95,2024,2025,2024/2025
+1040,BRA - Brasileiro Women - 2024,467,BRA,Brasileiro Women,female,adult,29,2024,2024,2024
+1041,LTU - 1 Lyga - 2024/2025,468,LTU,1 Lyga,male,adult,95,2024,2025,2024/2025
+1042,VEN - Primera División - 2024/2025,469,VEN,Primera División,male,adult,95,2024,2025,2024/2025
+1043,AFC - Gulf Cup of Nations - 2024,225,AFC,Gulf Cup of Nations,male,adult,29,2024,2024,2024
+1046,BRA - Paulista A2 - 2024/2025,474,BRA,Paulista A2,male,adult,95,2024,2025,2024/2025
+1047,VNM - V.League 1 - 2024/2025,475,VNM,V.League 1,male,adult,95,2024,2025,2024/2025
+1048,BRA - São Paulo Youth Cup - 2024/2025,169,BRA,São Paulo Youth Cup,male,U20,95,2024,2025,2024/2025
+1049,BRA - Paranaense 1 - 2024/2025,476,BRA,Paranaense 1,male,adult,95,2024,2025,2024/2025
+1050,BRA - Catarinense 1 - 2024/2025,477,BRA,Catarinense 1,male,adult,95,2024,2025,2024/2025
+1051,USA - NCAA D1 Big East - 2024/2025,478,USA,NCAA D1 Big East,male,adult,95,2024,2025,2024/2025
+1052,"BRA - Paulista, Serie A1 - 2025",68,BRA,"Paulista, Serie A1",male,adult,128,2025,2025,2025
+1053,INT - Friendly International - 2025,20,INT,Friendly International,male,adult,128,2025,2025,2025
+1054,USA - NCAA D1 Big Ten - 2024/2025,479,USA,NCAA D1 Big Ten,male,adult,95,2024,2025,2024/2025
+1055,INT - Club Friendlies - 2025,149,INT,Club Friendlies,male,adult,128,2025,2025,2025
+1056,JPN - Emperor Cup - 2023,480,JPN,Emperor Cup,male,adult,22,2023,2023,2023
+1057,UEFA - U20 Elite League - 2024/2025,218,UEFA,U20 Elite League,male,U20,95,2024,2025,2024/2025
+1058,BRA - Carioca 1 - 2025,168,BRA,Carioca 1,male,adult,128,2025,2025,2025
+1059,ARG - Primera Nacional - 2025,412,ARG,Primera Nacional,male,adult,128,2025,2025,2025
+1061,BRA - Série B - 2025,80,BRA,Série B,male,adult,128,2025,2025,2025
+1062,BRA - Copa do Brasil - 2025,308,BRA,Copa do Brasil,male,adult,128,2025,2025,2025
+1063,CAN - Canadian Premier League - 2025,203,CAN,Canadian Premier League,male,adult,128,2025,2025,2025
+1064,CHI - Primera Division - 2025,57,CHI,Primera Division,male,adult,128,2025,2025,2025
+1065,CHN - Super League - 2025,47,CHN,Super League,male,adult,128,2025,2025,2025
+1066,COL - Liga Dimayor - 2025,100,COL,Liga Dimayor,male,adult,128,2025,2025,2025
+1067,CONCACAF - Champions League - 2025,159,CONCACAF,Champions League,male,adult,128,2025,2025,2025
+1068,CONCACAF - Leagues Cup - 2025,346,CONCACAF,Leagues Cup,male,adult,128,2025,2025,2025
+1069,CONMEBOL - Copa Libertadores - 2025,109,CONMEBOL,Copa Libertadores,male,adult,128,2025,2025,2025
+1070,CONMEBOL - Copa Sudamericana - 2025,110,CONMEBOL,Copa Sudamericana,male,adult,128,2025,2025,2025
+1071,ECU - Liga Pro - 2025,138,ECU,Liga Pro,male,adult,128,2025,2025,2025
+1072,UEFA - U17 European Championship - 2024,163,UEFA,U17 European Championship,male,U17,29,2024,2024,2024
+1073,ARG - Primera Division - 1st Phase - 2025,70,ARG,Primera Division - 1st Phase,male,adult,128,2025,2025,2025
+1074,UEFA - U19 European Championship - 2024,164,UEFA,U19 European Championship,male,U19,29,2024,2024,2024
+1075,JPN - J1 League - 2025,87,JPN,J1 League,male,adult,128,2025,2025,2025
+1076,JPN - J2 League - 2025,240,JPN,J2 League,male,adult,128,2025,2025,2025
+1077,JPN - J3 League - 2025,447,JPN,J3 League,male,adult,128,2025,2025,2025
+1081,IRL - Premier Division - 2025,406,IRL,Premier Division,male,adult,128,2025,2025,2025
+1084,KOR - K League 1 - 2025,194,KOR,K League 1,male,adult,128,2025,2025,2025
+1087,PAR - Division Profesional - 2025,140,PAR,Division Profesional,male,adult,128,2025,2025,2025
+1089,PER - Primera Division - 2025,139,PER,Primera Division,male,adult,128,2025,2025,2025
+1090,URY - Primera Division - 2025,95,URY,Primera Division,male,adult,128,2025,2025,2025
+1091,USA - Major League Soccer - 2025,60,USA,Major League Soccer,male,adult,128,2025,2025,2025
+1092,USA - MLS Next Pro - 2025,190,USA,MLS Next Pro,male,adult,128,2025,2025,2025
+1093,USA - NWSL - 2025,126,USA,NWSL,female,adult,128,2025,2025,2025
+1094,USA - USL Championship - 2025,191,USA,USL Championship,male,adult,128,2025,2025,2025
+1095,LVA - Virsliga - 2025,222,LVA,Virsliga,male,adult,128,2025,2025,2025
+1096,NOR - Eliteserien - 2025,124,NOR,Eliteserien,male,adult,128,2025,2025,2025
+1097,NOR - Toppserien - 2025,228,NOR,Toppserien,female,adult,128,2025,2025,2025
+1098,SWE - Allsvenskan - 2025,90,SWE,Allsvenskan,male,adult,128,2025,2025,2025
+1099,SWE - Damallsvenskan - 2025,229,SWE,Damallsvenskan,female,adult,128,2025,2025,2025
+1100,BRA - Brasileiro Women - 2025,467,BRA,Brasileiro Women,female,adult,128,2025,2025,2025
+1101,SUI - Women's Super League - 2024/2025,482,SUI,Women's Super League,female,adult,95,2024,2025,2024/2025
+1102,INT - SheBelieves Cup - 2025,186,INT,SheBelieves Cup,female,adult,128,2025,2025,2025
+1103,CONMEBOL - Sudamericano U20 - 2025,212,CONMEBOL,Sudamericano U20,male,U20,128,2025,2025,2025
+1104,SGP - Premier League - 2024/2025,484,SGP,Premier League,male,adult,95,2024,2025,2024/2025
+1106,UEFA - Women's Nations League - League A - 2025,331,UEFA,Women's Nations League - League A,female,adult,128,2025,2025,2025
+1107,NOR - Obos Ligaen - 2025,174,NOR,Obos Ligaen,male,adult,128,2025,2025,2025
+1108,UEFA - Women's Nations League - League B - 2025,485,UEFA,Women's Nations League - League B,female,adult,128,2025,2025,2025
+1109,POR - 1a Divisão Women - 2024/2025,486,POR,1a Divisão Women,female,adult,95,2024,2025,2024/2025
+1110,UEFA - U21 European Championship - 2025,49,UEFA,U21 European Championship,male,U21,128,2025,2025,2025
+1112,UEFA - U19 European Championship - 2025,164,UEFA,U19 European Championship,male,U19,128,2025,2025,2025
+1113,COL - Liga Femenina - 2025,488,COL,Liga Femenina,female,adult,128,2025,2025,2025
+1114,"USA - USL Super League, Women - 2024/2025",489,USA,"USL Super League, Women",female,adult,95,2024,2025,2024/2025
+1116,BRA - Paulista U20 - 2024,490,BRA,Paulista U20,male,U20,29,2024,2024,2024
+1117,BRA - CBF Brasileiro U20 - 2025,167,BRA,CBF Brasileiro U20,male,U20,128,2025,2025,2025
+1118,USA - NWSL Challenge Cup - 2025,154,USA,NWSL Challenge Cup,female,adult,128,2025,2025,2025
+1119,INT - U21 National Team Friendlies - 2025,216,INT,U21 National Team Friendlies,male,U21,128,2025,2025,2025
+1120,UEFA - FIFA World Cup Qualifier - 2025,15,UEFA,FIFA World Cup Qualifier,male,adult,128,2025,2025,2025
+1121,UEFA - Nations League - Play-offs - 2024/2025,491,UEFA,Nations League - Play-offs,male,adult,95,2024,2025,2024/2025
+1122,BRA - CBF Brasileiro U20 - 2024,167,BRA,CBF Brasileiro U20,male,U20,29,2024,2024,2024
+1123,BRA - CBF Brasileiro U20 - 2023,167,BRA,CBF Brasileiro U20,male,U20,22,2023,2023,2023
+1124,BRA - Copa do Brasil U20 - 2023,492,BRA,Copa do Brasil U20,male,U20,22,2023,2023,2023
+1125,INT - U20 National Team Friendlies - 2025,183,INT,U20 National Team Friendlies,male,U20,128,2025,2025,2025
+1126,FRA - Trophée des Champions - 2024/2025,52,FRA,Trophée des Champions,male,adult,95,2024,2025,2024/2025
+1127,BRA - Série A - 2025,77,BRA,Série A,male,adult,128,2025,2025,2025
+1128,INT - Women Friendly International - 2025,123,INT,Women Friendly International,female,adult,128,2025,2025,2025
+1129,INT - Pinatar National Team Friendlies - 2025,221,INT,Pinatar National Team Friendlies,male,U21,128,2025,2025,2025
+1130,AFC - AFC U17 Asian Cup - 2025,493,AFC,AFC U17 Asian Cup,male,U17,128,2025,2025,2025
+1131,ENG - Professional Development League - 2024/2025,494,ENG,Professional Development League,male,U21,95,2024,2025,2024/2025
+1132,KOR - K League 2 - 2025,211,KOR,K League 2,male,adult,128,2025,2025,2025
+1133,CONMEBOL - Sudamericano U17 - 2025,495,CONMEBOL,Sudamericano U17,male,U17,128,2025,2025,2025
+1134,AFC - Asian Cup - 2025,35,AFC,Asian Cup,male,adult,128,2025,2025,2025
+1135,CONCACAF - Gold Cup Qualification - 2025,234,CONCACAF,Gold Cup Qualification,male,adult,128,2025,2025,2025
+1136,CONCACAF - Nations League - League B - 2024/2025,496,CONCACAF,Nations League - League B,male,adult,95,2024,2025,2024/2025
+1137,ITA - Serie B Women - 2024/2025,497,ITA,Serie B Women,female,adult,95,2024,2025,2024/2025
+1138,FRA - Challenge Espoirs - 2024/2025,498,FRA,Challenge Espoirs,male,U23,95,2024,2025,2024/2025
+1139,FRA - Championnat National U19 - 2024/2025,340,FRA,Championnat National U19,male,U19,95,2024,2025,2024/2025
+1140,ECU - Liga Pro Serie B - 2025,499,ECU,Liga Pro Serie B,male,adult,128,2025,2025,2025
+1141,FRA - Feminine Division 2 - 2024/2025,500,FRA,Feminine Division 2,female,adult,95,2024,2025,2024/2025
+1142,BRA - Goiano 1 - 2025,501,BRA,Goiano 1,male,adult,128,2025,2025,2025
+1143,EST - A.LeCoq Premium Liiga - 2025,502,EST,A.LeCoq Premium Liiga,male,adult,128,2025,2025,2025
+1144,KSA - Saudi Women's Cup - 2024/2025,503,KSA,Saudi Women's Cup,female,adult,95,2024,2025,2024/2025
+1145,INT - Hybrid Friendlies - 2025,504,INT,Hybrid Friendlies,male,adult,128,2025,2025,2025
+1146,HUN - MLSZ U16 Országos Kiemelt - 2024/2025,505,HUN,MLSZ U16 Országos Kiemelt,male,U16,95,2024,2025,2024/2025
+1147,HUN - MLSZ U19 Országos Kiemelt - 2024/2025,506,HUN,MLSZ U19 Országos Kiemelt,male,U19,95,2024,2025,2024/2025
+1148,HUN - MLSZ U15 Országos Kiemelt - 2024/2025,507,HUN,MLSZ U15 Országos Kiemelt,male,U15,95,2024,2025,2024/2025
+1149,GEO - Erovnuli Liga - 2025,508,GEO,Erovnuli Liga,male,adult,128,2025,2025,2025
+1150,HUN - NB II - 2024/2025,509,HUN,NB II,male,adult,95,2024,2025,2024/2025
+1151,NZL - Northern League - 2025,510,NZL,Northern League,male,adult,128,2025,2025,2025
+1152,USA - USL League 1 - 2025,454,USA,USL League 1,male,adult,128,2025,2025,2025
+1153,CONCACAF - Gold Cup - 2025,36,CONCACAF,Gold Cup,male,adult,128,2025,2025,2025
+1154,KSA - SAFF Premier League U16 - 2024/2025,511,KSA,SAFF Premier League U16,male,U16,95,2024,2025,2024/2025
+1155,KSA - SAFF Premier League U15 - 2024/2025,512,KSA,SAFF Premier League U15,male,U15,95,2024,2025,2024/2025
+1156,KSA - SAFF Premier League U18 - 2024/2025,513,KSA,SAFF Premier League U18,male,U18,95,2024,2025,2024/2025
+1157,INT - U17 National Team Friendlies - 2025,515,INT,U17 National Team Friendlies,male,U17,128,2025,2025,2025
+1158,IND - Indian Super League - 2024/2025,65,IND,Indian Super League,male,adult,95,2024,2025,2024/2025
+1160,FIFA - FIFA Club World Cup - 2025,516,FIFA,FIFA Club World Cup,male,adult,128,2025,2025,2025
+1161,AFC - WC Qualification Asia - 2024/2025,181,AFC,WC Qualification Asia,male,adult,95,2024,2025,2024/2025
+1162,CZE - 1. Liga Women - 2024/2025,517,CZE,1. Liga Women,female,adult,95,2024,2025,2024/2025
+1163,TUN - Ligue 1 - 2024/2025,518,TUN,Ligue 1,male,adult,95,2024,2025,2024/2025
+1164,CHI - Primera B - 2025,519,CHI,Primera B,male,adult,128,2025,2025,2025
+1166,BRA - Série C - 2025,465,BRA,Série C,male,adult,128,2025,2025,2025
+1167,ISL - Besta-deild karla - 2025,310,ISL,Besta-deild karla,male,adult,128,2025,2025,2025
+1168,ISR - Ligat Al - 2025/2026,86,ISR,Ligat Al,male,adult,129,2025,2026,2025/2026
+1169,MEX - Liga MX - 2025/2026,97,MEX,Liga MX,male,adult,129,2025,2026,2025/2026
+1170,MEX - Liga MX Femenil - 2025/2026,336,MEX,Liga MX Femenil,female,adult,129,2025,2026,2025/2026
+1171,POL - Ekstraklasa - 2025/2026,43,POL,Ekstraklasa,male,adult,129,2025,2026,2025/2026
+1172,BGR - First League - 2025/2026,332,BGR,First League,male,adult,129,2025,2026,2025/2026
+1173,SRB - Superliga - 2025/2026,105,SRB,Superliga,male,adult,129,2025,2026,2025/2026
+1174,GHA - Premier League - 2024/2025,520,GHA,Premier League,male,adult,95,2024,2025,2024/2025
+1175,AFC - Asian Cup Qualification - 2024/2025,521,AFC,Asian Cup Qualification,male,adult,95,2024,2025,2024/2025
+1177,CONMEBOL - Women's Copa Libertadores - 2024,522,CONMEBOL,Women's Copa Libertadores,female,adult,29,2024,2024,2024
+1178,FRA - National 2 - 2024/2025,523,FRA,National 2,male,adult,95,2024,2025,2024/2025
+1179,CAN - Northern Super League - 2025,524,CAN,Northern Super League,female,adult,128,2025,2025,2025
+1180,ARG - Torneo Proyección - 2025,525,ARG,Torneo Proyección,male,U23,128,2025,2025,2025
+1181,NED - Eredivisie Women - 2024/2025,526,NED,Eredivisie Women,female,adult,95,2024,2025,2024/2025
+1182,UEFA - U17 European Championship - 2025,163,UEFA,U17 European Championship,male,U17,128,2025,2025,2025
+1183,CIV - Ligue 1 - 2024/2025,528,CIV,Ligue 1,male,adult,95,2024,2025,2024/2025
+1184,SEN - Ligue 1 - 2024/2025,529,SEN,Ligue 1,male,adult,95,2024,2025,2024/2025
+1185,LUX - Luxembourg National Division - 2023/2024,530,LUX,Luxembourg National Division,male,adult,28,2023,2024,2023/2024
+1186,CAF - Africa Cup of Nations - 2025,37,CAF,Africa Cup of Nations,male,adult,128,2025,2025,2025
+1187,CAF - Africa Women Cup of Nations - 2025,213,CAF,Africa Women Cup of Nations,female,adult,128,2025,2025,2025
+1188,CZE - FNL - 2025/2026,333,CZE,FNL,male,adult,129,2025,2026,2025/2026
+1189,DEN - Superliga - 2025/2026,89,DEN,Superliga,male,adult,129,2025,2026,2025/2026
+1190,DEN - 1st Division - 2025/2026,145,DEN,1st Division,male,adult,129,2025,2026,2025/2026
+1191,CZE - First League - 2025/2026,94,CZE,First League,male,adult,129,2025,2026,2025/2026
+1192,POL - I liga - 2025/2026,407,POL,I liga,male,adult,129,2025,2026,2025/2026
+1193,RUS - Premier League - 2025/2026,27,RUS,Premier League,male,adult,129,2025,2026,2025/2026
+1194,BEL - Pro League - 2025/2026,16,BEL,Pro League,male,adult,129,2025,2026,2025/2026
+1195,SUI - Challenge League - 2025/2026,122,SUI,Challenge League,male,adult,129,2025,2026,2025/2026
+1196,SUI - Super League - 2025/2026,82,SUI,Super League,male,adult,129,2025,2026,2025/2026
+1197,HUN - Nemzeti Bajnokság - 2025/2026,98,HUN,Nemzeti Bajnokság,male,adult,129,2025,2026,2025/2026
+1198,ENG - Premier League - 2025/2026,1,ENG,Premier League,male,adult,129,2025,2026,2025/2026
+1199,ITA - Serie A - 2025/2026,5,ITA,Serie A,male,adult,129,2025,2026,2025/2026
+1200,TZA - Ligi kuu Bara - 2024/2025,531,TZA,Ligi kuu Bara,male,adult,95,2024,2025,2024/2025
+1201,ENG - FA Cup - 2023/2024,19,ENG,FA Cup,male,adult,28,2023,2024,2023/2024
+1202,UEFA - Women`s European Championship - 2025,166,UEFA,Women`s European Championship,female,adult,128,2025,2025,2025
+1203,CONMEBOL - Copa America Femenina - 2024/2025,214,CONMEBOL,Copa America Femenina,female,adult,95,2024,2025,2024/2025
+1204,ARM - IDBank Premier League - 2024/2025,532,ARM,IDBank Premier League,male,adult,95,2024,2025,2024/2025
+1205,ARM - Cup - 2024/2025,533,ARM,Cup,male,adult,95,2024,2025,2024/2025
+1206,UEFA - Europa Conference League - 2025/2026,131,UEFA,Europa Conference League,male,adult,129,2025,2026,2025/2026
+1207,ROU - Liga 1 - 2025/2026,104,ROU,Liga 1,male,adult,129,2025,2026,2025/2026
+1208,SVN - 1. SNL - 2025/2026,235,SVN,1. SNL,male,adult,129,2025,2026,2025/2026
+1209,SVK - Niké Liga - 2025/2026,241,SVK,Niké Liga,male,adult,129,2025,2026,2025/2026
+1210,SCO - Scottish Championship - 2025/2026,459,SCO,Scottish Championship,male,adult,129,2025,2026,2025/2026
+1211,ENG - League One - 2025/2026,101,ENG,League One,male,adult,129,2025,2026,2025/2026
+1212,GER - 2nd Bundesliga - 2025/2026,40,GER,2nd Bundesliga,male,adult,129,2025,2026,2025/2026
+1213,SCO - Premiership - 2025/2026,18,SCO,Premiership,male,adult,129,2025,2026,2025/2026
+1214,ENG - League Two - 2025/2026,204,ENG,League Two,male,adult,129,2025,2026,2025/2026
+1215,CRO - 1.HNL - 2025/2026,93,CRO,1.HNL,male,adult,129,2025,2026,2025/2026
+1216,ENG - Championship - 2025/2026,31,ENG,Championship,male,adult,129,2025,2026,2025/2026
+1217,ESP - LaLiga - 2025/2026,4,ESP,LaLiga,male,adult,129,2025,2026,2025/2026
+1218,ESP - LaLiga 2 - 2025/2026,42,ESP,LaLiga 2,male,adult,129,2025,2026,2025/2026
+1219,AFC - EAFF E-1 Football Championship - 2025,182,AFC,EAFF E-1 Football Championship,male,adult,128,2025,2025,2025
+1220,UEFA - Champions League - Qualification - 2025/2026,534,UEFA,Champions League - Qualification,male,adult,129,2025,2026,2025/2026
+1221,UEFA - Europa Conference League - Qualification - 2025/2026,535,UEFA,Europa Conference League - Qualification,male,adult,129,2025,2026,2025/2026
+1222,UEFA - Europa League - Qualification - 2025/2026,536,UEFA,Europa League - Qualification,male,adult,129,2025,2026,2025/2026
+1223,ENG - Women's League Cup - 2024/2025,537,ENG,Women's League Cup,female,adult,95,2024,2025,2024/2025
+1224,BIH - Premier League - 2025/2026,408,BIH,Premier League,male,adult,129,2025,2026,2025/2026
+1225,GER - 3. Liga - 2025/2026,64,GER,3. Liga,male,adult,129,2025,2026,2025/2026
+1226,AUT - 2. Liga - 2025/2026,103,AUT,2. Liga,male,adult,129,2025,2026,2025/2026
+1227,AUT - Bundesliga - 2025/2026,88,AUT,Bundesliga,male,adult,129,2025,2026,2025/2026
+1228,UKR - Premier League - 2025/2026,26,UKR,Premier League,male,adult,129,2025,2026,2025/2026
+1229,BEL - 1B Pro League - 2025/2026,119,BEL,1B Pro League,male,adult,129,2025,2026,2025/2026
+1230,NED - Eredivisie - 2025/2026,17,NED,Eredivisie,male,adult,129,2025,2026,2025/2026
+1231,NED - Eerste Divisie - 2025/2026,106,NED,Eerste Divisie,male,adult,129,2025,2026,2025/2026
+1232,FRA - Ligue 1 - 2025/2026,3,FRA,Ligue 1,male,adult,129,2025,2026,2025/2026
+1233,GER - Bundesliga - 2025/2026,6,GER,Bundesliga,male,adult,129,2025,2026,2025/2026
+1234,GER - Regionalliga Nord - 2025/2026,538,GER,Regionalliga Nord,male,adult,129,2025,2026,2025/2026
+1235,GER - Regionalliga Südwest - 2025/2026,539,GER,Regionalliga Südwest,male,adult,129,2025,2026,2025/2026
+1236,GER - Regionalliga Nordost - 2025/2026,541,GER,Regionalliga Nordost,male,adult,129,2025,2026,2025/2026
+1237,GER - Regionalliga Bayern - 2025/2026,542,GER,Regionalliga Bayern,male,adult,129,2025,2026,2025/2026
+1238,GER - Regionalliga West - 2025/2026,540,GER,Regionalliga West,male,adult,129,2025,2026,2025/2026
+1239,POR - Segunda Liga - 2025/2026,102,POR,Segunda Liga,male,adult,129,2025,2026,2025/2026
+1240,TUR - Super Lig - 2025/2026,29,TUR,Super Lig,male,adult,129,2025,2026,2025/2026
+1241,TUR - 1. Lig - 2025/2026,120,TUR,1. Lig,male,adult,129,2025,2026,2025/2026
+1242,SWE - Superettan - 2025,543,SWE,Superettan,male,adult,128,2025,2025,2025
+1243,FIFA - U17 Women's World Cup - 2024,189,FIFA,U17 Women's World Cup,female,U17,29,2024,2024,2024
+1244,ESP - Segunda Division RFEF - 2024/2025,545,ESP,Segunda Division RFEF,male,adult,95,2024,2025,2024/2025
+1245,CZE - 1. Liga Women - 2025/2026,517,CZE,1. Liga Women,female,adult,129,2025,2026,2025/2026
+1246,ENG - Carabao Cup - 2025/2026,66,ENG,Carabao Cup,male,adult,129,2025,2026,2025/2026
+1247,ENG - National League - 2025/2026,96,ENG,National League,male,adult,129,2025,2026,2025/2026
+1248,FRA - Ligue 2 - 2025/2026,12,FRA,Ligue 2,male,adult,129,2025,2026,2025/2026
+1249,FRA - National - 2025/2026,30,FRA,National,male,adult,129,2025,2026,2025/2026
+1250,GER - U19 Bundesliga - 2025/2026,136,GER,U19 Bundesliga,male,U19,129,2025,2026,2025/2026
+1251,AFC - Champions League - 2025/2026,147,AFC,Champions League,male,adult,129,2025,2026,2025/2026
+1252,AUS - A-League - 2025/2026,61,AUS,A-League,male,adult,129,2025,2026,2025/2026
+1253,AUS - A-League Women - 2025/2026,410,AUS,A-League Women,female,adult,129,2025,2026,2025/2026
+1254,CAF - Champions League - 2025/2026,148,CAF,Champions League,male,adult,129,2025,2026,2025/2026
+1255,CONCACAF - Nations League - League A - 2025/2026,63,CONCACAF,Nations League - League A,male,adult,129,2025,2026,2025/2026
+1256,CYP - 1. Division - 2025/2026,223,CYP,1. Division,male,adult,129,2025,2026,2025/2026
+1257,DEN - Kvindeligaen - 2025/2026,227,DEN,Kvindeligaen,female,adult,129,2025,2026,2025/2026
+1258,ENG - FA Women`s Super League - 2025/2026,127,ENG,FA Women`s Super League,female,adult,129,2025,2026,2025/2026
+1259,ENG - Premier League 2 Division One - 2025/2026,79,ENG,Premier League 2 Division One,male,U21,129,2025,2026,2025/2026
+1260,ENG - U18 Premier League - 2025/2026,92,ENG,U18 Premier League,male,U18,129,2025,2026,2025/2026
+1261,ESP - Primera Division RFEF - 2025/2026,133,ESP,Primera Division RFEF,male,adult,129,2025,2026,2025/2026
+1262,FRA - Feminine Division 1 - 2025/2026,230,FRA,Feminine Division 1,female,adult,129,2025,2026,2025/2026
+1263,GRE - Super League - 2025/2026,28,GRE,Super League,male,adult,129,2025,2026,2025/2026
+1264,UEFA - Women`s Champions League - 2025/2026,141,UEFA,Women`s Champions League,female,adult,129,2025,2026,2025/2026
+1265,POR - Primeira Liga - 2025/2026,25,POR,Primeira Liga,male,adult,129,2025,2026,2025/2026
+1266,ITA - Serie B - 2025/2026,41,ITA,Serie B,male,adult,129,2025,2026,2025/2026
+1267,ITA - Serie A Women - 2025/2026,379,ITA,Serie A Women,female,adult,129,2025,2026,2025/2026
+1268,GER - Frauen Bundesliga - 2025/2026,338,GER,Frauen Bundesliga,female,adult,129,2025,2026,2025/2026
+1269,JPN - WE League - 2025/2026,348,JPN,WE League,female,adult,129,2025,2026,2025/2026
+1270,KSA - Division 1 - 2025/2026,231,KSA,Division 1,male,adult,129,2025,2026,2025/2026
+1271,KSA - Pro League - 2025/2026,146,KSA,Pro League,male,adult,129,2025,2026,2025/2026
+1272,MAR - Botola Pro - 2025/2026,409,MAR,Botola Pro,male,adult,129,2025,2026,2025/2026
+1273,POR - 1a Divisão Women - 2025/2026,486,POR,1a Divisão Women,female,adult,129,2025,2026,2025/2026
+1274,ITA - Serie C - 2025/2026,113,ITA,Serie C,male,adult,129,2025,2026,2025/2026
+1275,ESP - Primera División Femenina - 2025/2026,132,ESP,Primera División Femenina,female,adult,129,2025,2026,2025/2026
+1276,QAT - Qatar Stars League - 2025/2026,152,QAT,Qatar Stars League,male,adult,129,2025,2026,2025/2026
+1278,UAE - Pro League - 2025/2026,151,UAE,Pro League,male,adult,129,2025,2026,2025/2026
+1279,UEFA - Champions League - 2025/2026,10,UEFA,Champions League,male,adult,129,2025,2026,2025/2026
+1280,UEFA - Europa League - 2025/2026,9,UEFA,Europa League,male,adult,129,2025,2026,2025/2026
+1281,UEFA - Youth League - 2025/2026,78,UEFA,Youth League,male,U19,129,2025,2026,2025/2026
+1282,NED - Super Cup - 2025/2026,442,NED,Super Cup,male,adult,129,2025,2026,2025/2026
+1283,GER - DFB-Pokal - 2025/2026,84,GER,DFB-Pokal,male,adult,129,2025,2026,2025/2026
+1284,URY - Segunda División - 2025/2026,547,URY,Segunda División,male,adult,129,2025,2026,2025/2026
+1305,RSA - PSL - 2025/2026,165,RSA,PSL,male,adult,129,2025,2026,2025/2026
+1306,RUS - FNL - 2025/2026,121,RUS,FNL,male,adult,129,2025,2026,2025/2026
+1307,ITA - Campionato Primavera 1 - 2025/2026,224,ITA,Campionato Primavera 1,male,U19,129,2025,2026,2025/2026
+1308,"USA - USL Super League, Women - 2025/2026",489,USA,"USL Super League, Women",female,adult,129,2025,2026,2025/2026
+1309,AFC - Champions League Two - 2025/2026,448,AFC,Champions League Two,male,adult,129,2025,2026,2025/2026
+1310,AFC - Women's Champions League - 2024/2025,567,AFC,Women's Champions League,female,adult,95,2024,2025,2024/2025
+1313,ITA - Coppa Italia - 2025/2026,112,ITA,Coppa Italia,male,adult,129,2025,2026,2025/2026
+1314,GER - U17 Bundesliga - 2025/2026,135,GER,U17 Bundesliga,male,U17,129,2025,2026,2025/2026
+1315,KSA - Super Cup - 2025,440,KSA,Super Cup,male,adult,128,2025,2025,2025
+1317,HKG - Premier League - 2025/2026,444,HKG,Premier League,male,adult,129,2025,2026,2025/2026
+1318,THA - Thai League - 2025/2026,312,THA,Thai League,male,adult,129,2025,2026,2025/2026
+1319,UEFA - U21 European Championship Qualifiers - 2025/2026,62,UEFA,U21 European Championship Qualifiers,male,U21,129,2025,2026,2025/2026
+1320,ENG - Barclays Womens Championship - 2025/2026,451,ENG,Barclays Womens Championship,female,adult,129,2025,2026,2025/2026
+1321,MYS - Super League - 2025/2026,450,MYS,Super League,male,adult,129,2025,2026,2025/2026
+1322,KSA - King's Cup - 2025/2026,570,KSA,King's Cup,male,adult,129,2025,2026,2025/2026
+1323,KSA - King's Cup - 2024/2025,570,KSA,King's Cup,male,adult,95,2024,2025,2024/2025
+1324,FIN - Ykkösliiga - 2025,571,FIN,Ykkösliiga,male,adult,128,2025,2025,2025
+1325,CONMEBOL - Women's Copa Libertadores - 2025,522,CONMEBOL,Women's Copa Libertadores,female,adult,128,2025,2025,2025
+1326,FIFA - U20 World Cup - 2025,237,FIFA,U20 World Cup,male,U20,128,2025,2025,2025
+1327,ENG - FA Women's Cup - 2023/2024,572,ENG,FA Women's Cup,female,adult,28,2023,2024,2023/2024
+1328,SGP - Premier League - 2025/2026,484,SGP,Premier League,male,adult,129,2025,2026,2025/2026
+1329,ENG - FA Cup - 2022/2023,19,ENG,FA Cup,male,adult,21,2022,2023,2022/2023
+1330,ENG - Premier League International Cup - 2025/2026,573,ENG,Premier League International Cup,male,adult,129,2025,2026,2025/2026
+1331,GER - DFB Junioren Pokal - 2025/2026,574,GER,DFB Junioren Pokal,male,U19,129,2025,2026,2025/2026
+1332,XWO - FIFA Intercontinental Cup - 2025,575,XWO,FIFA Intercontinental Cup,male,adult,128,2025,2025,2025
+1333,DZA - Ligue 1 - 2025/2026,452,DZA,Ligue 1,male,adult,129,2025,2026,2025/2026
+1334,ENG - EFL Trophy - 2025/2026,143,ENG,EFL Trophy,male,adult,129,2025,2026,2025/2026
+1335,JPN - WE League Cup - 2025/2026,576,JPN,WE League Cup,female,adult,129,2025,2026,2025/2026
+1336,FIN - Veikkausliiga - 2025,323,FIN,Veikkausliiga,male,adult,128,2025,2025,2025
+1337,SCO - FA Cup - 2024/2025,74,SCO,FA Cup,male,adult,95,2024,2025,2024/2025
+1338,SCO - League Cup - 2025/2026,76,SCO,League Cup,male,adult,129,2025,2026,2025/2026
+1339,ENG - FA Cup - 2025/2026,19,ENG,FA Cup,male,adult,129,2025,2026,2025/2026
+1340,TZA - Ligi kuu Bara - 2025/2026,531,TZA,Ligi kuu Bara,male,adult,129,2025,2026,2025/2026
+1341,FIFA - U17 World Cup - 2025,327,FIFA,U17 World Cup,male,U17,128,2025,2025,2025
+1343,UEFA - Women's Europa Cup - 2025/2026,577,UEFA,Women's Europa Cup,female,adult,129,2025,2026,2025/2026
+1344,ENG - Premier League Cup - 2025/2026,578,ENG,Premier League Cup,male,U21,129,2025,2026,2025/2026
+1345,ENG - Premier League Cup - 2024/2025,578,ENG,Premier League Cup,male,U21,95,2024,2025,2024/2025
+1346,ENG - Premier League Cup - 2023/2024,578,ENG,Premier League Cup,male,U21,28,2023,2024,2023/2024
+1347,ENG - Premier League Cup - 2022/2023,578,ENG,Premier League Cup,male,U21,21,2022,2023,2022/2023
+1348,KAZ - Premier League - 2025,579,KAZ,Premier League,male,adult,128,2025,2025,2025
+1349,ENG - U18 Premier League Cup - 2025/2026,580,ENG,U18 Premier League Cup,male,U18,129,2025,2026,2025/2026
+1350,ENG - U18 Premier League Cup - 2024/2025,580,ENG,U18 Premier League Cup,male,U18,95,2024,2025,2024/2025
+1351,ENG - U18 Premier League Cup - 2023/2024,580,ENG,U18 Premier League Cup,male,U18,28,2023,2024,2023/2024
+1352,ENG - U18 Premier League Cup - 2022/2023,580,ENG,U18 Premier League Cup,male,U18,21,2022,2023,2022/2023
+1353,INT - Arab Cup - 2025,184,INT,Arab Cup,male,adult,128,2025,2025,2025
+1355,ENG - National League Cup - 2024/2025,582,ENG,National League Cup,male,adult,95,2024,2025,2024/2025
+1356,NOR - Play-offs 1/2 - 2025,583,NOR,Play-offs 1/2,male,adult,128,2025,2025,2025
+1357,SWE - Play-offs 1/2 - 2025,584,SWE,Play-offs 1/2,male,adult,128,2025,2025,2025
+1358,POL - Polish Cup - 2025/2026,585,POL,Polish Cup,male,adult,129,2025,2026,2025/2026
+1360,FRA - Coupe de France - 2025/2026,7,FRA,Coupe de France,male,adult,129,2025,2026,2025/2026
+1362,FRA - National 3 - 2025/2026,449,FRA,National 3,male,adult,129,2025,2026,2025/2026
+1363,KAZ - Freedom QJ League U18 - 2025,329,KAZ,Freedom QJ League U18,male,U18,128,2025,2025,2025
+1364,POR - Liga Revelação Sub 23 - 2025/2026,156,POR,Liga Revelação Sub 23,male,U23,129,2025,2026,2025/2026
+1365,POR - Júniores U19 - 2025/2026,587,POR,Júniores U19,male,adult,129,2025,2026,2025/2026
+1366,"BRA - Paulista, Serie A1 - 2026",68,BRA,"Paulista, Serie A1",male,adult,130,2026,2026,2026
+1367,BRA - Carioca 1 - 2026,168,BRA,Carioca 1,male,adult,130,2026,2026,2026
+1368,BRA - Série A - 2026,77,BRA,Série A,male,adult,130,2026,2026,2026
+1369,USA - USL Championship - 2026,191,USA,USL Championship,male,adult,130,2026,2026,2026
+1370,CAN - Canadian Premier League - 2026,203,CAN,Canadian Premier League,male,adult,130,2026,2026,2026
+1373,AFC - U-23 Asian Cup - 2026,588,AFC,U-23 Asian Cup,male,adult,130,2026,2026,2026
+1374,KAZ - First League - 2025,589,KAZ,First League,male,adult,128,2025,2025,2025
+1375,KAZ - Freedom QJ League U16 - 2025/2026,590,KAZ,Freedom QJ League U16,male,U16,129,2025,2026,2025/2026
+1376,CRI - Primera División - 2025/2026,455,CRI,Primera División,male,adult,129,2025,2026,2025/2026
+1377,BRA - Paranaense 1 - 2026,476,BRA,Paranaense 1,male,adult,130,2026,2026,2026
+1378,ENG - FA Women's Cup - 2025/2026,572,ENG,FA Women's Cup,female,adult,129,2025,2026,2025/2026
+1379,INT - Women Friendly International - 2026,123,INT,Women Friendly International,female,adult,130,2026,2026,2026
+1380,UZB - Super League - 2025,591,UZB,Super League,male,adult,128,2025,2025,2025
+1381,UKR - U19 League - 2025/2026,453,UKR,U19 League,male,U19,129,2025,2026,2025/2026
+1382,COL - Liga Dimayor - 2026,100,COL,Liga Dimayor,male,adult,130,2026,2026,2026
+1383,PAR - Division Profesional - 2026,140,PAR,Division Profesional,male,adult,130,2026,2026,2026
+1384,PER - Primera Division - 2026,139,PER,Primera Division,male,adult,130,2026,2026,2026
+1385,ARM - IDBank Premier League - 2025/2026,532,ARM,IDBank Premier League,male,adult,129,2025,2026,2025/2026
+1386,AZE - Premyer Liqa - 2025/2026,592,AZE,Premyer Liqa,male,adult,129,2025,2026,2025/2026
+1387,XKS - Superliga - 2025/2026,593,XKS,Superliga,male,adult,129,2025,2026,2025/2026
+1388,ARE - UAE LEAGUE - 2025/2026,594,ARE,UAE LEAGUE,male,U16,129,2025,2026,2025/2026
+1389,KAZ - Freedom QJ League U17 - 2025,595,KAZ,Freedom QJ League U17,male,adult,128,2025,2025,2025
+1390,ARG - Primera Division - 1st Phase - 2026,70,ARG,Primera Division - 1st Phase,male,adult,130,2026,2026,2026
+1391,FRA - Ligue 2 Playoffs - 2024/2025,596,FRA,Ligue 2 Playoffs,male,adult,95,2024,2025,2024/2025
+1392,FRA - Ligue 1 Playoffs - 2024/2025,597,FRA,Ligue 1 Playoffs,male,adult,95,2024,2025,2024/2025
+1393,USA - Major League Soccer - 2026,60,USA,Major League Soccer,male,adult,130,2026,2026,2026
+1394,USA - USL League 1 - 2026,454,USA,USL League 1,male,adult,130,2026,2026,2026
+1395,FIN - Veikkausliiga - 2026,323,FIN,Veikkausliiga,male,adult,130,2026,2026,2026
+1396,NOR - Eliteserien - 2026,124,NOR,Eliteserien,male,adult,130,2026,2026,2026
+1397,SWE - Allsvenskan - 2026,90,SWE,Allsvenskan,male,adult,130,2026,2026,2026
+1398,SWE - Superettan - 2026,543,SWE,Superettan,male,adult,130,2026,2026,2026
+1399,BRA - Série B - 2026,80,BRA,Série B,male,adult,130,2026,2026,2026
+1400,URY - Primera Division - 2026,95,URY,Primera Division,male,adult,130,2026,2026,2026
+1401,ECU - Liga Pro - 2026,138,ECU,Liga Pro,male,adult,130,2026,2026,2026
+1402,USA - NWSL - 2026,126,USA,NWSL,female,adult,130,2026,2026,2026
+1403,BRA - Brasileiro Women - 2026,467,BRA,Brasileiro Women,female,adult,130,2026,2026,2026
+1404,SWE - Damallsvenskan - 2026,229,SWE,Damallsvenskan,female,adult,130,2026,2026,2026
+1405,NOR - Toppserien - 2026,228,NOR,Toppserien,female,adult,130,2026,2026,2026
+1406,CHI - Primera Division - 2026,57,CHI,Primera Division,male,adult,130,2026,2026,2026
+1409,USA - MLS Next Pro - 2026,190,USA,MLS Next Pro,male,adult,130,2026,2026,2026
+1410,KOR - K League 1 - 2026,194,KOR,K League 1,male,adult,130,2026,2026,2026
+1412,CONCACAF - Champions League - 2025/2026,159,CONCACAF,Champions League,male,adult,129,2025,2026,2025/2026
+1413,CONMEBOL - Copa Libertadores - 2026,109,CONMEBOL,Copa Libertadores,male,adult,130,2026,2026,2026
+1414,CONMEBOL - Copa Sudamericana - 2026,110,CONMEBOL,Copa Sudamericana,male,adult,130,2026,2026,2026
+1415,NOR - Obos Ligaen - 2026,174,NOR,Obos Ligaen,male,adult,130,2026,2026,2026
+1416,IRL - Premier Division - 2026,406,IRL,Premier Division,male,adult,130,2026,2026,2026
+1417,LVA - Virsliga - 2026,222,LVA,Virsliga,male,adult,130,2026,2026,2026
+1418,CHN - Super League - 2026,47,CHN,Super League,male,adult,130,2026,2026,2026
+1419,ARG - Primera Nacional - 2026,412,ARG,Primera Nacional,male,adult,130,2026,2026,2026
+1420,BRA - Copa do Brasil - 2026,308,BRA,Copa do Brasil,male,adult,130,2026,2026,2026
+1422,CONCACAF - Leagues Cup - 2026,346,CONCACAF,Leagues Cup,male,adult,130,2026,2026,2026
+1423,JPN - Japanese Super Cup - 2024,599,JPN,Japanese Super Cup,male,adult,29,2024,2024,2024
+1424,JPN - Japanese Super Cup - 2025,599,JPN,Japanese Super Cup,male,adult,128,2025,2025,2025
+1425,JPN - J1 100 Year Vision League - 2026,600,JPN,J1 100 Year Vision League,male,adult,130,2026,2026,2026
+1426,JPN - J2/J3 100 Year Vision League - 2026,601,JPN,J2/J3 100 Year Vision League,male,adult,130,2026,2026,2026
+1427,AFC - CAFA Nations Cup - 2025,602,AFC,CAFA Nations Cup,male,adult,128,2025,2025,2025
+1428,SCO - Scottish Women's Premier League - 2025/2026,603,SCO,Scottish Women's Premier League,female,adult,129,2025,2026,2025/2026
+1429,TUR - 2. Lig - 2025/2026,604,TUR,2. Lig,male,adult,129,2025,2026,2025/2026
+1430,AUT - Frauenliga - 2025/2026,605,AUT,Frauenliga,female,adult,129,2025,2026,2025/2026
+1431,CIV - Ligue 1 - 2025/2026,528,CIV,Ligue 1,male,adult,129,2025,2026,2025/2026
+1433,CHI - Primera B - 2026,519,CHI,Primera B,male,adult,130,2026,2026,2026
+1434,COL - Primera B - 2026,606,COL,Primera B,male,adult,130,2026,2026,2026
+1435,UEFA - Women's Nations League - League C - 2025,607,UEFA,Women's Nations League - League C,female,adult,128,2025,2025,2025
+1436,INT - Friendly International - 2026,20,INT,Friendly International,male,adult,130,2026,2026,2026
+1437,INT - SheBelieves Cup - 2026,186,INT,SheBelieves Cup,female,adult,130,2026,2026,2026
+1438,IDN - EPA Super League U16 - 2025/2026,608,IDN,EPA Super League U16,male,U16,129,2025,2026,2025/2026
+1439,UEFA - FIFA Women's World Cup Qualifier - 2026,609,UEFA,FIFA Women's World Cup Qualifier,female,adult,130,2026,2026,2026
+1440,POR - Taça de Portugal - 2025/2026,328,POR,Taça de Portugal,male,adult,129,2025,2026,2025/2026
+1441,MEX - Liga MX Clausura - 2025/2026,610,MEX,Liga MX Clausura,male,adult,129,2025,2026,2025/2026
+1442,ESP - Segunda Division RFEF - 2025/2026,545,ESP,Segunda Division RFEF,male,adult,129,2025,2026,2025/2026
+1443,CRI - Primera División Clausura - 2025/2026,611,CRI,Primera División Clausura,male,adult,129,2025,2026,2025/2026
+1444,CONMEBOL - Copa Libertadores Qualifying - 2026,612,CONMEBOL,Copa Libertadores Qualifying,male,adult,130,2026,2026,2026
+1445,CONMEBOL - FIFA World Cup Qualifier - 2025/2026,39,CONMEBOL,FIFA World Cup Qualifier,male,adult,129,2025,2026,2025/2026
+1446,NOR - Cupen - 2025/2026,613,NOR,Cupen,male,adult,129,2025,2026,2025/2026
+1447,ESP - Copa del Rey Juvenil - 2025/2026,614,ESP,Copa del Rey Juvenil,male,U19,129,2025,2026,2025/2026
+1448,ECU - Liga Pro Serie B - 2026,499,ECU,Liga Pro Serie B,male,adult,130,2026,2026,2026
+1449,UEFA - FIFA World Cup Qualifier - 2026,15,UEFA,FIFA World Cup Qualifier,male,adult,130,2026,2026,2026
+1450,INT - Club Friendlies - 2026,149,INT,Club Friendlies,male,adult,130,2026,2026,2026
+1451,FRA - Ligue 2 Playoffs - 2026,596,FRA,Ligue 2 Playoffs,male,adult,130,2026,2026,2026
+1452,CONCACAF - FIFA World Cup Qualifier - 2026,33,CONCACAF,FIFA World Cup Qualifier,male,adult,130,2026,2026,2026
+1453,UZB - Super League - 2026,591,UZB,Super League,male,adult,130,2026,2026,2026
+1454,GEO - Erovnuli Liga - 2026,508,GEO,Erovnuli Liga,male,adult,130,2026,2026,2026
+1455,GER - Frauen Bundesliga - 2021/2022,338,GER,Frauen Bundesliga,female,adult,8,2021,2022,2021/2022
+1456,INT - WC Qualification Intercontinental Play-offs - 2026,192,INT,WC Qualification Intercontinental Play-offs,male,adult,130,2026,2026,2026
+1457,GER - Frauen Westfalenliga - 2025/2026,615,GER,Frauen Westfalenliga,female,adult,129,2025,2026,2025/2026
+1458,USA - US Open Cup - 2026,616,USA,US Open Cup,male,adult,130,2026,2026,2026
+1459,JPN - Kanto Daigaku League Div.1 - 2025,617,JPN,Kanto Daigaku League Div.1,male,adult,128,2025,2025,2025
+1460,VEN - Primera División - 2025/2026,469,VEN,Primera División,male,adult,129,2025,2026,2025/2026
+1461,EGY - Premier League - 2025/2026,207,EGY,Premier League,male,adult,129,2025,2026,2025/2026
+1462,HUN - Hungarian Cup - 2026,618,HUN,Hungarian Cup,male,adult,130,2026,2026,2026
+1463,CAF - Confederation Cup - 2025/2026,619,CAF,Confederation Cup,male,adult,129,2025,2026,2025/2026
+1464,ESP - Superliga Infantil - 2025/2026,620,ESP,Superliga Infantil,male,U14,129,2025,2026,2025/2026
+1465,ESP - Liga Nacional Juvenil - 2025/2026,621,ESP,Liga Nacional Juvenil,male,U18,129,2025,2026,2025/2026
+1466,ESP - Superliga Cadete - 2025/2026,622,ESP,Superliga Cadete,male,U15,129,2025,2026,2025/2026
+1467,ESP - Superliga Alevín - 2025/2026,623,ESP,Superliga Alevín,male,U12,129,2025,2026,2025/2026
+1469,ITA - Serie A - Last 4 match days - 2025/2026,624,ITA,Serie A - Last 4 match days,male,adult,129,2025,2026,2025/2026
+1470,AFC - AFC U17 Asian Cup - 2026,493,AFC,AFC U17 Asian Cup,male,U17,130,2026,2026,2026
+1471,GHA - GARFA Division Two - Zone 3 - 2025/2026,625,GHA,GARFA Division Two - Zone 3,male,adult,129,2025,2026,2025/2026
+1472,FRA - Challenge Espoirs - 2025/2026,498,FRA,Challenge Espoirs,male,U23,129,2025,2026,2025/2026
+1473,UEFA - U21 European Championship - 2021,49,UEFA,U21 European Championship,male,U21,17,2021,2021,2021
+1474,JPN - JFA U-18 Premier League WEST - 2025,626,JPN,JFA U-18 Premier League WEST,male,U18,128,2025,2025,2025
+1475,BRA - Copa do Nordeste - 2026,627,BRA,Copa do Nordeste,male,adult,130,2026,2026,2026
+1476,JPN - JFA U-18 Premier League EAST - 2025,628,JPN,JFA U-18 Premier League EAST,male,U18,128,2025,2025,2025
+1477,JPN - JFA U-18 Premier League EAST - 2024,628,JPN,JFA U-18 Premier League EAST,male,U18,29,2024,2024,2024
+1478,JPN - J Youth Cup - 2025,629,JPN,J Youth Cup,male,adult,128,2025,2025,2025
+1479,ITA - Serie D - Group B - 2025/2026,630,ITA,Serie D - Group B,male,adult,129,2025,2026,2025/2026
+1480,CHN - League One - 2025,631,CHN,League One,male,adult,128,2025,2025,2025
+1481,CHN - Chinese Champions League - 2026,632,CHN,Chinese Champions League,male,adult,130,2026,2026,2026
+1482,ESP - División de Honor Juvenil - 2025/2026,208,ESP,División de Honor Juvenil,male,U19,129,2025,2026,2025/2026
+1489,JPN - J.League Cup - 2025,637,JPN,J.League Cup,male,adult,128,2025,2025,2025
+1490,JPN - Emperor Cup - 2025,480,JPN,Emperor Cup,male,adult,128,2025,2025,2025
+1491,FIFA - World Cup - 2026,0,FIFA,World Cup,male,adult,130,2026,2026,2026
+1492,BRA - Série C - 2026,465,BRA,Série C,male,adult,130,2026,2026,2026
+1493,BRA - Campeonato Cearense - 2026,638,BRA,Campeonato Cearense,male,adult,130,2026,2026,2026
+1494,USA - NCAA Division I Men's Championship - 2025,639,USA,NCAA Division I Men's Championship,male,adult,128,2025,2025,2025
+1495,USA - NCAA Division I Women's Championship - 2025,640,USA,NCAA Division I Women's Championship,female,adult,128,2025,2025,2025
+1496,NED - Tweede Divisie - 2025/2026,641,NED,Tweede Divisie,male,adult,129,2025,2026,2025/2026
+1497,KAZ - Premier League - 2026,579,KAZ,Premier League,male,adult,130,2026,2026,2026
+1498,IRL - First Division - 2026,158,IRL,First Division,male,adult,130,2026,2026,2026
+1499,NED - Eredivisie Women - 2025/2026,526,NED,Eredivisie Women,female,adult,129,2025,2026,2025/2026
+1500,ISL - Besta-deild karla - 2026,310,ISL,Besta-deild karla,male,adult,130,2026,2026,2026
+1501,ENG - Professional Development League - 2026,494,ENG,Professional Development League,male,U21,130,2026,2026,2026
+1502,SCO - Scottish League One - 2026,642,SCO,Scottish League One,male,adult,130,2026,2026,2026
+1503,NED - Eredivisie Women - 2026/2027,526,NED,Eredivisie Women,female,adult,131,2026,2027,2026/2027
+1504,SCO - Scottish League One - 2027,642,SCO,Scottish League One,male,adult,132,2027,2027,2027
+1505,BRA - CBF Brasileiro U20 - 2026,167,BRA,CBF Brasileiro U20,male,U20,130,2026,2026,2026
+1506,DEN - U19 Ligaen - 2025/2026,205,DEN,U19 Ligaen,male,U19,129,2025,2026,2025/2026
+1507,DEN - U17 Drenge Ligaen - 2025/2026,643,DEN,U17 Drenge Ligaen,male,U17,129,2025,2026,2025/2026
+1508,AFC - Champions League - 2026/2027,147,AFC,Champions League,male,adult,131,2026,2027,2026/2027
+1509,AFC - Champions League Two - 2026/2027,448,AFC,Champions League Two,male,adult,131,2026,2027,2026/2027
+1510,AFC - U-23 Asian Cup - 2027,588,AFC,U-23 Asian Cup,male,adult,132,2027,2027,2027
+1511,ARE - UAE LEAGUE - 2026/2027,594,ARE,UAE LEAGUE,male,U16,131,2026,2027,2026/2027
+1512,ARG - Primera Division - 1st Phase - 2027,70,ARG,Primera Division - 1st Phase,male,adult,132,2027,2027,2027
+1513,ARG - Primera Nacional - 2027,412,ARG,Primera Nacional,male,adult,132,2027,2027,2027
+1514,ARM - IDBank Premier League - 2026/2027,532,ARM,IDBank Premier League,male,adult,131,2026,2027,2026/2027
+1516,AUS - A-League Women - 2026/2027,410,AUS,A-League Women,female,adult,131,2026,2027,2026/2027
+1517,AUT - 2. Liga - 2026/2027,103,AUT,2. Liga,male,adult,131,2026,2027,2026/2027
+1518,AUT - Bundesliga - 2026/2027,88,AUT,Bundesliga,male,adult,131,2026,2027,2026/2027
+1519,AUT - Frauenliga - 2026/2027,605,AUT,Frauenliga,female,adult,131,2026,2027,2026/2027
+1520,AZE - Premyer Liqa - 2026/2027,592,AZE,Premyer Liqa,male,adult,131,2026,2027,2026/2027
+1521,BEL - 1B Pro League - 2026/2027,119,BEL,1B Pro League,male,adult,131,2026,2027,2026/2027
+1522,BEL - Pro League - 2026/2027,16,BEL,Pro League,male,adult,131,2026,2027,2026/2027
+1523,BGR - First League - 2026/2027,332,BGR,First League,male,adult,131,2026,2027,2026/2027
+1524,BIH - Premier League - 2026/2027,408,BIH,Premier League,male,adult,131,2026,2027,2026/2027
+1525,BRA - Brasileiro Women - 2027,467,BRA,Brasileiro Women,female,adult,132,2027,2027,2027
+1526,BRA - Campeonato Cearense - 2027,638,BRA,Campeonato Cearense,male,adult,132,2027,2027,2027
+1527,BRA - Carioca 1 - 2027,168,BRA,Carioca 1,male,adult,132,2027,2027,2027
+1528,BRA - Copa do Brasil - 2027,308,BRA,Copa do Brasil,male,adult,132,2027,2027,2027
+1529,BRA - Copa do Nordeste - 2027,627,BRA,Copa do Nordeste,male,adult,132,2027,2027,2027
+1530,BRA - Paranaense 1 - 2027,476,BRA,Paranaense 1,male,adult,132,2027,2027,2027
+1531,"BRA - Paulista, Serie A1 - 2027",68,BRA,"Paulista, Serie A1",male,adult,132,2027,2027,2027
+1532,BRA - Série A - 2027,77,BRA,Série A,male,adult,132,2027,2027,2027
+1533,BRA - Série B - 2027,80,BRA,Série B,male,adult,132,2027,2027,2027
+1534,BRA - Série C - 2027,465,BRA,Série C,male,adult,132,2027,2027,2027
+1535,CAF - Champions League - 2026/2027,148,CAF,Champions League,male,adult,131,2026,2027,2026/2027
+1536,CAF - Confederation Cup - 2026/2027,619,CAF,Confederation Cup,male,adult,131,2026,2027,2026/2027
+1537,CAN - Canadian Premier League - 2027,203,CAN,Canadian Premier League,male,adult,132,2027,2027,2027
+1538,CHI - Primera B - 2027,519,CHI,Primera B,male,adult,132,2027,2027,2027
+1539,CHI - Primera Division - 2027,57,CHI,Primera Division,male,adult,132,2027,2027,2027
+1540,CHN - Chinese Champions League - 2027,632,CHN,Chinese Champions League,male,adult,132,2027,2027,2027
+1541,CHN - Super League - 2027,47,CHN,Super League,male,adult,132,2027,2027,2027
+1542,CIV - Ligue 1 - 2026/2027,528,CIV,Ligue 1,male,adult,131,2026,2027,2026/2027
+1543,COL - Liga Dimayor - 2027,100,COL,Liga Dimayor,male,adult,132,2027,2027,2027
+1544,COL - Primera B - 2027,606,COL,Primera B,male,adult,132,2027,2027,2027
+1545,CONCACAF - Champions League - 2026/2027,159,CONCACAF,Champions League,male,adult,131,2026,2027,2026/2027
+1546,CONCACAF - FIFA World Cup Qualifier - 2027,33,CONCACAF,FIFA World Cup Qualifier,male,adult,132,2027,2027,2027
+1547,CONCACAF - Leagues Cup - 2027,346,CONCACAF,Leagues Cup,male,adult,132,2027,2027,2027
+1548,CONCACAF - Nations League - League A - 2026/2027,63,CONCACAF,Nations League - League A,male,adult,131,2026,2027,2026/2027
+1549,CONMEBOL - Copa Libertadores - 2027,109,CONMEBOL,Copa Libertadores,male,adult,132,2027,2027,2027
+1550,CONMEBOL - Copa Libertadores Qualifying - 2027,612,CONMEBOL,Copa Libertadores Qualifying,male,adult,132,2027,2027,2027
+1551,CONMEBOL - Copa Sudamericana - 2027,110,CONMEBOL,Copa Sudamericana,male,adult,132,2027,2027,2027
+1552,CONMEBOL - FIFA World Cup Qualifier - 2026/2027,39,CONMEBOL,FIFA World Cup Qualifier,male,adult,131,2026,2027,2026/2027
+1553,CRI - Primera División - 2026/2027,455,CRI,Primera División,male,adult,131,2026,2027,2026/2027
+1554,CRI - Primera División Clausura - 2026/2027,611,CRI,Primera División Clausura,male,adult,131,2026,2027,2026/2027
+1555,CRO - 1.HNL - 2026/2027,93,CRO,1.HNL,male,adult,131,2026,2027,2026/2027
+1556,CYP - 1. Division - 2026/2027,223,CYP,1. Division,male,adult,131,2026,2027,2026/2027
+1557,CZE - 1. Liga Women - 2026/2027,517,CZE,1. Liga Women,female,adult,131,2026,2027,2026/2027
+1558,CZE - First League - 2026/2027,94,CZE,First League,male,adult,131,2026,2027,2026/2027
+1559,CZE - FNL - 2026/2027,333,CZE,FNL,male,adult,131,2026,2027,2026/2027
+1560,DEN - 1st Division - 2026/2027,145,DEN,1st Division,male,adult,131,2026,2027,2026/2027
+1561,DEN - Kvindeligaen - 2026/2027,227,DEN,Kvindeligaen,female,adult,131,2026,2027,2026/2027
+1562,DEN - Superliga - 2026/2027,89,DEN,Superliga,male,adult,131,2026,2027,2026/2027
+1563,DZA - Ligue 1 - 2026/2027,452,DZA,Ligue 1,male,adult,131,2026,2027,2026/2027
+1564,ECU - Liga Pro - 2027,138,ECU,Liga Pro,male,adult,132,2027,2027,2027
+1565,ECU - Liga Pro Serie B - 2027,499,ECU,Liga Pro Serie B,male,adult,132,2027,2027,2027
+1566,EGY - Premier League - 2026/2027,207,EGY,Premier League,male,adult,131,2026,2027,2026/2027
+1567,ENG - Barclays Womens Championship - 2026/2027,451,ENG,Barclays Womens Championship,female,adult,131,2026,2027,2026/2027
+1568,ENG - Carabao Cup - 2026/2027,66,ENG,Carabao Cup,male,adult,131,2026,2027,2026/2027
+1569,ENG - Championship - 2026/2027,31,ENG,Championship,male,adult,131,2026,2027,2026/2027
+1570,ENG - EFL Trophy - 2026/2027,143,ENG,EFL Trophy,male,adult,131,2026,2027,2026/2027
+1571,ENG - FA Cup - 2026/2027,19,ENG,FA Cup,male,adult,131,2026,2027,2026/2027
+1572,ENG - FA Women's Cup - 2026/2027,572,ENG,FA Women's Cup,female,adult,131,2026,2027,2026/2027
+1573,ENG - FA Women`s Super League - 2026/2027,127,ENG,FA Women`s Super League,female,adult,131,2026,2027,2026/2027
+1574,ENG - League One - 2026/2027,101,ENG,League One,male,adult,131,2026,2027,2026/2027
+1575,ENG - League Two - 2026/2027,204,ENG,League Two,male,adult,131,2026,2027,2026/2027
+1576,ENG - National League - 2026/2027,96,ENG,National League,male,adult,131,2026,2027,2026/2027
+1577,ENG - Premier League Cup - 2026/2027,578,ENG,Premier League Cup,male,U21,131,2026,2027,2026/2027
+1578,ENG - Premier League 2 Division One - 2026/2027,79,ENG,Premier League 2 Division One,male,U21,131,2026,2027,2026/2027
+1579,ENG - Premier League International Cup - 2026/2027,573,ENG,Premier League International Cup,male,adult,131,2026,2027,2026/2027
+1580,ENG - Professional Development League - 2027,494,ENG,Professional Development League,male,U21,132,2027,2027,2027
+1581,ENG - U18 Premier League - 2026/2027,92,ENG,U18 Premier League,male,U18,131,2026,2027,2026/2027
+1582,ENG - U18 Premier League Cup - 2026/2027,580,ENG,U18 Premier League Cup,male,U18,131,2026,2027,2026/2027
+1583,ESP - Copa del Rey Juvenil - 2026/2027,614,ESP,Copa del Rey Juvenil,male,U19,131,2026,2027,2026/2027
+1584,ESP - División de Honor Juvenil - 2026/2027,208,ESP,División de Honor Juvenil,male,U19,131,2026,2027,2026/2027
+1585,ESP - LaLiga - 2026/2027,4,ESP,LaLiga,male,adult,131,2026,2027,2026/2027
+1586,ESP - LaLiga 2 - 2026/2027,42,ESP,LaLiga 2,male,adult,131,2026,2027,2026/2027
+1587,ESP - Liga Nacional Juvenil - 2026/2027,621,ESP,Liga Nacional Juvenil,male,U18,131,2026,2027,2026/2027
+1588,ESP - Primera División Femenina - 2026/2027,132,ESP,Primera División Femenina,female,adult,131,2026,2027,2026/2027
+1589,ESP - Primera Division RFEF - 2026/2027,133,ESP,Primera Division RFEF,male,adult,131,2026,2027,2026/2027
+1590,ESP - Segunda Division RFEF - 2026/2027,545,ESP,Segunda Division RFEF,male,adult,131,2026,2027,2026/2027
+1591,ESP - Superliga Alevín - 2026/2027,623,ESP,Superliga Alevín,male,U12,131,2026,2027,2026/2027
+1592,ESP - Superliga Cadete - 2026/2027,622,ESP,Superliga Cadete,male,U15,131,2026,2027,2026/2027
+1593,ESP - Superliga Infantil - 2026/2027,620,ESP,Superliga Infantil,male,U14,131,2026,2027,2026/2027
+1595,FIN - Veikkausliiga - 2027,323,FIN,Veikkausliiga,male,adult,132,2027,2027,2027
+1596,FRA - Challenge Espoirs - 2026/2027,498,FRA,Challenge Espoirs,male,U23,131,2026,2027,2026/2027
+1597,FRA - Coupe de France - 2026/2027,7,FRA,Coupe de France,male,adult,131,2026,2027,2026/2027
+1598,FRA - Feminine Division 1 - 2026/2027,230,FRA,Feminine Division 1,female,adult,131,2026,2027,2026/2027
+1599,FRA - Ligue 1 - 2026/2027,3,FRA,Ligue 1,male,adult,131,2026,2027,2026/2027
+1600,FRA - Ligue 2 - 2026/2027,12,FRA,Ligue 2,male,adult,131,2026,2027,2026/2027
+1601,FRA - Ligue 2 Playoffs - 2027,596,FRA,Ligue 2 Playoffs,male,adult,132,2027,2027,2027
+1602,FRA - National - 2026/2027,30,FRA,National,male,adult,131,2026,2027,2026/2027
+1603,FRA - National 3 - 2026/2027,449,FRA,National 3,male,adult,131,2026,2027,2026/2027
+1604,EST - A.LeCoq Premium Liiga - 2026,502,EST,A.LeCoq Premium Liiga,male,adult,130,2026,2026,2026
+1605,GEO - Erovnuli Liga - 2027,508,GEO,Erovnuli Liga,male,adult,132,2027,2027,2027
+1606,GER - 2nd Bundesliga - 2026/2027,40,GER,2nd Bundesliga,male,adult,131,2026,2027,2026/2027
+1607,GER - 3. Liga - 2026/2027,64,GER,3. Liga,male,adult,131,2026,2027,2026/2027
+1608,GER - Bundesliga - 2026/2027,6,GER,Bundesliga,male,adult,131,2026,2027,2026/2027
+1609,GER - DFB Junioren Pokal - 2026/2027,574,GER,DFB Junioren Pokal,male,U19,131,2026,2027,2026/2027
+1610,GER - DFB-Pokal - 2026/2027,84,GER,DFB-Pokal,male,adult,131,2026,2027,2026/2027
+1611,GER - Frauen Bundesliga - 2026/2027,338,GER,Frauen Bundesliga,female,adult,131,2026,2027,2026/2027
+1612,GER - Frauen Westfalenliga - 2026/2027,615,GER,Frauen Westfalenliga,female,adult,131,2026,2027,2026/2027
+1613,GER - Regionalliga Bayern - 2026/2027,542,GER,Regionalliga Bayern,male,adult,131,2026,2027,2026/2027
+1614,GER - Regionalliga Nord - 2026/2027,538,GER,Regionalliga Nord,male,adult,131,2026,2027,2026/2027
+1615,GER - Regionalliga Nordost - 2026/2027,541,GER,Regionalliga Nordost,male,adult,131,2026,2027,2026/2027
+1616,GER - Regionalliga Südwest - 2026/2027,539,GER,Regionalliga Südwest,male,adult,131,2026,2027,2026/2027
+1617,GER - Regionalliga West - 2026/2027,540,GER,Regionalliga West,male,adult,131,2026,2027,2026/2027
+1618,GER - U17 Bundesliga - 2026/2027,135,GER,U17 Bundesliga,male,U17,131,2026,2027,2026/2027
+1619,GER - U19 Bundesliga - 2026/2027,136,GER,U19 Bundesliga,male,U19,131,2026,2027,2026/2027
+1620,GHA - GARFA Division Two - Zone 3 - 2026/2027,625,GHA,GARFA Division Two - Zone 3,male,adult,131,2026,2027,2026/2027
+1621,GRE - Super League - 2026/2027,28,GRE,Super League,male,adult,131,2026,2027,2026/2027
+1622,HKG - Premier League - 2026/2027,444,HKG,Premier League,male,adult,131,2026,2027,2026/2027
+1623,IDN - EPA Super League U16 - 2026/2027,608,IDN,EPA Super League U16,male,U16,131,2026,2027,2026/2027
+1624,INT - Club Friendlies - 2027,149,INT,Club Friendlies,male,adult,132,2027,2027,2027
+1625,INT - Friendly International - 2027,20,INT,Friendly International,male,adult,132,2027,2027,2027
+1626,INT - SheBelieves Cup - 2027,186,INT,SheBelieves Cup,female,adult,132,2027,2027,2027
+1627,INT - WC Qualification Intercontinental Play-offs - 2027,192,INT,WC Qualification Intercontinental Play-offs,male,adult,132,2027,2027,2027
+1628,INT - Women Friendly International - 2027,123,INT,Women Friendly International,female,adult,132,2027,2027,2027
+1629,IRL - First Division - 2027,158,IRL,First Division,male,adult,132,2027,2027,2027
+1630,IRL - Premier Division - 2027,406,IRL,Premier Division,male,adult,132,2027,2027,2027
+1631,ISL - Besta-deild karla - 2027,310,ISL,Besta-deild karla,male,adult,132,2027,2027,2027
+1632,ISR - Ligat Al - 2026/2027,86,ISR,Ligat Al,male,adult,131,2026,2027,2026/2027
+1633,ITA - Campionato Primavera 1 - 2026/2027,224,ITA,Campionato Primavera 1,male,U19,131,2026,2027,2026/2027
+1634,ITA - Coppa Italia - 2026/2027,112,ITA,Coppa Italia,male,adult,131,2026,2027,2026/2027
+1635,ITA - Serie A - 2026/2027,5,ITA,Serie A,male,adult,131,2026,2027,2026/2027
+1638,ITA - Serie A Women - 2026/2027,379,ITA,Serie A Women,female,adult,131,2026,2027,2026/2027
+1639,ITA - Serie B - 2026/2027,41,ITA,Serie B,male,adult,131,2026,2027,2026/2027
+1640,ITA - Serie C - 2026/2027,113,ITA,Serie C,male,adult,131,2026,2027,2026/2027
+1641,ITA - Serie D - Group B - 2026/2027,630,ITA,Serie D - Group B,male,adult,131,2026,2027,2026/2027
+1644,JPN - WE League - 2026/2027,348,JPN,WE League,female,adult,131,2026,2027,2026/2027
+1645,JPN - WE League Cup - 2026/2027,576,JPN,WE League Cup,female,adult,131,2026,2027,2026/2027
+1646,KAZ - Freedom QJ League U16 - 2026/2027,590,KAZ,Freedom QJ League U16,male,U16,131,2026,2027,2026/2027
+1647,KAZ - Premier League - 2027,579,KAZ,Premier League,male,adult,132,2027,2027,2027
+1648,KOR - K League 1 - 2027,194,KOR,K League 1,male,adult,132,2027,2027,2027
+1649,KSA - Division 1 - 2026/2027,231,KSA,Division 1,male,adult,131,2026,2027,2026/2027
+1650,KSA - King's Cup - 2026/2027,570,KSA,King's Cup,male,adult,131,2026,2027,2026/2027
+1651,KSA - Pro League - 2026/2027,146,KSA,Pro League,male,adult,131,2026,2027,2026/2027
+1652,LVA - Virsliga - 2027,222,LVA,Virsliga,male,adult,132,2027,2027,2027
+1653,MAR - Botola Pro - 2026/2027,409,MAR,Botola Pro,male,adult,131,2026,2027,2026/2027
+1654,MEX - Liga MX - 2026/2027,97,MEX,Liga MX,male,adult,131,2026,2027,2026/2027
+1655,MEX - Liga MX Clausura - 2026/2027,610,MEX,Liga MX Clausura,male,adult,131,2026,2027,2026/2027
+1656,MEX - Liga MX Femenil - 2026/2027,336,MEX,Liga MX Femenil,female,adult,131,2026,2027,2026/2027
+1657,MYS - Super League - 2026/2027,450,MYS,Super League,male,adult,131,2026,2027,2026/2027
+1658,NED - Eerste Divisie - 2026/2027,106,NED,Eerste Divisie,male,adult,131,2026,2027,2026/2027
+1659,NED - Eredivisie - 2026/2027,17,NED,Eredivisie,male,adult,131,2026,2027,2026/2027
+1660,NED - Super Cup - 2026/2027,442,NED,Super Cup,male,adult,131,2026,2027,2026/2027
+1661,NED - Tweede Divisie - 2026/2027,641,NED,Tweede Divisie,male,adult,131,2026,2027,2026/2027
+1662,NOR - Cupen - 2026/2027,613,NOR,Cupen,male,adult,131,2026,2027,2026/2027
+1664,NOR - Obos Ligaen - 2027,174,NOR,Obos Ligaen,male,adult,132,2027,2027,2027
+1665,NOR - Toppserien - 2027,228,NOR,Toppserien,female,adult,132,2027,2027,2027
+1666,PAR - Division Profesional - 2027,140,PAR,Division Profesional,male,adult,132,2027,2027,2027
+1667,PER - Primera Division - 2027,139,PER,Primera Division,male,adult,132,2027,2027,2027
+1668,POL - Ekstraklasa - 2026/2027,43,POL,Ekstraklasa,male,adult,131,2026,2027,2026/2027
+1669,POL - I liga - 2026/2027,407,POL,I liga,male,adult,131,2026,2027,2026/2027
+1670,POL - Polish Cup - 2026/2027,585,POL,Polish Cup,male,adult,131,2026,2027,2026/2027
+1671,POR - 1a Divisão Women - 2026/2027,486,POR,1a Divisão Women,female,adult,131,2026,2027,2026/2027
+1672,POR - Júniores U19 - 2026/2027,587,POR,Júniores U19,male,adult,131,2026,2027,2026/2027
+1673,POR - Liga Revelação Sub 23 - 2026/2027,156,POR,Liga Revelação Sub 23,male,U23,131,2026,2027,2026/2027
+1674,POR - Primeira Liga - 2026/2027,25,POR,Primeira Liga,male,adult,131,2026,2027,2026/2027
+1675,POR - Segunda Liga - 2026/2027,102,POR,Segunda Liga,male,adult,131,2026,2027,2026/2027
+1676,POR - Taça de Portugal - 2026/2027,328,POR,Taça de Portugal,male,adult,131,2026,2027,2026/2027
+1677,QAT - Qatar Stars League - 2026/2027,152,QAT,Qatar Stars League,male,adult,131,2026,2027,2026/2027
+1678,ROU - Liga 1 - 2026/2027,104,ROU,Liga 1,male,adult,131,2026,2027,2026/2027
+1679,RSA - PSL - 2026/2027,165,RSA,PSL,male,adult,131,2026,2027,2026/2027
+1680,RUS - FNL - 2026/2027,121,RUS,FNL,male,adult,131,2026,2027,2026/2027
+1681,RUS - Premier League - 2026/2027,27,RUS,Premier League,male,adult,131,2026,2027,2026/2027
+1682,SCO - League Cup - 2026/2027,76,SCO,League Cup,male,adult,131,2026,2027,2026/2027
+1683,SCO - Premiership - 2026/2027,18,SCO,Premiership,male,adult,131,2026,2027,2026/2027
+1684,SCO - Scottish Championship - 2026/2027,459,SCO,Scottish Championship,male,adult,131,2026,2027,2026/2027
+1685,SCO - Scottish Women's Premier League - 2026/2027,603,SCO,Scottish Women's Premier League,female,adult,131,2026,2027,2026/2027
+1686,SGP - Premier League - 2026/2027,484,SGP,Premier League,male,adult,131,2026,2027,2026/2027
+1687,SRB - Superliga - 2026/2027,105,SRB,Superliga,male,adult,131,2026,2027,2026/2027
+1688,SUI - Challenge League - 2026/2027,122,SUI,Challenge League,male,adult,131,2026,2027,2026/2027
+1689,SUI - Super League - 2026/2027,82,SUI,Super League,male,adult,131,2026,2027,2026/2027
+1690,SVK - Niké Liga - 2026/2027,241,SVK,Niké Liga,male,adult,131,2026,2027,2026/2027
+1691,SVN - 1. SNL - 2026/2027,235,SVN,1. SNL,male,adult,131,2026,2027,2026/2027
+1692,SWE - Allsvenskan - 2027,90,SWE,Allsvenskan,male,adult,132,2027,2027,2027
+1693,SWE - Damallsvenskan - 2027,229,SWE,Damallsvenskan,female,adult,132,2027,2027,2027
+1694,SWE - Superettan - 2027,543,SWE,Superettan,male,adult,132,2027,2027,2027
+1695,THA - Thai League - 2026/2027,312,THA,Thai League,male,adult,131,2026,2027,2026/2027
+1696,TUR - 1. Lig - 2026/2027,120,TUR,1. Lig,male,adult,131,2026,2027,2026/2027
+1697,TUR - 2. Lig - 2026/2027,604,TUR,2. Lig,male,adult,131,2026,2027,2026/2027
+1698,TUR - Super Lig - 2026/2027,29,TUR,Super Lig,male,adult,131,2026,2027,2026/2027
+1699,TZA - Ligi kuu Bara - 2026/2027,531,TZA,Ligi kuu Bara,male,adult,131,2026,2027,2026/2027
+1700,UAE - Pro League - 2026/2027,151,UAE,Pro League,male,adult,131,2026,2027,2026/2027
+1701,UEFA - Champions League - 2026/2027,10,UEFA,Champions League,male,adult,131,2026,2027,2026/2027
+1702,UEFA - Champions League - Qualification - 2026/2027,534,UEFA,Champions League - Qualification,male,adult,131,2026,2027,2026/2027
+1703,UEFA - Europa Conference League - Qualification - 2026/2027,535,UEFA,Europa Conference League - Qualification,male,adult,131,2026,2027,2026/2027
+1704,UEFA - Europa League - 2026/2027,9,UEFA,Europa League,male,adult,131,2026,2027,2026/2027
+1705,UEFA - Europa League - Qualification - 2026/2027,536,UEFA,Europa League - Qualification,male,adult,131,2026,2027,2026/2027
+1706,UEFA - FIFA Women's World Cup Qualifier - 2027,609,UEFA,FIFA Women's World Cup Qualifier,female,adult,132,2027,2027,2027
+1707,UEFA - U21 European Championship Qualifiers - 2026/2027,62,UEFA,U21 European Championship Qualifiers,male,U21,131,2026,2027,2026/2027
+1708,UEFA - Women's Europa Cup - 2026/2027,577,UEFA,Women's Europa Cup,female,adult,131,2026,2027,2026/2027
+1709,UEFA - Women`s Champions League - 2026/2027,141,UEFA,Women`s Champions League,female,adult,131,2026,2027,2026/2027
+1710,UEFA - Youth League - 2026/2027,78,UEFA,Youth League,male,U19,131,2026,2027,2026/2027
+1711,UKR - Premier League - 2026/2027,26,UKR,Premier League,male,adult,131,2026,2027,2026/2027
+1712,UKR - U19 League - 2026/2027,453,UKR,U19 League,male,U19,131,2026,2027,2026/2027
+1713,URY - Primera Division - 2027,95,URY,Primera Division,male,adult,132,2027,2027,2027
+1714,URY - Segunda División - 2026/2027,547,URY,Segunda División,male,adult,131,2026,2027,2026/2027
+1715,USA - Major League Soccer - 2027,60,USA,Major League Soccer,male,adult,132,2027,2027,2027
+1716,USA - MLS Next Pro - 2027,190,USA,MLS Next Pro,male,adult,132,2027,2027,2027
+1717,USA - NWSL - 2027,126,USA,NWSL,female,adult,132,2027,2027,2027
+1718,USA - US Open Cup - 2027,616,USA,US Open Cup,male,adult,132,2027,2027,2027
+1719,USA - USL Championship - 2027,191,USA,USL Championship,male,adult,132,2027,2027,2027
+1720,USA - USL League 1 - 2027,454,USA,USL League 1,male,adult,132,2027,2027,2027
+1721,"USA - USL Super League, Women - 2026/2027",489,USA,"USL Super League, Women",female,adult,131,2026,2027,2026/2027
+1722,UZB - Super League - 2027,591,UZB,Super League,male,adult,132,2027,2027,2027
+1723,VEN - Primera División - 2026/2027,469,VEN,Primera División,male,adult,131,2026,2027,2026/2027
+1724,XKS - Superliga - 2026/2027,593,XKS,Superliga,male,adult,131,2026,2027,2026/2027
+1725,AFC - AFC U17 Asian Cup - 2027,493,AFC,AFC U17 Asian Cup,male,U17,132,2027,2027,2027
+1726,MDA - Super Liga - 2024/2025,644,MDA,Super Liga,male,adult,95,2024,2025,2024/2025
+1727,IDN - Indonesia Super League - 2025/2026,645,IDN,Indonesia Super League,male,adult,129,2025,2026,2025/2026
+1728,AUS - A-League - 2026/2027,61,AUS,A-League,male,adult,131,2026,2027,2026/2027
+1729,ENG - Premier League - 2026/2027,1,ENG,Premier League,male,adult,131,2026,2027,2026/2027
+1730,HUN - Hungarian Cup - 2027,618,HUN,Hungarian Cup,male,adult,132,2027,2027,2027
+1731,HUN - Nemzeti Bajnokság - 2026/2027,98,HUN,Nemzeti Bajnokság,male,adult,131,2026,2027,2026/2027
+1732,UEFA - Europa Conference League - 2026/2027,131,UEFA,Europa Conference League,male,adult,131,2026,2027,2026/2027
+1733,IDN - Indonesia Super League - 2026/2027,645,IDN,Indonesia Super League,male,adult,131,2026,2027,2026/2027
+1734,ALB - Kategoria Superiore - 2024/2025,646,ALB,Kategoria Superiore,male,adult,95,2024,2025,2024/2025
+1735,NOR - Eliteserien - 2027,124,NOR,Eliteserien,male,adult,132,2027,2027,2027
+1736,ENG - National League North - 2025/2026,647,ENG,National League North,male,adult,129,2025,2026,2025/2026
+1737,ENG - National League South - 2025/2026,648,ENG,National League South,male,adult,129,2025,2026,2025/2026
+1738,AFC - AFC Asian Cup U20 - 2025,649,AFC,AFC Asian Cup U20,male,U20,128,2025,2025,2025
+1739,WAL - Cymru Premier - 2025/2026,650,WAL,Cymru Premier,male,adult,129,2025,2026,2025/2026
+1740,CHN - League One - 2026,631,CHN,League One,male,adult,130,2026,2026,2026
+1741,UEFA - U17 European Championship - 2026,163,UEFA,U17 European Championship,male,U17,130,2026,2026,2026
+1742,UEFA - U19 European Championship - 2026,164,UEFA,U19 European Championship,male,U19,130,2026,2026,2026
+1743,INT - U17 National Team Friendlies - 2026,515,INT,U17 National Team Friendlies,male,U17,130,2026,2026,2026
+1744,KHM - Cambodian Premier League - 2025/2026,651,KHM,Cambodian Premier League,male,adult,129,2025,2026,2025/2026
+1745,VNM - V.League 1 - 2025/2026,475,VNM,V.League 1,male,adult,129,2025,2026,2025/2026
+1746,JPN - J1 League - 2026/2027,87,JPN,J1 League,male,adult,131,2026,2027,2026/2027
+1747,JPN - J2 League - 2026/2027,240,JPN,J2 League,male,adult,131,2026,2027,2026/2027
+1748,JPN - J3 League - 2026/2027,447,JPN,J3 League,male,adult,131,2026,2027,2026/2027
+1749,ARG - Copa Argentina - 2026,311,ARG,Copa Argentina,male,adult,130,2026,2026,2026
+1750,PER - Primera Division Clausura - 2026,652,PER,Primera Division Clausura,male,adult,130,2026,2026,2026
+1751,COL - Liga Dimayor Clausura - 2026,653,COL,Liga Dimayor Clausura,male,adult,130,2026,2026,2026
+1752,PAR - Division Profesional Clausura - 2026,654,PAR,Division Profesional Clausura,male,adult,130,2026,2026,2026
+1753,URY - Primera Division Clausura - 2026,655,URY,Primera Division Clausura,male,adult,130,2026,2026,2026
+1754,GHA - Premier League - 2025/2026,520,GHA,Premier League,male,adult,129,2025,2026,2025/2026
+1756,ARG - Primera Division - 2nd Phase - 2026,376,ARG,Primera Division - 2nd Phase,male,adult,130,2026,2026,2026
+1757,FRA - Championnat National U19 - 2025/2026,340,FRA,Championnat National U19,male,U19,129,2025,2026,2025/2026
+1758,JPN - JFA U-18 Premier League EAST - 2026,628,JPN,JFA U-18 Premier League EAST,male,U18,130,2026,2026,2026
+1759,JPN - JFA U-18 Premier League WEST - 2026,626,JPN,JFA U-18 Premier League WEST,male,U18,130,2026,2026,2026

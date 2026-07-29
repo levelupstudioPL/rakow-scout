@@ -1,0 +1,447 @@
+id,area,name,gender,age_group
+649,AFC,AFC Asian Cup U20,male,U20
+117,AFC,AFC Olympic Qualification Women Playoffs,female,adult
+493,AFC,AFC U17 Asian Cup,male,U17
+115,AFC,AFF Suzuki Cup,male,adult
+445,AFC,ASEAN Club Championship,male,adult
+35,AFC,Asian Cup,male,adult
+521,AFC,Asian Cup Qualification,male,adult
+602,AFC,CAFA Nations Cup,male,adult
+147,AFC,Champions League,male,adult
+448,AFC,Champions League Two,male,adult
+182,AFC,EAFF E-1 Football Championship,male,adult
+225,AFC,Gulf Cup of Nations,male,adult
+588,AFC,U-23 Asian Cup,male,adult
+181,AFC,WC Qualification Asia,male,adult
+373,AFC,West Asia Championship U23,male,U23
+567,AFC,Women's Champions League,female,adult
+646,ALB,Kategoria Superiore,male,adult
+594,ARE,UAE LEAGUE,male,U16
+311,ARG,Copa Argentina,male,adult
+70,ARG,Primera Division - 1st Phase,male,adult
+376,ARG,Primera Division - 2nd Phase,male,adult
+412,ARG,Primera Nacional,male,adult
+525,ARG,Torneo Proyección,male,U23
+533,ARM,Cup,male,adult
+532,ARM,IDBank Premier League,male,adult
+61,AUS,A-League,male,adult
+410,AUS,A-League Women,female,adult
+103,AUT,2. Liga,male,adult
+88,AUT,Bundesliga,male,adult
+605,AUT,Frauenliga,female,adult
+592,AZE,Premyer Liqa,male,adult
+119,BEL,1B Pro League,male,adult
+91,BEL,Beker Van Belgie,male,adult
+58,BEL,"Belgium First Division A, Playoffs 2A",male,adult
+16,BEL,Pro League,male,adult
+332,BGR,First League,male,adult
+408,BIH,Premier League,male,adult
+319,BOL,LFPB,male,adult
+467,BRA,Brasileiro Women,female,adult
+69,BRA,Campeonato Baiano,male,adult
+638,BRA,Campeonato Cearense,male,adult
+168,BRA,Carioca 1,male,adult
+477,BRA,Catarinense 1,male,adult
+167,BRA,CBF Brasileiro U20,male,U20
+308,BRA,Copa do Brasil,male,adult
+492,BRA,Copa do Brasil U20,male,U20
+627,BRA,Copa do Nordeste,male,adult
+341,BRA,Gaúcho 1,male,adult
+501,BRA,Goiano 1,male,adult
+239,BRA,Mineiro 1,male,adult
+476,BRA,Paranaense 1,male,adult
+474,BRA,Paulista A2,male,adult
+68,BRA,"Paulista, Serie A1",male,adult
+490,BRA,Paulista U20,male,U20
+413,BRA,Paulista Women,female,adult
+169,BRA,São Paulo Youth Cup,male,U20
+77,BRA,Série A,male,adult
+80,BRA,Série B,male,adult
+465,BRA,Série C,male,adult
+59,BRA,Série D,male,adult
+335,BRA,Supercopa do Brasil,male,adult
+37,CAF,Africa Cup of Nations,male,adult
+193,CAF,Africa Cup of Nations Qualification,male,adult
+197,CAF,African Nations Championship Qualification,male,adult
+201,CAF,African Olympic Qualifiers,male,adult
+317,CAF,African Super League,male,adult
+213,CAF,Africa Women Cup of Nations,female,adult
+148,CAF,Champions League,male,adult
+330,CAF,Champions League - Preliminary Rounds,male,adult
+619,CAF,Confederation Cup,male,adult
+195,CAF,COSAFA Cup,male,adult
+32,CAF,FIFA World Cup Qualifier,male,adult
+118,CAF,U20 Africa Cup of Nations,male,U20
+347,CAF,Women's Olympic Qualifying,female,adult
+203,CAN,Canadian Premier League,male,adult
+524,CAN,Northern Super League,female,adult
+519,CHI,Primera B,male,adult
+57,CHI,Primera Division,male,adult
+632,CHN,Chinese Champions League,male,adult
+631,CHN,League One,male,adult
+47,CHN,Super League,male,adult
+528,CIV,Ligue 1,male,adult
+100,COL,Liga Dimayor,male,adult
+653,COL,Liga Dimayor Clausura,male,adult
+488,COL,Liga Femenina,female,adult
+606,COL,Primera B,male,adult
+159,CONCACAF,Champions League,male,adult
+33,CONCACAF,FIFA World Cup Qualifier,male,adult
+36,CONCACAF,Gold Cup,male,adult
+234,CONCACAF,Gold Cup Qualification,male,adult
+346,CONCACAF,Leagues Cup,male,adult
+63,CONCACAF,Nations League - League A,male,adult
+496,CONCACAF,Nations League - League B,male,adult
+343,CONCACAF,Road to W Gold Cup - Play-Offs,female,adult
+185,CONCACAF,U20,male,U20
+342,CONCACAF,Women's Gold Cup,female,adult
+337,CONCACAF,Women's U17 Championship,female,U17
+238,CONCACAF,Women's U20 Championship,female,U20
+187,CONCACAF,Women's WC Qualification,female,adult
+51,CONMEBOL,Copa America,male,adult
+214,CONMEBOL,Copa America Femenina,female,adult
+109,CONMEBOL,Copa Libertadores,male,adult
+612,CONMEBOL,Copa Libertadores Qualifying,male,adult
+108,CONMEBOL,Copa Libertadores U20,male,U20
+110,CONMEBOL,Copa Sudamericana,male,adult
+39,CONMEBOL,FIFA World Cup Qualifier,male,adult
+85,CONMEBOL,Pre-Olympic Tournament,male,adult
+460,CONMEBOL,Pre-Olympic Tournament U23,male,U23
+344,CONMEBOL,Recopa Sudamericana,male,adult
+495,CONMEBOL,Sudamericano U17,male,U17
+212,CONMEBOL,Sudamericano U20,male,U20
+522,CONMEBOL,Women's Copa Libertadores,female,adult
+456,CRI,Liga de Ascenso,male,adult
+455,CRI,Primera División,male,adult
+611,CRI,Primera División Clausura,male,adult
+93,CRO,1.HNL,male,adult
+223,CYP,1. Division,male,adult
+517,CZE,1. Liga Women,female,adult
+94,CZE,First League,male,adult
+333,CZE,FNL,male,adult
+145,DEN,1st Division,male,adult
+210,DEN,DBU Pokalen,male,adult
+227,DEN,Kvindeligaen,female,adult
+89,DEN,Superliga,male,adult
+643,DEN,U17 Drenge Ligaen,male,U17
+205,DEN,U19 Ligaen,male,U19
+452,DZA,Ligue 1,male,adult
+138,ECU,Liga Pro,male,adult
+499,ECU,Liga Pro Serie B,male,adult
+207,EGY,Premier League,male,adult
+451,ENG,Barclays Womens Championship,female,adult
+66,ENG,Carabao Cup,male,adult
+31,ENG,Championship,male,adult
+54,ENG,Community Shield,male,adult
+143,ENG,EFL Trophy,male,adult
+19,ENG,FA Cup,male,adult
+572,ENG,FA Women's Cup,female,adult
+127,ENG,FA Women`s Super League,female,adult
+101,ENG,League One,male,adult
+204,ENG,League Two,male,adult
+96,ENG,National League,male,adult
+582,ENG,National League Cup,male,adult
+647,ENG,National League North,male,adult
+648,ENG,National League South,male,adult
+1,ENG,Premier League,male,adult
+155,ENG,Premier League 2,male,U23
+79,ENG,Premier League 2 Division One,male,U21
+578,ENG,Premier League Cup,male,U21
+573,ENG,Premier League International Cup,male,adult
+494,ENG,Professional Development League,male,U21
+92,ENG,U18 Premier League,male,U18
+580,ENG,U18 Premier League Cup,male,U18
+537,ENG,Women's League Cup,female,adult
+44,ESP,Copa del Rey,male,adult
+614,ESP,Copa del Rey Juvenil,male,U19
+208,ESP,División de Honor Juvenil,male,U19
+4,ESP,LaLiga,male,adult
+42,ESP,LaLiga 2,male,adult
+621,ESP,Liga Nacional Juvenil,male,U18
+132,ESP,Primera División Femenina,female,adult
+133,ESP,Primera Division RFEF,male,adult
+116,ESP,Segunda B,male,adult
+545,ESP,Segunda Division RFEF,male,adult
+598,ESP,Segunda RFEF,male,adult
+134,ESP,Supercopa,male,adult
+623,ESP,Superliga Alevín,male,U12
+622,ESP,Superliga Cadete,male,U15
+620,ESP,Superliga Infantil,male,U14
+502,EST,A.LeCoq Premium Liiga,male,adult
+130,FIFA,Confederations Cup,male,adult
+516,FIFA,FIFA Club World Cup,male,adult
+189,FIFA,U17 Women's World Cup,female,U17
+327,FIFA,U17 World Cup,male,U17
+178,FIFA,U20 Women's World Cup,female,U20
+237,FIFA,U20 World Cup,male,U20
+0,FIFA,World Cup,male,adult
+48,FIFA,"World Cup, Women",female,adult
+323,FIN,Veikkausliiga,male,adult
+571,FIN,Ykkösliiga,male,adult
+498,FRA,Challenge Espoirs,male,U23
+340,FRA,Championnat National U19,male,U19
+7,FRA,Coupe de France,male,adult
+8,FRA,Coupe de la Ligue,male,adult
+230,FRA,Feminine Division 1,female,adult
+500,FRA,Feminine Division 2,female,adult
+3,FRA,Ligue 1,male,adult
+597,FRA,Ligue 1 Playoffs,male,adult
+12,FRA,Ligue 2,male,adult
+596,FRA,Ligue 2 Playoffs,male,adult
+30,FRA,National,male,adult
+523,FRA,National 2,male,adult
+449,FRA,National 3,male,adult
+52,FRA,Trophée des Champions,male,adult
+508,GEO,Erovnuli Liga,male,adult
+40,GER,2nd Bundesliga,male,adult
+64,GER,3. Liga,male,adult
+6,GER,Bundesliga,male,adult
+574,GER,DFB Junioren Pokal,male,U19
+84,GER,DFB-Pokal,male,adult
+53,GER,DFL-Supercup,male,adult
+338,GER,Frauen Bundesliga,female,adult
+615,GER,Frauen Westfalenliga,female,adult
+325,GER,Play-offs 1/2,male,adult
+326,GER,Play-offs 2/3,male,adult
+142,GER,Regionalliga,male,adult
+542,GER,Regionalliga Bayern,male,adult
+538,GER,Regionalliga Nord,male,adult
+541,GER,Regionalliga Nordost,male,adult
+539,GER,Regionalliga Südwest,male,adult
+540,GER,Regionalliga West,male,adult
+135,GER,U17 Bundesliga,male,U17
+136,GER,U19 Bundesliga,male,U19
+625,GHA,GARFA Division Two - Zone 3,male,adult
+520,GHA,Premier League,male,adult
+28,GRE,Super League,male,adult
+320,GRE,Super League 2,male,adult
+321,GRE,Super League K19,male,U19
+444,HKG,Premier League,male,adult
+618,HUN,Hungarian Cup,male,adult
+507,HUN,MLSZ U15 Országos Kiemelt,male,U15
+505,HUN,MLSZ U16 Országos Kiemelt,male,U16
+506,HUN,MLSZ U19 Országos Kiemelt,male,U19
+509,HUN,NB II,male,adult
+98,HUN,Nemzeti Bajnokság,male,adult
+608,IDN,EPA Super League U16,male,U16
+645,IDN,Indonesia Super League,male,adult
+65,IND,Indian Super League,male,adult
+184,INT,Arab Cup,male,adult
+215,INT,Arnold Clark Cup,female,adult
+149,INT,Club Friendlies,male,adult
+202,INT,Finalissima,male,adult
+345,INT,Football Federations Cup U16,male,U16
+20,INT,Friendly International,male,adult
+504,INT,Hybrid Friendlies,male,adult
+55,INT,International Champions Cup,male,adult
+179,INT,Kirin Cup,male,adult
+38,INT,Olympic Games,male,U23
+128,INT,Olympic Games Women,female,adult
+221,INT,Pinatar National Team Friendlies,male,U21
+186,INT,SheBelieves Cup,female,adult
+188,INT,Sud Ladies Cup,female,U20
+137,INT,Syrenka Cup U17,male,U17
+150,INT,Torneio Internacional Algarve U17,male,U17
+232,INT,Tournoi de France,female,adult
+226,INT,U16 National Team Friendlies,male,U16
+515,INT,U17 National Team Friendlies,male,U17
+375,INT,U17 National Team Friendlies Women,female,U17
+199,INT,U18 Friendly International,male,U18
+161,INT,U19 National Team Friendlies,male,U19
+374,INT,U19 National Team Friendlies Women,female,adult
+183,INT,U20 National Team Friendlies,male,U20
+216,INT,U21 National Team Friendlies,male,U21
+462,INT,U23 National Team Friendlies,male,U23
+192,INT,WC Qualification Intercontinental Play-offs,male,adult
+123,INT,Women Friendly International,female,adult
+219,INT,Women's Finalissima,female,adult
+233,INT,Women's WC Qualification Intercontinental Play-off,female,adult
+339,INT,Yongchuan Tournament,female,adult
+220,INT,Youth Friendlies,male,adult
+158,IRL,First Division,male,adult
+406,IRL,Premier Division,male,adult
+310,ISL,Besta-deild karla,male,adult
+309,ISL,Cup,male,adult
+457,ISR,Leumit Youth,male,adult
+86,ISR,Ligat Al,male,adult
+209,ISR,State Cup,male,adult
+224,ITA,Campionato Primavera 1,male,U19
+112,ITA,Coppa Italia,male,adult
+5,ITA,Serie A,male,adult
+624,ITA,Serie A - Last 4 match days,male,adult
+379,ITA,Serie A Women,female,adult
+41,ITA,Serie B,male,adult
+497,ITA,Serie B Women,female,adult
+113,ITA,Serie C,male,adult
+114,ITA,"Serie C, Promotion Playoffs",male,adult
+439,ITA,Serie D - Girone D,male,adult
+630,ITA,Serie D - Group B,male,adult
+480,JPN,Emperor Cup,male,adult
+600,JPN,J1 100 Year Vision League,male,adult
+87,JPN,J1 League,male,adult
+601,JPN,J2/J3 100 Year Vision League,male,adult
+240,JPN,J2 League,male,adult
+447,JPN,J3 League,male,adult
+599,JPN,Japanese Super Cup,male,adult
+626,JPN,JFA U-18 Premier League WEST,male,U18
+637,JPN,J.League Cup,male,adult
+617,JPN,Kanto Daigaku League Div.1,male,adult
+348,JPN,WE League,female,adult
+576,JPN,WE League Cup,female,adult
+629,JPN,J Youth Cup,male,adult
+628,JPN,JFA U-18 Premier League EAST,male,U18
+589,KAZ,First League,male,adult
+590,KAZ,Freedom QJ League U16,male,U16
+595,KAZ,Freedom QJ League U17,male,adult
+329,KAZ,Freedom QJ League U18,male,U18
+579,KAZ,Premier League,male,adult
+651,KHM,Cambodian Premier League,male,adult
+194,KOR,K League 1,male,adult
+211,KOR,K League 2,male,adult
+231,KSA,Division 1,male,adult
+570,KSA,King's Cup,male,adult
+146,KSA,Pro League,male,adult
+512,KSA,SAFF Premier League U15,male,U15
+511,KSA,SAFF Premier League U16,male,U16
+513,KSA,SAFF Premier League U18,male,U18
+503,KSA,Saudi Women's Cup,female,adult
+440,KSA,Super Cup,male,adult
+468,LTU,1 Lyga,male,adult
+530,LUX,Luxembourg National Division,male,adult
+458,LVA,1. Liga,male,adult
+222,LVA,Virsliga,male,adult
+409,MAR,Botola Pro,male,adult
+644,MDA,Super Liga,male,adult
+315,MEX,Liga de Expansión MX,male,adult
+97,MEX,Liga MX,male,adult
+610,MEX,Liga MX Clausura,male,adult
+336,MEX,Liga MX Femenil,female,adult
+314,MEX,Liga Premier Serie A,male,adult
+173,MEX,U20 League,male,U20
+172,MLT,Challenge League,male,adult
+157,MLT,Premier League,male,adult
+466,MNE,Prva Liga,male,adult
+450,MYS,Super League,male,adult
+106,NED,Eerste Divisie,male,adult
+17,NED,Eredivisie,male,adult
+526,NED,Eredivisie Women,female,adult
+107,NED,KNVB Beker,male,adult
+442,NED,Super Cup,male,adult
+641,NED,Tweede Divisie,male,adult
+613,NOR,Cupen,male,adult
+124,NOR,Eliteserien,male,adult
+174,NOR,Obos Ligaen,male,adult
+583,NOR,Play-offs 1/2,male,adult
+228,NOR,Toppserien,female,adult
+510,NZL,Northern League,male,adult
+153,OFC,FIFA World Cup Qualifier,male,adult
+140,PAR,Division Profesional,male,adult
+654,PAR,Division Profesional Clausura,male,adult
+139,PER,Primera Division,male,adult
+652,PER,Primera Division Clausura,male,adult
+446,PHL,Philippines Football League,male,adult
+43,POL,Ekstraklasa,male,adult
+407,POL,I liga,male,adult
+585,POL,Polish Cup,male,adult
+486,POR,1a Divisão Women,female,adult
+587,POR,Júniores U19,male,adult
+162,POR,Liga 3,male,adult
+156,POR,Liga Revelação Sub 23,male,U23
+275,POR,Play-offs 2/3,male,adult
+25,POR,Primeira Liga,male,adult
+102,POR,Segunda Liga,male,adult
+307,POR,Super Cup,male,adult
+274,POR,Taça da Liga,male,adult
+328,POR,Taça de Portugal,male,adult
+152,QAT,Qatar Stars League,male,adult
+318,QAT,QSL Cup,male,adult
+104,ROU,Liga 1,male,adult
+377,RSA,Nedbank Cup,male,adult
+165,RSA,PSL,male,adult
+121,RUS,FNL,male,adult
+27,RUS,Premier League,male,adult
+74,SCO,FA Cup,male,adult
+76,SCO,League Cup,male,adult
+170,SCO,Play-offs 1/2,male,adult
+18,SCO,Premiership,male,adult
+459,SCO,Scottish Championship,male,adult
+642,SCO,Scottish League One,male,adult
+603,SCO,Scottish Women's Premier League,female,adult
+529,SEN,Ligue 1,male,adult
+484,SGP,Premier League,male,adult
+105,SRB,Superliga,male,adult
+316,SUI,1. Liga Promotion,male,adult
+122,SUI,Challenge League,male,adult
+82,SUI,Super League,male,adult
+482,SUI,Women's Super League,female,adult
+241,SVK,Niké Liga,male,adult
+235,SVN,1. SNL,male,adult
+90,SWE,Allsvenskan,male,adult
+229,SWE,Damallsvenskan,female,adult
+584,SWE,Play-offs 1/2,male,adult
+543,SWE,Superettan,male,adult
+312,THA,Thai League,male,adult
+518,TUN,Ligue 1,male,adult
+120,TUR,1. Lig,male,adult
+604,TUR,2. Lig,male,adult
+29,TUR,Super Lig,male,adult
+531,TZA,Ligi kuu Bara,male,adult
+151,UAE,Pro League,male,adult
+378,UEFA,Baltic Cup,male,adult
+10,UEFA,Champions League,male,adult
+534,UEFA,Champions League - Qualification,male,adult
+131,UEFA,Europa Conference League,male,adult
+535,UEFA,Europa Conference League - Qualification,male,adult
+9,UEFA,Europa League,male,adult
+536,UEFA,Europa League - Qualification,male,adult
+2,UEFA,European Championship,male,adult
+34,UEFA,European Championship Qualifiers,male,adult
+609,UEFA,FIFA Women's World Cup Qualifier,female,adult
+15,UEFA,FIFA World Cup Qualifier,male,adult
+21,UEFA,Nation`s League - League A,male,adult
+160,UEFA,Nation`s League - League B,male,adult
+443,UEFA,Nations League - League C,male,adult
+491,UEFA,Nations League - Play-offs,male,adult
+13,UEFA,Super Cup,male,adult
+144,UEFA,U17 Championship Qualification,male,U17
+163,UEFA,U17 European Championship,male,U17
+164,UEFA,U19 European Championship,male,U19
+200,UEFA,U19 European Championship Qualifiers,male,U19
+218,UEFA,U20 Elite League,male,U20
+49,UEFA,U21 European Championship,male,U21
+62,UEFA,U21 European Championship Qualifiers,male,U21
+461,UEFA,Women's Championship Qualification - League A,female,adult
+463,UEFA,Women's Championship Qualification - Play-off,female,adult
+141,UEFA,Women`s Champions League,female,adult
+577,UEFA,Women's Europa Cup,female,adult
+166,UEFA,Women`s European Championship,female,adult
+331,UEFA,Women's Nations League - League A,female,adult
+485,UEFA,Women's Nations League - League B,female,adult
+607,UEFA,Women's Nations League - League C,female,adult
+217,UEFA,Women's WC Qualification Europe,female,adult
+176,UEFA,Women U17 Championship,female,U17
+177,UEFA,Women U19 Championship,female,U19
+78,UEFA,Youth League,male,U19
+26,UKR,Premier League,male,adult
+453,UKR,U19 League,male,U19
+95,URY,Primera Division,male,adult
+655,URY,Primera Division Clausura,male,adult
+547,URY,Segunda División,male,adult
+60,USA,Major League Soccer,male,adult
+190,USA,MLS Next Pro,male,adult
+478,USA,NCAA D1 Big East,male,adult
+479,USA,NCAA D1 Big Ten,male,adult
+639,USA,NCAA Division I Men's Championship,male,adult
+640,USA,NCAA Division I Women's Championship,female,adult
+126,USA,NWSL,female,adult
+154,USA,NWSL Challenge Cup,female,adult
+191,USA,USL Championship,male,adult
+454,USA,USL League 1,male,adult
+489,USA,"USL Super League, Women",female,adult
+616,USA,US Open Cup,male,adult
+591,UZB,Super League,male,adult
+469,VEN,Primera División,male,adult
+475,VNM,V.League 1,male,adult
+650,WAL,Cymru Premier,male,adult
+593,XKS,Superliga,male,adult
+575,XWO,FIFA Intercontinental Cup,male,adult
