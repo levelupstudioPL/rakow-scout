@@ -103,14 +103,46 @@ PHYS_STYLE_METRICS = {
     "Pomoc": _PHYS_STYLE,
     "Atak": _PHYS_STYLE,
 }
-# Waga metryk fizycznych w profilu koherencji (<1 = fizyka wzbogaca, nie dominuje).
+ 
+# --- Game Intelligence (SkillCorner) w profilu KOHERENCJI (styl gry) ---
+# Trzecia warstwa stylu (obok techniki StatsBomb i fizyki). Też TYLKO koherencja,
+# nie RC. Metryki opisują SPOSÓB gry: biegi bez piłki, styl podań, oferowanie się,
+# prowadzenie/odporność na pressing, angażowanie/pressing. Bramkarze: bez GI.
+_GI_STYLE = [
+    "offballrun_count", "offballrun_count_dangerous",
+    "offballrun_count_penaltyarea", "offballrun_count_abovehsr",
+    "pass_count_completed", "pass_avgdistance",
+    "pass_count_longrange_attempted", "pass_count_linebreak_completed",
+    "optionoffered_count", "optionoffered_count_inspace",
+    "optionoffered_count_penaltyarea", "optionoffered_count_dangerous",
+    "possession_count", "longcarry_count_forwardtrajectory",
+    "possession_count_forwardmomentum", "possession_count_escapedpressure",
+    "onballengagement_count", "onballengagement_count_directregain",
+    "onballengagement_count_pressingchain", "onballengagement_count_forwardtrajectory",
+]
+GI_STYLE_METRICS = {
+    "Bramka": [],
+    "Obrona": _GI_STYLE,
+    "Pomoc": _GI_STYLE,
+    "Atak": _GI_STYLE,
+}
+ 
+# Wagi w profilu koherencji (<1 = warstwa wzbogaca, nie dominuje techniki).
+# GI ma dużo metryk, więc niższa waga na metrykę niż fizyka, by SkillCorner
+# łącznie nie przytłoczył sygnału technicznego StatsBomb.
 PHYS_WEIGHT = 0.5
-METRIC_WEIGHTS = {m: PHYS_WEIGHT for m in _PHYS_STYLE}
+GI_WEIGHT = 0.35
+METRIC_WEIGHTS = {}
+METRIC_WEIGHTS.update({m: PHYS_WEIGHT for m in _PHYS_STYLE})
+METRIC_WEIGHTS.update({m: GI_WEIGHT for m in _GI_STYLE})
  
  
 def _profile_metrics(line):
-    """Pełny profil koherencji = metryki StatsBomb + fizyka (jeśli dołączona)."""
-    return LINE_METRICS.get(line, []) + PHYS_STYLE_METRICS.get(line, [])
+    """Pełny profil koherencji = technika StatsBomb + fizyka + Game Intelligence
+    (te z warstw SkillCornera, które realnie dołączono do wiersza)."""
+    return (LINE_METRICS.get(line, [])
+            + PHYS_STYLE_METRICS.get(line, [])
+            + GI_STYLE_METRICS.get(line, []))
  
  
 def _val(row, key):
