@@ -129,24 +129,69 @@ def discover():
  
  
 # ---------------------------------------------------------------------
-def physical(edition_id, group="player"):
-    client = make_client()
-    try:
-        eid = int(edition_id)
-    except ValueError:
-        die(f"'{edition_id}' nie jest liczbą (competition_edition id).")
-    # Agregacja per zawodnik dla danej edycji rozgrywek.
+# Konfiguracja: 8 lig modelu Rakowa, sezon 2025/26 (SkillCorner competition_edition id).
+# Etykiety = dokładnie te z data.json ("league"), żeby dane spinały się z modelem.
+# UWAGA: id są specyficzne dla SEZONU — przy zmianie sezonu odpal 'discover'
+# i zaktualizuj tę mapę.
+EDITIONS = {
+    1171: "Ekstraklasa (PL)",
+    1194: "Jupiler Pro League (BE)",
+    1230: "Eredivisie (NL)",
+    1265: "Primeira Liga (PT)",
+    1212: "2. Bundesliga (DE)",
+    1189: "Superliga (DK)",
+    1191: "Czech Liga (CZ)",
+    1196: "Super League (CH)",
+}
+ 
+ 
+def _pull_physical(client, eid, group="player"):
+    """Fizyka jednej edycji jako DataFrame z tagiem edycji/ligi (albo None)."""
     params = {"competition_edition": eid, "group_by": group}
     data = _call(client, "get_physical", params=params)
     df = to_frame(data)
     if len(df) == 0:
-        print(f"[uwaga] Brak danych fizycznych dla edycji {eid} (group_by={group}). "
-              f"Sprawdź, czy edycja ma dane i czy nazwy parametrów pasują do Twojej licencji.")
+        print(f"[uwaga] Edycja {eid}: brak danych fizycznych (group_by={group}).")
+        return None
+    df.insert(0, "competition_edition", eid)
+    df.insert(1, "league", EDITIONS.get(eid, ""))
+    return df
+ 
+ 
+def _maybe_combine(frames):
+    """Gdy pobrano >1 ligi, zapisz też jeden plik zbiorczy z tagiem ligi."""
+    if len(frames) <= 1:
         return
-    out = HERE / f"skillcorner_physical_{eid}.csv"
-    df.to_csv(out, index=False)
-    print(f"[OK] Fizyka edycji {eid}: {len(df)} wierszy, {len(df.columns)} kolumn → {out.name}")
-    print(f"     Kolumny (pierwsze 25): {', '.join(map(str, list(df.columns)[:25]))}")
+    import pandas as pd
+    combined = pd.concat(frames, ignore_index=True)
+    out = HERE / "skillcorner_physical_all.csv"
+    combined.to_csv(out, index=False)
+    print(f"[OK] Zbiorczo: {len(combined)} wierszy z {len(frames)} lig → {out.name}")
+ 
+ 
+def physical(edition_ids, group="player"):
+    client = make_client()
+    frames = []
+    for raw in edition_ids:
+        try:
+            eid = int(raw)
+        except (ValueError, TypeError):
+            print(f"[pomijam] '{raw}' nie jest liczbą (edition id).", file=sys.stderr)
+            continue
+        df = _pull_physical(client, eid, group)
+        if df is None:
+            continue
+        out = HERE / f"skillcorner_physical_{eid}.csv"
+        df.to_csv(out, index=False)
+        frames.append(df)
+        print(f"[OK] Fizyka {eid} ({EDITIONS.get(eid, '?')}): "
+              f"{len(df)} wierszy, {len(df.columns)} kolumn → {out.name}")
+    _maybe_combine(frames)
+ 
+ 
+def physical_all(group="player"):
+    """Pobierz fizykę wszystkich 8 lig modelu (EDITIONS) za jednym razem."""
+    physical(list(EDITIONS.keys()), group)
  
  
 # ---------------------------------------------------------------------
@@ -155,12 +200,15 @@ def main():
     mode = args[0] if args else "discover"
     if mode == "discover":
         discover()
+    elif mode == "physical-all":
+        physical_all()
     elif mode == "physical":
         if len(args) < 2:
-            die("Podaj competition_edition id: python scripts/fetch_skillcorner.py physical <edition_id> [group]")
-        physical(args[1], args[2] if len(args) > 2 else "player")
+            die("Podaj co najmniej jeden competition_edition id "
+                "(albo użyj trybu 'physical-all').")
+        physical(args[1:])
     else:
-        die(f"Nieznany tryb '{mode}'. Użyj: discover  |  physical <edition_id> [group]")
+        die(f"Nieznany tryb '{mode}'. Użyj: discover | physical-all | physical <id> [id...]")
  
  
 if __name__ == "__main__":
