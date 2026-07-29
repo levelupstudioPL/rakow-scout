@@ -11,9 +11,9 @@
 #
 # Metryki dobrane per linia — profil gry definiują akcje typowe dla roli.
 # =====================================================================
-
+ 
 import math
-
+ 
 # --- Metryki definiujące PROFIL GRY per linia ---
 # Do koherencji (podobieństwa) i do poziomu. Nazwy = pola StatsBomb.
 LINE_METRICS = {
@@ -45,7 +45,7 @@ LINE_METRICS = {
         "player_season_op_xgchain_90",
     ],
 }
-
+ 
 # Podzbiór metryk "jakościowych" (wyższa wartość = lepszy) do liczenia POZIOMU.
 # Metryki proporcjonalne (ratio, proportion) pomijamy w poziomie — opisują styl,
 # nie jakość. Zostają za to w profilu koherencji.
@@ -80,8 +80,39 @@ QUALITY_METRICS = {
              "player_season_np_shots_90", "player_season_touches_inside_box_90",
              "player_season_xa_90"],
 }
-
-
+ 
+ 
+# --- Fizyka (SkillCorner) w profilu KOHERENCJI (styl gry) ---
+# WAŻNE: fizyka wchodzi tylko do koherencji (podobieństwo stylu), NIE do RC
+# (QUALITY_METRICS). Walidacja na ocenach trenerów pokazała, że domieszka
+# fizyki do RC pogarsza zgodność — dlatego RC zostaje czysto techniczne.
+# Pola dokładane do wierszy przez physical.enrich_rows (nazwy natywne SkillCornera).
+# Bramkarze: bez fizyki (styl ruchu nieistotny dla podobieństwa GK).
+_PHYS_STYLE = [
+    "total_metersperminute_full_all",   # tempo/wolumen ruchu
+    "hsr_distance_full_all",            # biegi wysokiej prędkości
+    "sprint_count_full_all",           # częstość sprintów
+    "hi_count_full_all",               # akcje wysokiej intensywności
+    "psv99",                           # prędkość szczytowa
+    "highaccel_count_full_all",        # dynamika (przyspieszenia)
+    "cod_count_full_all",              # zwroty / zmiany kierunku
+]
+PHYS_STYLE_METRICS = {
+    "Bramka": [],
+    "Obrona": _PHYS_STYLE,
+    "Pomoc": _PHYS_STYLE,
+    "Atak": _PHYS_STYLE,
+}
+# Waga metryk fizycznych w profilu koherencji (<1 = fizyka wzbogaca, nie dominuje).
+PHYS_WEIGHT = 0.5
+METRIC_WEIGHTS = {m: PHYS_WEIGHT for m in _PHYS_STYLE}
+ 
+ 
+def _profile_metrics(line):
+    """Pełny profil koherencji = metryki StatsBomb + fizyka (jeśli dołączona)."""
+    return LINE_METRICS.get(line, []) + PHYS_STYLE_METRICS.get(line, [])
+ 
+ 
 def _val(row, key):
     v = row.get(key)
     if not isinstance(v, (int, float)):
@@ -90,12 +121,12 @@ def _val(row, key):
     if math.isnan(fv) or math.isinf(fv):  # puste/niepoprawne metryki -> brak
         return None
     return fv
-
-
+ 
+ 
 def build_league_stats(rows, line):
     """Dla każdej metryki linii liczy min/max/średnią/odchylenie w populacji ligi.
     Służy do normalizacji (percentyl / z-score)."""
-    metrics = LINE_METRICS.get(line, [])
+    metrics = _profile_metrics(line)
     stats = {}
     for m in metrics:
         vals = [_val(r, m) for r in rows]
@@ -108,21 +139,21 @@ def build_league_stats(rows, line):
                     "min": min(vals), "max": max(vals),
                     "sorted": sorted(vals)}
     return stats
-
-
+ 
+ 
 def _percentile(value, sorted_vals):
     """Percentyl wartości w posortowanej populacji (0-100)."""
     if not sorted_vals:
         return 50.0
     below = sum(1 for v in sorted_vals if v < value)
     return 100.0 * below / len(sorted_vals)
-
-
+ 
+ 
 # DIAGNOSTYKA: zlicza, ile metryk realnie weszlo do liczenia poziomu.
 # Odpowiada na pytanie: czy rozszerzenie QUALITY_METRICS dziala, czy dodane
 # metryki sa puste w danych StatsBomb (wtedy sa po cichu pomijane).
 DIAG = {}
-
+ 
 def quality_level(row, line, league_stats):
     """POZIOM 0-100: średni percentyl metryk jakościowych względem ligi bazowej."""
     metrics = QUALITY_METRICS.get(line, [])
@@ -149,22 +180,24 @@ def quality_level(row, line, league_stats):
     if math.isnan(avg) or math.isinf(avg):
         return 72
     return max(0, min(100, round(avg)))
-
-
+ 
+ 
 def _zprofile(row, line, base_stats):
-    """Profil zawodnika jako wektor z-score względem ligi bazowej."""
-    metrics = LINE_METRICS.get(line, [])
+    """Profil zawodnika jako wektor z-score względem ligi bazowej.
+    Metryki fizyczne (SkillCorner) wchodzą z wagą METRIC_WEIGHTS (<1)."""
+    metrics = _profile_metrics(line)
     vec = []
     for m in metrics:
+        w = METRIC_WEIGHTS.get(m, 1.0)
         v = _val(row, m)
         st = base_stats.get(m)
         if v is None or not st:
             vec.append(0.0)
         else:
-            vec.append((v - st["mean"]) / st["std"])
+            vec.append(w * (v - st["mean"]) / st["std"])
     return vec
-
-
+ 
+ 
 def coherence(candidate_row, rakow_row, line, base_stats):
     """KOHERENCJA 0-100: podobieństwo profili gry (kandydat vs zawodnik Rakowa).
     Liczone jako podobieństwo kosinusowe wektorów z-score, przeskalowane 0-100."""
@@ -182,8 +215,8 @@ def coherence(candidate_row, rakow_row, line, base_stats):
     if math.isnan(result) or math.isinf(result):
         return 50
     return max(0, min(100, round(result)))  # 0..100, zabezpieczone
-
-
+ 
+ 
 if __name__ == "__main__":
     # Test na danych syntetycznych
     base = [
