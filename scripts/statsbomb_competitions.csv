@@ -1,0 +1,270 @@
+competition_id,season_id,country_name,competition_name,season_name,competition_gender
+260,351,Denmark,1. Division,2026/2027,male
+260,318,Denmark,1. Division,2025/2026,male
+260,317,Denmark,1. Division,2024/2025,male
+260,281,Denmark,1. Division,2023/2024,male
+78,351,Croatia,1. HNL,2026/2027,male
+78,318,Croatia,1. HNL,2025/2026,male
+78,317,Croatia,1. HNL,2024/2025,male
+78,281,Croatia,1. HNL,2023/2024,male
+78,235,Croatia,1. HNL,2022/2023,male
+78,108,Croatia,1. HNL,2021/2022,male
+78,90,Croatia,1. HNL,2020/2021,male
+78,42,Croatia,1. HNL,2019/2020,male
+1714,351,Slovenia,1. SNL,2026/2027,male
+1714,318,Slovenia,1. SNL,2025/2026,male
+1714,317,Slovenia,1. SNL,2024/2025,male
+10,351,Germany,2. Bundesliga,2026/2027,male
+10,318,Germany,2. Bundesliga,2025/2026,male
+10,317,Germany,2. Bundesliga,2024/2025,male
+10,281,Germany,2. Bundesliga,2023/2024,male
+10,235,Germany,2. Bundesliga,2022/2023,male
+10,108,Germany,2. Bundesliga,2021/2022,male
+10,90,Germany,2. Bundesliga,2020/2021,male
+10,42,Germany,2. Bundesliga,2019/2020,male
+179,235,Germany,3. Liga,2022/2023,male
+179,108,Germany,3. Liga,2021/2022,male
+179,90,Germany,3. Liga,2020/2021,male
+75,316,Sweden,Allsvenskan,2026,male
+75,315,Sweden,Allsvenskan,2025,male
+75,282,Sweden,Allsvenskan,2024,male
+75,107,Sweden,Allsvenskan,2023,male
+75,106,Sweden,Allsvenskan,2022,male
+75,91,Sweden,Allsvenskan,2021,male
+75,43,Sweden,Allsvenskan,2020,male
+47,351,Austria,Bundesliga,2026/2027,male
+47,318,Austria,Bundesliga,2025/2026,male
+47,317,Austria,Bundesliga,2024/2025,male
+47,281,Austria,Bundesliga,2023/2024,male
+47,235,Austria,Bundesliga,2022/2023,male
+47,108,Austria,Bundesliga,2021/2022,male
+47,90,Austria,Bundesliga,2020/2021,male
+47,42,Austria,Bundesliga,2019/2020,male
+119,351,Germany,Bundesliga 1/2 Play-offs,2026/2027,male
+119,318,Germany,Bundesliga 1/2 Play-offs,2025/2026,male
+119,317,Germany,Bundesliga 1/2 Play-offs,2024/2025,male
+119,281,Germany,Bundesliga 1/2 Play-offs,2023/2024,male
+119,235,Germany,Bundesliga 1/2 Play-offs,2022/2023,male
+119,108,Germany,Bundesliga 1/2 Play-offs,2021/2022,male
+119,90,Germany,Bundesliga 1/2 Play-offs,2020/2021,male
+119,42,Germany,Bundesliga 1/2 Play-offs,2019/2020,male
+121,351,Germany,Bundesliga 2/3 Play-offs,2026/2027,male
+121,318,Germany,Bundesliga 2/3 Play-offs,2025/2026,male
+121,317,Germany,Bundesliga 2/3 Play-offs,2024/2025,male
+121,281,Germany,Bundesliga 2/3 Play-offs,2023/2024,male
+121,235,Germany,Bundesliga 2/3 Play-offs,2022/2023,male
+121,108,Germany,Bundesliga 2/3 Play-offs,2021/2022,male
+121,90,Germany,Bundesliga 2/3 Play-offs,2020/2021,male
+121,42,Germany,Bundesliga 2/3 Play-offs,2019/2020,male
+1894,351,Czech Republic,Chance National Liga,2026/2027,male
+1894,318,Czech Republic,Chance National Liga,2025/2026,male
+76,351,Czech Republic,Czech Liga,2026/2027,male
+76,318,Czech Republic,Czech Liga,2025/2026,male
+76,317,Czech Republic,Czech Liga,2024/2025,male
+76,281,Czech Republic,Czech Liga,2023/2024,male
+76,235,Czech Republic,Czech Liga,2022/2023,male
+76,108,Czech Republic,Czech Liga,2021/2022,male
+76,90,Czech Republic,Czech Liga,2020/2021,male
+76,42,Czech Republic,Czech Liga,2019/2020,male
+38,351,Poland,Ekstraklasa,2026/2027,male
+38,318,Poland,Ekstraklasa,2025/2026,male
+38,317,Poland,Ekstraklasa,2024/2025,male
+38,281,Poland,Ekstraklasa,2023/2024,male
+38,235,Poland,Ekstraklasa,2022/2023,male
+38,108,Poland,Ekstraklasa,2021/2022,male
+38,90,Poland,Ekstraklasa,2020/2021,male
+38,42,Poland,Ekstraklasa,2019/2020,male
+88,316,Norway,Eliteserien,2026,male
+88,315,Norway,Eliteserien,2025,male
+88,282,Norway,Eliteserien,2024,male
+88,107,Norway,Eliteserien,2023,male
+88,106,Norway,Eliteserien,2022,male
+88,91,Norway,Eliteserien,2021,male
+88,43,Norway,Eliteserien,2020,male
+6,351,Netherlands,Eredivisie,2026/2027,male
+6,318,Netherlands,Eredivisie,2025/2026,male
+6,317,Netherlands,Eredivisie,2024/2025,male
+6,281,Netherlands,Eredivisie,2023/2024,male
+6,235,Netherlands,Eredivisie,2022/2023,male
+6,108,Netherlands,Eredivisie,2021/2022,male
+6,90,Netherlands,Eredivisie,2020/2021,male
+6,42,Netherlands,Eredivisie,2019/2020,male
+1865,351,Bulgaria,First League,2026/2027,male
+1865,318,Bulgaria,First League,2025/2026,male
+1848,351,Poland,I Liga,2026/2027,male
+1848,318,Poland,I Liga,2025/2026,male
+1848,317,Poland,I Liga,2024/2025,male
+1848,281,Poland,I Liga,2023/2024,male
+1985,316,Japan,J1 100 Year Vision League,2026,male
+108,351,Japan,J1 League,2026/2027,male
+108,315,Japan,J1 League,2025,male
+108,282,Japan,J1 League,2024,male
+108,107,Japan,J1 League,2023,male
+46,351,Belgium,Jupiler Pro League,2026/2027,male
+46,318,Belgium,Jupiler Pro League,2025/2026,male
+46,317,Belgium,Jupiler Pro League,2024/2025,male
+46,281,Belgium,Jupiler Pro League,2023/2024,male
+46,235,Belgium,Jupiler Pro League,2022/2023,male
+46,108,Belgium,Jupiler Pro League,2021/2022,male
+46,90,Belgium,Jupiler Pro League,2020/2021,male
+46,42,Belgium,Jupiler Pro League,2019/2020,male
+42,351,Spain,La Liga 2,2026/2027,male
+42,318,Spain,La Liga 2,2025/2026,male
+42,317,Spain,La Liga 2,2024/2025,male
+42,281,Spain,La Liga 2,2023/2024,male
+42,235,Spain,La Liga 2,2022/2023,male
+42,108,Spain,La Liga 2,2021/2022,male
+42,90,Spain,La Liga 2,2020/2021,male
+42,42,Spain,La Liga 2,2019/2020,male
+349,351,Romania,Liga I,2026/2027,male
+349,318,Romania,Liga I,2025/2026,male
+349,317,Romania,Liga I,2024/2025,male
+349,281,Romania,Liga I,2023/2024,male
+349,235,Romania,Liga I,2022/2023,male
+349,108,Romania,Liga I,2021/2022,male
+8,351,France,Ligue 2,2026/2027,male
+8,318,France,Ligue 2,2025/2026,male
+8,317,France,Ligue 2,2024/2025,male
+8,281,France,Ligue 2,2023/2024,male
+8,235,France,Ligue 2,2022/2023,male
+8,108,France,Ligue 2,2021/2022,male
+8,90,France,Ligue 2,2020/2021,male
+8,42,France,Ligue 2,2019/2020,male
+1442,316,Norway,OBOS-ligaen,2026,male
+1442,315,Norway,OBOS-ligaen,2025,male
+1442,282,Norway,OBOS-ligaen,2024,male
+1442,107,Norway,OBOS-ligaen,2023,male
+125,351,Switzerland,Play-offs 1/2,2026/2027,male
+286,351,Slovakia,Play-offs 1/2,2026/2027,male
+1340,351,Romania,Play-offs 1/2,2026/2027,male
+1860,351,Slovenia,Play-offs 1/2,2026/2027,male
+283,351,Netherlands,Play-offs 1/2,2026/2027,male
+1341,351,Serbia,Play-offs 1/2,2026/2027,male
+1337,351,Czech Republic,Play-offs 1/2,2026/2027,male
+295,351,Portugal,Play-offs 1/2,2026/2027,male
+226,351,Sweden,Play-offs 1/2,2026/2027,male
+295,318,Portugal,Play-offs 1/2,2025/2026,male
+274,318,Belgium,Play-offs 1/2,2025/2026,male
+283,318,Netherlands,Play-offs 1/2,2025/2026,male
+1337,318,Czech Republic,Play-offs 1/2,2025/2026,male
+226,318,Sweden,Play-offs 1/2,2025/2026,male
+1341,318,Serbia,Play-offs 1/2,2025/2026,male
+286,318,Slovakia,Play-offs 1/2,2025/2026,male
+1860,318,Slovenia,Play-offs 1/2,2025/2026,male
+1340,318,Romania,Play-offs 1/2,2025/2026,male
+125,318,Switzerland,Play-offs 1/2,2025/2026,male
+283,317,Netherlands,Play-offs 1/2,2024/2025,male
+274,317,Belgium,Play-offs 1/2,2024/2025,male
+295,317,Portugal,Play-offs 1/2,2024/2025,male
+286,317,Slovakia,Play-offs 1/2,2024/2025,male
+1860,317,Slovenia,Play-offs 1/2,2024/2025,male
+1340,317,Romania,Play-offs 1/2,2024/2025,male
+1341,317,Serbia,Play-offs 1/2,2024/2025,male
+1337,317,Czech Republic,Play-offs 1/2,2024/2025,male
+125,317,Switzerland,Play-offs 1/2,2024/2025,male
+226,282,Sweden,Play-offs 1/2,2024,male
+231,282,Norway,Play-offs 1/2,2024,male
+283,281,Netherlands,Play-offs 1/2,2023/2024,male
+274,281,Belgium,Play-offs 1/2,2023/2024,male
+125,281,Switzerland,Play-offs 1/2,2023/2024,male
+1341,281,Serbia,Play-offs 1/2,2023/2024,male
+1340,281,Romania,Play-offs 1/2,2023/2024,male
+295,281,Portugal,Play-offs 1/2,2023/2024,male
+1337,281,Czech Republic,Play-offs 1/2,2023/2024,male
+231,107,Norway,Play-offs 1/2,2023,male
+226,107,Sweden,Play-offs 1/2,2023,male
+295,235,Portugal,Play-offs 1/2,2022/2023,male
+1337,235,Czech Republic,Play-offs 1/2,2022/2023,male
+1340,235,Romania,Play-offs 1/2,2022/2023,male
+125,235,Switzerland,Play-offs 1/2,2022/2023,male
+226,106,Sweden,Play-offs 1/2,2022,male
+231,106,Norway,Play-offs 1/2,2022,male
+1337,108,Czech Republic,Play-offs 1/2,2021/2022,male
+1340,108,Romania,Play-offs 1/2,2021/2022,male
+125,108,Switzerland,Play-offs 1/2,2021/2022,male
+295,108,Portugal,Play-offs 1/2,2021/2022,male
+231,91,Norway,Play-offs 1/2,2021,male
+226,91,Sweden,Play-offs 1/2,2021,male
+295,90,Portugal,Play-offs 1/2,2020/2021,male
+125,90,Switzerland,Play-offs 1/2,2020/2021,male
+226,43,Sweden,Play-offs 1/2,2020,male
+231,43,Norway,Play-offs 1/2,2020,male
+125,42,Switzerland,Play-offs 1/2,2019/2020,male
+1339,351,Portugal,Play-offs 2/3,2026/2027,male
+1339,318,Portugal,Play-offs 2/3,2025/2026,male
+1339,317,Portugal,Play-offs 2/3,2024/2025,male
+1339,281,Portugal,Play-offs 2/3,2023/2024,male
+1480,235,Switzerland,Play-offs 2/3,2022/2023,male
+1339,235,Portugal,Play-offs 2/3,2022/2023,male
+1256,106,Sweden,Play-offs 2/3,2022,male
+1339,108,Portugal,Play-offs 2/3,2021/2022,male
+1256,91,Sweden,Play-offs 2/3,2021,male
+1757,318,Poland,Polish Cup: Rakow Czestochowa,2025/2026,male
+1757,317,Poland,Polish Cup: Rakow Czestochowa,2024/2025,male
+13,351,Portugal,Primeira Liga,2026/2027,male
+13,318,Portugal,Primeira Liga,2025/2026,male
+13,317,Portugal,Primeira Liga,2024/2025,male
+13,281,Portugal,Primeira Liga,2023/2024,male
+13,235,Portugal,Primeira Liga,2022/2023,male
+13,108,Portugal,Primeira Liga,2021/2022,male
+13,90,Portugal,Primeira Liga,2020/2021,male
+13,42,Portugal,Primeira Liga,2019/2020,male
+1408,351,Spain,Primera División RFEF,2026/2027,male
+1408,318,Spain,Primera División RFEF,2025/2026,male
+1408,317,Spain,Primera División RFEF,2024/2025,male
+1408,281,Spain,Primera División RFEF,2023/2024,male
+1408,235,Spain,Primera División RFEF,2022/2023,male
+1890,351,Poland,Raków Częstochowa Friendlies,2026/2027,male
+1890,318,Poland,Raków Częstochowa Friendlies,2025/2026,male
+357,351,Portugal,Segunda Liga,2026/2027,male
+357,318,Portugal,Segunda Liga,2025/2026,male
+357,317,Portugal,Segunda Liga,2024/2025,male
+357,281,Portugal,Segunda Liga,2023/2024,male
+357,235,Portugal,Segunda Liga,2022/2023,male
+357,108,Portugal,Segunda Liga,2021/2022,male
+12,351,Italy,Serie A,2026/2027,male
+12,318,Italy,Serie A,2025/2026,male
+12,317,Italy,Serie A,2024/2025,male
+80,351,Switzerland,Super League,2026/2027,male
+60,351,Greece,Super League,2026/2027,male
+60,318,Greece,Super League,2025/2026,male
+80,318,Switzerland,Super League,2025/2026,male
+60,317,Greece,Super League,2024/2025,male
+80,317,Switzerland,Super League,2024/2025,male
+80,281,Switzerland,Super League,2023/2024,male
+60,281,Greece,Super League,2023/2024,male
+80,235,Switzerland,Super League,2022/2023,male
+80,108,Switzerland,Super League,2021/2022,male
+80,90,Switzerland,Super League,2020/2021,male
+80,42,Switzerland,Super League,2019/2020,male
+79,351,Serbia,Super Liga,2026/2027,male
+124,351,Slovakia,Super Liga,2026/2027,male
+79,318,Serbia,Super Liga,2025/2026,male
+124,318,Slovakia,Super Liga,2025/2026,male
+79,317,Serbia,Super Liga,2024/2025,male
+124,317,Slovakia,Super Liga,2024/2025,male
+124,281,Slovakia,Super Liga,2023/2024,male
+79,281,Serbia,Super Liga,2023/2024,male
+249,316,Sweden,Superettan,2026,male
+249,315,Sweden,Superettan,2025,male
+249,282,Sweden,Superettan,2024,male
+249,107,Sweden,Superettan,2023,male
+249,106,Sweden,Superettan,2022,male
+249,91,Sweden,Superettan,2021,male
+77,351,Denmark,Superliga,2026/2027,male
+77,318,Denmark,Superliga,2025/2026,male
+77,317,Denmark,Superliga,2024/2025,male
+77,281,Denmark,Superliga,2023/2024,male
+1896,351,Europe,UEFA Conference League - Qualification,2026/2027,male
+1896,318,Europe,UEFA Conference League - Qualification,2025/2026,male
+55,43,Europe,UEFA Euro,2020,male
+353,351,Europe,UEFA Europa Conference League,2026/2027,male
+353,318,Europe,UEFA Europa Conference League,2025/2026,male
+35,351,Europe,UEFA Europa League,2026/2027,male
+35,318,Europe,UEFA Europa League,2025/2026,male
+35,317,Europe,UEFA Europa League,2024/2025,male
+1892,318,Europe,UEFA Europa League - Qualification,2025/2026,male
+113,351,Europe,UEFA Youth League,2026/2027,male
+113,318,Europe,UEFA Youth League,2025/2026,male
+113,317,Europe,UEFA Youth League,2024/2025,male
+113,281,Europe,UEFA Youth League,2023/2024,male
