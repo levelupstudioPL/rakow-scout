@@ -59,6 +59,12 @@ LEAGUE_CONFIG = [
     {"name": "Superliga (DK)",          "competition_id": 77,  "season_id": 318, "base": False},
     {"name": "Czech Liga (CZ)",         "competition_id": 76,  "season_id": 318, "base": False},
     {"name": "Super League (CH)",       "competition_id": 80,  "season_id": 318, "base": False},
+    # Rozszerzenie puli (budżet + poziom pod TOP3 Ekstraklasy) — sezon 2025/26.
+    {"name": "1. HNL (HR)",             "competition_id": 78,  "season_id": 318, "base": False},
+    {"name": "Super Liga (RS)",         "competition_id": 79,  "season_id": 318, "base": False},
+    {"name": "Liga I (RO)",             "competition_id": 349, "season_id": 318, "base": False},
+    {"name": "Super League (GR)",       "competition_id": 60,  "season_id": 318, "base": False},
+    # (Węgry NB I — brak w licencji StatsBomb, więc pominięte mimo dostępności w SkillCorner.)
     {"name": "Jupiler / inne — dodaj wg potrzeb", "competition_id": None, "season_id": None, "base": False},
 ]
 # Uwaga: ostatni wpis to placeholder-przykład; usuń go albo uzupełnij realnym ID.
@@ -564,4 +570,5 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
  
