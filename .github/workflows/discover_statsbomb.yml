@@ -1,0 +1,44 @@
+name: StatsBomb — rozpoznanie licencji
+ 
+# Jednorazowe: wypisuje dostępne rozgrywki (do dodania nowych lig) oraz listę
+# kolumn metryk (do rozbudowy oceny bramkarzy). Wymaga sekretów SB_USERNAME/SB_PASSWORD.
+ 
+on:
+  workflow_dispatch:
+ 
+permissions:
+  contents: write
+ 
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod repo
+        uses: actions/checkout@v4
+ 
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Zainstaluj zależności
+        run: pip install statsbombpy pandas
+ 
+      - name: Rozpoznaj licencję StatsBomb
+        env:
+          SB_USERNAME: ${{ secrets.SB_USERNAME }}
+          SB_PASSWORD: ${{ secrets.SB_PASSWORD }}
+        run: python scripts/discover_statsbomb.py
+ 
+      - name: Zapisz wyniki
+        run: |
+          git add scripts/statsbomb_competitions.csv scripts/statsbomb_columns.txt 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Brak zmian."
+          else
+            git config user.name "rakow-scout-bot"
+            git config user.email "actions@github.com"
+            git commit -m "StatsBomb: rozpoznanie licencji [auto]"
+            git pull --rebase origin main
+            git push
+          fi
