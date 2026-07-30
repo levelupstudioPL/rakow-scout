@@ -290,7 +290,7 @@ function TwinView({ data, sel, setSel, setView }) {
           background: `${C.warn}14`, border: `1px solid ${C.warn}44`, borderRadius: 9,
           padding: "7px 12px", fontSize: 12, color: C.steelHi }}>
           <span style={{ color: C.warn, fontSize: 14 }}>⚠</span>
-          Znacznik przy RC oznacza <b style={{ color: C.bone }}>niepełne dane</b> — poziom szacowany, bo zawodnik nie ma jeszcze wystarczającej próbki meczowej. Traktuj orientacyjnie.
+          <b style={{ color: C.warn }}>b.d.</b>&nbsp;w miejscu RC oznacza <b style={{ color: C.bone }}>brak dostatecznych danych</b> — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć.
         </div>
       )}
       <RcExplainer />
@@ -315,15 +315,16 @@ function TwinView({ data, sel, setSel, setView }) {
                     </div>
                     <div className="disp" style={{ fontSize: 34, lineHeight: 0.8, color: C.bone, flexShrink: 0,
                       display: "flex", alignItems: "flex-start", gap: 3 }}>
-                      {p.rc}<span style={{ fontSize: 11, color: C.steel }}> RC</span>
-                      {p.rc_estimated && (
-                        <span title="Niepełne dane — poziom szacowany (zawodnik nie ma jeszcze wystarczającej próbki meczowej w StatsBomb). Traktuj orientacyjnie."
-                          style={{ fontSize: 13, color: C.warn, cursor: "help", lineHeight: 1 }}>⚠</span>
+                      {p.rc_estimated ? (
+                        <span className="mono" title="Brak dostatecznych danych — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć."
+                          style={{ fontSize: 15, color: C.warn, cursor: "help", lineHeight: 1.2, fontWeight: 700 }}>b.d.</span>
+                      ) : (
+                        <>{p.rc}<span style={{ fontSize: 11, color: C.steel }}> RC</span></>
                       )}
                     </div>
                   </div>
                   <div style={{ height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden", marginTop: 12 }}>
-                    <div className="bar" style={{ width: `${p.rc}%`, height: "100%",
+                    <div className="bar" style={{ width: p.rc_estimated ? "0%" : `${p.rc}%`, height: "100%",
                       background: p.rc_estimated ? C.warn : C.red }} />
                   </div>
                   {p.real && <div style={{ position: "absolute", top: 0, right: 0, background: C.good,
@@ -424,11 +425,10 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
               <div>
                 <div className="disp" style={{ fontSize: 26, lineHeight: 0.9,
                   display: "flex", alignItems: "flex-start", gap: 2 }}>
-                  {m.level}
-                  {p.level_estimated && (
-                    <span title="Niepełne dane — poziom szacowany (brak wystarczającej próbki meczowej)."
-                      style={{ fontSize: 11, color: C.warn, cursor: "help", lineHeight: 1 }}>⚠</span>
-                  )}
+                  {p.level_estimated ? (
+                    <span className="mono" title="Brak dostatecznych danych — brak wystarczającej próbki meczowej, poziomu nie da się policzyć."
+                      style={{ fontSize: 13, color: C.warn, cursor: "help", fontWeight: 700 }}>b.d.</span>
+                  ) : m.level}
                 </div>
                 <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
               </div>
@@ -536,7 +536,10 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                 </div>
                 <div>
                   <div className="disp" style={{ fontSize: 24, lineHeight: 0.9, display: "flex", gap: 2 }}>
-                    {p.raw}{p.level_estimated && <span title="Niepełne dane — poziom szacowany." style={{ fontSize: 10, color: C.warn, cursor: "help" }}>⚠</span>}
+                    {p.level_estimated ? (
+                      <span className="mono" title="Brak dostatecznych danych — brak wystarczającej próbki meczowej, poziomu nie da się policzyć."
+                        style={{ fontSize: 12, color: C.warn, cursor: "help", fontWeight: 700 }}>b.d.</span>
+                    ) : p.raw}
                   </div>
                   <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
                 </div>
@@ -691,7 +694,7 @@ function HelpView({ data, setView }) {
     ["Koherencja", "Skala 0–100. Jak podobnie kandydat GRA do konkretnego zawodnika Rakowa (podobieństwo profili). Obejmuje technikę (StatsBomb), fizykę i taktykę ruchu (SkillCorner). Nie myl z poziomem — to podobieństwo stylu, nie jakość."],
     ["Fizyka (SkillCorner)", "Dystans, biegi wysokiej intensywności, sprinty, prędkość szczytowa, przyspieszenia, zwroty. Wchodzi do koherencji (styl), nie do RC."],
     ["Game Intelligence (SkillCorner)", "Biegi bez piłki, styl i zasięg podań, oferowanie się, prowadzenie pod presją, pressing/odbiory. Wchodzi do koherencji (styl), nie do RC."],
-    ["⚠ Niepełne dane", "Zawodnik nie ma jeszcze wystarczającej próbki meczowej — poziom jest szacowany. Traktuj orientacyjnie."],
+    ["b.d. (brak danych)", "W miejscu poziomu/RC pojawia się b.d., gdy zawodnik nie ma wystarczającej próbki meczowej — poziomu nie da się policzyć. To nie ocena negatywna, tylko brak danych."],
     ["Cena (estymacja)", "Wartość rynkowa skorygowana o poziom vs RC, wiek, długość kontraktu i mnożnik ligi. Zwraca punkt i widełki (−20% / +25%). Placeholder do kalibracji na zrealizowanych transferach."],
   ];
   return (
