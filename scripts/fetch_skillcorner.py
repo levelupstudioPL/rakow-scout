@@ -142,6 +142,11 @@ EDITIONS = {
     1189: "Superliga (DK)",
     1191: "Czech Liga (CZ)",
     1196: "Super League (CH)",
+    # Rozszerzenie puli (sezon 2025/26) — etykiety identyczne jak w LEAGUE_CONFIG.
+    1215: "1. HNL (HR)",
+    1173: "Super Liga (RS)",
+    1207: "Liga I (RO)",
+    1263: "Super League (GR)",
 }
  
  
