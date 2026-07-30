@@ -18,9 +18,14 @@ import math
 # Do koherencji (podobieństwa) i do poziomu. Nazwy = pola StatsBomb.
 LINE_METRICS = {
     "Bramka": [
-        # Bramkarze mają osobny zestaw danych; przy braku pól fallback niżej.
+        # Rozbudowany profil bramkarza: shot-stopping + wartość ogólna + styl
+        # gry nogą (krótka vs długa dystrybucja). Metryki realnie dostępne w
+        # StatsBomb dla tych lig (potwierdzone w statsbomb_columns.txt).
         "player_season_gsaa_90", "player_season_save_ratio",
+        "player_season_positive_outcome_90", "player_season_obv_gk_90",
         "player_season_op_passes_90", "player_season_passing_ratio",
+        "player_season_long_balls_90", "player_season_long_ball_ratio",
+        "player_season_pass_length",
     ],
     "Obrona": [
         "player_season_padj_tackles_and_interceptions_90",
@@ -68,6 +73,7 @@ LINE_METRICS = {
 # nie zmniejsza potrzeby jego walidacji.
 QUALITY_METRICS = {
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
+               "player_season_positive_outcome_90", "player_season_obv_gk_90",
                "player_season_op_passes_90"],
     "Obrona": ["player_season_padj_tackles_and_interceptions_90",
                "player_season_aerial_wins_90", "player_season_clearance_90",
