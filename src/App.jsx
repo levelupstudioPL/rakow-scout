@@ -21,6 +21,23 @@ const lineOfPos = (pos) => {
   if (/[LR]?W$/.test(s) || s.includes("M")) return "Pomoc";
   return "Pomoc";
 };
+const mean = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0);
+
+// Formacja 3-4-3. Kolejność = priorytet obsadzania (najpierw najwęższe pule:
+// bramka, środek obrony, napastnik). x/y = pozycja na boisku w % (y: 0=góra/atak).
+const FORMATION_343 = [
+  { id: "GK",  label: "GK",  line: "Bramka", pos: ["GK"],        x: 50, y: 90 },
+  { id: "LCB", label: "CB",  line: "Obrona", pos: ["CB"],        x: 27, y: 70 },
+  { id: "CCB", label: "CB",  line: "Obrona", pos: ["CB"],        x: 50, y: 73 },
+  { id: "RCB", label: "CB",  line: "Obrona", pos: ["CB"],        x: 73, y: 70 },
+  { id: "ST",  label: "ST",  line: "Atak",   pos: ["ST"],        x: 50, y: 13 },
+  { id: "LWB", label: "LWB", line: "Obrona", pos: ["WB", "WM"],  x: 10, y: 45 },
+  { id: "RWB", label: "RWB", line: "Obrona", pos: ["WB", "WM"],  x: 90, y: 45 },
+  { id: "LCM", label: "CM",  line: "Pomoc",  pos: ["DM", "CM"],  x: 37, y: 49 },
+  { id: "RCM", label: "CM",  line: "Pomoc",  pos: ["CM", "DM", "AM"], x: 63, y: 49 },
+  { id: "LW",  label: "LW",  line: "Pomoc",  pos: ["W", "AM"],   x: 21, y: 23 },
+  { id: "RW",  label: "RW",  line: "Pomoc",  pos: ["W", "AM"],   x: 79, y: 23 },
+];
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -164,6 +181,8 @@ export default function App() {
   const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y);
     const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 
+  // (Drużyna cieni liczona jest wewnątrz ShadowView — obsługuje ręczny skład.)
+
   if (err && !data) return <Splash>{err}</Splash>;
   if (!data) return <Splash>Wczytywanie…</Splash>;
 
@@ -171,8 +190,8 @@ export default function App() {
   const realCount = data.squad.filter((p) => p.real).length;
   const NAV = [
     ["twin", "Skład", "01"], ["match", "Odpowiednicy", "02"],
-    ["leagues", "Handicapy", "03"], ["corr", "Formacja", "04"],
-    ["search", "Szukaj", "05"], ["help", "Instrukcja", "—"],
+    ["shadow", "Drużyna cieni", "03"], ["leagues", "Handicapy", "04"],
+    ["corr", "Formacja", "05"], ["search", "Szukaj", "06"], ["help", "Instrukcja", "—"],
   ];
 
   return (
@@ -247,6 +266,7 @@ export default function App() {
               {view === "match" && "Odpowiednicy z Europy"}
               {view === "leagues" && "Handicapy lig"}
               {view === "corr" && "Zależności formacji"}
+              {view === "shadow" && "Drużyna cieni · 3-4-3"}
               {view === "search" && "Wyszukiwarka zawodników"}
               {view === "help" && "Jak korzystać"}
             </h1>
@@ -268,6 +288,7 @@ export default function App() {
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
             FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
+          {view === "shadow" && <ShadowView {...{ data, fmt, estimatePrice, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -571,6 +592,185 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+function ShadowView({ data, fmt, estimatePrice, setSel, setView }) {
+  const squad = data.squad, pool = data.pool;
+  const [lineup, setLineup] = useState({});   // slotId -> playerId (ręczny wybór)
+  const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
+  const surname = (nm) => { const t = String(nm || "").trim().split(" "); return t[t.length - 1]; };
+
+  const xi = useMemo(() => {
+    const used = new Set();
+    const byRc = (a, b) => (a.rc_estimated ? 1 : 0) - (b.rc_estimated ? 1 : 0) || (b.rc - a.rc);
+    const chosen = {};
+    for (const slot of FORMATION_343) {
+      const p = lineup[slot.id] && squad.find((s) => s.id === lineup[slot.id]);
+      if (p && !used.has(p.id)) { chosen[slot.id] = p; used.add(p.id); }
+    }
+    const pickAuto = (slot) => {
+      const free = squad.filter((p) => !used.has(p.id));
+      for (const pos of slot.pos) { const c = free.filter((p) => p.pos === pos).sort(byRc); if (c.length) return c[0]; }
+      return free.filter((p) => (p.line || lineOfPos(p.pos)) === slot.line).sort(byRc)[0] || null;
+    };
+    const usedShadows = new Set();
+    return FORMATION_343.map((slot) => {
+      let starter = chosen[slot.id];
+      if (!starter) { starter = pickAuto(slot); if (starter) used.add(starter.id); }
+      let shadow = null;
+      if (starter) {
+        const same = pool.filter((p) => p.pos === starter.pos && typeof p.coherence === "number" && !usedShadows.has(p.id));
+        const pref = same.filter((p) => p.coherence_ref === starter.name);
+        const list = (pref.length ? pref : same).sort((a, b) => b.coherence - a.coherence);
+        shadow = list[0] || null; if (shadow) usedShadows.add(shadow.id);
+      }
+      const price = starter && shadow ? estimatePrice(starter, shadow) : null;
+      return { slot, starter, shadow, price };
+    });
+  }, [data, lineup]);
+
+  const filled = xi.filter((s) => s.starter);
+  const real = filled.filter((s) => !s.starter.rc_estimated);
+  const shadows = xi.filter((s) => s.shadow);
+  const avgRC = real.length ? Math.round(mean(real.map((s) => s.starter.rc))) : null;
+  const avgCoh = shadows.length ? Math.round(mean(shadows.map((s) => s.shadow.coherence))) : null;
+  const totalCost = shadows.reduce((a, s) => a + (s.price ? s.price.est : 0), 0);
+  const isManual = Object.keys(lineup).length > 0;
+  const eligible = (slot) => squad.filter((p) => (slot.line === "Bramka" ? p.pos === "GK" : (p.line || lineOfPos(p.pos)) === slot.line));
+
+  // --- macierz koherencji (podobieństwo stylu) między zawodnikami pola ---
+  const wp = xi.filter((s) => s.starter && s.slot.line !== "Bramka"
+    && Array.isArray(s.starter.profile) && s.starter.profile.some((v) => v !== 0));
+  const cos = (a, b) => { let d = 0, na = 0, nb = 0; for (let i = 0; i < a.length; i++) { d += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; } if (!na || !nb) return 50; return Math.round((d / (Math.sqrt(na) * Math.sqrt(nb)) + 1) / 2 * 100); };
+  const hasProfiles = wp.length >= 2;
+  const pairSim = (i, j) => cos(wp[i].starter.profile, wp[j].starter.profile);
+  const avgWith = (i) => { const o = []; for (let j = 0; j < wp.length; j++) if (j !== i) o.push(pairSim(i, j)); return o.length ? Math.round(mean(o)) : 0; };
+  let teamCoh = null;
+  if (hasProfiles) { const ps = []; for (let i = 0; i < wp.length; i++) for (let j = i + 1; j < wp.length; j++) ps.push(pairSim(i, j)); teamCoh = ps.length ? Math.round(mean(ps)) : null; }
+
+  const selStyle = { background: C.panel2, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 6,
+    padding: "3px 4px", fontSize: 11, fontWeight: 600, width: "100%", cursor: "pointer" };
+
+  return (
+    <div>
+      <Lead>Skład Rakowa w formacji <b className="mono" style={{ color: C.redHi }}>3-4-3</b> — ustaw go ręcznie (rozwijane listy na kartach), a pod każdym zawodnikiem zobaczysz jego najlepszy <b style={{ color: C.bone }}>cień</b>. Niżej macierz koherencji: jak podobnie stylem grają wybrani zawodnicy względem siebie.</Lead>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "14px 0 4px", flexWrap: "wrap" }}>
+        <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>
+          SKŁAD: <b style={{ color: isManual ? C.redHi : C.steelHi }}>{isManual ? "ręczny" : "automatyczny"}</b>
+        </span>
+        {isManual && (
+          <button onClick={() => setLineup({})} style={{ background: "transparent", color: C.redHi,
+            border: `1px solid ${C.red}66`, borderRadius: 8, padding: "5px 12px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>
+            Przywróć automatyczny
+          </button>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "12px 0 18px" }}>
+        <Kpi l="Śr. poziom XI" v={avgRC ?? "—"} />
+        <Kpi l="Koherencja składu" v={teamCoh != null ? `${teamCoh}%` : "—"} c={C.redHi} />
+        <Kpi l="Śr. koherencja cieni" v={avgCoh != null ? `${avgCoh}%` : "—"} c={C.proxy} />
+        <Kpi l="Koszt cieni (łącznie)" v={fmt(totalCost)} c={C.proxy} />
+      </div>
+
+      <div style={{ overflowX: "auto" }}>
+        <div style={{ position: "relative", width: "100%", minWidth: 660, maxWidth: 940, margin: "0 auto",
+          aspectRatio: "10 / 12", background: "linear-gradient(180deg,#0f2018,#0a140e)",
+          border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden" }}>
+          <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 1, background: `${C.bone}16` }} />
+          <div style={{ position: "absolute", left: "50%", top: "50%", width: 120, height: 120, marginLeft: -60, marginTop: -60, border: `1px solid ${C.bone}12`, borderRadius: "50%" }} />
+          <div style={{ position: "absolute", left: "26%", right: "26%", top: 0, height: "13%", border: `1px solid ${C.bone}12`, borderTop: "none" }} />
+          <div style={{ position: "absolute", left: "26%", right: "26%", bottom: 0, height: "13%", border: `1px solid ${C.bone}12`, borderBottom: "none" }} />
+
+          {xi.map(({ slot, starter, shadow, price }) => (
+            <div key={slot.id} style={{ position: "absolute", left: `${slot.x}%`, top: `${slot.y}%`,
+              transform: "translate(-50%,-50%)", width: 156, background: `${C.panel}F2`,
+              border: `1px solid ${C.line}`, borderRadius: 11, padding: "8px 10px", color: C.bone }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
+                <span className="mono" style={{ fontSize: 9, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>{slot.label}</span>
+                <select value={starter ? starter.id : ""} title="Zmień zawodnika"
+                  onChange={(e) => setLineup((l) => ({ ...l, [slot.id]: e.target.value || undefined }))}
+                  style={selStyle}>
+                  {!starter && <option value="">—</option>}
+                  {eligible(slot).map((p) => (
+                    <option key={p.id} value={p.id}>{p.pos} {surname(p.name)} · {p.rc_estimated ? "b.d." : p.rc}</option>
+                  ))}
+                </select>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                <span className="disp" style={{ fontSize: 15 }}>
+                  {starter ? (starter.rc_estimated
+                    ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 10, color: C.warn }}>b.d.</span>
+                    : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></>) : ""}
+                </span>
+                {starter && (
+                  <button onClick={() => { setSel(starter); setView("match"); }}
+                    style={{ background: "transparent", color: C.steelHi, border: `1px solid ${C.line}`,
+                      borderRadius: 6, padding: "2px 7px", fontSize: 10, cursor: "pointer" }}>odp. →</button>
+                )}
+              </div>
+              <div style={{ height: 1, background: C.line, margin: "0 0 6px" }} />
+              {shadow ? (
+                <div>
+                  <div className="mono" style={{ fontSize: 8.5, letterSpacing: 1, color: C.steel, textTransform: "uppercase", marginBottom: 2 }}>cień</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{shadow.name}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}>
+                    <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: cohColor(shadow.coherence) }}>{Math.round(shadow.coherence)}%</span>
+                    <span style={{ fontSize: 10, color: C.steel }}>koh.</span>
+                    <span style={{ marginLeft: "auto", fontSize: 11, color: C.proxy }}>
+                      {price ? fmt(price.est) : (Number(shadow.mv) > 0 ? fmt(Number(shadow.mv)) : "—")}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ fontSize: 10.5, color: C.steel }}>brak cienia w puli</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <SectionLabel>Koherencja składu — podobieństwo stylu</SectionLabel>
+      {!hasProfiles ? (
+        <Empty>Macierz włączy się po najbliższym odświeżeniu danych ze StatsBomb — pipeline dołoży wtedy profile stylu zawodników do <span className="mono">data.json</span>. Na razie brak profili.</Empty>
+      ) : (
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", fontSize: 11 }}>
+            <thead>
+              <tr>
+                <th></th>
+                {wp.map((s) => <th key={s.slot.id} className="mono" style={{ padding: 6, color: C.steel, fontWeight: 700 }} title={s.starter.name}>{s.slot.label}</th>)}
+                <th className="mono" style={{ padding: 6, color: C.steelHi }}>śr.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wp.map((s, i) => (
+                <tr key={s.slot.id}>
+                  <td className="mono" style={{ padding: "6px 8px", color: C.steelHi, whiteSpace: "nowrap", fontWeight: 600 }} title={s.starter.name}>
+                    <span style={{ color: C.redHi }}>{s.slot.label}</span> {surname(s.starter.name)}
+                  </td>
+                  {wp.map((_, j) => {
+                    const v = i === j ? 100 : pairSim(i, j);
+                    return (
+                      <td key={j} className="mono" title={`${surname(wp[i].starter.name)} ↔ ${surname(wp[j].starter.name)}: ${v}`}
+                        style={{ width: 40, height: 34, textAlign: "center", fontWeight: 600,
+                          background: i === j ? C.panelHi : `rgba(214,0,28,${0.08 + (v / 100) * 0.7})`,
+                          color: i === j ? C.steel : (v > 55 ? "#fff" : C.steelHi), border: `2px solid ${C.ink}`, borderRadius: 4 }}>
+                        {i === j ? "—" : v}
+                      </td>
+                    );
+                  })}
+                  <td className="mono" style={{ padding: "6px 8px", textAlign: "center", fontWeight: 700, color: C.proxy }}>{avgWith(i)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      <Note>Podobieństwo stylu (0-100) liczone z profilu ruchu i akcji (StatsBomb + SkillCorner), znormalizowanego względem Ekstraklasy. Wysokie = zawodnicy grają podobnie; niskie = uzupełniają się rolami. To podgląd spójności stylistycznej składu, nie ocena jakości. Bramkarz pominięty (metryki nieporównywalne). „Koszt cieni" = suma estymacji cen.</Note>
     </div>
   );
 }
