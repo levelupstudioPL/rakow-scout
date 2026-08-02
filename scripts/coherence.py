@@ -255,6 +255,47 @@ def coherence(candidate_row, rakow_row, line, base_stats):
     return max(0, min(100, round(result)))  # 0..100, zabezpieczone
  
  
+# =====================================================================
+# PROFIL STYLU (uniwersalny) — do koherencji „każdy z każdym" w drużynie.
+# Jeden, POZYCYJNIE NIEZALEŻNY zestaw metryk (technika + fizyka + GI), z-score
+# vs Ekstraklasa, żeby dało się policzyć podobieństwo stylu MIĘDZY dowolnymi
+# dwoma zawodnikami pola. Eksportowany do data.json jako pole "profile";
+# front liczy z niego macierz koherencji składu. Bramkarze: profil pomijany.
+# =====================================================================
+UNIVERSAL_STYLE = [
+    "player_season_op_passes_90", "player_season_passing_ratio",
+    "player_season_forward_pass_proportion", "player_season_op_f3_passes_90",
+    "player_season_padj_tackles_and_interceptions_90", "player_season_aerial_wins_90",
+    "player_season_dribbles_90", "player_season_key_passes_90",
+    "player_season_xa_90", "player_season_np_xg_90", "player_season_op_xgchain_90",
+    "total_metersperminute_full_all", "sprint_count_full_all", "psv99",
+    "offballrun_count", "pass_avgdistance", "onballengagement_count",
+]
+ 
+ 
+def build_universal_stats(rows):
+    """Średnia/odchylenie metryk UNIVERSAL_STYLE w populacji bazowej (Ekstraklasa)."""
+    stats = {}
+    for m in UNIVERSAL_STYLE:
+        vals = [v for v in (_val(r, m) for r in rows) if v is not None]
+        if not vals:
+            continue
+        mean = sum(vals) / len(vals)
+        var = sum((v - mean) ** 2 for v in vals) / len(vals)
+        stats[m] = {"mean": mean, "std": math.sqrt(var) or 1.0}
+    return stats
+ 
+ 
+def style_profile(row, ustats):
+    """Wektor z-score stylu zawodnika (stała długość = len(UNIVERSAL_STYLE))."""
+    vec = []
+    for m in UNIVERSAL_STYLE:
+        v = _val(row, m)
+        st = ustats.get(m)
+        vec.append(0.0 if (v is None or not st) else round((v - st["mean"]) / st["std"], 2))
+    return vec
+ 
+ 
 if __name__ == "__main__":
     # Test na danych syntetycznych
     base = [
