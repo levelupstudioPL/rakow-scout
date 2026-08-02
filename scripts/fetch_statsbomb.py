@@ -247,6 +247,8 @@ def build_dataset(sb, creds):
     # --- Statystyki populacji ligi bazowej per linia (do normalizacji) ---
     base_stats_by_line = {ln: coh.build_league_stats(base_pop, ln)
                           for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
+    # Uniwersalny profil stylu (do koherencji „każdy z każdym" w składzie).
+    universal_stats = coh.build_universal_stats(base_pop)
  
     # --- Handicapy lig (bez zmian, realna metoda) ---
     leagues = []
@@ -313,6 +315,9 @@ def build_dataset(sb, creds):
             # StatsBomb -> fallback ze squad.json lub domyslne 72). Front pokazuje
             # wtedy flage "niepelne dane", zeby nie mylic braku danych z ocena.
             "rc_estimated": (rc_source != "model"),
+            # profil stylu (z-score) do koherencji „każdy z każdym"; None gdy brak
+            # dopasowania w StatsBomb (bramkarze i tak pomijani na froncie).
+            "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
             "_sb": sb_row,
         })
  
@@ -570,5 +575,4 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
  
