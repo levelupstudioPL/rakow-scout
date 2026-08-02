@@ -41,6 +41,7 @@ const FORMATION_343 = [
 
 export default function App() {
   const [data, setData] = useState(null);
+  const [photos, setPhotos] = useState({});   // { "Imię Nazwisko": url } z public/photos.json
   const [err, setErr] = useState(null);
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
@@ -97,6 +98,11 @@ export default function App() {
         const dd = { ...d, pool: [...seen.values()] };
         setData(dd);
         setSel(dd.squad.find((p) => p.real) || dd.squad[0]);
+        // Zdjęcia kadry (wolne licencyjnie, Wikimedia) — best-effort, nie blokują danych.
+        fetch("photos.json")
+          .then((r) => (r.ok && (r.headers.get("content-type") || "").includes("json") ? r.json() : {}))
+          .then((pm) => setPhotos(pm && typeof pm === "object" ? pm : {}))
+          .catch(() => {});
       })
       .catch(() => {
         setErr(live
@@ -282,13 +288,13 @@ export default function App() {
         {err && <div style={{ margin: "16px 34px 0", fontSize: 12.5, color: C.warn }}>{err}</div>}
 
         <div style={{ padding: "26px 34px 0", maxWidth: 1180 }}>
-          {view === "twin" && <TwinView data={data} sel={sel} setSel={setSel} setView={setView} />}
+          {view === "twin" && <TwinView data={data} photos={photos} sel={sel} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
             FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
-          {view === "shadow" && <ShadowView {...{ data, fmt, estimatePrice, setSel, setView }} />}
+          {view === "shadow" && <ShadowView {...{ data, photos, fmt, estimatePrice, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -299,7 +305,7 @@ export default function App() {
 }
 
 // ============================ SUBVIEWS ============================
-function TwinView({ data, sel, setSel, setView }) {
+function TwinView({ data, photos = {}, sel, setSel, setView }) {
   const byLine = { Bramka: [], Obrona: [], Pomoc: [], Atak: [] };
   data.squad.forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
   const order = ["Atak", "Pomoc", "Obrona", "Bramka"];
@@ -329,10 +335,14 @@ function TwinView({ data, sel, setSel, setView }) {
                 <button key={p.id} className="card" onClick={() => { setSel(p); setView("match"); }}
                   style={{ textAlign: "left", background: C.panel, border: `1px solid ${sel?.id === p.id ? C.red : C.line}`,
                     borderRadius: 12, padding: "15px 16px", cursor: "pointer", color: C.bone, position: "relative", overflow: "hidden" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div style={{ minWidth: 0 }}>
-                      <div className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{p.pos}</div>
-                      <div style={{ fontSize: 14, fontWeight: 600, marginTop: 4, lineHeight: 1.2 }}>{p.name}</div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                    <div style={{ display: "flex", gap: 10, minWidth: 0, alignItems: "center" }}>
+                      <Face name={p.name} src={photos[p.name]} size={42}
+                        ring={p.rc_estimated ? C.line : tierColor(p.rc)} />
+                      <div style={{ minWidth: 0 }}>
+                        <div className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{p.pos}</div>
+                        <div style={{ fontSize: 14, fontWeight: 600, marginTop: 4, lineHeight: 1.2 }}>{p.name}</div>
+                      </div>
                     </div>
                     <div className="disp" style={{ fontSize: 34, lineHeight: 0.8, color: C.bone, flexShrink: 0,
                       display: "flex", alignItems: "flex-start", gap: 3 }}>
@@ -596,7 +606,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
   );
 }
 
-function ShadowView({ data, fmt, estimatePrice, setSel, setView }) {
+function ShadowView({ data, photos = {}, fmt, estimatePrice, setSel, setView }) {
   const squad = data.squad, pool = data.pool;
   const [lineup, setLineup] = useState({});   // slotId -> playerId (ręczny wybór)
   const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
@@ -687,9 +697,10 @@ function ShadowView({ data, fmt, estimatePrice, setSel, setView }) {
 
           {xi.map(({ slot, starter, shadow, price }) => (
             <div key={slot.id} style={{ position: "absolute", left: `${slot.x}%`, top: `${slot.y}%`,
-              transform: "translate(-50%,-50%)", width: 156, background: `${C.panel}F2`,
-              border: `1px solid ${C.line}`, borderRadius: 11, padding: "8px 10px", color: C.bone }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
+              transform: "translate(-50%,-50%)", width: 172, background: `${C.panel}F2`,
+              border: `1px solid ${starter && !starter.rc_estimated ? `${tierColor(starter.rc)}66` : C.line}`,
+              borderRadius: 11, padding: "8px 10px", color: C.bone }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
                 <span className="mono" style={{ fontSize: 9, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>{slot.label}</span>
                 <select value={starter ? starter.id : ""} title="Zmień zawodnika"
                   onChange={(e) => setLineup((l) => ({ ...l, [slot.id]: e.target.value || undefined }))}
@@ -700,16 +711,23 @@ function ShadowView({ data, fmt, estimatePrice, setSel, setView }) {
                   ))}
                 </select>
               </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                <span className="disp" style={{ fontSize: 15 }}>
-                  {starter ? (starter.rc_estimated
-                    ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 10, color: C.warn }}>b.d.</span>
-                    : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></>) : ""}
-                </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <Face name={starter ? starter.name : ""} src={starter ? photos[starter.name] : null}
+                  size={40} ring={starter && !starter.rc_estimated ? tierColor(starter.rc) : C.line} />
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {starter ? surname(starter.name) : "—"}
+                  </div>
+                  <span className="disp" style={{ fontSize: 15 }}>
+                    {starter ? (starter.rc_estimated
+                      ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 10, color: C.warn }}>b.d.</span>
+                      : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></>) : ""}
+                  </span>
+                </div>
                 {starter && (
                   <button onClick={() => { setSel(starter); setView("match"); }}
                     style={{ background: "transparent", color: C.steelHi, border: `1px solid ${C.line}`,
-                      borderRadius: 6, padding: "2px 7px", fontSize: 10, cursor: "pointer" }}>odp. →</button>
+                      borderRadius: 6, padding: "2px 7px", fontSize: 10, cursor: "pointer", flexShrink: 0 }}>odp. →</button>
                 )}
               </div>
               <div style={{ height: 1, background: C.line, margin: "0 0 6px" }} />
@@ -1194,6 +1212,35 @@ function Empty({ children }) {
   return (
     <div style={{ background: C.panel, border: `1px dashed ${C.line}`, borderRadius: 12, padding: 24,
       color: C.steel, fontSize: 13.5, lineHeight: 1.5 }}>{children}</div>
+  );
+}
+// Kolor "tieru" karty (FIFA-like): złoto / srebro / brąz wg poziomu RC.
+function tierColor(rc) {
+  const v = Number(rc);
+  if (!Number.isFinite(v)) return C.steel;
+  if (v >= 72) return "#E8C15A";   // złoto
+  if (v >= 58) return "#C7CBD1";   // srebro
+  return "#C58A5A";                // brąz
+}
+// Twarz zawodnika: zdjęcie (Wikimedia) jeśli jest, w innym wypadku sylwetka.
+function Face({ name, src, size = 44, ring = C.line }) {
+  const [broken, setBroken] = useState(false);
+  const show = src && !broken;
+  return (
+    <div style={{ width: size, height: size, borderRadius: 10, overflow: "hidden", flexShrink: 0,
+      background: `linear-gradient(160deg, ${C.panelHi}, ${C.panel2})`, border: `1.5px solid ${ring}`,
+      display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+      {show ? (
+        <img src={src} alt={name || ""} onError={() => setBroken(true)}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center" }} />
+      ) : (
+        <svg viewBox="0 0 24 24" width={size * 0.66} height={size * 0.66} aria-hidden="true"
+          style={{ opacity: 0.42 }}>
+          <circle cx="12" cy="8.2" r="3.9" fill={C.steelHi} />
+          <path d="M4.2 20.5c0-4.3 3.5-6.8 7.8-6.8s7.8 2.5 7.8 6.8z" fill={C.steelHi} />
+        </svg>
+      )}
+    </div>
   );
 }
 function SectionLabel({ children }) {
