@@ -1,0 +1,39 @@
+name: Zdjęcia zawodników — pobierz z Wikimedia
+ 
+# Uruchamiane ręcznie z zakładki Actions. Nie wymaga żadnych sekretów —
+# korzysta z publicznego API Wikidata / Wikimedia Commons.
+# Pobiera wolne licencyjnie zdjęcia kadry Raków do public/photos.json.
+ 
+on:
+  workflow_dispatch:
+ 
+permissions:
+  contents: write
+ 
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod repo
+        uses: actions/checkout@v4
+ 
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Pobierz zdjęcia z Wikimedia
+        run: python scripts/fetch_photos.py
+ 
+      - name: Zapisz photos.json (jeśli zmieniony)
+        run: |
+          git config user.name "rakow-scout-bot"
+          git config user.email "actions@github.com"
+          git add public/photos.json
+          if git diff --cached --quiet; then
+            echo "Brak zmian w public/photos.json."
+          else
+            git commit -m "Zdjęcia: aktualizacja z Wikimedia [auto]"
+            git push
+          fi
+ 
