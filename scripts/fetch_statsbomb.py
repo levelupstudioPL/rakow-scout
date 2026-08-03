@@ -249,6 +249,15 @@ def build_dataset(sb, creds):
                           for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
     # Uniwersalny profil stylu (do koherencji „każdy z każdym" w składzie).
     universal_stats = coh.build_universal_stats(base_pop)
+    # Profil DOPASOWANY DO POZYCJI: populacja bazowa podzielona wg linii, żeby
+    # z-score liczyć względem rówieśników z tej samej pozycji (position-fair).
+    LINES = ("Bramka", "Obrona", "Pomoc", "Atak")
+    base_pop_by_line = {ln: [] for ln in LINES}
+    for r in base_pop:
+        _mp = POS_TO_LINE.get(r.get("primary_position") or r.get("position"))
+        if _mp:
+            base_pop_by_line[_mp[1]].append(r)
+    pos_style_stats = {ln: coh.build_pos_style_stats(base_pop_by_line[ln], ln) for ln in LINES}
  
     # --- Handicapy lig (bez zmian, realna metoda) ---
     leagues = []
@@ -318,6 +327,9 @@ def build_dataset(sb, creds):
             # profil stylu (z-score) do koherencji „każdy z każdym"; None gdy brak
             # dopasowania w StatsBomb (bramkarze i tak pomijani na froncie).
             "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
+            # profil dopasowany do pozycji (bogatszy, position-fair) — pod panele
+            # „mocne strony" i „kandydat vs nasz".
+            "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
             "_sb": sb_row,
         })
  
@@ -373,16 +385,17 @@ def build_dataset(sb, creds):
             pool.append({
                 "id": f"pl-{row.get('player_id')}",
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
-                "lg": lg["name"], "pos": pos,
+                "lg": lg["name"], "pos": pos, "line": line,
                 "raw": level,
                 "level_estimated": level_estimated,
                 "coherence": best_coh,
                 "coherence_ref": best_ref,
                 "age": _age(row.get("birth_date")),
                 "mv": 0.0, "contract": 0,
-                # Profil stylu (z-score vs Ekstraklasa) — pozwala pokazać
-                # "w czym kandydat lepszy od naszego zawodnika" na froncie.
+                # Profile stylu: uniwersalny (cross-position) + dopasowany do
+                # pozycji (bogatszy) — pod „w czym kandydat lepszy od naszego".
                 "profile": coh.style_profile(row, universal_stats),
+                "profile_pos": coh.pos_style_profile(row, line, pos_style_stats[line]),
             })
  
     # Usuń profile metryk ze składu przed zapisem (były tylko do liczenia)
@@ -423,6 +436,9 @@ def build_dataset(sb, creds):
                      "profilu gry do zawodnika Rakowa (position-specific similarity). "
                      "Wartość transferowa (Transfermarkt) dociągana tylko dla kandydatów "
                      "pasujących wg modelu (koherencja >= 70%). Dane: StatsBomb + Transfermarkt."),
+            # Etykiety atrybutów profilu pozycyjnego (profile_pos) — front czyta
+            # je stąd, żeby nie powielać listy. Kolejność == wektor profile_pos.
+            "style_labels": {ln: coh.pos_style_labels(ln) for ln in ("Bramka", "Obrona", "Pomoc", "Atak")},
         },
         "squad": squad,
         "leagues": leagues,
@@ -578,4 +594,5 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
  
