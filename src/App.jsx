@@ -2,10 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 
 // ============================ TOKENS ============================
 const C = {
-  ink: "#0A0A0B", panel: "#141416", panel2: "#1B1B1E", panelHi: "#232327",
-  line: "#2C2C31", bone: "#F2F0EC", steel: "#71767E", steelHi: "#9CA1A9",
-  red: "#D6001C", redHi: "#FF2740", redDim: "#8A0012",
-  good: "#3ECF8E", warn: "#E8A13A", bad: "#E5544B", proxy: "#E8A13A",
+  // Paleta w duchu rakow.com — głęboki granat + czerwień + biel.
+  ink: "#081733", panel: "#0E2246", panel2: "#14315F", panelHi: "#1B406F",
+  line: "#23426F", bone: "#F3F6FB", steel: "#7C90B0", steelHi: "#AAB9D4",
+  red: "#E4022B", redHi: "#FF2D4E", redDim: "#3A0A1C",
+  good: "#37D08A", warn: "#E8A13A", bad: "#E5544B", proxy: "#E8C15A",
+  blue: "#1F5FCE", blueHi: "#3E7BEC",
 };
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
@@ -205,80 +207,82 @@ export default function App() {
 
   const isLive = data.meta.source && data.meta.source.includes("live");
   const realCount = data.squad.filter((p) => p.real).length;
-  const NAV = [
-    ["twin", "Skład", "01"], ["match", "Odpowiednicy", "02"],
-    ["shadow", "Drużyna cieni", "03"], ["leagues", "Handicapy", "04"],
-    ["corr", "Formacja", "05"], ["search", "Szukaj", "06"], ["help", "Instrukcja", "—"],
+  // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
+  const SECTIONS = [
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"]] },
+    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["search", "Szukaj"]] },
+    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
+    { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["help", "Jak to działa"]] },
   ];
+  const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
 
   return (
     <div style={{ minHeight: "100vh", background: C.ink, color: C.bone,
-      fontFamily: "'Inter', system-ui, sans-serif", display: "flex" }} className="shell">
+      fontFamily: "'Barlow', system-ui, sans-serif" }} className="shell">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
         *{box-sizing:border-box;}
         ::selection{background:${C.red};color:#fff;}
-        .disp{font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:-0.02em;}
+        .disp{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.01em;text-transform:uppercase;}
+        .cond{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.04em;}
         .mono{font-family:'Space Grotesk',monospace;}
-        .navitem{transition:all .15s ease;}
-        .navitem:hover{background:${C.panel2};}
+        .topnav{transition:all .15s ease;}
+        .topnav:hover{color:#fff !important;background:rgba(255,255,255,.05);}
         .card{transition:transform .15s ease, border-color .15s ease;}
         .card:hover{border-color:${C.red};transform:translateY(-2px);}
         .rowh:hover{background:${C.panel2};}
         button:focus-visible{outline:2px solid ${C.redHi};outline-offset:2px;}
         @media (prefers-reduced-motion:no-preference){.bar{transition:width .6s cubic-bezier(.2,.8,.2,1);}}
-        @media(max-width:820px){.shell{flex-direction:column;} .rail{width:100%!important;min-height:auto!important;position:relative!important;} .railnav{flex-direction:row!important;overflow-x:auto;} .railfoot{display:none!important;}}
+        @media(max-width:820px){.topbar{flex-wrap:wrap;height:auto!important;padding:10px 16px!important;gap:10px!important;}}
       `}</style>
 
-      {/* ===================== LEFT RAIL ===================== */}
-      <aside className="rail" style={{ width: 232, minHeight: "100vh", position: "sticky", top: 0,
-        background: `linear-gradient(180deg, ${C.panel} 0%, ${C.ink} 100%)`,
-        borderRight: `1px solid ${C.line}`, display: "flex", flexDirection: "column",
-        padding: "22px 0", flexShrink: 0 }}>
-        <div style={{ padding: "0 22px 22px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
-              style={{ width: 34, height: 41, objectFit: "contain", display: "block" }} />
-            <div>
-              <div className="disp" style={{ fontSize: 15, lineHeight: 1 }}>RAKÓW</div>
-              <div className="mono" style={{ fontSize: 9, color: C.steel, letterSpacing: 2, marginTop: 2 }}>SCOUT ENGINE</div>
-            </div>
+      {/* ===================== TOP BAR ===================== */}
+      <header className="topbar" style={{ position: "sticky", top: 0, zIndex: 30,
+        background: "linear-gradient(180deg, #0A1D40, #081733)", borderBottom: `1px solid ${C.line}`,
+        display: "flex", alignItems: "center", gap: 20, padding: "0 26px", height: 64 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+          <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
+            style={{ width: 34, height: 41, objectFit: "contain", display: "block",
+              filter: "drop-shadow(0 2px 4px rgba(0,0,0,.5))" }} />
+          <div>
+            <div className="cond" style={{ fontWeight: 800, fontSize: 19, lineHeight: 1 }}>RAKÓW</div>
+            <div className="mono" style={{ fontSize: 9, color: C.steel, letterSpacing: 3, marginTop: 1 }}>SCOUT ENGINE</div>
           </div>
         </div>
-
-        <nav className="railnav" style={{ display: "flex", flexDirection: "column", gap: 2, padding: "0 12px" }}>
-          {NAV.map(([k, label, n]) => (
-            <button key={k} className="navitem" onClick={() => setView(k)} style={{
-              display: "flex", alignItems: "center", gap: 12, textAlign: "left",
-              background: view === k ? C.red : "transparent", color: view === k ? "#fff" : C.steelHi,
-              border: "none", padding: "11px 12px", borderRadius: 8, cursor: "pointer",
-              fontSize: 13.5, fontWeight: 600, whiteSpace: "nowrap" }}>
-              <span className="mono" style={{ fontSize: 10, opacity: view === k ? 0.8 : 0.5, width: 14 }}>{n}</span>
-              {label}
-            </button>
-          ))}
+        <nav style={{ display: "flex", gap: 4, marginLeft: 14, flexWrap: "wrap" }}>
+          {SECTIONS.map((s) => {
+            const active = curSection.id === s.id;
+            return (
+              <button key={s.id} className="topnav" onClick={() => setView(s.views[0][0])} style={{
+                position: "relative", background: "transparent", border: "none", cursor: "pointer",
+                fontFamily: "'Barlow Condensed',sans-serif", textTransform: "uppercase", fontWeight: 700,
+                letterSpacing: ".05em", fontSize: 15.5, color: active ? "#fff" : "#C7D4E6",
+                padding: "9px 15px", borderRadius: 8 }}>
+                {s.label}
+                {active && <span style={{ position: "absolute", left: 15, right: 15, bottom: 2, height: 3,
+                  background: C.red, borderRadius: 2 }} />}
+              </button>
+            );
+          })}
         </nav>
-
-        <div className="railfoot" style={{ marginTop: "auto", padding: "0 22px" }}>
-          <div style={{ fontSize: 10, color: C.steel, lineHeight: 1.6,
-            border: `1px solid ${C.line}`, borderRadius: 8, padding: "10px 12px" }}>
-            <div className="mono" style={{ letterSpacing: 1, color: C.steelHi, marginBottom: 3 }}>ŹRÓDŁO DANYCH</div>
-            {isLive ? <span style={{ color: C.good }}>● live</span> : <span style={{ color: C.proxy }}>● zapis (snapshot)</span>}
-          </div>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10, fontSize: 11 }}>
+          <span className="mono" style={{ letterSpacing: 1 }}>{isLive
+            ? <span style={{ color: C.good }}>● live</span>
+            : <span style={{ color: C.proxy }}>● snapshot</span>}</span>
         </div>
-      </aside>
+      </header>
 
       {/* ===================== MAIN ===================== */}
-      <main style={{ flex: 1, minWidth: 0, padding: "0 0 60px" }}>
+      <main style={{ padding: "0 0 60px" }}>
         <div style={{ position: "relative", overflow: "hidden", borderBottom: `1px solid ${C.line}`,
-          background: `linear-gradient(120deg, ${C.panel} 0%, ${C.ink} 60%)` }}>
-          <div style={{ position: "absolute", top: 0, right: -80, width: 300, height: "100%",
-            background: `linear-gradient(90deg, transparent, ${C.redDim}22)`, transform: "skewX(-14deg)" }} />
-          <div style={{ padding: "30px 34px 26px", position: "relative" }}>
-            <div className="mono" style={{ fontSize: 10.5, letterSpacing: 3, color: C.red, fontWeight: 700 }}>
+          background: `linear-gradient(120deg, ${C.panel} 0%, ${C.ink} 62%)` }}>
+          <div style={{ position: "absolute", top: 0, right: -80, width: 320, height: "100%",
+            background: `linear-gradient(90deg, transparent, ${C.red}18)`, transform: "skewX(-14deg)" }} />
+          <div style={{ padding: "28px 34px 22px", position: "relative", maxWidth: 1180, margin: "0 auto" }}>
+            <div className="cond" style={{ fontSize: 12, letterSpacing: ".22em", color: C.redHi, fontWeight: 700 }}>
               CYFROWY BLIŹNIAK · MVP
             </div>
-            <h1 className="disp" style={{ margin: "8px 0 0", fontSize: "clamp(28px, 4vw, 46px)", lineHeight: 0.98 }}>
+            <h1 className="disp" style={{ margin: "6px 0 0", fontSize: "clamp(30px, 4.4vw, 50px)", lineHeight: 0.95 }}>
               {view === "twin" && "Obecny skład"}
               {view === "match" && "Odpowiednicy z Europy"}
               {view === "leagues" && "Handicapy lig"}
@@ -287,18 +291,32 @@ export default function App() {
               {view === "search" && "Wyszukiwarka zawodników"}
               {view === "help" && "Jak korzystać"}
             </h1>
-            <div style={{ display: "flex", gap: 26, marginTop: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 26, marginTop: 16, flexWrap: "wrap" }}>
               <Stat n={data.squad.length} l="zawodników" />
               <Stat n={realCount} l="realnych profili" accent />
               <Stat n={data.leagues.length - 1} l="lig w puli" />
               <Stat n={data.pool.length} l="kandydatów" />
             </div>
+            {curSection.views.length > 1 && (
+              <div style={{ display: "flex", gap: 8, marginTop: 20, flexWrap: "wrap" }}>
+                {curSection.views.map(([k, label]) => {
+                  const on = view === k;
+                  return (
+                    <button key={k} onClick={() => setView(k)} className="cond" style={{
+                      background: on ? `linear-gradient(180deg, ${C.blue}, #1747A8)` : C.panel,
+                      color: on ? "#fff" : C.steelHi, border: `1px solid ${on ? C.blueHi : C.line}`,
+                      borderRadius: 10, padding: "9px 16px", cursor: "pointer", fontWeight: 700,
+                      fontSize: 14, letterSpacing: ".04em" }}>{label}</button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
         {err && <div style={{ margin: "16px 34px 0", fontSize: 12.5, color: C.warn }}>{err}</div>}
 
-        <div style={{ padding: "26px 34px 0", maxWidth: 1180 }}>
+        <div style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photos={photos} sel={sel} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
@@ -341,38 +359,37 @@ function TwinView({ data, photos = {}, sel, setSel, setView }) {
               {line.toUpperCase()}
               <span style={{ flex: 1, height: 1, background: C.line }} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(210px,1fr))", gap: 10 }}>
-              {byLine[line].map((p) => (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(210px,1fr))", gap: 12 }}>
+              {byLine[line].map((p) => {
+                const est = p.rc_estimated;
+                const tc = est ? C.steel : tierColor(p.rc);
+                const seld = sel?.id === p.id;
+                return (
                 <button key={p.id} className="card" onClick={() => { setSel(p); setView("match"); }}
-                  style={{ textAlign: "left", background: C.panel, border: `1px solid ${sel?.id === p.id ? C.red : C.line}`,
-                    borderRadius: 12, padding: "15px 16px", cursor: "pointer", color: C.bone, position: "relative", overflow: "hidden" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
-                    <div style={{ display: "flex", gap: 10, minWidth: 0, alignItems: "center" }}>
-                      <Face name={p.name} src={photos[p.name]} size={42}
-                        ring={p.rc_estimated ? C.line : tierColor(p.rc)} />
-                      <div style={{ minWidth: 0 }}>
-                        <div className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{p.pos}</div>
-                        <div style={{ fontSize: 14, fontWeight: 600, marginTop: 4, lineHeight: 1.2 }}>{p.name}</div>
+                  style={{ textAlign: "left", background: `linear-gradient(162deg, ${C.panel}, #0B1C3C)`,
+                    border: `1px solid ${seld ? C.red : `${tc}55`}`, borderRadius: 14,
+                    padding: "13px 15px 12px", cursor: "pointer", color: C.bone, position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: tc, opacity: est ? 0.35 : 1 }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div className="disp" style={{ fontSize: 40, lineHeight: 0.82, color: tc }}>
+                        {est ? <span className="mono" title="Brak dostatecznych danych — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć."
+                          style={{ fontSize: 17, color: C.warn, cursor: "help" }}>b.d.</span> : p.rc}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+                        <span className="cond" style={{ fontSize: 12, fontWeight: 800, color: "#fff",
+                          background: C.red, borderRadius: 4, padding: "1px 7px" }}>{p.pos}</span>
+                        {!est && <span className="mono" style={{ fontSize: 9, color: C.steel, letterSpacing: 1 }}>RC</span>}
                       </div>
                     </div>
-                    <div className="disp" style={{ fontSize: 34, lineHeight: 0.8, color: C.bone, flexShrink: 0,
-                      display: "flex", alignItems: "flex-start", gap: 3 }}>
-                      {p.rc_estimated ? (
-                        <span className="mono" title="Brak dostatecznych danych — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć."
-                          style={{ fontSize: 15, color: C.warn, cursor: "help", lineHeight: 1.2, fontWeight: 700 }}>b.d.</span>
-                      ) : (
-                        <>{p.rc}<span style={{ fontSize: 11, color: C.steel }}> RC</span></>
-                      )}
-                    </div>
+                    <Face name={p.name} src={photos[p.name]} size={58} ring={tc} />
                   </div>
-                  <div style={{ height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden", marginTop: 12 }}>
-                    <div className="bar" style={{ width: p.rc_estimated ? "0%" : `${p.rc}%`, height: "100%",
-                      background: p.rc_estimated ? C.warn : C.red }} />
-                  </div>
-                  {p.real && <div style={{ position: "absolute", top: 0, right: 0, background: C.good,
-                    color: C.ink, fontSize: 8.5, fontWeight: 800, padding: "2px 7px", letterSpacing: 0.5 }}>REAL</div>}
+                  <div style={{ height: 1, background: C.line, margin: "12px 0 9px" }} />
+                  <div className="cond" style={{ fontSize: 15, fontWeight: 700, letterSpacing: ".02em",
+                    whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</div>
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
           )
