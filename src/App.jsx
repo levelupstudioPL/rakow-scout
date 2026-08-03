@@ -23,6 +23,17 @@ const lineOfPos = (pos) => {
 };
 const mean = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0);
 
+// Etykiety profilu stylu — KOLEJNOŚĆ musi zgadzać się z UNIVERSAL_STYLE
+// w scripts/coherence.py (wektor "profile" w data.json). Wartości to z-score
+// względem Ekstraklasy: >0 = powyżej średniej ligi, <0 = poniżej.
+const STYLE_LABELS = [
+  "Podania (wolumen)", "Celność podań", "Podania do przodu", "Podania w tercji ataku",
+  "Odbiory i przechwyty", "Gra w powietrzu", "Drybling", "Podania kluczowe",
+  "Asysty oczekiwane (xA)", "Groźność pod bramką (xG)", "Udział w akcjach (xGChain)",
+  "Dystans / intensywność", "Liczba sprintów", "Prędkość maksymalna", "Biegi bez piłki",
+  "Śr. długość podania", "Zaangażowanie z piłką",
+];
+
 // Formacja 3-4-3. Kolejność = priorytet obsadzania (najpierw najwęższe pule:
 // bramka, środek obrony, napastnik). x/y = pozycja na boisku w % (y: 0=góra/atak).
 const FORMATION_343 = [
@@ -373,6 +384,7 @@ function TwinView({ data, photos = {}, sel, setSel, setView }) {
 
 function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
   filters, applied, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
+  const [openCmp, setOpenCmp] = useState(null);   // id kandydata z rozwiniętym porównaniem
   if (!sel) return null;
   const totalForPos = data.pool.filter((p) => p.pos === sel.pos).length;
   const activeCount = countActiveFilters(applied, FILTERS_DEFAULT);
@@ -410,6 +422,9 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </div>
       </div>
 
+      <SectionLabel>W czym {sel.name} jest mocny</SectionLabel>
+      <StrengthsPanel profile={sel.profile} name={sel.name} />
+
       <FilterPanel {...{ data, filters, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT,
         filtersOpen, setFiltersOpen, activeCount, shown: candidates.length, total: totalForPos }} />
 
@@ -439,9 +454,11 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
       <div style={{ display: "grid", gap: 9 }}>
         {candidates.map(({ p, m, price }) => {
           const a = adjusted(p);
+          const open = openCmp === p.id;
           return (
-            <div key={p.id} className="rowh" style={{ background: C.panel, border: `1px solid ${C.line}`,
-              borderRadius: 12, padding: "15px 18px", display: "grid",
+           <div key={p.id} style={{ background: C.panel, border: `1px solid ${open ? `${C.redHi}88` : C.line}`,
+             borderRadius: 12, overflow: "hidden" }}>
+            <div className="rowh" style={{ padding: "15px 18px", display: "grid",
               gridTemplateColumns: "1.5fr 0.9fr 1fr 1fr auto", gap: 16, alignItems: "center" }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name && p.name !== "?" ? p.name : p.lg}</div>
@@ -489,13 +506,23 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
                   </>
                 )}
               </div>
-              <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
-                style={{ background: short.includes(p.id) ? C.red : "transparent",
-                  color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
-                  borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
-                {short.includes(p.id) ? "★" : "☆"}
-              </button>
+              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <button onClick={() => setOpenCmp(open ? null : p.id)} title="W czym lepszy/słabszy od naszego zawodnika"
+                  style={{ background: open ? C.panelHi : "transparent", color: open ? C.bone : C.steelHi,
+                    border: `1px solid ${open ? C.redHi : C.line}`, borderRadius: 9, height: 38, padding: "0 11px",
+                    cursor: "pointer", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>
+                  vs {surnameU(sel.name)}
+                </button>
+                <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
+                  style={{ background: short.includes(p.id) ? C.red : "transparent",
+                    color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
+                    borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
+                  {short.includes(p.id) ? "★" : "☆"}
+                </button>
+              </div>
             </div>
+            {open && <ComparePanel sel={sel} cand={p} />}
+           </div>
           );
         })}
       </div>
@@ -1222,6 +1249,96 @@ function tierColor(rc) {
   if (v >= 58) return "#C7CBD1";   // srebro
   return "#C58A5A";                // brąz
 }
+// Pojedynczy słupek atrybutu (z-score → szerokość, kolor wg znaku).
+function AttrBar({ label, z, better }) {
+  const col = better === false ? C.bad : better === true ? C.good : (z >= 0 ? C.good : C.bad);
+  const w = Math.min(Math.abs(z) / 3, 1) * 100;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+      <span style={{ fontSize: 11.5, color: C.steelHi, width: 152, flexShrink: 0,
+        whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={label}>{label}</span>
+      <div style={{ flex: 1, height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
+        <div style={{ width: `${w}%`, height: "100%", background: col }} />
+      </div>
+      <span className="mono" style={{ fontSize: 10.5, color: col, width: 34, textAlign: "right", flexShrink: 0 }}>
+        {z > 0 ? "+" : ""}{z.toFixed(1)}
+      </span>
+    </div>
+  );
+}
+// Mocne strony zawodnika — top atrybuty wg profilu stylu (z-score vs Ekstraklasa).
+function StrengthsPanel({ profile, name }) {
+  if (!Array.isArray(profile) || profile.length === 0) {
+    return <Empty>Profil stylu <b>{name}</b> pojawi się po najbliższym odświeżeniu danych ze StatsBomb (pipeline dokłada wektor atrybutów do <span className="mono">data.json</span>).</Empty>;
+  }
+  const items = profile
+    .map((z, i) => ({ label: STYLE_LABELS[i], z: Number(z) || 0 }))
+    .filter((x) => x.label && x.z !== 0 && Math.abs(x.z) >= 0.5);
+  const strong = items.filter((x) => x.z > 0).sort((a, b) => b.z - a.z).slice(0, 6);
+  const weak = items.filter((x) => x.z < 0).sort((a, b) => a.z - b.z).slice(0, 4);
+  if (!strong.length && !weak.length) {
+    return <Empty>Profil <b>{name}</b> jest blisko średniej Ekstraklasy we wszystkich atrybutach — brak wyraźnych wychyleń.</Empty>;
+  }
+  return (
+    <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "16px 18px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "8px 28px" }}>
+        <div>
+          <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.good, fontWeight: 700, marginBottom: 10 }}>MOCNE STRONY</div>
+          {strong.length ? strong.map((x) => <AttrBar key={x.label} label={x.label} z={x.z} />)
+            : <div style={{ fontSize: 12, color: C.steel }}>brak wyraźnych atutów nad średnią ligi</div>}
+        </div>
+        {weak.length > 0 && (
+          <div>
+            <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.bad, fontWeight: 700, marginBottom: 10 }}>DO POPRAWY</div>
+            {weak.map((x) => <AttrBar key={x.label} label={x.label} z={x.z} />)}
+          </div>
+        )}
+      </div>
+      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>
+        Skala: z-score względem Ekstraklasy (0 = średnia ligi). Atrybuty fizyczne (bieg, sprinty, prędkość) tylko dla zawodników z danymi SkillCorner.
+      </div>
+    </div>
+  );
+}
+// "W czym kandydat lepszy od naszego" — różnica profili metryka po metryce.
+function ComparePanel({ sel, cand }) {
+  const a = Array.isArray(sel?.profile) ? sel.profile : null;
+  const b = Array.isArray(cand?.profile) ? cand.profile : null;
+  if (!a || !b) {
+    return (
+      <div style={{ background: C.panel2, borderTop: `1px solid ${C.line}`, borderRadius: "0 0 12px 12px", padding: "12px 18px", fontSize: 12, color: C.steel }}>
+        Porównanie atrybutów włączy się po najbliższym odświeżeniu danych ze StatsBomb — pipeline dokłada profil stylu {!a ? "naszego zawodnika" : "kandydata"} do <span className="mono">data.json</span>.
+      </div>
+    );
+  }
+  const diffs = STYLE_LABELS
+    .map((label, i) => ({ label, d: (Number(b[i]) || 0) - (Number(a[i]) || 0), any: (Number(a[i]) || 0) !== 0 || (Number(b[i]) || 0) !== 0 }))
+    .filter((x) => x.any && Math.abs(x.d) >= 0.4);
+  const better = diffs.filter((x) => x.d > 0).sort((x, y) => y.d - x.d).slice(0, 4);
+  const worse = diffs.filter((x) => x.d < 0).sort((x, y) => x.d - y.d).slice(0, 4);
+  return (
+    <div style={{ background: C.panel2, borderTop: `1px solid ${C.line}`, borderRadius: "0 0 12px 12px", padding: "14px 18px" }}>
+      {(!better.length && !worse.length) ? (
+        <div style={{ fontSize: 12, color: C.steel }}>Profile stylu obu zawodników są bardzo zbliżone — brak wyraźnych różnic w atrybutach.</div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "8px 28px" }}>
+          <div>
+            <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.good, fontWeight: 700, marginBottom: 10 }}>LEPSZY OD {surnameU(sel.name)}</div>
+            {better.length ? better.map((x) => <AttrBar key={x.label} label={x.label} z={x.d} better={true} />)
+              : <div style={{ fontSize: 12, color: C.steel }}>w żadnym atrybucie wyraźnie nie przewyższa</div>}
+          </div>
+          <div>
+            <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.bad, fontWeight: 700, marginBottom: 10 }}>SŁABSZY</div>
+            {worse.length ? worse.map((x) => <AttrBar key={x.label} label={x.label} z={x.d} better={false} />)
+              : <div style={{ fontSize: 12, color: C.steel }}>nie ustępuje w żadnym istotnym atrybucie</div>}
+          </div>
+        </div>
+      )}
+      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>Różnica z-score: kandydat − {sel.name}. Porównywane tylko atrybuty z realną próbką.</div>
+    </div>
+  );
+}
+const surnameU = (nm) => { const t = String(nm || "").trim().split(" "); return (t[t.length - 1] || "").toUpperCase(); };
 // Twarz zawodnika: zdjęcie (Wikimedia) jeśli jest, w innym wypadku sylwetka.
 function Face({ name, src, size = 44, ring = C.line }) {
   const [broken, setBroken] = useState(false);
