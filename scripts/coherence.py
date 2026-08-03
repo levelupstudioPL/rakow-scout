@@ -296,6 +296,118 @@ def style_profile(row, ustats):
     return vec
  
  
+# =====================================================================
+#  PROFIL DOPASOWANY DO POZYCJI (position-fitted)
+#  Bogatszy zestaw atrybutów DLA KAŻDEJ LINII osobno — pod panele
+#  "mocne strony" i "kandydat vs nasz". Z-score liczony względem
+#  zawodników TEJ SAMEJ LINII w Ekstraklasie (position-fair). Kolejność
+#  (metryka, etykieta) jest źródłem prawdy — etykiety trafiają do
+#  data.json (meta.style_labels), więc front ich nie powiela.
+#  Wszystkie kolumny potwierdzone w statsbomb_columns.txt.
+# =====================================================================
+_PHYS_LABELED = [
+    ("total_metersperminute_full_all", "Dystans / intensywność"),
+    ("psv99", "Prędkość maksymalna"),
+    ("sprint_count_full_all", "Liczba sprintów"),
+]
+POS_STYLE = {
+    "Bramka": [
+        ("player_season_gsaa_90", "Obrony ponad oczekiwane (GSAA)"),
+        ("player_season_save_ratio", "Skuteczność obron"),
+        ("player_season_positive_outcome_90", "Pozytywne interwencje"),
+        ("player_season_obv_gk_90", "Wartość działań GK (OBV)"),
+        ("player_season_op_passes_90", "Podania (wolumen)"),
+        ("player_season_passing_ratio", "Celność podań"),
+        ("player_season_long_balls_90", "Długie podania"),
+        ("player_season_long_ball_ratio", "Udział długich podań"),
+        ("player_season_pass_length", "Śr. długość podania"),
+    ],
+    "Obrona": [
+        ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
+        ("player_season_padj_tackles_90", "Odbiory (PAdj)"),
+        ("player_season_padj_interceptions_90", "Przechwyty (PAdj)"),
+        ("player_season_aerial_wins_90", "Pojedynki powietrzne"),
+        ("player_season_aerial_ratio", "Skuteczność w powietrzu"),
+        ("player_season_padj_clearances_90", "Wybicia (PAdj)"),
+        ("player_season_blocks_per_shot", "Bloki strzałów"),
+        ("player_season_ball_recoveries_90", "Odzyski piłki"),
+        ("player_season_pressures_90", "Pressing (liczba)"),
+        ("player_season_op_passes_90", "Podania (wolumen)"),
+        ("player_season_passing_ratio", "Celność podań"),
+        ("player_season_forward_pass_proportion", "Podania do przodu"),
+        ("player_season_deep_progressions_90", "Progresja piłki"),
+        ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
+        ("player_season_carries_90", "Prowadzenia piłki"),
+        ("player_season_obv_90", "Wartość działań (OBV)"),
+    ] + _PHYS_LABELED,
+    "Pomoc": [
+        ("player_season_op_xgchain_90", "Udział w akcjach (xGChain)"),
+        ("player_season_xgbuildup_90", "Budowanie akcji (xGBuildup)"),
+        ("player_season_key_passes_90", "Podania kluczowe"),
+        ("player_season_xa_90", "Asysty oczekiwane (xA)"),
+        ("player_season_passes_into_box_90", "Podania w pole karne"),
+        ("player_season_op_passes_90", "Podania (wolumen)"),
+        ("player_season_passing_ratio", "Celność podań"),
+        ("player_season_forward_pass_proportion", "Podania do przodu"),
+        ("player_season_deep_progressions_90", "Progresja piłki"),
+        ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
+        ("player_season_dribbles_90", "Drybling"),
+        ("player_season_dribble_ratio", "Skuteczność dryblingu"),
+        ("player_season_carries_90", "Prowadzenia piłki"),
+        ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
+        ("player_season_pressures_90", "Pressing (liczba)"),
+        ("player_season_ball_recoveries_90", "Odzyski piłki"),
+        ("player_season_obv_90", "Wartość działań (OBV)"),
+    ] + _PHYS_LABELED,
+    "Atak": [
+        ("player_season_np_xg_90", "Groźność pod bramką (xG)"),
+        ("player_season_npg_90", "Gole (bez karnych)"),
+        ("player_season_np_shots_90", "Strzały"),
+        ("player_season_conversion_ratio", "Skuteczność wykończenia"),
+        ("player_season_touches_inside_box_90", "Kontakty w polu karnym"),
+        ("player_season_shot_touch_ratio", "Strzały na kontakt"),
+        ("player_season_xa_90", "Asysty oczekiwane (xA)"),
+        ("player_season_key_passes_90", "Podania kluczowe"),
+        ("player_season_aerial_wins_90", "Pojedynki powietrzne"),
+        ("player_season_aerial_ratio", "Skuteczność w powietrzu"),
+        ("player_season_dribbles_90", "Drybling"),
+        ("player_season_dribble_ratio", "Skuteczność dryblingu"),
+        ("player_season_op_xgchain_90", "Udział w akcjach (xGChain)"),
+        ("player_season_fouls_won_90", "Wymuszone faule"),
+        ("player_season_carries_90", "Prowadzenia piłki"),
+        ("player_season_obv_90", "Wartość działań (OBV)"),
+    ] + _PHYS_LABELED,
+}
+ 
+ 
+def pos_style_labels(line):
+    """Etykiety (po polsku) profilu pozycyjnego — do meta.style_labels."""
+    return [lab for _, lab in POS_STYLE.get(line, [])]
+ 
+ 
+def build_pos_style_stats(rows_of_line, line):
+    """Średnia/odchylenie metryk POS_STYLE[line] w populacji TEJ linii (Ekstraklasa)."""
+    stats = {}
+    for m, _lab in POS_STYLE.get(line, []):
+        vals = [v for v in (_val(r, m) for r in rows_of_line) if v is not None]
+        if not vals:
+            continue
+        mean = sum(vals) / len(vals)
+        var = sum((v - mean) ** 2 for v in vals) / len(vals)
+        stats[m] = {"mean": mean, "std": math.sqrt(var) or 1.0}
+    return stats
+ 
+ 
+def pos_style_profile(row, line, stats):
+    """Wektor z-score atrybutów dopasowanych do pozycji (kolejność = POS_STYLE[line])."""
+    vec = []
+    for m, _lab in POS_STYLE.get(line, []):
+        v = _val(row, m)
+        st = stats.get(m)
+        vec.append(0.0 if (v is None or not st) else round((v - st["mean"]) / st["std"], 2))
+    return vec
+ 
+ 
 if __name__ == "__main__":
     # Test na danych syntetycznych
     base = [
