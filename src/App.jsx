@@ -55,6 +55,7 @@ const FORMATION_343 = [
 export default function App() {
   const [data, setData] = useState(null);
   const [photos, setPhotos] = useState({});   // { "Imię Nazwisko": url } z public/photos.json
+  const [navOpen, setNavOpen] = useState(false);   // szuflada menu na mobile
   const [err, setErr] = useState(null);
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
@@ -234,11 +235,35 @@ export default function App() {
         .trow:hover{background:${C.panel2};}
         button:focus-visible{outline:2px solid ${C.redHi};outline-offset:2px;}
         @media (prefers-reduced-motion:no-preference){.bar{transition:width .6s cubic-bezier(.2,.8,.2,1);}}
-        @media(max-width:860px){.shell{flex-direction:column;} .rail{width:100%!important;min-height:auto!important;position:relative!important;}}
+        .mobabar{display:none;}
+        .hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+        @media(max-width:900px){
+          .shell{flex-direction:column;}
+          .mobabar{display:flex;}
+          .rail{position:static!important;width:100%!important;min-height:auto!important;
+            border-right:none!important;border-bottom:1px solid ${C.line};}
+          .rail.closed{display:none!important;}
+          .pagehead{padding:16px 18px 14px!important;}
+          .content{padding:18px 18px 0!important;}
+          h1.disp{font-size:26px!important;}
+        }
+        @media(max-width:480px){ .content{padding:14px 14px 0!important;} }
       `}</style>
 
+      {/* ===================== MOBILE TOP BAR (hamburger) ===================== */}
+      <div className="mobabar" style={{ position: "sticky", top: 0, zIndex: 40,
+        background: "linear-gradient(180deg, #0A1D40, #081733)", borderBottom: `1px solid ${C.line}`,
+        alignItems: "center", gap: 12, padding: "10px 16px" }}>
+        <button onClick={() => setNavOpen((o) => !o)} aria-label="Menu" style={{
+          background: C.panel2, border: `1px solid ${C.line}`, color: C.bone, borderRadius: 8,
+          width: 40, height: 40, cursor: "pointer", fontSize: 18, lineHeight: 1 }}>{navOpen ? "✕" : "☰"}</button>
+        <img src="/logo-rakow.webp" alt="Herb Raków" style={{ width: 26, height: 32, objectFit: "contain" }} />
+        <div className="cond" style={{ fontWeight: 800, fontSize: 17 }}>RAKÓW</div>
+        <span className="cond" style={{ marginLeft: "auto", fontSize: 12, color: C.steelHi, letterSpacing: 1 }}>{curSection.label}</span>
+      </div>
+
       {/* ===================== LEFT SIDEBAR (styl Football Manager) ===================== */}
-      <aside className="rail" style={{ width: 224, flexShrink: 0, minHeight: "100vh", position: "sticky", top: 0,
+      <aside className={"rail" + (navOpen ? "" : " closed")} style={{ width: 224, flexShrink: 0, minHeight: "100vh", position: "sticky", top: 0,
         background: "linear-gradient(180deg, #0A1D40, #081733)", borderRight: `1px solid ${C.line}`,
         display: "flex", flexDirection: "column", padding: "18px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 18px 16px",
@@ -257,7 +282,7 @@ export default function App() {
               {s.views.map(([k, label]) => {
                 const on = view === k;
                 return (
-                  <button key={k} className="navq" onClick={() => setView(k)} style={{
+                  <button key={k} className="navq" onClick={() => { setView(k); setNavOpen(false); }} style={{
                     display: "flex", alignItems: "center", width: "100%", textAlign: "left",
                     background: on ? C.panel2 : "transparent", color: on ? "#fff" : C.steelHi,
                     border: "none", borderLeft: `3px solid ${on ? C.red : "transparent"}`,
@@ -279,7 +304,7 @@ export default function App() {
 
       {/* ===================== MAIN ===================== */}
       <main style={{ flex: 1, minWidth: 0, padding: "0 0 60px" }}>
-        <div style={{ borderBottom: `1px solid ${C.line}`, background: C.panel, padding: "20px 30px 18px" }}>
+        <div className="pagehead" style={{ borderBottom: `1px solid ${C.line}`, background: C.panel, padding: "20px 30px 18px" }}>
           <div className="cond" style={{ fontSize: 11, letterSpacing: ".18em", color: C.redHi, fontWeight: 700 }}>{curSection.label}</div>
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
@@ -300,7 +325,7 @@ export default function App() {
 
         {err && <div style={{ margin: "16px 34px 0", fontSize: 12.5, color: C.warn }}>{err}</div>}
 
-        <div style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
+        <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photos={photos} sel={sel} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
@@ -358,7 +383,7 @@ function TwinView({ data, photos = {}, sel, setSel, setView }) {
               {line}<span style={{ color: C.steel, fontWeight: 400 }}>· {byLine[line].length}</span>
               <span style={{ flex: 1, height: 1, background: C.line }} />
             </div>
-            <div style={{ border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden" }}>
+            <div className="hscroll"><div style={{ minWidth: 560, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden" }}>
               <div className="cond" style={{ display: "grid", gridTemplateColumns: COLS, gap: 12,
                 padding: "8px 14px", background: C.panel, borderBottom: `1px solid ${C.line}`,
                 fontSize: 10.5, letterSpacing: 1, color: C.steel, fontWeight: 700 }}>
@@ -398,7 +423,7 @@ function TwinView({ data, photos = {}, sel, setSel, setView }) {
                   </button>
                 );
               })}
-            </div>
+            </div></div>
           </div>
           )
         ))}
@@ -485,7 +510,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </Empty>
       )}
 
-      <div style={{ display: "grid", gap: 9 }}>
+      <div className="hscroll"><div style={{ display: "grid", gap: 9, minWidth: 680 }}>
         {candidates.map(({ p, m, price }) => {
           const a = adjusted(p);
           const open = openCmp === p.id;
@@ -559,7 +584,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
            </div>
           );
         })}
-      </div>
+      </div></div>
 
       {shortRows.length > 0 && (
         <div style={{ marginTop: 20, background: `linear-gradient(120deg, ${C.panel}, ${C.ink})`,
@@ -615,7 +640,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
           <div className="mono" style={{ fontSize: 11, color: C.steel, marginBottom: 10 }}>
             {searchResults.length}{searchResults.length === 60 ? "+" : ""} wynik(ów)
           </div>
-          <div style={{ display: "grid", gap: 9 }}>
+          <div className="hscroll"><div style={{ display: "grid", gap: 9, minWidth: 640 }}>
             {searchResults.map((p) => (
               <div key={p.id} className="rowh" style={{ background: C.panel, border: `1px solid ${C.line}`,
                 borderRadius: 12, padding: "14px 18px", display: "grid",
@@ -660,7 +685,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                 </button>
               </div>
             ))}
-          </div>
+          </div></div>
         </>
       )}
     </div>
@@ -1406,7 +1431,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
         <span className="disp" style={{ fontSize: 17, color: C.proxy }}>◆ TOP 5 DO OBSERWACJI</span>
         <span style={{ fontSize: 12, color: C.steel }}>najlepszy kompromis jakość / cena na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b></span>
       </div>
-      <div style={{ display: "grid", gap: 7 }}>
+      <div className="hscroll"><div style={{ display: "grid", gap: 7, minWidth: 600 }}>
         {top.map((c, i) => (
           <div key={c.p.id} style={{ display: "grid", gridTemplateColumns: "22px 1.5fr 0.7fr 0.8fr 0.9fr 1.1fr auto",
             gap: 12, alignItems: "center", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 13px" }}>
@@ -1443,7 +1468,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
             </button>
           </div>
         ))}
-      </div>
+      </div></div>
       <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>
         Wartość = (0,45·poziom + 0,55·koherencja) / √cena. Tylko kandydaci z wyceną i policzonym poziomem. To podpowiedź do obserwacji, nie ostateczny ranking.
       </div>
