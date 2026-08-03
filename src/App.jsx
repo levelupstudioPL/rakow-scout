@@ -25,6 +25,41 @@ const lineOfPos = (pos) => {
 };
 const mean = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0);
 
+// Dopasowanie nazwisk zdjęć (photos.json z rakow.com) do nazwisk w składzie.
+// Klub bywa pełniejszy ("Efstratios Svarnas" vs "Stratos Svarnas",
+// "Jean Carlos Silva Rocha" vs "Jean Carlos Silva"), więc dopasowujemy po
+// nakładaniu się tokenów (bez ogonków), a nie po dokładnym stringu.
+function _nameTokens(s) {
+  return (s || "")
+    .replace(/[łŁ]/g, "l").replace(/[øØ]/g, "o")
+    .replace(/[đðĐ]/g, "d").replace(/ß/g, "ss")
+    .replace(/[æÆ]/g, "ae").replace(/[œŒ]/g, "oe")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(Boolean);
+}
+function makePhotoResolver(photos) {
+  const entries = Object.entries(photos || {}).map(([name, url]) => ({ url, tk: _nameTokens(name) }));
+  return (name) => {
+    if (!name) return null;
+    if (photos && photos[name]) return photos[name];
+    const pn = _nameTokens(name);
+    if (!pn.length) return null;
+    const plast = pn[pn.length - 1];
+    let best = null, bestScore = 0;
+    for (const e of entries) {
+      const set = new Set(e.tk);
+      let shared = 0;
+      for (const t of pn) if (set.has(t)) shared++;
+      const lastEq = e.tk[e.tk.length - 1] === plast;
+      const single = pn.length === 1 && set.has(pn[0]);
+      if (!(shared >= 2 || lastEq || single)) continue;
+      const score = shared + (lastEq ? 0.5 : 0) + (single ? 0.25 : 0);
+      if (score > bestScore) { bestScore = score; best = e.url; }
+    }
+    return best;
+  };
+}
+
 // Etykiety profilu stylu — KOLEJNOŚĆ musi zgadzać się z UNIVERSAL_STYLE
 // w scripts/coherence.py (wektor "profile" w data.json). Wartości to z-score
 // względem Ekstraklasy: >0 = powyżej średniej ligi, <0 = poniżej.
@@ -198,6 +233,7 @@ export default function App() {
 
   const fmt = (v) => `€${v.toFixed(1)}M`;
   const shortRows = useMemo(() => candidates.filter((c) => short.includes(c.p.id)), [candidates, short]);
+  const photoOf = useMemo(() => makePhotoResolver(photos), [photos]);   // przed early-return (Rules of Hooks)
   const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y);
     const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 
@@ -326,13 +362,13 @@ export default function App() {
         {err && <div style={{ margin: "16px 34px 0", fontSize: 12.5, color: C.warn }}>{err}</div>}
 
         <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
-          {view === "twin" && <TwinView data={data} photos={photos} sel={sel} setSel={setSel} setView={setView} />}
+          {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
             FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
-          {view === "shadow" && <ShadowView {...{ data, photos, fmt, estimatePrice, setSel, setView }} />}
+          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -343,7 +379,7 @@ export default function App() {
 }
 
 // ============================ SUBVIEWS ============================
-function TwinView({ data, photos = {}, sel, setSel, setView }) {
+function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
   const byLine = { Bramka: [], Obrona: [], Pomoc: [], Atak: [] };
   data.squad.forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
   // Sortowanie wg RC malejąco (jak tabela składu w FM). „b.d." na dół.
@@ -405,7 +441,7 @@ function TwinView({ data, photos = {}, sel, setSel, setView }) {
                     <div><span className="cond" style={{ fontSize: 11.5, fontWeight: 800, color: "#fff",
                       background: C.red, borderRadius: 4, padding: "1px 7px" }}>{p.pos}</span></div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-                      <Face name={p.name} src={photos[p.name]} size={32} ring={tc} />
+                      <Face name={p.name} src={photoOf(p.name)} size={32} ring={tc} />
                       <span style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
                     </div>
                     <div style={{ textAlign: "center" }}>
@@ -692,7 +728,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
   );
 }
 
-function ShadowView({ data, photos = {}, fmt, estimatePrice, setSel, setView }) {
+function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, setView }) {
   const squad = data.squad, pool = data.pool;
   const [lineup, setLineup] = useState({});   // slotId -> playerId (ręczny wybór)
   const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
@@ -798,7 +834,7 @@ function ShadowView({ data, photos = {}, fmt, estimatePrice, setSel, setView }) 
                 </select>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <Face name={starter ? starter.name : ""} src={starter ? photos[starter.name] : null}
+                <Face name={starter ? starter.name : ""} src={starter ? photoOf(starter.name) : null}
                   size={40} ring={starter && !starter.rc_estimated ? tierColor(starter.rc) : C.line} />
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
