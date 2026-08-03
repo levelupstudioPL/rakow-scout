@@ -380,6 +380,9 @@ def build_dataset(sb, creds):
                 "coherence_ref": best_ref,
                 "age": _age(row.get("birth_date")),
                 "mv": 0.0, "contract": 0,
+                # Profil stylu (z-score vs Ekstraklasa) — pozwala pokazać
+                # "w czym kandydat lepszy od naszego zawodnika" na froncie.
+                "profile": coh.style_profile(row, universal_stats),
             })
  
     # Usuń profile metryk ze składu przed zapisem (były tylko do liczenia)
