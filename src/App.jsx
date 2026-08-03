@@ -388,6 +388,11 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
   if (!sel) return null;
   const totalForPos = data.pool.filter((p) => p.pos === sel.pos).length;
   const activeCount = countActiveFilters(applied, FILTERS_DEFAULT);
+  // Etykiety atrybutów dopasowanych do pozycji (z data.json). Wektor profile_pos
+  // ma tę samą kolejność. Brak (stare dane) → panele użyją profilu uniwersalnego.
+  const posLabels = data.meta && data.meta.style_labels ? data.meta.style_labels[sel.line] : null;
+  const selVec = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? sel.profile_pos : sel.profile;
+  const selLabs = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? posLabels : STYLE_LABELS;
   return (
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
@@ -422,8 +427,8 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
         </div>
       </div>
 
-      <SectionLabel>W czym {sel.name} jest mocny</SectionLabel>
-      <StrengthsPanel profile={sel.profile} name={sel.name} />
+      <SectionLabel>{`W czym ${sel.name} jest mocny`}</SectionLabel>
+      <StrengthsPanel profile={selVec} labels={selLabs} name={sel.name} />
 
       <FilterPanel {...{ data, filters, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT,
         filtersOpen, setFiltersOpen, activeCount, shown: candidates.length, total: totalForPos }} />
@@ -435,6 +440,10 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
           <Kpi l="Mediana" v={fmt(median(candidates.map((c) => c.price.est)))} c={C.proxy} />
           <Kpi l="Najlepsza koh." v={`${Math.round(Math.max(...candidates.map((c) => c.m.coherence)))}%`} c={C.redHi} />
         </div>
+      )}
+
+      {candidates.length > 0 && (
+        <Top5Panel candidates={candidates} sel={sel} short={short} toggleShort={toggleShort} fmt={fmt} />
       )}
 
       {candidates.length === 0 && (
@@ -521,7 +530,7 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
                 </button>
               </div>
             </div>
-            {open && <ComparePanel sel={sel} cand={p} />}
+            {open && <ComparePanel sel={sel} cand={p} labels={posLabels} />}
            </div>
           );
         })}
@@ -1267,12 +1276,13 @@ function AttrBar({ label, z, better }) {
   );
 }
 // Mocne strony zawodnika — top atrybuty wg profilu stylu (z-score vs Ekstraklasa).
-function StrengthsPanel({ profile, name }) {
+function StrengthsPanel({ profile, name, labels }) {
   if (!Array.isArray(profile) || profile.length === 0) {
     return <Empty>Profil stylu <b>{name}</b> pojawi się po najbliższym odświeżeniu danych ze StatsBomb (pipeline dokłada wektor atrybutów do <span className="mono">data.json</span>).</Empty>;
   }
+  const L = (Array.isArray(labels) && labels.length) ? labels : STYLE_LABELS;
   const items = profile
-    .map((z, i) => ({ label: STYLE_LABELS[i], z: Number(z) || 0 }))
+    .map((z, i) => ({ label: L[i], z: Number(z) || 0 }))
     .filter((x) => x.label && x.z !== 0 && Math.abs(x.z) >= 0.5);
   const strong = items.filter((x) => x.z > 0).sort((a, b) => b.z - a.z).slice(0, 6);
   const weak = items.filter((x) => x.z < 0).sort((a, b) => a.z - b.z).slice(0, 4);
@@ -1301,9 +1311,14 @@ function StrengthsPanel({ profile, name }) {
   );
 }
 // "W czym kandydat lepszy od naszego" — różnica profili metryka po metryce.
-function ComparePanel({ sel, cand }) {
-  const a = Array.isArray(sel?.profile) ? sel.profile : null;
-  const b = Array.isArray(cand?.profile) ? cand.profile : null;
+// Preferuje profil dopasowany do pozycji (profile_pos + etykiety z data.json),
+// z fallbackiem do profilu uniwersalnego, gdy danych pozycyjnych brak.
+function ComparePanel({ sel, cand, labels }) {
+  const usePos = Array.isArray(labels) && labels.length
+    && Array.isArray(sel?.profile_pos) && Array.isArray(cand?.profile_pos);
+  const a = usePos ? sel.profile_pos : (Array.isArray(sel?.profile) ? sel.profile : null);
+  const b = usePos ? cand.profile_pos : (Array.isArray(cand?.profile) ? cand.profile : null);
+  const L = usePos ? labels : STYLE_LABELS;
   if (!a || !b) {
     return (
       <div style={{ background: C.panel2, borderTop: `1px solid ${C.line}`, borderRadius: "0 0 12px 12px", padding: "12px 18px", fontSize: 12, color: C.steel }}>
@@ -1311,7 +1326,7 @@ function ComparePanel({ sel, cand }) {
       </div>
     );
   }
-  const diffs = STYLE_LABELS
+  const diffs = L
     .map((label, i) => ({ label, d: (Number(b[i]) || 0) - (Number(a[i]) || 0), any: (Number(a[i]) || 0) !== 0 || (Number(b[i]) || 0) !== 0 }))
     .filter((x) => x.any && Math.abs(x.d) >= 0.4);
   const better = diffs.filter((x) => x.d > 0).sort((x, y) => y.d - x.d).slice(0, 4);
@@ -1339,6 +1354,77 @@ function ComparePanel({ sel, cand }) {
   );
 }
 const surnameU = (nm) => { const t = String(nm || "").trim().split(" "); return (t[t.length - 1] || "").toUpperCase(); };
+// TOP5 do obserwacji — najlepszy kompromis jakość / cena.
+// skill = mieszanka poziomu i koherencji (dopasowania do naszego zawodnika),
+// wartość = skill / pierwiastek z ceny (kara za cenę maleje przy droższych).
+// Bramka jakości (skill>=62, luzowana), żeby nie promować taniej przypadkowości.
+function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
+  const scored = candidates
+    .filter((c) => !c.p.level_estimated && c.price && c.price.est > 0)
+    .map((c) => {
+      const skill = 0.45 * (Number(c.m.level) || 0) + 0.55 * (Number(c.m.coherence) || 0);
+      const value = skill / Math.sqrt(Math.max(c.price.est, 0.5));
+      return { ...c, skill, value };
+    });
+  if (!scored.length) return null;
+  const gate = (f) => scored.filter((c) => c.skill >= f).sort((a, b) => b.value - a.value);
+  let ranked = gate(62);
+  if (ranked.length < 5) ranked = gate(52);
+  if (ranked.length < 3) ranked = [...scored].sort((a, b) => b.value - a.value);
+  const top = ranked.slice(0, 5);
+  const maxV = Math.max(...top.map((c) => c.value)) || 1;
+  const cohCol = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
+  return (
+    <div style={{ margin: "4px 0 20px", background: `linear-gradient(120deg, ${C.panel}, ${C.ink})`,
+      border: `1px solid ${C.proxy}66`, borderRadius: 14, padding: "16px 18px" }}>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
+        <span className="disp" style={{ fontSize: 17, color: C.proxy }}>◆ TOP 5 DO OBSERWACJI</span>
+        <span style={{ fontSize: 12, color: C.steel }}>najlepszy kompromis jakość / cena na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b></span>
+      </div>
+      <div style={{ display: "grid", gap: 7 }}>
+        {top.map((c, i) => (
+          <div key={c.p.id} style={{ display: "grid", gridTemplateColumns: "22px 1.5fr 0.7fr 0.8fr 0.9fr 1.1fr auto",
+            gap: 12, alignItems: "center", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 13px" }}>
+            <span className="disp" style={{ fontSize: 18, color: C.proxy, textAlign: "center" }}>{i + 1}</span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {c.p.name && c.p.name !== "?" ? c.p.name : c.p.lg}
+              </div>
+              <div style={{ fontSize: 10.5, color: C.steel, marginTop: 1 }}>{c.p.lg} · {c.p.age} lat · do {c.p.contract}</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div className="disp" style={{ fontSize: 18, lineHeight: 0.9 }}>{c.m.level}</div>
+              <div style={{ fontSize: 9, color: C.steel }}>poziom</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div className="mono" style={{ fontSize: 13, fontWeight: 700, color: cohCol(c.m.coherence) }}>{Math.round(c.m.coherence)}%</div>
+              <div style={{ fontSize: 9, color: C.steel }}>koh.</div>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <div className="disp" style={{ fontSize: 16, color: C.proxy, lineHeight: 0.9 }}>{fmt(c.price.est)}</div>
+              <div style={{ fontSize: 9, color: C.steel }}>cena</div>
+            </div>
+            <div title="Wskaźnik wartości = jakość / cena">
+              <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
+                <div style={{ width: `${(c.value / maxV) * 100}%`, height: "100%", background: C.proxy }} />
+              </div>
+              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wartość</div>
+            </div>
+            <button onClick={() => toggleShort(c.p.id)} title="Lista obserwowanych"
+              style={{ background: short.includes(c.p.id) ? C.red : "transparent",
+                color: short.includes(c.p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(c.p.id) ? C.red : C.line}`,
+                borderRadius: 9, width: 34, height: 34, cursor: "pointer", fontSize: 15 }}>
+              {short.includes(c.p.id) ? "★" : "☆"}
+            </button>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>
+        Wartość = (0,45·poziom + 0,55·koherencja) / √cena. Tylko kandydaci z wyceną i policzonym poziomem. To podpowiedź do obserwacji, nie ostateczny ranking.
+      </div>
+    </div>
+  );
+}
 // Twarz zawodnika: zdjęcie (Wikimedia) jeśli jest, w innym wypadku sylwetka.
 function Face({ name, src, size = 44, ring = C.line }) {
   const [broken, setBroken] = useState(false);
@@ -1361,10 +1447,14 @@ function Face({ name, src, size = 44, ring = C.line }) {
   );
 }
 function SectionLabel({ children }) {
+  // Odporność: children bywa tablicą węzłów (interpolacja `{...}`), a nie stringiem.
+  const flat = Array.isArray(children) ? children : [children];
+  const content = flat.every((c) => typeof c === "string")
+    ? flat.join("").toUpperCase() : children;
   return (
     <div className="mono" style={{ fontSize: 11, letterSpacing: 2, color: C.red, fontWeight: 700,
       margin: "26px 0 12px", display: "flex", alignItems: "center", gap: 10 }}>
-      {children.toUpperCase()}<span style={{ flex: 1, height: 1, background: C.line }} />
+      {content}<span style={{ flex: 1, height: 1, background: C.line }} />
     </div>
   );
 }
