@@ -3,203 +3,174 @@
     "id": "rk-kacper-trelowski",
     "name": "Kacper Trelowski",
     "pos": "GK",
-    "line": "Bramka",
-    "rc": 49
+    "line": "Bramka"
   },
   {
     "id": "rk-tarik-karic",
     "name": "Tarik Karic",
     "pos": "GK",
-    "line": "Bramka",
-    "rc": 72
+    "line": "Bramka"
   },
   {
     "id": "rk-wiktor-zolneczko",
     "name": "Wiktor Zolneczko",
     "pos": "GK",
-    "line": "Bramka",
-    "rc": 72
-  },
-  {
-    "id": "rk-dominik-czeremski",
-    "name": "Dominik Czeremski",
-    "pos": "GK",
-    "line": "Bramka",
-    "rc": 72
+    "line": "Bramka"
   },
   {
     "id": "rk-stratos-svarnas",
     "name": "Stratos Svarnas",
     "pos": "CB",
-    "line": "Obrona",
-    "rc": 72
+    "line": "Obrona"
   },
   {
     "id": "rk-bogdan-racovițan",
     "name": "Bogdan Racovițan",
     "pos": "CB",
-    "line": "Obrona",
-    "rc": 63
+    "line": "Obrona"
   },
   {
     "id": "rk-dieudonné-gaucho-debohi",
     "name": "Dieudonné Gaucho Debohi",
     "pos": "CB",
-    "line": "Obrona",
-    "rc": 72
+    "line": "Obrona"
   },
   {
     "id": "rk-jerzy-napieraj",
     "name": "Jerzy Napieraj",
     "pos": "CB",
-    "line": "Obrona",
-    "rc": 72
+    "line": "Obrona"
+  },
+  {
+    "id": "rk-nikodem-całko",
+    "name": "Nikodem Całko",
+    "pos": "CB",
+    "line": "Obrona"
   },
   {
     "id": "rk-marko-bulat",
     "name": "Marko Bulat",
     "pos": "DM",
-    "line": "Pomoc",
-    "rc": 73
+    "line": "Pomoc"
   },
   {
     "id": "rk-oskar-repka",
     "name": "Oskar Repka",
     "pos": "DM",
-    "line": "Pomoc",
-    "rc": 66
+    "line": "Pomoc"
   },
   {
     "id": "rk-vladyslav-kochergin",
     "name": "Vladyslav Kochergin",
     "pos": "DM",
-    "line": "Pomoc",
-    "rc": 65
+    "line": "Pomoc"
   },
   {
     "id": "rk-karol-struski",
     "name": "Karol Struski",
     "pos": "DM",
-    "line": "Pomoc",
-    "rc": 68
+    "line": "Pomoc"
   },
   {
     "id": "rk-abraham-ojo",
     "name": "Abraham Ojo",
     "pos": "DM",
-    "line": "Pomoc",
-    "rc": 33
+    "line": "Pomoc"
   },
   {
     "id": "rk-fran-tudor",
     "name": "Fran Tudor",
     "pos": "WM",
-    "line": "Pomoc",
-    "rc": 78
+    "line": "Pomoc"
   },
   {
     "id": "rk-michael-ameyaw",
     "name": "Michael Ameyaw",
-    "pos": "WB",
-    "line": "Obrona",
-    "rc": 50
-  },
-  {
-    "id": "rk-ádin-molnár",
-    "name": "Ádin Molnár",
     "pos": "WM",
-    "line": "Pomoc",
-    "rc": 72
+    "line": "Pomoc"
   },
   {
     "id": "rk-jakub-jendryka",
     "name": "Jakub Jendryka",
     "pos": "WM",
-    "line": "Pomoc",
-    "rc": 72
+    "line": "Pomoc"
   },
   {
     "id": "rk-adriano",
     "name": "Adriano",
-    "pos": "WB",
-    "line": "Obrona",
-    "rc": 62
+    "pos": "WM",
+    "line": "Pomoc"
   },
   {
     "id": "rk-jean-carlos-silva",
     "name": "Jean Carlos Silva",
-    "pos": "WB",
-    "line": "Obrona",
-    "rc": 62
+    "pos": "WM",
+    "line": "Pomoc"
   },
   {
     "id": "rk-erick-otieno",
     "name": "Erick Otieno",
-    "pos": "WB",
-    "line": "Obrona",
-    "rc": 47
+    "pos": "WM",
+    "line": "Pomoc"
   },
   {
     "id": "rk-lamine-diaby-fadiga",
     "name": "Lamine Diaby-Fadiga",
     "pos": "AM",
-    "line": "Pomoc",
-    "rc": 63
+    "line": "Pomoc"
   },
   {
     "id": "rk-tomasz-pieńko",
     "name": "Tomasz Pieńko",
     "pos": "AM",
-    "line": "Pomoc",
-    "rc": 59
+    "line": "Pomoc"
   },
   {
     "id": "rk-bogdan-mirčetić",
     "name": "Bogdan Mirčetić",
-    "pos": "W",
-    "line": "Pomoc",
-    "rc": 48
+    "pos": "AM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-ádin-molnár",
+    "name": "Ádin Molnár",
+    "pos": "AM",
+    "line": "Pomoc"
   },
   {
     "id": "rk-patryk-makuch",
     "name": "Patryk Makuch",
-    "pos": "W",
-    "line": "Pomoc",
-    "rc": 52
-  },
-  {
-    "id": "rk-jesús-díaz",
-    "name": "Jesús Díaz",
-    "pos": "W",
-    "line": "Pomoc",
-    "rc": 66
+    "pos": "AM",
+    "line": "Pomoc"
   },
   {
     "id": "rk-oliwier-kwiatkowski",
     "name": "Oliwier Kwiatkowski",
     "pos": "AM",
-    "line": "Pomoc",
-    "rc": 72
+    "line": "Pomoc"
   },
   {
-    "id": "rk-jonatan-braut-brunes",
-    "name": "Jonatan Braut Brunes",
+    "id": "rk-jesús-díaz",
+    "name": "Jesús Díaz",
+    "pos": "AM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-mahir-emreli",
+    "name": "Mahir Emreli",
     "pos": "ST",
-    "line": "Atak",
-    "rc": 83
+    "line": "Atak"
   },
   {
     "id": "rk-isak-brusberg",
     "name": "Isak Brusberg",
-    "pos": "W",
-    "line": "Pomoc",
-    "rc": 35
+    "pos": "ST",
+    "line": "Atak"
   },
   {
     "id": "rk-adam-basse",
     "name": "Adam Basse",
     "pos": "ST",
-    "line": "Atak",
-    "rc": 72
+    "line": "Atak"
   }
 ]
