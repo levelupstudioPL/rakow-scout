@@ -1,0 +1,62 @@
+name: Wartości rynkowe — z Kaggle (Transfermarkt)
+ 
+# Uruchamiane ręcznie z zakładki Actions. Pobiera AKTUALNY players.csv z
+# datasetu davidcariboo/player-scores (Kaggle) i buduje scripts/player_values.csv.
+# Odpalaj co jakiś czas (dane na Kaggle są odświeżane) — potem „Odśwież dane
+# StatsBomb", żeby wyceny weszły do data.json.
+#
+# WYMAGA sekretów repo: KAGGLE_USERNAME, KAGGLE_KEY
+# (kaggle.com → Account → „Create New API Token" → z pliku kaggle.json).
+ 
+on:
+  workflow_dispatch:
+ 
+permissions:
+  contents: write
+ 
+concurrency:
+  group: refresh-values
+  cancel-in-progress: false
+ 
+jobs:
+  values:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+ 
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Zainstaluj kaggle
+        run: pip install kaggle
+ 
+      - name: Zbuduj player_values.csv z Kaggle
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: python scripts/build_player_values.py
+ 
+      - name: Zapisz player_values.csv (jeśli zmieniony)
+        run: |
+          git config user.name "rakow-scout-bot"
+          git config user.email "actions@github.com"
+          git add scripts/player_values.csv
+          if git diff --cached --quiet; then
+            echo "Brak zmian w player_values.csv."
+            exit 0
+          fi
+          git commit -m "Wartości: aktualizacja z Kaggle [auto]"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; true; }
+            if git push origin HEAD:main; then echo "Push OK (próba $i)."; exit 0; fi
+            echo "Push odrzucony — ponawiam (próba $i)…"; sleep 4
+          done
+          echo "Nie udało się wypchnąć zmian po 5 próbach." >&2
+          exit 1
+ 
