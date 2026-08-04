@@ -489,8 +489,17 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                       background: seld ? C.panel2 : "transparent", border: "none",
                       borderBottom: `1px solid ${C.line}`, borderLeft: `3px solid ${seld ? C.red : "transparent"}`,
                       padding: "9px 14px 9px 11px" }}>
-                    <div><span className="cond" style={{ fontSize: 11.5, fontWeight: 800, color: "#fff",
-                      background: C.red, borderRadius: 4, padding: "1px 7px" }}>{p.pos}</span></div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
+                      <span className="cond" style={{ fontSize: 11.5, fontWeight: 800, color: "#fff",
+                        background: C.red, borderRadius: 4, padding: "1px 7px" }}>{p.pos}</span>
+                      {Array.isArray(p.alt_pos) && p.alt_pos.length > 0 && (
+                        <span className="cond" title={`Gra też na: ${p.alt_pos.join(", ")} (pozycja alternatywna)`}
+                          style={{ fontSize: 10, fontWeight: 700, color: C.steelHi, background: "transparent",
+                            border: `1px solid ${C.line}`, borderRadius: 4, padding: "0px 5px", cursor: "help" }}>
+                          {p.alt_pos.join("/")}
+                        </span>
+                      )}
+                    </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
                       <Face name={p.name} src={photoOf(p.name)} size={32} ring={tc} />
                       <span style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
@@ -584,6 +593,11 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
           <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.15 }}>{sel.name}</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 3 }}>
             <span className="cond" style={{ fontSize: 12, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 7px" }}>{sel.pos}</span>
+            {Array.isArray(sel.alt_pos) && sel.alt_pos.length > 0 && (
+              <span className="cond" title={`Gra też na: ${sel.alt_pos.join(", ")} (pozycja alternatywna)`}
+                style={{ fontSize: 11, fontWeight: 700, color: C.steelHi, border: `1px solid ${C.line}`,
+                  borderRadius: 4, padding: "1px 6px", cursor: "help" }}>{sel.alt_pos.join("/")}</span>
+            )}
             {sel.rc_estimated
               ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 11, color: C.warn, fontWeight: 700 }}>b.d.</span>
               : <span className="disp" style={{ fontSize: 20, color: tierColor(sel.rc) }}>{sel.rc}<span style={{ fontSize: 10, color: C.steel }}> RC</span></span>}
@@ -877,11 +891,13 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
       const p = lineup[slot.id] && squad.find((s) => s.id === lineup[slot.id]);
       if (p && !used.has(p.id) && !isExcluded(p.id)) { chosen[slot.id] = p; used.add(p.id); }
     }
-    // AUTO: tylko na WŁAŚCIWEJ pozycji (slot.pos). Bez zapasowego wpadania po
-    // linii — dzięki temu stoper nie ląduje na wahadle. Brak pasującego = pusty slot.
+    // AUTO: najpierw na pozycji PODSTAWOWEJ zawodnika, a jeśli brak — na jego
+    // pozycji ALTERNATYWNEJ (alt_pos, np. Fran WB→CB). Wciąż bez wpadania po całej
+    // linii, więc stoper nie ląduje na wahadle. Brak pasującego = pusty slot.
     const pickAuto = (slot) => {
       const free = squad.filter((p) => !used.has(p.id) && !isExcluded(p.id));
       for (const pos of slot.pos) { const c = free.filter((p) => p.pos === pos).sort(byRc); if (c.length) return c[0]; }
+      for (const pos of slot.pos) { const c = free.filter((p) => (p.alt_pos || []).includes(pos)).sort(byRc); if (c.length) return c[0]; }
       return null;
     };
     const usedShadows = new Set();
@@ -924,12 +940,14 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
   const nIns = xi.filter((s) => s.ins).length;
   const insCost = xi.filter((s) => s.ins && s.price).reduce((a, s) => a + s.price.est, 0);
   const lvlDelta = (avgNow != null && avgBase != null) ? avgNow - avgBase : 0;
-  // Lista wyboru: najpierw zawodnicy NA pozycję slotu, potem pozostali (można
-  // wstawić kogo się chce — np. Tudora na wahadło). Bramkarze tylko na GK.
-  const onPos = (slot) => squad.filter((p) => !isExcluded(p.id) &&
-    (slot.pos.includes(p.pos) || (slot.line === "Bramka" && p.pos === "GK")));
-  const offPos = (slot) => squad.filter((p) => !isExcluded(p.id) && p.pos !== "GK" &&
-    !slot.pos.includes(p.pos) && !(slot.line === "Bramka" && p.pos === "GK"));
+  // Lista wyboru: najpierw zawodnicy NA pozycję slotu (podstawową LUB alternatywną),
+  // potem pozostali (można wstawić kogo się chce — np. Tudora na wahadło). Bramkarze
+  // tylko na GK. „Na pozycji" uwzględnia alt_pos, więc Fran wejdzie też do slotu CB.
+  const playsSlot = (p, slot) => slot.pos.includes(p.pos)
+    || (p.alt_pos || []).some((a) => slot.pos.includes(a))
+    || (slot.line === "Bramka" && p.pos === "GK");
+  const onPos = (slot) => squad.filter((p) => !isExcluded(p.id) && playsSlot(p, slot));
+  const offPos = (slot) => squad.filter((p) => !isExcluded(p.id) && p.pos !== "GK" && !playsSlot(p, slot));
   const excludedPlayers = squad.filter((p) => isExcluded(p.id));
 
   // --- macierz koherencji (podobieństwo stylu) między zawodnikami pola ---
@@ -1034,9 +1052,14 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                   style={selStyle}>
                   <option value="">— puste —</option>
                   <optgroup label={`Na pozycję (${slot.label})`}>
-                    {onPos(slot).map((p) => (
-                      <option key={p.id} value={p.id}>{p.pos} {surname(p.name)} · {p.rc_estimated ? "b.d." : p.rc}</option>
-                    ))}
+                    {onPos(slot).map((p) => {
+                      const viaAlt = !slot.pos.includes(p.pos) && p.pos !== "GK";
+                      return (
+                        <option key={p.id} value={p.id}>
+                          {p.pos}{viaAlt ? `→${slot.label}` : ""} {surname(p.name)} · {p.rc_estimated ? "b.d." : p.rc}
+                        </option>
+                      );
+                    })}
                   </optgroup>
                   <optgroup label="Inne pozycje">
                     {offPos(slot).map((p) => (
