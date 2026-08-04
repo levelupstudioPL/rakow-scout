@@ -75,9 +75,9 @@ const STYLE_LABELS = [
 // bramka, środek obrony, napastnik). x/y = pozycja na boisku w % (y: 0=góra/atak).
 const FORMATION_343 = [
   { id: "GK",  label: "GK",  line: "Bramka", pos: ["GK"],        x: 50, y: 90 },
-  { id: "LCB", label: "CB",  line: "Obrona", pos: ["CB"],        x: 27, y: 70 },
+  { id: "LCB", label: "LCB", line: "Obrona", pos: ["CB"],        x: 27, y: 70 },
   { id: "CCB", label: "CB",  line: "Obrona", pos: ["CB"],        x: 50, y: 73 },
-  { id: "RCB", label: "CB",  line: "Obrona", pos: ["CB"],        x: 73, y: 70 },
+  { id: "RCB", label: "RCB", line: "Obrona", pos: ["CB"],        x: 73, y: 70 },
   { id: "ST",  label: "ST",  line: "Atak",   pos: ["ST"],        x: 50, y: 13 },
   { id: "LWB", label: "LWB", line: "Obrona", pos: ["WB", "WM"],  x: 10, y: 45 },
   { id: "RWB", label: "RWB", line: "Obrona", pos: ["WB", "WM"],  x: 90, y: 45 },
@@ -111,7 +111,7 @@ export default function App() {
   // Filtry aplikowane na przycisk „Szukaj": draft = edycja, filters = zastosowane.
   const [filters, setFilters] = useState(FILTERS_DEFAULT);
   const [draft, setDraft] = useState(FILTERS_DEFAULT);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(true);   // filtry (wiek/cena) widoczne od razu
   const setF = (patch) => setDraft((f) => ({ ...f, ...patch }));
   const applyFilters = () => setFilters(draft);
   const resetFilters = () => { setDraft(FILTERS_DEFAULT); setFilters(FILTERS_DEFAULT); };
@@ -932,7 +932,12 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
           <div style={{ position: "absolute", left: "26%", right: "26%", top: 0, height: "13%", border: `1px solid ${C.bone}12`, borderTop: "none" }} />
           <div style={{ position: "absolute", left: "26%", right: "26%", bottom: 0, height: "13%", border: `1px solid ${C.bone}12`, borderBottom: "none" }} />
 
-          {xi.map(({ slot, starter, shadow, price, ins }) => (
+          {xi.map(({ slot, starter, shadow, price, ins }) => {
+            const effCand = ins && shadow;   // po „wstaw" na karcie widać KANDYDATA, nie naszego
+            const effName = effCand ? shadow.name : (starter ? starter.name : null);
+            const effLvl = effCand ? Math.round(adjusted(shadow).adj)
+              : (starter && !starter.rc_estimated ? starter.rc : null);
+            return (
             <div key={slot.id} style={{ position: "absolute", left: `${slot.x}%`, top: `${slot.y}%`,
               transform: "translate(-50%,-50%)", width: 172, background: ins ? `${C.blue}22` : `${C.panel}F2`,
               border: `1px solid ${ins ? C.blueHi : (starter && !starter.rc_estimated ? `${tierColor(starter.rc)}66` : C.line)}`,
@@ -961,16 +966,19 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                 )}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <Face name={starter ? starter.name : ""} src={starter ? photoOf(starter.name) : null}
-                  size={40} ring={starter && !starter.rc_estimated ? tierColor(starter.rc) : C.line} />
+                <Face name={effName || ""} src={effCand ? photoOf(shadow.name) : (starter ? photoOf(starter.name) : null)}
+                  size={40} ring={effCand ? C.blueHi : (starter && !starter.rc_estimated ? tierColor(starter.rc) : C.line)} />
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {starter ? surname(starter.name) : "—"}
+                  <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                    color: effCand ? C.blueHi : C.bone }}>
+                    {effName ? surname(effName) : "—"}
                   </div>
                   <span className="disp" style={{ fontSize: 15 }}>
-                    {starter ? (starter.rc_estimated
-                      ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 10, color: C.warn }}>b.d.</span>
-                      : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></>) : ""}
+                    {effCand
+                      ? <>{effLvl}<span style={{ fontSize: 9, color: C.steel }}> poz.</span></>
+                      : (starter ? (starter.rc_estimated
+                        ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 10, color: C.warn }}>b.d.</span>
+                        : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></>) : "")}
                   </span>
                 </div>
                 {starter && (
@@ -997,7 +1005,14 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                       {ins ? "cofnij" : "wstaw ⇄"}
                     </button>
                   </div>
-                  <div style={{ fontSize: 11.5, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{shadow.name}</div>
+                  <a href={tmUrl(shadow.name)} target="_blank" rel="noopener noreferrer" title="Otwórz profil w Transfermarkt"
+                    style={{ fontSize: 11.5, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                      display: "block", color: C.bone, textDecoration: "none" }}
+                    onMouseOver={(e) => { e.currentTarget.style.color = C.redHi; e.currentTarget.style.textDecoration = "underline"; }}
+                    onMouseOut={(e) => { e.currentTarget.style.color = C.bone; e.currentTarget.style.textDecoration = "none"; }}>
+                    {shadow.name} <span style={{ fontSize: 9, color: C.steel }}>↗</span>
+                  </a>
+                  <div style={{ fontSize: 9.5, color: C.steel, margin: "1px 0 0" }}>{shadow.lg} · {shadow.age || "?"} lat</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}>
                     <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: cohColor(shadow.coherence) }}>{Math.round(shadow.coherence)}%</span>
                     <span style={{ fontSize: 10, color: C.steel }}>koh.</span>
@@ -1010,7 +1025,8 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                 <div style={{ fontSize: 10.5, color: C.steel }}>brak cienia w puli</div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -1585,14 +1601,25 @@ const surnameU = (nm) => { const t = String(nm || "").trim().split(" "); return 
 // wartość = skill / pierwiastek z ceny (kara za cenę maleje przy droższych).
 // Bramka jakości (skill>=62, luzowana), żeby nie promować taniej przypadkowości.
 function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
+  // Domyślny profil obserwacji: młodzi (≤25 lat) i tani (≤3 mln €).
+  const AGE_CAP = 25, PRICE_CAP = 3;
   const scored = candidates
-    .filter((c) => !c.p.level_estimated && c.price && c.price.est > 0)
+    .filter((c) => !c.p.level_estimated && c.price && c.price.est > 0
+      && c.price.est <= PRICE_CAP && (Number(c.p.age) || 99) <= AGE_CAP)
     .map((c) => {
       const skill = 0.45 * (Number(c.m.level) || 0) + 0.55 * (Number(c.m.coherence) || 0);
       const value = skill / Math.sqrt(Math.max(c.price.est, 0.5));
       return { ...c, skill, value };
     });
-  if (!scored.length) return null;
+  if (!scored.length) return (
+    <div style={{ margin: "4px 0 20px", background: `linear-gradient(120deg, ${C.panel}, ${C.ink})`,
+      border: `1px solid ${C.proxy}66`, borderRadius: 14, padding: "16px 18px" }}>
+      <span className="disp" style={{ fontSize: 17, color: C.proxy }}>◆ TOP 5 DO OBSERWACJI</span>
+      <div style={{ fontSize: 12.5, color: C.steel, marginTop: 8 }}>
+        Brak kandydatów na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b> spełniających profil obserwacji (do {AGE_CAP} lat, do €{PRICE_CAP}M z wyceną). Poszerz kryteria w filtrach powyżej.
+      </div>
+    </div>
+  );
   const gate = (f) => scored.filter((c) => c.skill >= f).sort((a, b) => b.value - a.value);
   let ranked = gate(62);
   if (ranked.length < 5) ranked = gate(52);
@@ -1605,7 +1632,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
       border: `1px solid ${C.proxy}66`, borderRadius: 14, padding: "16px 18px" }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
         <span className="disp" style={{ fontSize: 17, color: C.proxy }}>◆ TOP 5 DO OBSERWACJI</span>
-        <span style={{ fontSize: 12, color: C.steel }}>najlepszy kompromis jakość / cena na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b></span>
+        <span style={{ fontSize: 12, color: C.steel }}>kompromis jakość / cena na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b> · profil: <b style={{ color: C.steelHi }}>do 25 lat, do €3M</b></span>
       </div>
       <div className="hscroll"><div style={{ display: "grid", gap: 7, minWidth: 600 }}>
         {top.map((c, i) => (
