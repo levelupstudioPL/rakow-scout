@@ -452,6 +452,14 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
           <b style={{ color: C.warn }}>b.d.</b>&nbsp;w miejscu RC oznacza <b style={{ color: C.bone }}>brak dostatecznych danych</b> — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć.
         </div>
       )}
+      {data.squad.some((p) => p.rc_source === "historical") && (
+        <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 7,
+          background: `${C.blueHi}14`, border: `1px solid ${C.blueHi}44`, borderRadius: 9,
+          padding: "7px 12px", fontSize: 12, color: C.steelHi }}>
+          <b className="mono" style={{ color: C.blueHi, fontSize: 11 }}>hist.</b>
+          &nbsp;oznacza RC policzone z <b style={{ color: C.bone }}>danych poprzedniego sezonu</b> — zawodnik nie ma jeszcze próbki w bieżącym, więc ocena jest orientacyjna.
+        </div>
+      )}
       <RcExplainer />
       <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 18 }}>
         {order.map((line) => (
@@ -491,6 +499,7 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                       {est ? <span className="mono" title="Brak dostatecznych danych — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć."
                         style={{ fontSize: 11, color: C.warn, fontWeight: 700, cursor: "help" }}>b.d.</span>
                         : <span className="disp" style={{ fontSize: 22, color: tc }}>{p.rc}</span>}
+                      {p.rc_source === "historical" && <div style={{ marginTop: 2 }}><HistBadge p={p} fontSize={8} ml={0} /></div>}
                     </div>
                     <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
                       <div className="bar" style={{ width: est ? "0%" : `${p.rc}%`, height: "100%", background: est ? C.warn : C.red }} />
@@ -578,6 +587,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
             {sel.rc_estimated
               ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 11, color: C.warn, fontWeight: 700 }}>b.d.</span>
               : <span className="disp" style={{ fontSize: 20, color: tierColor(sel.rc) }}>{sel.rc}<span style={{ fontSize: 10, color: C.steel }}> RC</span></span>}
+            <HistBadge p={sel} fontSize={10} />
           </div>
         </div>
       </div>
@@ -1053,7 +1063,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                       ? <>{effLvl}<span style={{ fontSize: 9, color: C.steel }}> poz.</span></>
                       : (starter ? (starter.rc_estimated
                         ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 10, color: C.warn }}>b.d.</span>
-                        : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></>) : "")}
+                        : <>{starter.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span>{!effCand && <HistBadge p={starter} fontSize={8} ml={4} />}</>) : "")}
                   </span>
                 </div>
                 {starter && (
@@ -1574,6 +1584,21 @@ function tierColor(rc) {
   if (v >= 72) return "#E8C15A";   // złoto
   if (v >= 58) return "#C7CBD1";   // srebro
   return "#C58A5A";                // brąz
+}
+// Znacznik „ocena z danych historycznych" — dla zawodników, których RC policzono
+// z poprzedniego sezonu (brak wystarczającej próbki w bieżącym). Odróżnia realną
+// ocenę na świeżych danych od tej dociągniętej z historii.
+function HistBadge({ p, fontSize = 9, ml = 5 }) {
+  if (!p || p.rc_source !== "historical") return null;
+  const s = p.rc_season || "poprz. sezonu";
+  return (
+    <span className="mono"
+      title={`Ocena policzona na danych z sezonu ${s} — zawodnik nie ma jeszcze wystarczającej próbki meczowej w bieżącym sezonie.`}
+      style={{ fontSize, color: C.blueHi, background: `${C.blueHi}1c`, border: `1px solid ${C.blueHi}66`,
+        borderRadius: 4, padding: "1px 5px", fontWeight: 700, marginLeft: ml, whiteSpace: "nowrap", cursor: "help" }}>
+      hist. {s}
+    </span>
+  );
 }
 // Pojedynczy słupek atrybutu (z-score → szerokość, kolor wg znaku).
 function AttrBar({ label, z, better }) {
