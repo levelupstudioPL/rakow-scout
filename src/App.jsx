@@ -363,12 +363,12 @@ export default function App() {
 
         <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
-          {view === "match" && <MatchView {...{ data, sel, setSel, candidates, sortBy, setSortBy,
+          {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
             FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
-          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, setSel, setView }} />}
+          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, filters, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -468,7 +468,7 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
   );
 }
 
-function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
+function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
   filters, applied, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
   const [openCmp, setOpenCmp] = useState(null);   // id kandydata z rozwiniętym porównaniem
   if (!sel) return null;
@@ -483,7 +483,26 @@ function MatchView({ data, sel, setSel, candidates, sortBy, setSortBy, short, to
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
       <RcExplainer compact />
-      <div style={{ display: "flex", gap: 10, margin: "18px 0", flexWrap: "wrap", alignItems: "center" }}>
+
+      {/* Wybrany zawodnik — twarz + tożsamość (dla kogo szukamy następcy) */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "16px 0 4px",
+        background: `linear-gradient(120deg, ${C.panel}, ${C.ink})`, border: `1px solid ${C.line}`,
+        borderRadius: 14, padding: "12px 16px" }}>
+        <Face name={sel.name} src={photoOf(sel.name)} size={64}
+          ring={sel.rc_estimated ? C.line : tierColor(sel.rc)} />
+        <div style={{ minWidth: 0 }}>
+          <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.steel }}>SZUKAMY NASTĘPCY DLA</div>
+          <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.15 }}>{sel.name}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 3 }}>
+            <span className="cond" style={{ fontSize: 12, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 7px" }}>{sel.pos}</span>
+            {sel.rc_estimated
+              ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 11, color: C.warn, fontWeight: 700 }}>b.d.</span>
+              : <span className="disp" style={{ fontSize: 20, color: tierColor(sel.rc) }}>{sel.rc}<span style={{ fontSize: 10, color: C.steel }}> RC</span></span>}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, margin: "14px 0", flexWrap: "wrap", alignItems: "center" }}>
         <select value={sel.id} onChange={(e) => setSel(data.squad.find((p) => p.id === e.target.value))}
           style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9,
             padding: "10px 13px", fontSize: 13, fontWeight: 600 }}>
@@ -728,11 +747,34 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
   );
 }
 
-function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, setView }) {
+function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore = () => null, filters = {}, setSel, setView }) {
   const squad = data.squad, pool = data.pool;
   const [lineup, setLineup] = useState({});   // slotId -> playerId (ręczny wybór)
+  const [excluded, setExcluded] = useState([]);   // id zawodników wykluczonych ze składu (np. na wylocie)
+  // Domyślny budżet cienia: filtr z „Odpowiedników" jeśli ustawiony, inaczej
+  // rozsądny pułap klubowy (5 mln €) — żeby cienie od razu były w realiach Rakowa,
+  // nie €20M+. Suwak niżej pozwala zmienić aż do „bez limitu".
+  const [budget, setBudget] = useState(
+    Number.isFinite(filters.priceMax) && filters.priceMax < 50 ? filters.priceMax : 5);
   const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
   const surname = (nm) => { const t = String(nm || "").trim().split(" "); return t[t.length - 1]; };
+  const isExcluded = (id) => excluded.includes(id);
+  const toggleExclude = (id) => setExcluded((e) => e.includes(id) ? e.filter((x) => x !== id) : [...e, id]);
+
+  // Cień musi TRZYMAĆ SIĘ FILTRÓW (budżet + aktywne filtry z „Odpowiedników").
+  const passes = (p, price) => {
+    const F = filters;
+    const age = Number(p.age) || 0;
+    if (age > 0 && ((F.ageMin && age < F.ageMin) || (F.ageMax && age > F.ageMax))) return false;
+    const hasPrice = Number(p.mv) > 0;
+    if (!hasPrice && F.showUnpriced === false) return false;
+    if (hasPrice && budget < 50 && price.est > budget) return false;     // budżet cienia
+    if (F.cohMin && (Number(p.coherence) || 0) < F.cohMin) return false;
+    if (F.levelMin && (Number(p.raw) || 0) < F.levelMin) return false;
+    if (F.onlyReliable && p.level_estimated) return false;
+    if (Array.isArray(F.leagues) && F.leagues.length > 0 && !F.leagues.includes(p.lg)) return false;
+    return true;
+  };
 
   const xi = useMemo(() => {
     const used = new Set();
@@ -740,28 +782,32 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, se
     const chosen = {};
     for (const slot of FORMATION_343) {
       const p = lineup[slot.id] && squad.find((s) => s.id === lineup[slot.id]);
-      if (p && !used.has(p.id)) { chosen[slot.id] = p; used.add(p.id); }
+      if (p && !used.has(p.id) && !isExcluded(p.id)) { chosen[slot.id] = p; used.add(p.id); }
     }
+    // AUTO: tylko na WŁAŚCIWEJ pozycji (slot.pos). Bez zapasowego wpadania po
+    // linii — dzięki temu stoper nie ląduje na wahadle. Brak pasującego = pusty slot.
     const pickAuto = (slot) => {
-      const free = squad.filter((p) => !used.has(p.id));
+      const free = squad.filter((p) => !used.has(p.id) && !isExcluded(p.id));
       for (const pos of slot.pos) { const c = free.filter((p) => p.pos === pos).sort(byRc); if (c.length) return c[0]; }
-      return free.filter((p) => (p.line || lineOfPos(p.pos)) === slot.line).sort(byRc)[0] || null;
+      return null;
     };
     const usedShadows = new Set();
     return FORMATION_343.map((slot) => {
       let starter = chosen[slot.id];
-      if (!starter) { starter = pickAuto(slot); if (starter) used.add(starter.id); }
-      let shadow = null;
+      if (!starter && !(slot.id in lineup)) { starter = pickAuto(slot); if (starter) used.add(starter.id); }
+      let shadow = null, price = null;
       if (starter) {
-        const same = pool.filter((p) => p.pos === starter.pos && typeof p.coherence === "number" && !usedShadows.has(p.id));
-        const pref = same.filter((p) => p.coherence_ref === starter.name);
-        const list = (pref.length ? pref : same).sort((a, b) => b.coherence - a.coherence);
-        shadow = list[0] || null; if (shadow) usedShadows.add(shadow.id);
+        const cands = pool
+          .filter((p) => p.pos === starter.pos && typeof p.coherence === "number" && !usedShadows.has(p.id))
+          .map((p) => ({ p, price: estimatePrice(starter, p) }))
+          .filter(({ p, price }) => passes(p, price));
+        const pref = cands.filter(({ p }) => p.coherence_ref === starter.name);
+        const list = (pref.length ? pref : cands).sort((a, b) => b.p.coherence - a.p.coherence);
+        if (list[0]) { shadow = list[0].p; price = list[0].price; usedShadows.add(shadow.id); }
       }
-      const price = starter && shadow ? estimatePrice(starter, shadow) : null;
       return { slot, starter, shadow, price };
     });
-  }, [data, lineup]);
+  }, [data, lineup, excluded, budget, filters]);
 
   const filled = xi.filter((s) => s.starter);
   const real = filled.filter((s) => !s.starter.rc_estimated);
@@ -770,7 +816,13 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, se
   const avgCoh = shadows.length ? Math.round(mean(shadows.map((s) => s.shadow.coherence))) : null;
   const totalCost = shadows.reduce((a, s) => a + (s.price ? s.price.est : 0), 0);
   const isManual = Object.keys(lineup).length > 0;
-  const eligible = (slot) => squad.filter((p) => (slot.line === "Bramka" ? p.pos === "GK" : (p.line || lineOfPos(p.pos)) === slot.line));
+  // Lista wyboru: najpierw zawodnicy NA pozycję slotu, potem pozostali (można
+  // wstawić kogo się chce — np. Tudora na wahadło). Bramkarze tylko na GK.
+  const onPos = (slot) => squad.filter((p) => !isExcluded(p.id) &&
+    (slot.pos.includes(p.pos) || (slot.line === "Bramka" && p.pos === "GK")));
+  const offPos = (slot) => squad.filter((p) => !isExcluded(p.id) && p.pos !== "GK" &&
+    !slot.pos.includes(p.pos) && !(slot.line === "Bramka" && p.pos === "GK"));
+  const excludedPlayers = squad.filter((p) => isExcluded(p.id));
 
   // --- macierz koherencji (podobieństwo stylu) między zawodnikami pola ---
   const wp = xi.filter((s) => s.starter && s.slot.line !== "Bramka"
@@ -789,7 +841,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, se
     <div>
       <Lead>Skład Rakowa w formacji <b className="mono" style={{ color: C.redHi }}>3-4-3</b> — ustaw go ręcznie (rozwijane listy na kartach), a pod każdym zawodnikiem zobaczysz jego najlepszy <b style={{ color: C.bone }}>cień</b>. Niżej macierz koherencji: jak podobnie stylem grają wybrani zawodnicy względem siebie.</Lead>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "14px 0 4px", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "14px 0 4px", flexWrap: "wrap" }}>
         <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>
           SKŁAD: <b style={{ color: isManual ? C.redHi : C.steelHi }}>{isManual ? "ręczny" : "automatyczny"}</b>
         </span>
@@ -799,7 +851,27 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, se
             Przywróć automatyczny
           </button>
         )}
+        {/* Budżet cienia — cienie trzymają się tego limitu (plus aktywne filtry) */}
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: C.steelHi }}>
+          <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>BUDŻET CIENIA</span>
+          <input type="range" min={0} max={50} step={0.5} value={budget}
+            onChange={(e) => setBudget(+e.target.value)} style={{ width: 130 }} />
+          <b style={{ color: C.proxy, minWidth: 62 }}>{budget >= 50 ? "bez limitu" : `≤ €${budget}M`}</b>
+        </label>
       </div>
+
+      {excludedPlayers.length > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", margin: "6px 0 2px" }}>
+          <span className="mono" style={{ fontSize: 10.5, letterSpacing: 1, color: C.steel }}>USUNIĘCI ZE SKŁADU:</span>
+          {excludedPlayers.map((p) => (
+            <button key={p.id} onClick={() => toggleExclude(p.id)} title="Przywróć do składu"
+              style={{ background: C.panel2, border: `1px solid ${C.line}`, color: C.steelHi, borderRadius: 8,
+                padding: "3px 9px", fontSize: 11.5, cursor: "pointer" }}>
+              {surname(p.name)} <span style={{ color: C.good }}>↺</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "12px 0 18px" }}>
         <Kpi l="Śr. poziom XI" v={avgRC ?? "—"} />
@@ -824,14 +896,26 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, setSel, se
               borderRadius: 11, padding: "8px 10px", color: C.bone }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
                 <span className="mono" style={{ fontSize: 9, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>{slot.label}</span>
-                <select value={starter ? starter.id : ""} title="Zmień zawodnika"
-                  onChange={(e) => setLineup((l) => ({ ...l, [slot.id]: e.target.value || undefined }))}
+                <select value={starter ? starter.id : ""} title="Zmień zawodnika (dowolny z kadry)"
+                  onChange={(e) => setLineup((l) => ({ ...l, [slot.id]: e.target.value || "" }))}
                   style={selStyle}>
-                  {!starter && <option value="">—</option>}
-                  {eligible(slot).map((p) => (
-                    <option key={p.id} value={p.id}>{p.pos} {surname(p.name)} · {p.rc_estimated ? "b.d." : p.rc}</option>
-                  ))}
+                  <option value="">— puste —</option>
+                  <optgroup label={`Na pozycję (${slot.label})`}>
+                    {onPos(slot).map((p) => (
+                      <option key={p.id} value={p.id}>{p.pos} {surname(p.name)} · {p.rc_estimated ? "b.d." : p.rc}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Inne pozycje">
+                    {offPos(slot).map((p) => (
+                      <option key={p.id} value={p.id}>{p.pos} {surname(p.name)} · {p.rc_estimated ? "b.d." : p.rc}</option>
+                    ))}
+                  </optgroup>
                 </select>
+                {starter && (
+                  <button onClick={() => toggleExclude(starter.id)} title="Usuń zawodnika ze składu"
+                    style={{ background: "transparent", color: C.steel, border: `1px solid ${C.line}`,
+                      borderRadius: 6, width: 20, height: 20, lineHeight: 1, fontSize: 11, cursor: "pointer", flexShrink: 0 }}>✕</button>
+                )}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 <Face name={starter ? starter.name : ""} src={starter ? photoOf(starter.name) : null}
