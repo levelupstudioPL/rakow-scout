@@ -210,6 +210,30 @@ def contract_year(player):
     return 0
  
  
+def age_from_dob(player):
+    """Wiek (lata) z daty urodzenia w obiekcie Scoutastic. None, gdy nie da się."""
+    import datetime as _dt
+    v = player.get("dateOfBirth") or player.get("birthDate") or player.get("birthday")
+    y = m = d = None
+    if isinstance(v, str) and len(v) >= 10 and v[:4].isdigit():
+        try:
+            y, m, d = int(v[:4]), int(v[5:7]), int(v[8:10])
+        except Exception:  # noqa: BLE001
+            return None
+    elif isinstance(v, (int, float)) and v > 0:
+        ts = v / 1000 if v > 1e12 else v
+        try:
+            dt = _dt.datetime.utcfromtimestamp(ts)
+            y, m, d = dt.year, dt.month, dt.day
+        except Exception:  # noqa: BLE001
+            return None
+    if not y:
+        return None
+    today = _dt.date.today()
+    a = today.year - y - ((today.month, today.day) < (m, d))
+    return a if 14 < a < 50 else None
+ 
+ 
 def extract(player):
     """Z surowego obiektu Scoutastic wyciąga to, czego używa model."""
     if not isinstance(player, dict):
@@ -218,5 +242,6 @@ def extract(player):
         "mv": to_millions(player.get("marketValue")),
         "peak": peak_from_history(player.get("marketValueHistory")),
         "contract": contract_year(player),
+        "age": age_from_dob(player),
     }
  
