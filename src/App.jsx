@@ -1241,7 +1241,7 @@ function FilterPanel({ data, filters, setF, applyFilters, resetFilters, filtersD
 
           {/* WIEK */}
           <div style={{ paddingTop: 14 }}>
-            <FLabel>Wiek: <b style={{ color: C.bone }}>{F.ageMin}-{F.ageMax}</b> lat</FLabel>
+            <FLabel>Wiek: <b style={{ color: C.bone }}>{F.ageMin > 16 ? `${F.ageMin}-${F.ageMax}` : `do ${F.ageMax}`}</b> lat</FLabel>
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: 9 }}>
               {AGE_PRESETS.map(([lbl, p]) => (
                 <button key={lbl} onClick={() => setF(p)} style={{
@@ -1250,13 +1250,12 @@ function FilterPanel({ data, filters, setF, applyFilters, resetFilters, filtersD
                   padding: "4px 10px", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>{lbl}</button>
               ))}
             </div>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <input type="range" min={16} max={45} value={F.ageMin}
-                onChange={(e) => setF({ ageMin: Math.min(+e.target.value, F.ageMax) })}
-                style={{ flex: 1, accentColor: C.red }} />
+            {/* Jeden suwak — górna granica wieku (dwa nakładające się rozjeżdżały się). */}
+            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
               <input type="range" min={16} max={45} value={F.ageMax}
                 onChange={(e) => setF({ ageMax: Math.max(+e.target.value, F.ageMin) })}
                 style={{ flex: 1, accentColor: C.red }} />
+              <span className="mono" style={{ fontSize: 12, color: C.steelHi, width: 48, textAlign: "right" }}>{F.ageMax} lat</span>
             </div>
           </div>
 
