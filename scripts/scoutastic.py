@@ -24,8 +24,22 @@ import urllib.request
  
 BASE_URL = os.getenv("SCOUTASTIC_BASE_URL", "https://rakow.scoutastic.com/api/v1")
 TIMEOUT = 30
-RETRIES = 3
-REQUEST_DELAY_S = float(os.getenv("SCOUTASTIC_DELAY_S", "0.2"))
+RETRIES = 4
+REQUEST_DELAY_S = float(os.getenv("SCOUTASTIC_DELAY_S", "0.15"))
+ 
+ 
+def _retry_after(headers):
+    """Ile sekund czekać po 429 — z nagłówka retry-after albo x-ratelimit-reset."""
+    try:
+        ra = headers.get("retry-after")
+        if ra and str(ra).strip().isdigit():
+            return min(max(int(ra), 1), 65)
+        reset = headers.get("x-ratelimit-reset")
+        if reset and str(reset).strip().isdigit():
+            return min(max(int(reset) - int(time.time()), 1), 65)
+    except Exception:  # noqa: BLE001
+        pass
+    return 5
  
  
 class ApiError(Exception):
@@ -65,8 +79,11 @@ class Client:
                     raw = resp.read().decode("utf-8")
                     return json.loads(raw) if raw else None
             except urllib.error.HTTPError as e:
-                # przejściowe: ponów; reszta: rzuć z treścią odpowiedzi (diagnostyka).
-                if e.code in (429, 500, 502, 503) and attempt < RETRIES:
+                # 429 = limit zapytań: poczekaj do resetu (nagłówki x-ratelimit / retry-after).
+                if e.code == 429 and attempt < RETRIES:
+                    time.sleep(_retry_after(e.headers))
+                    continue
+                if e.code in (500, 502, 503) and attempt < RETRIES:
                     time.sleep(REQUEST_DELAY_S * attempt * 3)
                     continue
                 try:
@@ -111,6 +128,18 @@ class Client:
             time.sleep(REQUEST_DELAY_S)
         return out
  
+    def search_player(self, text, dob_unix=None, tolerance=None, gender="male"):
+        """POST /players/search — szuka po nazwie (+opcjonalnie data ur. jako
+        Unix w sekundach, tolerance w sekundach). Zwraca listę wyników:
+        [{playerId, firstName, lastName, alias, dateOfBirth}]. Rzuca ApiError."""
+        body = {"text": text}
+        if isinstance(dob_unix, int) and dob_unix > 0:
+            body["dateOfBirth"] = dob_unix
+            if isinstance(tolerance, int) and tolerance > 0:
+                body["tolerance"] = tolerance
+        res = self._request("POST", "/players/search", params={"gender": gender}, body=body)
+        return res if isinstance(res, list) else []
+ 
     def get_player(self, external_id):
         """GET /players/{id} -> surowy obiekt zawodnika (albo None)."""
         try:
@@ -118,6 +147,19 @@ class Client:
         except Exception as e:  # noqa: BLE001
             print(f"[scoutastic] get_player {external_id}: błąd ({e})", file=sys.stderr)
             return None
+ 
+ 
+def dob_to_unix(date_str):
+    """'YYYY-MM-DD' -> Unix (sekundy, UTC). Zwraca None gdy nie da się sparsować."""
+    if not isinstance(date_str, str) or len(date_str) < 10:
+        return None
+    try:
+        import datetime as _dt
+        d = _dt.datetime(int(date_str[:4]), int(date_str[5:7]), int(date_str[8:10]),
+                         tzinfo=_dt.timezone.utc)
+        return int(d.timestamp())
+    except Exception:  # noqa: BLE001
+        return None
  
  
 # --- normalizacja pól (marketValue bywa liczbą EUR albo obiektem) ---
