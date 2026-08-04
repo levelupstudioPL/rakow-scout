@@ -260,9 +260,15 @@ def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_st
         "id": f"rk-{_slug(name)}", "name": name, "pos": pos, "line": line,
         "alt_pos": _alt_positions(sb_row, manual_alt, pos),
         "rc": rc, "real": True, "rc_estimated": est,
+        # wiek/wartość/kontrakt — zasilają moduły Priorytety i Czerwone flagi.
+        # Wiek ze StatsBomb (jeśli jest); mv/contract/peak dokłada _enrich_squad.
+        "age": _age(sb_row.get("birth_date")) if sb_row else None,
+        "mv": 0.0, "contract": 0,
         "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
         "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
         "_sb": sb_row,
+        "_bd": (sb_row.get("birth_date") or "")[:10]
+               if sb_row and isinstance(sb_row.get("birth_date"), str) else "",
     }
  
  
@@ -620,6 +626,10 @@ def build_dataset(sb, creds):
     print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
           f"(w tym {matched_tok} dopasowaniem po nazwisku) z player_values.csv")
  
+    # Wzbogacenie SKŁADU o wiek/wartość/kontrakt (Kaggle + Scoutastic) — zasila
+    # moduły „Priorytety transferowe" i „Czerwone flagi" na froncie.
+    _enrich_squad(squad, values_by_name, values_sur)
+ 
     # --- SCOUTASTIC: oficjalne wartości z Transfermarktu (przez API instancji) ---
     # Włączane obecnością sekretu SCOUTASTIC_TOKEN. Dopasowuje pulę do Scoutastic
     # przez /players/matching/statsbomb (po ID/nazwisku/dacie ur.), potem dociąga
@@ -636,6 +646,8 @@ def build_dataset(sb, creds):
     for c in pool:
         c.pop("_bd", None)
         c.pop("_ht", None)
+    for s in squad:
+        s.pop("_bd", None)
  
     # --- OPCJONALNIE: doczytanie wartości z Transfermarktu dla topowych bez ceny ---
     # Włączane flagą TM_ENRICH=1 (publiczne API bywa wolne/limitowane). Pyta TYLKO
@@ -813,6 +825,88 @@ def _pick_scoutastic(name, dob, results):
         if score > best_score:
             best, best_score = r, score
     return best
+ 
+ 
+def _enrich_squad(squad, values_by_name, values_sur):
+    """Dokłada wiek/wartość/kontrakt/szczyt do zawodników SKŁADU Rakowa.
+    Najpierw z Kaggle (player_values.csv, po nazwisku), potem — dla braków —
+    z wyszukiwarki Scoutastic (jak pula, tylko ~kadra, więc tanio). Cache dzieli
+    z pulą (klucze 'rk:<id>'). Zasila moduły Priorytety i Czerwone flagi."""
+    import json as _json
+    # 1) KAGGLE po nazwisku
+    km = 0
+    for s in squad:
+        v = values_by_name.get(_norm_ascii(s["name"]))
+        if not v:
+            v = _match_by_tokens(s["name"], values_sur, lambda x: round(x["mv"], 1))
+        if v:
+            if v.get("mv"):
+                s["mv"] = v["mv"]
+            if v.get("age") and not s.get("age"):
+                s["age"] = v["age"]
+            if v.get("contract"):
+                s["contract"] = v["contract"]
+            if v.get("peak"):
+                s["peak"] = v["peak"]
+            km += 1
+ 
+    # 2) SCOUTASTIC dla braków (wartość/kontrakt/wiek) — tylko gdy jest token
+    sc_fill = 0
+    token = os.getenv("SCOUTASTIC_TOKEN")
+    if token:
+        try:
+            import scoutastic as sc
+            client = sc.Client(token)
+            cache_path = Path(__file__).resolve().parent / "scoutastic_cache.json"
+            try:
+                cache = _json.loads(cache_path.read_text(encoding="utf-8"))
+            except Exception:  # noqa: BLE001
+                cache = {}
+            tol = int(os.getenv("SCOUTASTIC_DOB_TOL_DAYS", "4")) * 86400
+            for s in squad:
+                if float(s.get("mv") or 0) > 0 and s.get("contract") and s.get("age"):
+                    continue                      # komplet — nie pytamy
+                if not _is_valid_name(s.get("name")):
+                    continue
+                key = "rk:" + s["id"]
+                rec = cache.get(key)
+                if rec is None:
+                    dob = s.get("_bd")
+                    dob_unix = sc.dob_to_unix(dob)
+                    try:
+                        results = client.search_player(
+                            s["name"], dob_unix=dob_unix,
+                            tolerance=(tol if dob_unix else None))
+                    except Exception:  # noqa: BLE001
+                        results = []
+                    best = _pick_scoutastic(s["name"], dob, results)
+                    raw = client.get_player(best.get("playerId")) if best else None
+                    rec = sc.extract(raw) if raw else {"miss": True}
+                    cache[key] = rec
+                if rec and not rec.get("miss"):
+                    if rec.get("mv"):
+                        s["mv"] = rec["mv"]
+                    if rec.get("contract"):
+                        s["contract"] = rec["contract"]
+                    if rec.get("peak"):
+                        s["peak"] = rec["peak"]
+                    if rec.get("age") and not s.get("age"):
+                        s["age"] = rec["age"]
+                    sc_fill += 1
+            try:
+                cache_path.write_text(_json.dumps(cache, ensure_ascii=False, indent=1),
+                                      encoding="utf-8")
+            except Exception:  # noqa: BLE001
+                pass
+        except Exception as e:  # noqa: BLE001
+            print(f"[skład] Scoutastic enrichment pominięte: {e}", file=sys.stderr)
+ 
+    priced = sum(1 for s in squad if float(s.get("mv") or 0) > 0)
+    withc = sum(1 for s in squad if s.get("contract"))
+    witha = sum(1 for s in squad if s.get("age"))
+    print(f"[skład] Wzbogacono: Kaggle {km}, Scoutastic +{sc_fill}. "
+          f"Wartość {priced}/{len(squad)}, kontrakt {withc}/{len(squad)}, "
+          f"wiek {witha}/{len(squad)}.")
  
  
 def _enrich_values_scoutastic(pool):
