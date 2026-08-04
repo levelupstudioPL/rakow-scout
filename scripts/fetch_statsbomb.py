@@ -201,6 +201,110 @@ def league_handicap(league_rows, base_rows) -> dict:
 #  Pipeline pobierania. Struktura wyjścia = kontrakt data.json.
 # =====================================================================
  
+def _row_team_name(r):
+    for k in ("team_name", "team", "team_name_x"):
+        v = r.get(k)
+        if isinstance(v, str) and v.strip():
+            return v
+    return ""
+ 
+ 
+def _is_rakow_row(r):
+    return "rakow" in _norm_ascii(_row_team_name(r))
+ 
+ 
+def _player_minutes(r):
+    m = r.get("player_season_minutes")
+    return m if isinstance(m, (int, float)) else 0
+ 
+ 
+def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats):
+    return {
+        "id": f"rk-{_slug(name)}", "name": name, "pos": pos, "line": line,
+        "rc": rc, "real": True, "rc_estimated": est,
+        "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
+        "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
+        "_sb": sb_row,
+    }
+ 
+ 
+def build_squad_from_statsbomb(base_rows, base_stats_by_line, universal_stats, pos_style_stats):
+    """SKŁAD RAKOWA — automatycznie ze StatsBomb: zawodnicy z minutami dla Rakowa
+    w bieżącym sezonie Ekstraklasy. Odświeża się sam przy każdym pobraniu danych.
+    RC z modelu, gdy próbka >= MIN_MINUTES; inaczej 'b.d.'.
+ 
+    UCZCIWOŚĆ: to odzwierciedla „kto ZAGRAŁ", nie bieżącą kadrę z Transfermarktu —
+    nowy transfer wejdzie dopiero, gdy rozegra minuty, a zawodnik, który odszedł,
+    powisi póki ma rozegrane mecze w tym sezonie."""
+    best = {}
+    for r in base_rows:
+        if not _is_rakow_row(r):
+            continue
+        nm = r.get("player_name")
+        if not _is_valid_name(nm):
+            continue
+        key = _norm(nm)
+        if key not in best or _player_minutes(r) > _player_minutes(best[key]):
+            best[key] = r
+    squad, rc_from_model = [], 0
+    for r in best.values():
+        mapped = POS_TO_LINE.get(r.get("primary_position") or r.get("position"))
+        if not mapped:
+            continue
+        pos, line = mapped
+        model_rc = (coh.quality_level(r, line, base_stats_by_line[line])
+                    if _player_minutes(r) >= MIN_MINUTES else None)
+        if isinstance(model_rc, (int, float)):
+            rc, est = model_rc, False
+            rc_from_model += 1
+        else:
+            rc, est = 72, True   # za mała próbka / brak metryk -> "b.d." na froncie
+        squad.append(_squad_entry(r.get("player_name"), r, pos, line, rc, est,
+                                  universal_stats, pos_style_stats))
+    return squad, rc_from_model
+ 
+ 
+def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universal_stats, pos_style_stats):
+    """Awaryjny skład z ręcznego public/squad.json (gdy auto ze StatsBomb zawiedzie)."""
+    try:
+        static_squad = json.loads(squad_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"[BŁĄD] Nie wczytano {squad_path}: {e}", file=sys.stderr)
+        static_squad = []
+    # Indeks bazy po nazwisku — do dopasowania rozmytego, gdy nazwa w squad.json
+    # (z Transfermarktu) różni się od zapisu StatsBomb. To odzyskuje RC np. dla
+    # Racovițana, Napieraja, Emrelego zamiast pokazywać „b.d.".
+    _seen, _rows = set(), []
+    for r in base_by_name.values():
+        pid = r.get("player_id")
+        if pid in _seen:
+            continue
+        _seen.add(pid)
+        _rows.append(r)
+    base_sur = _surname_index([(r.get("player_name") or r.get("player_known_name") or "", r) for r in _rows])
+ 
+    squad, rc_from_model = [], 0
+    for pl in static_squad:
+        name, pos, line = pl.get("name"), pl.get("pos"), pl.get("line")
+        if not name or not pos or not line:
+            print(f"[uwaga] Pomijam niekompletny wpis skladu: {pl}", file=sys.stderr)
+            continue
+        sb_row = base_by_name.get(_norm(name)) \
+            or _match_by_tokens(name, base_sur, lambda r: r.get("player_id"))
+        model_rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else None
+        if isinstance(model_rc, (int, float)):
+            rc, est = model_rc, False
+            rc_from_model += 1
+        else:
+            fb = pl.get("rc")
+            rc, est = (fb if isinstance(fb, (int, float)) else 72), True
+        entry = _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats)
+        if pl.get("id"):
+            entry["id"] = pl["id"]
+        squad.append(entry)
+    return squad, rc_from_model
+ 
+ 
 def build_dataset(sb, creds):
     if not LEAGUE_CONFIG:
         die("LEAGUE_CONFIG jest puste — uzupełnij competition_id/season_id.")
@@ -266,78 +370,30 @@ def build_dataset(sb, creds):
         handicap = league_handicap(rows, base_rows)
         leagues.append({"lg": lg["name"], "base": lg.get("base", False), **handicap})
  
-    # --- Skład Rakowa: wczytywany ze stałego pliku public/squad.json ---
-    # (Wcześniej pobierany ze scrapera Transfermarktu, który bywa niedostępny
-    #  i wywalał całą aplikację. Teraz skład jest trwały; Transfermarkt służy
-    #  wyłącznie do opcjonalnych wartości rynkowych kandydatów.)
-    # Format squad.json: lista {"id","name","pos","line","rc"}.
-    # Analityk edytuje ten plik (docelowo przez interfejs w aplikacji).
+    # --- Skład Rakowa ---
+    # ŹRÓDŁO PRAWDY: public/squad.json — kurowany ręcznie przez analityka
+    # (generator "wklej skład" z Transfermarktu). RC i profile i tak liczy model
+    # ze StatsBomb; squad.json podaje tylko KTO jest w kadrze i na jakiej pozycji.
+    # BEZPIECZNIK: gdy squad.json jest pusty/uszkodzony (< 11 zawodników),
+    # awaryjnie budujemy skład automatycznie ze StatsBomb (kto zagrał dla Rakowa),
+    # żeby aplikacja nigdy nie została bez składu.
     squad_path = OUT.parent / "squad.json"
-    try:
-        static_squad = json.loads(squad_path.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"[BŁĄD] Nie wczytano {squad_path}: {e}", file=sys.stderr)
-        static_squad = []
- 
     base_by_name = _name_index(base_rows)
- 
-    squad = []
-    rc_from_model = 0
-    for pl in static_squad:
-        name = pl.get("name")
-        pos = pl.get("pos")
-        line = pl.get("line")
-        if not name or not pos or not line:
-            print(f"[uwaga] Pomijam niekompletny wpis skladu: {pl}", file=sys.stderr)
-            continue
-        # Dociagnij wiersz metryk StatsBomb po nazwisku (potrzebny do koherencji).
-        sb_row = base_by_name.get(_norm(name))
-        # RC — MODEL PIERWSZY:
-        # Poziom liczymy z realnych metryk StatsBomb (coh.quality_level, metoda
-        # percentylowa vs Ekstraklasa). To jest "model RC" — ta sama metoda, którą
-        # liczona jest pula kandydatów, więc skład i kandydaci są porównywalni.
-        #
-        # squad.json/"rc" służy już TYLKO jako awaryjny fallback: gdy zawodnik nie
-        # ma dopasowanego wiersza w StatsBomb (np. inny zapis nazwiska) albo metryki
-        # są puste (typowo bramkarze bez pól gsaa/save_ratio). Wpisana liczba NIE
-        # nadpisuje modelu, gdy dane są dostępne.
-        #
-        # UWAGA (uczciwość modelu): dobór metryk per pozycja (QUALITY_METRICS w
-        # coherence.py) to rozsądne domyślne, ale wciąż ZAŁOŻENIE — ktoś znający
-        # Ekstraklasę i te ligi powinien je kiedyś zweryfikować. Poziomy traktować
-        # jako orientacyjne, nie ostateczne.
-        model_rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else None
-        if isinstance(model_rc, (int, float)):
-            rc = model_rc
-            rc_source = "model"
-            rc_from_model += 1
-        else:
-            fallback = pl.get("rc")
-            rc = fallback if isinstance(fallback, (int, float)) else 72
-            rc_source = "squad.json" if isinstance(fallback, (int, float)) else "domyslne(72)"
-            print(f"[RC] {name}: brak metryk StatsBomb — uzyto {rc_source} (rc={rc})",
-                  file=sys.stderr)
-        squad.append({
-            "id": pl.get("id") or f"rk-{_slug(name)}", "name": name,
-            "pos": pos, "line": line, "rc": rc, "real": True,
-            # rc_estimated = True gdy RC NIE pochodzi z modelu (brak metryk
-            # StatsBomb -> fallback ze squad.json lub domyslne 72). Front pokazuje
-            # wtedy flage "niepelne dane", zeby nie mylic braku danych z ocena.
-            "rc_estimated": (rc_source != "model"),
-            # profil stylu (z-score) do koherencji „każdy z każdym"; None gdy brak
-            # dopasowania w StatsBomb (bramkarze i tak pomijani na froncie).
-            "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
-            # profil dopasowany do pozycji (bogatszy, position-fair) — pod panele
-            # „mocne strony" i „kandydat vs nasz".
-            "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
-            "_sb": sb_row,
-        })
+    squad, rc_from_model = build_squad_from_file(
+        squad_path, base_by_name, base_stats_by_line, universal_stats, pos_style_stats)
+    src = "squad.json"
+    if len(squad) < 11:
+        print(f"[skład] squad.json dało tylko {len(squad)} zawodników — "
+              f"awaryjnie buduję skład automatycznie ze StatsBomb.", file=sys.stderr)
+        squad, rc_from_model = build_squad_from_statsbomb(
+            base_rows, base_stats_by_line, universal_stats, pos_style_stats)
+        src = "auto-StatsBomb"
  
     if not squad:
-        print("[uwaga] Sklad Rakowa jest pusty - sprawdz public/squad.json.", file=sys.stderr)
+        print("[uwaga] Sklad Rakowa jest pusty — sprawdz public/squad.json / dane StatsBomb.", file=sys.stderr)
     else:
-        print(f"RC skladu: {rc_from_model}/{len(squad)} policzone z modelu "
-              f"(reszta = fallback ze squad.json / domyslne).")
+        print(f"Skład Rakowa: {len(squad)} zawodników (źródło: {src}), "
+              f"RC z modelu: {rc_from_model}/{len(squad)}.")
  
     # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
     squad_by_pos = {}
@@ -414,10 +470,14 @@ def build_dataset(sb, creds):
     # z Transfermarktu — łączymy po ZNORMALIZOWANYM nazwisku (bez znaków diakryt.,
     # lowercase). Część zawodników się nie dopasuje (inne zapisy, zdrobnienia) —
     # to NIE błąd, zostają z mv=0, tak jak było przy niedostępnym TM.
-    values_by_name = _load_values_csv(Path(__file__).resolve().parent / "player_values.csv")
-    matched = 0
+    values_by_name, values_sur = _load_values_csv(Path(__file__).resolve().parent / "player_values.csv")
+    matched = matched_tok = 0
     for c in pool:
         v = values_by_name.get(_norm_ascii(c["name"]))
+        if not v:
+            v = _match_by_tokens(c["name"], values_sur, lambda x: round(x["mv"], 1))
+            if v:
+                matched_tok += 1
         if v:
             c["mv"] = v["mv"]           # wartość w mln EUR
             if v.get("age"):
@@ -426,7 +486,7 @@ def build_dataset(sb, creds):
                 c["contract"] = v["contract"]
             matched += 1
     print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
-          f"z pliku player_values.csv")
+          f"(w tym {matched_tok} dopasowaniem po nazwisku) z player_values.csv")
  
     return {
         "meta": {
@@ -471,6 +531,40 @@ def _norm_ascii(name):
     s = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
     return " ".join(s.strip().lower().split())
  
+ 
+def _tokens(name):
+    """Tokeny nazwiska do dopasowania rozmytego (ascii, bez krótkich cząstek)."""
+    s = _norm_ascii((name or "").replace("ł", "l").replace("Ł", "l")).replace("-", " ")
+    return [t for t in s.split() if len(t) > 1]
+ 
+ 
+def _surname_index(items):
+    """items: [(name, payload)] -> {nazwisko: [(set(tokeny), imie, payload)]}."""
+    idx = {}
+    for name, payload in items:
+        tk = _tokens(name)
+        if tk:
+            idx.setdefault(tk[-1], []).append((set(tk), tk[0], payload))
+    return idx
+ 
+ 
+def _match_by_tokens(name, idx, dedup_key):
+    """Dopasowanie po nazwisku + nakładaniu tokenów. Zwraca payload TYLKO gdy
+    jest jednoznaczny (wszystkie trafienia wskazują to samo wg dedup_key),
+    inaczej None — lepiej brak dopasowania niż złe."""
+    tk = _tokens(name)
+    if not tk:
+        return None
+    cands = []
+    for tset, first, payload in idx.get(tk[-1], []):
+        shared = len(set(tk) & tset)
+        if shared >= 2 or (shared >= 1 and tk[0] == first):
+            cands.append(payload)
+    if not cands:
+        return None
+    keys = {dedup_key(p) for p in cands}
+    return cands[0] if len(keys) == 1 else None
+ 
 def _load_values_csv(path):
     """Wczytuje wartości rynkowe z lokalnego CSV (zrzut Kaggle) do słownika
     {znormalizowane_nazwisko: {mv, age, contract}}. Wartość przeliczana na mln EUR
@@ -512,7 +606,10 @@ def _load_values_csv(path):
               f"rynkowych (mv=0). Wgraj scripts/player_values.csv.", file=sys.stderr)
     except Exception as e:
         print(f"[uwaga] Błąd czytania {path}: {e} — pomijam wartości.", file=sys.stderr)
-    return result
+    # Indeks po nazwisku do dopasowania rozmytego (odzyskuje ceny, gdy nazwa
+    # w StatsBomb różni się od pliku — np. dodatkowe imiona).
+    sur_index = _surname_index([(k, v) for k, v in result.items()])
+    return result, sur_index
  
 def _slug(name):
     if not isinstance(name, str) or not name.strip():
@@ -594,5 +691,4 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
  
