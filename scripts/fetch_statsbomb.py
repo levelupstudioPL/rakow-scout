@@ -298,6 +298,21 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universa
         else:
             fb = pl.get("rc")
             rc, est = (fb if isinstance(fb, (int, float)) else 72), True
+            # DIAGNOSTYKA „b.d." — mówi WPROST, czemu nie ma RC:
+            if sb_row is None:
+                tk = _tokens(name)
+                near = base_sur.get(tk[-1], []) if tk else []
+                if near:
+                    alt = ", ".join(sorted({r.get("player_name", "?") for (_s, _f, r) in near})[:3])
+                    reason = (f"NIE dopasowany, ale w StatsBomb są o tym nazwisku: {alt} "
+                              f"→ sprawdź pisownię w squad.json")
+                else:
+                    reason = ("NIE ZNALEZIONY w StatsBomb (nikogo o tym nazwisku — nowy transfer / "
+                              "nie zagrał w tym sezonie / dane jeszcze niewciągnięte)")
+            else:
+                reason = (f"znaleziony ({int(_player_minutes(sb_row))} min), "
+                          f"ale BRAK metryk jakościowych dla linii {line}")
+            print(f"[b.d.] {name}: {reason}", file=sys.stderr)
         entry = _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats)
         if pl.get("id"):
             entry["id"] = pl["id"]
@@ -488,6 +503,14 @@ def build_dataset(sb, creds):
     print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
           f"(w tym {matched_tok} dopasowaniem po nazwisku) z player_values.csv")
  
+    # --- OPCJONALNIE: doczytanie wartości z Transfermarktu dla topowych bez ceny ---
+    # Włączane flagą TM_ENRICH=1 (publiczne API bywa wolne/limitowane). Pyta TYLKO
+    # o kandydatów bez ceny o najwyższej koherencji (limit TM_ENRICH_TOP, domyślnie
+    # 150), z cache w scripts/tm_values_cache.json — kolejne uruchomienia nie pytają
+    # ponownie. Błędy API nie wywalają runu (fallback = brak ceny).
+    if os.getenv("TM_ENRICH") and tm is not None:
+        _enrich_values_tm(pool)
+ 
     return {
         "meta": {
             "source": "statsbomb+kaggle-values",
@@ -610,6 +633,50 @@ def _load_values_csv(path):
     # w StatsBomb różni się od pliku — np. dodatkowe imiona).
     sur_index = _surname_index([(k, v) for k, v in result.items()])
     return result, sur_index
+ 
+def _enrich_values_tm(pool):
+    """Doczytuje wartości z Transfermarktu (przez transfermarkt.py) dla kandydatów
+    BEZ ceny, o najwyższej koherencji. Cache w scripts/tm_values_cache.json.
+    Bezpieczne: błędy pojedynczych zapytań są pomijane."""
+    import json as _json
+    cache_path = Path(__file__).resolve().parent / "tm_values_cache.json"
+    try:
+        cache = _json.loads(cache_path.read_text(encoding="utf-8"))
+    except Exception:
+        cache = {}
+    top_n = int(os.getenv("TM_ENRICH_TOP", "150"))
+    unpriced = [c for c in pool
+                if (float(c.get("mv") or 0) <= 0) and _is_valid_name(c.get("name"))]
+    unpriced.sort(key=lambda c: -(float(c.get("coherence") or 0)))
+    targets = unpriced[:top_n]
+    print(f"[TM] Doczytuję wartości dla {len(targets)} kandydatów bez ceny "
+          f"(najwyższa koherencja)…")
+    applied = queried = 0
+    for c in targets:
+        key = _norm_ascii(c["name"])
+        v = cache.get(key)
+        if v is None:
+            try:
+                v = tm.fetch_player_value(c["name"]) or {"mv": 0}
+            except Exception as e:  # noqa: BLE001
+                print(f"[TM] {c['name']}: błąd ({e})", file=sys.stderr)
+                v = {"mv": 0}
+            cache[key] = v
+            queried += 1
+        if v and float(v.get("mv") or 0) > 0:
+            c["mv"] = v["mv"]
+            if v.get("age"):
+                c["age"] = v["age"]
+            if v.get("contract"):
+                c["contract"] = v["contract"]
+            applied += 1
+    try:
+        cache_path.write_text(_json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+    except Exception as e:  # noqa: BLE001
+        print(f"[TM] Nie zapisano cache: {e}", file=sys.stderr)
+    print(f"[TM] Zapytań do API: {queried}, uzupełnionych wycen: {applied} "
+          f"(reszta bez ceny — brak w TM lub API niedostępne).")
+ 
  
 def _slug(name):
     if not isinstance(name, str) or not name.strip():
