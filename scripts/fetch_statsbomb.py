@@ -70,6 +70,14 @@ LEAGUE_CONFIG = [
 # Uwaga: ostatni wpis to placeholder-przykład; usuń go albo uzupełnij realnym ID.
 LEAGUE_CONFIG = [lg for lg in LEAGUE_CONFIG if lg["competition_id"] is not None]
  
+# Sezon HISTORYCZNY do fallbacku dla zawodników bez danych w bieżącym sezonie
+# (nowy transfer / za mało minut). Schemat season_id jest spójny między ligami:
+# 318 = 2025/2026, 317 = 2024/2025 (poprzedni), 281 = 2023/2024. Gdy zawodnik nie
+# ma metryk w 318, próbujemy policzyć RC z 317 i OZNACZAMY to jako „historyczne".
+# Wyłączalne: HIST_FALLBACK=0. Inny sezon: HIST_SEASON_ID / HIST_SEASON_LABEL.
+HIST_SEASON_ID = int(os.getenv("HIST_SEASON_ID", "317"))
+HIST_SEASON_LABEL = os.getenv("HIST_SEASON_LABEL", "2024/2025")
+ 
 # Nazwa zespołu w danych StatsBomb (do wyfiltrowania składu Rakowa)
 RAKOW_TEAM_NAME = "Raków Częstochowa"
  
@@ -320,6 +328,61 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universa
     return squad, rc_from_model
  
  
+def _apply_historical_fallback(sb, creds, squad, base_stats_by_line,
+                               universal_stats, pos_style_stats):
+    """Dla zawodników składu bez danych w bieżącym sezonie (rc_estimated) szuka ich
+    w SEZONIE POPRZEDNIM (HIST_SEASON_ID) we wszystkich skonfigurowanych ligach i —
+    jeśli mają tam wystarczającą próbkę — liczy RC oraz profile z tych danych.
+    Percentyl liczony WZGLĘDEM BIEŻĄCEJ ligi bazowej (base_stats_by_line), żeby RC
+    było porównywalne z resztą składu. Wpis dostaje rc_source="historical" +
+    rc_season, więc front pokaże, że to ocena na danych historycznych.
+    Zwraca liczbę odzyskanych zawodników."""
+    if os.getenv("HIST_FALLBACK", "1") not in ("1", "true", "True"):
+        return 0
+    todo = [e for e in squad if e.get("rc_estimated")]
+    if not todo:
+        return 0
+    print(f"[hist] {len(todo)} zawodników bez danych bieżącego sezonu — "
+          f"szukam w sezonie {HIST_SEASON_LABEL} (id {HIST_SEASON_ID})…")
+    # Pobierz sezon historyczny dla wszystkich lig i zbierz wiersze do jednego indeksu.
+    hist_rows = []
+    for lg in LEAGUE_CONFIG:
+        try:
+            stats = sb.player_season_stats(
+                competition_id=lg["competition_id"], season_id=HIST_SEASON_ID, creds=creds)
+            hist_rows.extend(stats.to_dict("records"))
+        except Exception as e:  # noqa: BLE001
+            print(f"[hist] Nie pobrano {lg['name']} ({HIST_SEASON_LABEL}): {e}", file=sys.stderr)
+    if not hist_rows:
+        print("[hist] Brak danych historycznych — pomijam fallback.", file=sys.stderr)
+        return 0
+    hist_by_name = _name_index(hist_rows)
+    hist_sur = _surname_index(
+        [(r.get("player_name") or r.get("player_known_name") or "", r) for r in hist_rows])
+    recovered = 0
+    for e in todo:
+        name, line = e["name"], e["line"]
+        row = hist_by_name.get(_norm(name)) \
+            or _match_by_tokens(name, hist_sur, lambda r: r.get("player_id"))
+        if not row or _player_minutes(row) < MIN_MINUTES:
+            continue
+        rc = coh.quality_level(row, line, base_stats_by_line[line])
+        if not isinstance(rc, (int, float)):
+            continue
+        e["rc"] = rc
+        e["rc_estimated"] = False
+        e["rc_source"] = "historical"
+        e["rc_season"] = HIST_SEASON_LABEL
+        e["profile"] = coh.style_profile(row, universal_stats)
+        e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
+        e["_sb"] = row              # staje się też referencją koherencji dla puli
+        recovered += 1
+        print(f"[hist] {name}: RC {rc} z sezonu {HIST_SEASON_LABEL} "
+              f"({int(_player_minutes(row))} min).")
+    print(f"[hist] Odzyskano {recovered}/{len(todo)} zawodników z danych historycznych.")
+    return recovered
+ 
+ 
 def build_dataset(sb, creds):
     if not LEAGUE_CONFIG:
         die("LEAGUE_CONFIG jest puste — uzupełnij competition_id/season_id.")
@@ -404,11 +467,23 @@ def build_dataset(sb, creds):
             base_rows, base_stats_by_line, universal_stats, pos_style_stats)
         src = "auto-StatsBomb"
  
+    # FALLBACK HISTORYCZNY: dolicz RC z poprzedniego sezonu dla zawodników bez danych
+    # bieżącego sezonu (oznaczone jako historyczne). Robione PRZED liczeniem puli, bo
+    # ustawia _sb odzyskanym zawodnikom → stają się referencją koherencji dla puli.
+    rc_hist = 0
+    if squad:
+        try:
+            rc_hist = _apply_historical_fallback(
+                sb, creds, squad, base_stats_by_line, universal_stats, pos_style_stats)
+        except Exception as e:  # noqa: BLE001
+            print(f"[hist] Fallback historyczny pominięty: {e}", file=sys.stderr)
+ 
     if not squad:
         print("[uwaga] Sklad Rakowa jest pusty — sprawdz public/squad.json / dane StatsBomb.", file=sys.stderr)
     else:
         print(f"Skład Rakowa: {len(squad)} zawodników (źródło: {src}), "
-              f"RC z modelu: {rc_from_model}/{len(squad)}.")
+              f"RC z modelu: {rc_from_model}/{len(squad)}"
+              f"{f' (+{rc_hist} z danych historycznych)' if rc_hist else ''}.")
  
     # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
     squad_by_pos = {}
@@ -499,6 +574,12 @@ def build_dataset(sb, creds):
                 c["age"] = v["age"]
             if v.get("contract"):
                 c["contract"] = v["contract"]
+            # Ubogacenie: szczyt wartości + output (gole/asysty/minuty) sezonu.
+            if v.get("peak"):
+                c["peak"] = v["peak"]
+            for k in ("goals", "assists", "minutes"):
+                if v.get(k):
+                    c[k] = v[k]
             matched += 1
     print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
           f"(w tym {matched_tok} dopasowaniem po nazwisku) z player_values.csv")
@@ -511,6 +592,17 @@ def build_dataset(sb, creds):
     if os.getenv("TM_ENRICH") and tm is not None:
         _enrich_values_tm(pool)
  
+ 
+    # Kalibracja cen: mnożniki fee/mv wg wieku (z transfers.csv na Kaggle).
+    price_calibration = {}
+    try:
+        cal_path = Path(__file__).resolve().parent / "price_calibration.json"
+        if cal_path.exists():
+            price_calibration = json.loads(cal_path.read_text(encoding="utf-8"))
+            print(f"Kalibracja cen wczytana: {price_calibration}")
+    except Exception as e:  # noqa: BLE001
+        print(f"[uwaga] Nie wczytano price_calibration.json: {e}", file=sys.stderr)
+ 
     return {
         "meta": {
             "source": "statsbomb+kaggle-values",
@@ -522,6 +614,7 @@ def build_dataset(sb, creds):
             # Etykiety atrybutów profilu pozycyjnego (profile_pos) — front czyta
             # je stąd, żeby nie powielać listy. Kolejność == wektor profile_pos.
             "style_labels": {ln: coh.pos_style_labels(ln) for ln in ("Bramka", "Obrona", "Pomoc", "Atak")},
+            "price_calibration": price_calibration,
         },
         "squad": squad,
         "leagues": leagues,
@@ -618,12 +711,23 @@ def _load_values_csv(path):
                 con = row.get("contract") or ""
                 if len(con) >= 4 and con[:4].isdigit():
                     contract = int(con[:4])
+                # Ubogacenie (Kaggle): szczyt wartości + output bieżącego sezonu.
+                def _num(x):
+                    try:
+                        return float(x or 0)
+                    except (ValueError, TypeError):
+                        return 0.0
+                peak_mln = round(_num(row.get("mv_peak_eur")) / 1_000_000.0, 2)
+                goals = int(_num(row.get("goals")))
+                assists = int(_num(row.get("assists")))
+                minutes = int(_num(row.get("minutes")))
                 # Gdy nazwisko powtarza się w pliku, bierz wyższą wartość
                 # (zwykle to ten "właściwy", aktywny zawodnik).
                 prev = result.get(key)
                 if prev and prev["mv"] >= mv_mln:
                     continue
-                result[key] = {"mv": mv_mln, "age": age, "contract": contract}
+                result[key] = {"mv": mv_mln, "age": age, "contract": contract,
+                               "peak": peak_mln, "goals": goals, "assists": assists, "minutes": minutes}
     except FileNotFoundError:
         print(f"[uwaga] Nie znaleziono {path} — kandydaci zostaną bez wartości "
               f"rynkowych (mv=0). Wgraj scripts/player_values.csv.", file=sys.stderr)
@@ -651,7 +755,12 @@ def _enrich_values_tm(pool):
     targets = unpriced[:top_n]
     print(f"[TM] Doczytuję wartości dla {len(targets)} kandydatów bez ceny "
           f"(najwyższa koherencja)…")
-    applied = queried = 0
+    # BEZPIECZNIK: gdy publiczne API TM leży (sypie 500 na każde zapytanie), nie ma
+    # sensu mielić przez wszystkie 150 kandydatów po ~14 s każdy (34 min w plecy za
+    # 0 wycen). Po serii kolejnych ZAPYTAŃ NA ŻYWO bez ani jednej ceny przerywamy —
+    # to prawie na pewno padnięte API, a nie zbieg braków. Próg z env (domyślnie 12).
+    break_after = int(os.getenv("TM_BREAK_AFTER", "12"))
+    applied = queried = consec_fail = 0
     for c in targets:
         key = _norm_ascii(c["name"])
         v = cache.get(key)
@@ -663,6 +772,8 @@ def _enrich_values_tm(pool):
                 v = {"mv": 0}
             cache[key] = v
             queried += 1
+            # licznik bezpiecznika tylko dla zapytań NA ŻYWO (cache nie liczy się)
+            consec_fail = 0 if float(v.get("mv") or 0) > 0 else consec_fail + 1
         if v and float(v.get("mv") or 0) > 0:
             c["mv"] = v["mv"]
             if v.get("age"):
@@ -670,6 +781,11 @@ def _enrich_values_tm(pool):
             if v.get("contract"):
                 c["contract"] = v["contract"]
             applied += 1
+        if break_after > 0 and consec_fail >= break_after and applied == 0:
+            print(f"[TM] Przerywam — {consec_fail} kolejnych zapytań bez ceny i 0 trafień. "
+                  f"API prawdopodobnie niedostępne. (Odpalaj bez tm_enrich, aż wróci.)",
+                  file=sys.stderr)
+            break
     try:
         cache_path.write_text(_json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
     except Exception as e:  # noqa: BLE001
