@@ -35,6 +35,7 @@ jobs:
         env:
           SB_USERNAME: ${{ secrets.SB_USERNAME }}
           SB_PASSWORD: ${{ secrets.SB_PASSWORD }}
+          SCOUTASTIC_TOKEN: ${{ secrets.SCOUTASTIC_TOKEN }}
           TM_ENRICH: ${{ github.event.inputs.tm_enrich == 'true' && '1' || '' }}
           TM_ENRICH_TOP: ${{ github.event.inputs.tm_top }}
         run: python scripts/fetch_statsbomb.py
