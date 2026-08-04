@@ -28,17 +28,25 @@ RETRIES = 3
 REQUEST_DELAY_S = float(os.getenv("SCOUTASTIC_DELAY_S", "0.2"))
  
  
+class ApiError(Exception):
+    """Błąd HTTP z treścią odpowiedzi serwera (żeby było widać DLACZEGO)."""
+    def __init__(self, code, body):
+        self.code = code
+        self.body = body
+        super().__init__(f"HTTP {code}: {body}")
+ 
+ 
 class Client:
     def __init__(self, token):
         self.token = (token or "").strip()
-        # "Bearer (apiKey)" w nagłówku Authorization. Gdy token już ma prefiks —
-        # nie dubluj. Przy 401 spróbujemy też surowej wartości (bez "Bearer ").
-        self._auth_variants = []
-        if self.token.lower().startswith("bearer "):
-            self._auth_variants = [self.token, self.token.split(" ", 1)[1]]
+        # Nagłówek Authorization. Domyślnie prefiks "Bearer " (schemat z docs:
+        # „Bearer (apiKey)"). Gdyby instancja chciała surowy token — SCOUTASTIC_AUTH_RAW=1.
+        if os.getenv("SCOUTASTIC_AUTH_RAW") in ("1", "true", "True"):
+            self._auth = self.token
+        elif self.token.lower().startswith("bearer "):
+            self._auth = self.token
         else:
-            self._auth_variants = [f"Bearer {self.token}", self.token]
-        self._auth = self._auth_variants[0]
+            self._auth = f"Bearer {self.token}"
  
     # --- niskopoziomowe ---
     def _request(self, method, path, params=None, body=None):
@@ -46,7 +54,6 @@ class Client:
         if params:
             url += "?" + urllib.parse.urlencode(params)
         data = json.dumps(body).encode("utf-8") if body is not None else None
-        last_err = None
         for attempt in range(1, RETRIES + 1):
             try:
                 req = urllib.request.Request(url, data=data, method=method)
@@ -58,20 +65,20 @@ class Client:
                     raw = resp.read().decode("utf-8")
                     return json.loads(raw) if raw else None
             except urllib.error.HTTPError as e:
-                last_err = e
-                # 401/403 na pierwszej próbie: przełącz wariant autoryzacji i spróbuj raz jeszcze.
-                if e.code in (401, 403) and self._auth != self._auth_variants[-1]:
-                    self._auth = self._auth_variants[-1]
-                    continue
-                if e.code in (429, 500, 502, 503):
+                # przejściowe: ponów; reszta: rzuć z treścią odpowiedzi (diagnostyka).
+                if e.code in (429, 500, 502, 503) and attempt < RETRIES:
                     time.sleep(REQUEST_DELAY_S * attempt * 3)
                     continue
-                raise
+                try:
+                    err_body = e.read().decode("utf-8")[:300]
+                except Exception:  # noqa: BLE001
+                    err_body = "(brak treści)"
+                raise ApiError(e.code, err_body)
             except (urllib.error.URLError, TimeoutError) as e:
-                last_err = e
-                time.sleep(REQUEST_DELAY_S * attempt * 3)
-        if last_err:
-            raise last_err
+                if attempt < RETRIES:
+                    time.sleep(REQUEST_DELAY_S * attempt * 3)
+                    continue
+                raise ApiError(0, str(e))
         return None
  
     # --- endpointy ---
@@ -79,13 +86,22 @@ class Client:
         """players: lista dictów {player_name, player_birth_date, offline_player_id,
         live_player_id, player_height}. Zwraca {offline_player_id: externalId}."""
         out = {}
+        shown = False
         for i in range(0, len(players), chunk):
             batch = players[i:i + chunk]
             try:
                 res = self._request("POST", "/players/matching/statsbomb",
                                     params={"gender": gender}, body=batch) or {}
             except Exception as e:  # noqa: BLE001
-                print(f"[scoutastic] match: błąd partii {i // chunk + 1} ({e})", file=sys.stderr)
+                # Pierwszy błąd pokaż SZCZEGÓŁOWO (kod + treść serwera) — to mówi DLACZEGO.
+                if not shown:
+                    print(f"[scoutastic] match: pierwszy błąd — {e}", file=sys.stderr)
+                    print(f"[scoutastic]   przykład wysłanego rekordu: {batch[0] if batch else '(pusto)'}",
+                          file=sys.stderr)
+                    shown = True
+                else:
+                    print(f"[scoutastic] match: błąd partii {i // chunk + 1} "
+                          f"({getattr(e, 'code', '?')})", file=sys.stderr)
                 continue
             for m in (res.get("successfulMatches") or []):
                 off = str(m.get("offline_player_id"))
