@@ -226,9 +226,39 @@ def _player_minutes(r):
     return m if isinstance(m, (int, float)) else 0
  
  
-def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats):
+VALID_POS = {p for (p, _ln) in POS_TO_LINE.values()}
+ 
+ 
+def _alt_positions(sb_row, manual_alt, primary_pos):
+    """Pozycje alternatywne zawodnika (kody, bez podstawowej). Źródła łączone:
+    (1) AUTO — druga pozycja ze StatsBomb (secondary_position), gdzie realnie grał;
+    (2) MANUAL — lista alt_pos z squad.json (nadpisanie/uzupełnienie przez analityka).
+    Zwraca listę kodów pozycji (np. ['ST']) w kolejności: auto, potem manual."""
+    out = []
+    if sb_row:
+        sec = sb_row.get("secondary_position")
+        if isinstance(sec, str) and sec.strip():
+            m = POS_TO_LINE.get(sec.strip())
+            if m and m[0] != primary_pos:
+                out.append(m[0])
+    if manual_alt:
+        for code in manual_alt:
+            if isinstance(code, str):
+                c = code.strip().upper()
+                if c in VALID_POS and c != primary_pos:
+                    out.append(c)
+    seen, res = set(), []
+    for c in out:
+        if c not in seen:
+            seen.add(c)
+            res.append(c)
+    return res
+ 
+ 
+def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats, manual_alt=None):
     return {
         "id": f"rk-{_slug(name)}", "name": name, "pos": pos, "line": line,
+        "alt_pos": _alt_positions(sb_row, manual_alt, pos),
         "rc": rc, "real": True, "rc_estimated": est,
         "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
         "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
@@ -321,7 +351,8 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universa
                 reason = (f"znaleziony ({int(_player_minutes(sb_row))} min), "
                           f"ale BRAK metryk jakościowych dla linii {line}")
             print(f"[b.d.] {name}: {reason}", file=sys.stderr)
-        entry = _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats)
+        entry = _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats,
+                             manual_alt=pl.get("alt_pos"))
         if pl.get("id"):
             entry["id"] = pl["id"]
         squad.append(entry)
@@ -376,6 +407,8 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_line,
         e["profile"] = coh.style_profile(row, universal_stats)
         e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
         e["_sb"] = row              # staje się też referencją koherencji dla puli
+        # dołóż pozycję alternatywną z danych historycznych (zachowaj manualne)
+        e["alt_pos"] = _alt_positions(row, e.get("alt_pos"), e["pos"])
         recovered += 1
         print(f"[hist] {name}: RC {rc} z sezonu {HIST_SEASON_LABEL} "
               f"({int(_player_minutes(row))} min).")
