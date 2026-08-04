@@ -824,16 +824,20 @@ def _enrich_values_scoutastic(pool):
         if pid in cache or pid in seen or not _is_valid_name(c.get("name")):
             continue
         seen.add(pid)
-        to_match.append({
-            "player_name": c["name"],
-            "player_birth_date": c.get("_bd") or "",
-            "offline_player_id": str(pid),
-            "live_player_id": str(pid),
-            "player_height": c.get("_ht") or 0,
-        })
+        # Ciało tylko z sensownymi polami — pusta data ur. / wzrost 0 dają 400.
+        rec = {"player_name": c["name"],
+               "offline_player_id": str(pid), "live_player_id": str(pid)}
+        bd = c.get("_bd")
+        if isinstance(bd, str) and len(bd) >= 8 and bd[:4].isdigit():
+            rec["player_birth_date"] = bd
+        ht = c.get("_ht")
+        if isinstance(ht, (int, float)) and ht > 0:
+            rec["player_height"] = int(ht)
+        to_match.append(rec)
     print(f"[scoutastic] Dopasowuję {len(to_match)} nowych zawodników "
           f"(w cache: {len(cache)})…")
-    ext_map = client.match_statsbomb(to_match) if to_match else {}
+    chunk = int(os.getenv("SCOUTASTIC_CHUNK", "100"))
+    ext_map = client.match_statsbomb(to_match, chunk=chunk) if to_match else {}
     print(f"[scoutastic] Dopasowano {len(ext_map)}/{len(to_match)} do Scoutastic.")
  
     # 2) POBIERANIE danych per externalId (z limitem bezpieczeństwa na 1. run).
