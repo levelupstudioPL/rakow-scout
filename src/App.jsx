@@ -271,6 +271,10 @@ export default function App() {
         .trow:hover{background:${C.panel2};}
         button:focus-visible{outline:2px solid ${C.redHi};outline-offset:2px;}
         @media (prefers-reduced-motion:no-preference){.bar{transition:width .6s cubic-bezier(.2,.8,.2,1);}}
+        /* Subtelna klubowa tekstura pod treścią (prześwituje ~8% spod granatu). */
+        .bgwall{position:fixed;inset:0;z-index:0;pointer-events:none;
+          background:url('/bg-rakow.webp') center/cover no-repeat;opacity:.08;filter:saturate(.75);}
+        .shell > .mobabar, .shell > .rail, .shell > main{position:relative;z-index:1;}
         .mobabar{display:none;}
         .hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
         @media(max-width:900px){
@@ -285,6 +289,8 @@ export default function App() {
         }
         @media(max-width:480px){ .content{padding:14px 14px 0!important;} }
       `}</style>
+
+      <div className="bgwall" aria-hidden="true" />
 
       {/* ===================== MOBILE TOP BAR (hamburger) ===================== */}
       <div className="mobabar" style={{ position: "sticky", top: 0, zIndex: 40,
