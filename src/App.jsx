@@ -180,24 +180,59 @@ export default function App() {
     return { adj, diff, level, coherence, ref: p.coherence_ref || null,
              fit: coherence };
   };
+  // Kalibracja: mediana fee/wartość z REALNYCH transferów (transfers.csv na Kaggle),
+  // rozbita wg wieku. Gdy jest — używamy jej zamiast ręcznego mnożnika wieku, więc
+  // wycena jest oparta na rzeczywistych kwotach, a nie na zgadywaniu.
+  const CAL = (data && data.meta && data.meta.price_calibration) || null;
+  const calAgeMult = (age) => {
+    const bucket = age <= 21 ? "u21" : age <= 25 ? "a22_25" : age <= 29 ? "a26_29" : "a30p";
+    if (CAL && typeof CAL[bucket] === "number") return CAL[bucket];
+    if (CAL && typeof CAL.all === "number") return CAL.all;
+    // Fallback (brak kalibracji): dawny ręczny mnożnik.
+    return age <= 23 ? 1.25 : age <= 26 ? 1.05 : age <= 29 ? 0.85 : 0.65;
+  };
   const estimatePrice = (player, p) => {
     const { adj } = adjusted(p);
     const base = Number(p.mv) || 0;
     const rc = Number(player.rc) || 0;
     const levelF = 1 + Math.max(-0.3, (adj - rc) * 0.04);
-    const ageF = p.age <= 23 ? 1.25 : p.age <= 26 ? 1.05 : p.age <= 29 ? 0.85 : 0.65;
+    const ageF = calAgeMult(Number(p.age) || 0);
     const yearsLeft = Math.max(0, (p.contract || 2026) - 2026);
     const contractF = yearsLeft >= 3 ? 1.2 : yearsLeft === 2 ? 1.0 : yearsLeft === 1 ? 0.75 : 0.5;
     const ligF = { "Championship (EN)": 1.3, "Eredivisie (NL)": 1.15, "Liga Portugalska": 1.2,
       "Liga Belgijska": 1.1, "2. Bundesliga (DE)": 1.05, "Superliga (DK)": 0.95 }[p.lg] || 1;
     const est = base * levelF * ageF * contractF * ligF;
-    return { est, lo: est * 0.8, hi: est * 1.25 };
+    return { est, lo: est * 0.8, hi: est * 1.25, calibrated: !!CAL };
   };
+
+  // Skuteczność / forma: percentyl G+A na 90 minut W OBRĘBIE POZYCJI, liczony na
+  // CAŁEJ puli. Świadomie ODDZIELONY od RC (RC zostaje czyste, jednoźródłowe). Tylko
+  // dla zawodników z wiarygodną próbką minut — poniżej per-90 to szum. Pozycje z małą
+  // liczbą zawodników z outputem (n<6) pomijamy — percentyl byłby niereprezentatywny.
+  const FORM_MIN_MINUTES = 450;
+  const formIndex = useMemo(() => {
+    if (!data) return {};
+    const byPos = {};
+    for (const p of data.pool) {
+      const mn = Number(p.minutes) || 0;
+      if (mn < FORM_MIN_MINUTES) continue;
+      const ga = (Number(p.goals) || 0) + (Number(p.assists) || 0);
+      (byPos[p.pos] = byPos[p.pos] || []).push({ id: p.id, ga90: ga / (mn / 90) });
+    }
+    const out = {};
+    for (const pos in byPos) {
+      const arr = byPos[pos].sort((a, b) => a.ga90 - b.ga90);
+      const n = arr.length;
+      if (n < 6) continue;
+      arr.forEach((x, i) => { out[x.id] = { ga90: x.ga90, pct: Math.round((i / (n - 1)) * 100), n }; });
+    }
+    return out;
+  }, [data]);
 
   const candidates = useMemo(() => {
     if (!data || !sel) return [];
     let rows = data.pool.map((p) => ({ p, m: matchScore(sel, p) }))
-      .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(sel, x.p) }));
+      .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(sel, x.p), form: formIndex[x.p.id] || null }));
     // --- filtrowanie ---
     const F = filters;
     rows = rows.filter(({ p, m, price }) => {
@@ -213,13 +248,15 @@ export default function App() {
       if (F.leagues.length > 0 && !F.leagues.includes(p.lg)) return false;
       return true;
     });
+    const fpct = (r) => (r.form ? r.form.pct : -1);   // bez formy = na koniec
     const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
       coherence: (a, b) => b.m.coherence - a.m.coherence,
       price: (a, b) => a.price.est - b.price.est,
       price_desc: (a, b) => b.price.est - a.price.est,
+      form: (a, b) => fpct(b) - fpct(a),
       level: (a, b) => b.m.level - a.m.level };
     return rows.sort(s[sortBy] || s.coherence);
-  }, [data, sel, sortBy, filters]);
+  }, [data, sel, sortBy, filters, formIndex]);
 
   // Wyszukiwarka ręczna: po nazwisku, w CAŁEJ puli (niezależnie od pozycji).
   const searchResults = useMemo(() => {
@@ -474,6 +511,43 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
   );
 }
 
+// Chipy: output bieżącego sezonu (G/A/min z appearances.csv) + sygnał „OKAZJA",
+// gdy szczyt wartości kariery (highest_market_value) jest istotnie wyższy niż
+// obecna wycena — zawodnik po spadku ceny, potencjalne odbicie. Dane z Kaggle.
+function OutputChips({ p, fmt, form = null }) {
+  const g = Number(p.goals) || 0, as = Number(p.assists) || 0, mn = Number(p.minutes) || 0;
+  const peak = Number(p.peak) || 0, mv = Number(p.mv) || 0;
+  const okazja = peak > 0 && mv > 0 && peak >= mv * 1.6 && (peak - mv) >= 1.5;
+  const hasOut = mn > 0 || g > 0 || as > 0;
+  const fc = form ? (form.pct >= 70 ? C.good : form.pct >= 45 ? C.warn : C.steelHi) : null;
+  if (!hasOut && !okazja && !form) return null;
+  return (
+    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5, alignItems: "center" }}>
+      {hasOut && (
+        <span className="mono" title="Output w bieżącym sezonie: gole · asysty · rozegrane minuty (dane meczowe)."
+          style={{ fontSize: 10.5, color: C.steelHi, background: C.panel2, borderRadius: 5, padding: "2px 7px" }}>
+          {g}G · {as}A · {mn}′
+        </span>
+      )}
+      {form && (
+        <span className="mono"
+          title={`Skuteczność: ${form.ga90.toFixed(2)} G+A na 90 min — wyżej niż ${form.pct}% zawodników na tej pozycji (próba ${form.n}). Liczone osobno, NIE wchodzi do RC.`}
+          style={{ fontSize: 10.5, color: fc, background: `${fc}1c`, border: `1px solid ${fc}55`,
+            borderRadius: 5, padding: "2px 7px", fontWeight: 700 }}>
+          forma {form.pct}%
+        </span>
+      )}
+      {okazja && (
+        <span className="mono" title={`Szczyt wyceny w karierze ${fmt(peak)}, teraz ${fmt(mv)}. Możliwa okazja — cena po spadku, potencjał odbicia.`}
+          style={{ fontSize: 10.5, color: C.good, background: `${C.good}1c`, border: `1px solid ${C.good}55`,
+            borderRadius: 5, padding: "2px 7px", fontWeight: 700 }}>
+          OKAZJA · szczyt {fmt(peak)}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
   filters, applied, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
   const [openCmp, setOpenCmp] = useState(null);   // id kandydata z rozwiniętym porównaniem
@@ -516,7 +590,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
         </select>
         <div style={{ display: "flex", gap: 5, marginLeft: "auto", alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, color: C.steel }}>sortuj</span>
-          {[["coherence", "koherencja"], ["level", "poziom"]].map(([k, l]) => (
+          {[["coherence", "koherencja"], ["level", "poziom"], ["form", "forma"]].map(([k, l]) => (
             <button key={k} onClick={() => setSortBy(k)} style={{ background: sortBy === k ? C.panelHi : "transparent",
               color: sortBy === k ? C.bone : C.steel, border: `1px solid ${sortBy === k ? C.redHi : C.line}`,
               padding: "7px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{l}</button>
@@ -572,7 +646,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
       )}
 
       <div className="hscroll"><div style={{ display: "grid", gap: 9, minWidth: 680 }}>
-        {candidates.map(({ p, m, price }) => {
+        {candidates.map(({ p, m, price, form }) => {
           const a = adjusted(p);
           const open = openCmp === p.id;
           return (
@@ -589,6 +663,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                     Transfermarkt ↗
                   </a>
                 )}
+                <OutputChips p={p} fmt={fmt} form={form} />
               </div>
               <div>
                 <div className="disp" style={{ fontSize: 26, lineHeight: 0.9,
