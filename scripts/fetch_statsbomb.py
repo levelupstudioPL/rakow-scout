@@ -571,6 +571,9 @@ def build_dataset(sb, creds):
                 "coherence_ref": best_ref,
                 "age": _age(row.get("birth_date")),
                 "mv": 0.0, "contract": 0,
+                # Pola tymczasowe do dopasowania w Scoutastic (usuwane przed zapisem).
+                "_bd": (row.get("birth_date") or "")[:10] if isinstance(row.get("birth_date"), str) else "",
+                "_ht": row.get("player_height") if isinstance(row.get("player_height"), (int, float)) else 0,
                 # Profile stylu: uniwersalny (cross-position) + dopasowany do
                 # pozycji (bogatszy) — pod „w czym kandydat lepszy od naszego".
                 "profile": coh.style_profile(row, universal_stats),
@@ -616,6 +619,23 @@ def build_dataset(sb, creds):
             matched += 1
     print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
           f"(w tym {matched_tok} dopasowaniem po nazwisku) z player_values.csv")
+ 
+    # --- SCOUTASTIC: oficjalne wartości z Transfermarktu (przez API instancji) ---
+    # Włączane obecnością sekretu SCOUTASTIC_TOKEN. Dopasowuje pulę do Scoutastic
+    # przez /players/matching/statsbomb (po ID/nazwisku/dacie ur.), potem dociąga
+    # marketValue + szczyt + kontrakt. Nadpisuje wartości z Kaggle, gdy dostępne
+    # (źródło oficjalne, świeższe). Cache w scripts/scoutastic_cache.json. Błędy
+    # nie wywalają runu (fallback = wartości z Kaggle).
+    if os.getenv("SCOUTASTIC_TOKEN"):
+        try:
+            _enrich_values_scoutastic(pool)
+        except Exception as e:  # noqa: BLE001
+            print(f"[scoutastic] Pominięto (błąd): {e}", file=sys.stderr)
+ 
+    # Sprzątanie pól tymczasowych użytych tylko do dopasowania w Scoutastic.
+    for c in pool:
+        c.pop("_bd", None)
+        c.pop("_ht", None)
  
     # --- OPCJONALNIE: doczytanie wartości z Transfermarktu dla topowych bez ceny ---
     # Włączane flagą TM_ENRICH=1 (publiczne API bywa wolne/limitowane). Pyta TYLKO
@@ -770,6 +790,96 @@ def _load_values_csv(path):
     # w StatsBomb różni się od pliku — np. dodatkowe imiona).
     sur_index = _surname_index([(k, v) for k, v in result.items()])
     return result, sur_index
+ 
+def _enrich_values_scoutastic(pool):
+    """Dociąga oficjalne wartości rynkowe z Scoutastic (Transfermarkt) dla całej
+    puli. Krok 1: dopasowanie StatsBomb->Scoutastic (externalId). Krok 2: pobranie
+    marketValue/szczytu/kontraktu per zawodnik. Cache w scripts/scoutastic_cache.json,
+    więc kolejne uruchomienia pobierają tylko nowych. Nadpisuje ceny z Kaggle."""
+    import json as _json
+    try:
+        import scoutastic as sc
+    except Exception as e:  # noqa: BLE001
+        print(f"[scoutastic] Brak modułu scoutastic.py ({e}) — pomijam.", file=sys.stderr)
+        return
+    token = os.getenv("SCOUTASTIC_TOKEN")
+    if not token:
+        return
+    cache_path = Path(__file__).resolve().parent / "scoutastic_cache.json"
+    try:
+        cache = _json.loads(cache_path.read_text(encoding="utf-8"))
+    except Exception:
+        cache = {}
+ 
+    # Klucz cache = offline_player_id (nasze id StatsBomb, z pool["id"] = "pl-<id>").
+    def _pid(c):
+        return c["id"].split("pl-")[-1]
+ 
+    client = sc.Client(token)
+ 
+    # 1) DOPASOWANIE: buduj listę tylko dla zawodników jeszcze nie w cache.
+    to_match, seen = [], set()
+    for c in pool:
+        pid = _pid(c)
+        if pid in cache or pid in seen or not _is_valid_name(c.get("name")):
+            continue
+        seen.add(pid)
+        to_match.append({
+            "player_name": c["name"],
+            "player_birth_date": c.get("_bd") or "",
+            "offline_player_id": str(pid),
+            "live_player_id": str(pid),
+            "player_height": c.get("_ht") or 0,
+        })
+    print(f"[scoutastic] Dopasowuję {len(to_match)} nowych zawodników "
+          f"(w cache: {len(cache)})…")
+    ext_map = client.match_statsbomb(to_match) if to_match else {}
+    print(f"[scoutastic] Dopasowano {len(ext_map)}/{len(to_match)} do Scoutastic.")
+ 
+    # 2) POBIERANIE danych per externalId (z limitem bezpieczeństwa na 1. run).
+    max_fetch = int(os.getenv("SCOUTASTIC_MAX_FETCH", "5000"))
+    fetched = 0
+    dbg_done = False
+    for pid, ext in ext_map.items():
+        if fetched >= max_fetch:
+            print(f"[scoutastic] Limit {max_fetch} pobrań — reszta następnym razem.",
+                  file=sys.stderr)
+            break
+        raw = client.get_player(ext)
+        if not dbg_done and isinstance(raw, dict):
+            keys = [k for k in raw.keys() if "market" in k.lower() or "contract" in k.lower()]
+            print(f"[scoutastic] Przykład pól ceny (weryfikacja): {keys} -> "
+                  f"marketValue={raw.get('marketValue')!r}")
+            dbg_done = True
+        cache[pid] = sc.extract(raw) if raw else {"miss": True}
+        fetched += 1
+    # zawodnicy bez dopasowania też trafiają do cache jako 'miss' (nie pytamy ich ponownie)
+    for m in to_match:
+        pid = m["offline_player_id"]
+        cache.setdefault(pid, {"miss": True})
+ 
+    try:
+        cache_path.write_text(_json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+    except Exception as e:  # noqa: BLE001
+        print(f"[scoutastic] Nie zapisano cache: {e}", file=sys.stderr)
+ 
+    # 3) NAŁÓŻ na pulę (oficjalne wartości nadpisują Kaggle).
+    applied = 0
+    for c in pool:
+        v = cache.get(_pid(c))
+        if not v or v.get("miss"):
+            continue
+        if v.get("mv"):
+            c["mv"] = v["mv"]
+            applied += 1
+        if v.get("peak"):
+            c["peak"] = v["peak"]
+        if v.get("contract"):
+            c["contract"] = v["contract"]
+    priced = sum(1 for c in pool if float(c.get("mv") or 0) > 0)
+    print(f"[scoutastic] Nałożono wartości na {applied} kandydatów. "
+          f"Pokrycie cenami łącznie: {priced}/{len(pool)}.")
+ 
  
 def _enrich_values_tm(pool):
     """Doczytuje wartości z Transfermarktu (przez transfermarkt.py) dla kandydatów
