@@ -1222,42 +1222,81 @@ function LeaguesView({ data }) {
   );
 }
 
+const POS_LABEL = { GK: "Bramkarz", CB: "Środek obrony", WB: "Wahadło", WM: "Pomoc boczna",
+  DM: "Defen. pomoc", CM: "Środek pomocy", AM: "Ofens. pomoc", W: "Skrzydło", ST: "Napastnik" };
+
 function CorrView({ data }) {
-  const POS = ["DM", "CM", "AM", "ST", "LWB", "RWB", "CCB"];
-  const corrOf = (a, b) => a === b ? 1 : data.correlations[`${a}-${b}`] ?? data.correlations[`${b}-${a}`] ?? 0.15;
-  const insights = [
-    ["Najsilniejsza para", "AM ↔ ST", "0.81", "Ofensywny pomocnik i napastnik — rdzeń powtarzalnej zależności ataku."],
-    ["Oś środka", "DM–CM–AM", "0.72→0.78", "Stabilny kręgosłup formacji, spójny łańcuch zależności."],
-    ["Słaby link", "RWB ↔ ST", "0.29", "Skrzydło i napastnik słabo skorelowane w tym układzie."],
-  ];
+  const corr = (data && data.correlations) || {};
+  const positions = Array.isArray(corr.positions) ? corr.positions : [];
+  const sim = corr.sim || {};
+  const counts = corr.counts || {};
+  const val = (a, b) => (a === b ? 1 : (sim[`${a}-${b}`] ?? sim[`${b}-${a}`] ?? null));
+
+  // Fallback: brak policzonych zależności (stare data.json sprzed odświeżenia).
+  if (positions.length < 2) {
+    return (
+      <div>
+        <Lead>Podobieństwo stylu między pozycjami — jak blisko stylistycznie grają role w układzie.</Lead>
+        <Empty>Zależności policzą się po najbliższym odświeżeniu danych — pipeline dołoży macierz podobieństwa stylu do <span className="mono">data.json</span>. Na razie brak danych do wyświetlenia.</Empty>
+      </div>
+    );
+  }
+
+  // Kontrast koloru: normalizacja po zakresie wartości POZA przekątną (czytelność).
+  const off = [];
+  for (const a of positions) for (const b of positions) if (a !== b) { const v = val(a, b); if (v != null) off.push(v); }
+  const lo = Math.min(...off), hi = Math.max(...off);
+  const shade = (v) => (hi > lo ? (v - lo) / (hi - lo) : 0.5);
+
+  // Insighty liczone z macierzy: najbardziej zbliżone i najbardziej odrębne role.
+  let hiPair = null, loPair = null;
+  for (let i = 0; i < positions.length; i++)
+    for (let j = i + 1; j < positions.length; j++) {
+      const v = val(positions[i], positions[j]); if (v == null) continue;
+      if (!hiPair || v > hiPair.v) hiPair = { a: positions[i], b: positions[j], v };
+      if (!loPair || v < loPair.v) loPair = { a: positions[i], b: positions[j], v };
+    }
+  // Pozycja najbardziej odrębna stylistycznie (najniższa średnia do reszty).
+  let outlier = null;
+  for (const a of positions) {
+    const others = positions.filter((b) => b !== a).map((b) => val(a, b)).filter((x) => x != null);
+    if (!others.length) continue;
+    const avg = others.reduce((s, x) => s + x, 0) / others.length;
+    if (!outlier || avg < outlier.avg) outlier = { a, avg };
+  }
+  const nm = (p) => POS_LABEL[p] || p;
+  const cards = [];
+  if (hiPair) cards.push(["Najbardziej zbliżone role", `${hiPair.a} ↔ ${hiPair.b}`, hiPair.v.toFixed(2),
+    `${nm(hiPair.a)} i ${nm(hiPair.b)} mają najbardziej podobny profil stylu — grają najbliżej siebie rolą.`]);
+  if (loPair) cards.push(["Najbardziej odrębne", `${loPair.a} ↔ ${loPair.b}`, loPair.v.toFixed(2),
+    `${nm(loPair.a)} i ${nm(loPair.b)} najmocniej się różnią — role wyraźnie się uzupełniają.`]);
+  if (outlier) cards.push(["Najbardziej wyjątkowa rola", outlier.a, outlier.avg.toFixed(2),
+    `${nm(outlier.a)} stylistycznie najbardziej odstaje od reszty układu.`]);
+
   return (
     <div>
-      <Lead>Które pozycje najsilniej współzależą w układzie. Ciemniejsze pole = silniejsza zależność między parą pozycji.</Lead>
-      <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8,
-        background: `${C.warn}14`, border: `1px solid ${C.warn}66`, borderRadius: 9,
-        padding: "9px 13px", fontSize: 12.5, color: C.steelHi, maxWidth: 760 }}>
-        <span style={{ color: C.warn, fontSize: 15 }}>⚠</span>
-        <span><b style={{ color: C.warn }}>DANE PRZYKŁADOWE.</b> Wartości w tej macierzy są poglądowe — pokazują, jak sekcja będzie działać. Realne korelacje wymagają policzenia ze współwystępowania akcji w danych meczowych (osobny etap). Nie interpretuj tych liczb jako faktycznych zależności.</span>
-      </div>
-      <div style={{ position: "relative", display: "flex", gap: 24, marginTop: 20, flexWrap: "wrap",
-        alignItems: "flex-start", opacity: 0.5, filter: "grayscale(0.4)" }}>
-        <span style={{ position: "absolute", top: -10, left: 8, zIndex: 2, background: C.warn, color: C.ink,
-          fontSize: 9, fontWeight: 800, letterSpacing: 1, padding: "2px 8px", borderRadius: 4 }}>PRZYKŁADOWE</span>
+      <Lead>Podobieństwo stylu między pozycjami — policzone z profili stylu wszystkich zawodników puli. Ciemniejsze pole = role o zbliżonym stylu; jasne = role, które się uzupełniają.</Lead>
+      <div style={{ display: "flex", gap: 24, marginTop: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
         <div style={{ overflowX: "auto" }}>
           <table style={{ borderCollapse: "collapse" }}>
-            <thead><tr><th></th>{POS.map((p) => <th key={p} className="mono" style={{ padding: 7, color: C.steel, fontSize: 11 }}>{p}</th>)}</tr></thead>
+            <thead><tr><th></th>{positions.map((p) => (
+              <th key={p} className="mono" title={`${nm(p)} · n=${counts[p] ?? "?"}`}
+                style={{ padding: 7, color: C.steel, fontSize: 11 }}>{p}</th>
+            ))}</tr></thead>
             <tbody>
-              {POS.map((a) => (
+              {positions.map((a) => (
                 <tr key={a}>
-                  <td className="mono" style={{ padding: 7, color: C.steel, fontSize: 11, fontWeight: 700 }}>{a}</td>
-                  {POS.map((b) => {
-                    const v = corrOf(a, b);
+                  <td className="mono" title={nm(a)} style={{ padding: 7, color: C.steelHi, fontSize: 11, fontWeight: 700 }}>{a}</td>
+                  {positions.map((b) => {
+                    const v = val(a, b);
+                    const self = a === b;
+                    const sh = self ? 1 : (v == null ? 0 : shade(v));
                     return (
-                      <td key={b} title={`${a}↔${b}: ${v.toFixed(2)}`} className="mono"
-                        style={{ width: 50, height: 46, textAlign: "center", fontSize: 12, fontWeight: 600,
-                          background: a === b ? C.panelHi : `rgba(214,0,28,${0.1 + v * 0.85})`,
-                          color: v > 0.5 ? "#fff" : C.steelHi, border: `2px solid ${C.ink}`, borderRadius: 4 }}>
-                        {v.toFixed(2)}
+                      <td key={b} title={`${nm(a)} ↔ ${nm(b)}: ${v == null ? "—" : v.toFixed(2)}`} className="mono"
+                        style={{ width: 52, height: 46, textAlign: "center", fontSize: 12, fontWeight: 600,
+                          background: self ? C.panelHi : `rgba(228,2,43,${0.08 + sh * 0.82})`,
+                          color: sh > 0.55 ? "#fff" : C.steelHi, border: `2px solid ${C.ink}`, borderRadius: 4 }}>
+                        {self ? "—" : (v == null ? "" : v.toFixed(2))}
                       </td>
                     );
                   })}
@@ -1265,21 +1304,24 @@ function CorrView({ data }) {
               ))}
             </tbody>
           </table>
+          <div className="mono" style={{ fontSize: 10, color: C.steel, marginTop: 8 }}>
+            0 = style odrębne · 1 = identyczny profil stylu. Kolor skalowany po zakresie macierzy dla czytelności.
+          </div>
         </div>
         <div style={{ flex: "1 1 260px", display: "flex", flexDirection: "column", gap: 10 }}>
-          {insights.map(([t, pair, val, d]) => (
+          {cards.map(([t, pair, v, d]) => (
             <div key={t} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
               <div className="mono" style={{ fontSize: 9.5, color: C.steel, letterSpacing: 1, textTransform: "uppercase" }}>{t}</div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, margin: "5px 0 6px" }}>
                 <span className="disp" style={{ fontSize: 17, color: C.redHi }}>{pair}</span>
-                <span className="mono" style={{ fontSize: 13, color: C.proxy }}>{val}</span>
+                <span className="mono" style={{ fontSize: 13, color: C.proxy }}>{v}</span>
               </div>
               <div style={{ fontSize: 12, color: C.steel, lineHeight: 1.5 }}>{d}</div>
             </div>
           ))}
         </div>
       </div>
-      <Note>Korelacje liczone docelowo ze współwystępowania akcji (wspólne sekwencje podań) z danych meczowych — osobny krok po walidacji modelu.</Note>
+      <Note>Podobieństwo stylu ról = kosinus między średnimi profilami stylu pozycji (z-score względem Ekstraklasy, 17 wymiarów: podania, odbiory, gra w powietrzu, drybling, xG/xA, fizyka…), liczony z całej puli lig. To mapa <b>stylistycznego pokrewieństwa ról</b>, nie sieć podań — „kto z kim realnie gra" wymaga danych zdarzeniowych (pas po pasie) i jest naturalnym kolejnym krokiem, skoro dostęp do eventów StatsBomb jest.</Note>
     </div>
   );
 }
@@ -1291,7 +1333,7 @@ function HelpView({ data, setView }) {
     ["Szukaj", "Wyszukiwarka ręczna: wpisz nazwisko, a znajdziesz dowolnego zawodnika w całej puli, niezależnie od pozycji — z poziomem, koherencją, wartością rynkową i linkiem do Transfermarktu."],
     ["Lista obserwowanych", "Gwiazdka przy kandydacie dodaje go do listy na dole. Aplikacja sumuje łączny szacowany koszt zaznaczonych zawodników."],
     ["Handicapy", "Tabela: o ile każda liga różni się od Ekstraklasy, osobno per linia. To te korekty podnoszą lub obniżają surowy poziom kandydata."],
-    ["Formacja", "Macierz zależności między pozycjami — które role najsilniej ze sobą współgrają w układzie."],
+    ["Zależności", "Macierz podobieństwa stylu między pozycjami — liczona z profili stylu całej puli (kosinus centroidów). Ciemne = role grają podobnie, jasne = uzupełniają się. To pokrewieństwo stylu, nie sieć podań."],
     ["Dane live", "Przycisk w lewym panelu pobiera świeże dane, gdy źródło jest podpięte. Bez tego działają dane zapisane."],
   ];
   const sources = [
