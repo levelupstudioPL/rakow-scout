@@ -724,8 +724,24 @@ def _formation_style_correlations(pool):
     for a in positions:
         for b in positions:
             sim[f"{a}-{b}"] = round((_cos(centroids[a], centroids[b]) + 1) / 2, 3)
-    print(f"[formacja] Policzono podobieństwo stylu dla {len(positions)} pozycji "
-          f"(próby: {counts}).")
+ 
+    # SPÓJNOŚĆ WEWNĄTRZ POZYCJI (odpowiedź na pytanie o wariancję wewnątrzpozycyjną):
+    # średnie podobieństwo zawodnika roli do centroidu tej roli (0..1). Wysokie =
+    # rola stylistycznie jednorodna; niskie = duży rozrzut w obrębie roli (np. różne
+    # typy stopera). Zestawiamy to z podobieństwem MIĘDZY rolami — jeśli spójność
+    # wewnątrz nie jest wyraźnie wyższa niż podobieństwo między rolami, macierz niesie
+    # głównie szum. To uczciwy licznik sygnału vs szumu dla tego ekranu.
+    cohesion = {}
+    for pos in positions:
+        c = centroids[pos]
+        vals = [(_cos(v, c) + 1) / 2 for v in groups[pos]]
+        cohesion[pos] = round(sum(vals) / len(vals), 3) if vals else None
+    within = round(sum(cohesion.values()) / len(cohesion), 3) if cohesion else None
+    offvals = [sim[f"{a}-{b}"] for a in positions for b in positions if a != b]
+    between = round(sum(offvals) / len(offvals), 3) if offvals else None
+ 
+    print(f"[formacja] Podobieństwo stylu dla {len(positions)} pozycji "
+          f"(próby: {counts}). Spójność wewnątrz ról śr={within} vs między rolami śr={between}.")
     return {
         "method": "style-centroid-cosine",
         "note": ("Podobieństwo stylu ról: kosinus między średnimi profilami stylu "
@@ -735,6 +751,10 @@ def _formation_style_correlations(pool):
         "positions": positions,
         "counts": counts,
         "sim": sim,
+        # spójność wewnątrz pozycji + porównanie within vs between (sygnał vs szum)
+        "cohesion": cohesion,
+        "within": within,
+        "between": between,
     }
  
  
