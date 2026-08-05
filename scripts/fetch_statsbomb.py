@@ -684,7 +684,57 @@ def build_dataset(sb, creds):
         "squad": squad,
         "leagues": leagues,
         "pool": pool,
-        "correlations": {},
+        # Zależności formacji = REALNE podobieństwo stylu ról (nie sieć podań).
+        "correlations": _formation_style_correlations(pool),
+    }
+ 
+ 
+def _formation_style_correlations(pool):
+    """Realne „zależności formacji" jako PODOBIEŃSTWO STYLU ról. Dla każdej pozycji
+    liczymy centroid uniwersalnego profilu stylu (z-score vs Ekstraklasa, 17 wymiarów)
+    ze WSZYSTKICH zawodników puli na tej pozycji, a potem kosinus między centroidami
+    (przeskalowany do 0..1). Wysokie = role o zbliżonym stylu; niskie = uzupełniające
+    się. To NIE jest sieć podań (kto z kim gra) — na to trzeba danych zdarzeniowych.
+    Zwraca kompaktowy obiekt do data.json['correlations']; front tylko go renderuje."""
+    import math
+    ORDER = ["GK", "CB", "WB", "WM", "DM", "CM", "AM", "W", "ST"]
+    MIN_N = 10
+    groups = {}
+    for p in pool:
+        prof = p.get("profile")
+        pos = p.get("pos")
+        if isinstance(prof, list) and prof and any(prof):
+            groups.setdefault(pos, []).append(prof)
+    centroids, counts = {}, {}
+    for pos, arr in groups.items():
+        if len(arr) < MIN_N:
+            continue
+        L = len(arr[0])
+        centroids[pos] = [sum(v[i] for v in arr) / len(arr) for i in range(L)]
+        counts[pos] = len(arr)
+ 
+    def _cos(a, b):
+        d = sum(x * y for x, y in zip(a, b))
+        na = math.sqrt(sum(x * x for x in a))
+        nb = math.sqrt(sum(y * y for y in b))
+        return d / (na * nb) if na and nb else 0.0
+ 
+    positions = [p for p in ORDER if p in centroids]
+    sim = {}
+    for a in positions:
+        for b in positions:
+            sim[f"{a}-{b}"] = round((_cos(centroids[a], centroids[b]) + 1) / 2, 3)
+    print(f"[formacja] Policzono podobieństwo stylu dla {len(positions)} pozycji "
+          f"(próby: {counts}).")
+    return {
+        "method": "style-centroid-cosine",
+        "note": ("Podobieństwo stylu ról: kosinus między średnimi profilami stylu "
+                 "(z-score vs Ekstraklasa) pozycji, liczony z całej puli. "
+                 "Wysokie = role grają podobnie; niskie = uzupełniają się. "
+                 "To nie jest sieć podań."),
+        "positions": positions,
+        "counts": counts,
+        "sim": sim,
     }
  
  
@@ -1151,5 +1201,4 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
  
