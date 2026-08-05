@@ -1230,6 +1230,8 @@ function CorrView({ data }) {
   const positions = Array.isArray(corr.positions) ? corr.positions : [];
   const sim = corr.sim || {};
   const counts = corr.counts || {};
+  const cohesion = corr.cohesion || {};
+  const within = corr.within, between = corr.between;
   const val = (a, b) => (a === b ? 1 : (sim[`${a}-${b}`] ?? sim[`${b}-${a}`] ?? null));
 
   // Fallback: brak policzonych zależności (stare data.json sprzed odświeżenia).
@@ -1280,7 +1282,8 @@ function CorrView({ data }) {
         <div style={{ overflowX: "auto" }}>
           <table style={{ borderCollapse: "collapse" }}>
             <thead><tr><th></th>{positions.map((p) => (
-              <th key={p} className="mono" title={`${nm(p)} · n=${counts[p] ?? "?"}`}
+              <th key={p} className="mono"
+                title={`${nm(p)} · n=${counts[p] ?? "?"}${cohesion[p] != null ? ` · spójność roli ${cohesion[p].toFixed(2)}` : ""}`}
                 style={{ padding: 7, color: C.steel, fontSize: 11 }}>{p}</th>
             ))}</tr></thead>
             <tbody>
@@ -1307,6 +1310,18 @@ function CorrView({ data }) {
           <div className="mono" style={{ fontSize: 10, color: C.steel, marginTop: 8 }}>
             0 = style odrębne · 1 = identyczny profil stylu. Kolor skalowany po zakresie macierzy dla czytelności.
           </div>
+          {within != null && between != null && (
+            <div style={{ marginTop: 10, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10,
+              padding: "10px 13px", fontSize: 11.5, color: C.steelHi, maxWidth: 520, lineHeight: 1.5 }}>
+              <b style={{ color: C.bone }}>Sygnał vs szum.</b> Spójność stylu wewnątrz ról śr.{" "}
+              <b className="mono" style={{ color: within > between ? C.good : C.warn }}>{within.toFixed(2)}</b>,
+              podobieństwo między rolami śr. <b className="mono" style={{ color: C.steelHi }}>{between.toFixed(2)}</b>.
+              {within > between + 0.05
+                ? " Role są wewnętrznie spójniejsze, niż podobne do siebie nawzajem — macierz niesie sygnał."
+                : " Różnice między rolami są niewielkie względem rozrzutu wewnątrz nich — czytaj ostrożnie (dużo szumu)."}
+              {" "}Najazd na nagłówek pozycji pokazuje jej spójność i próbę.
+            </div>
+          )}
         </div>
         <div style={{ flex: "1 1 260px", display: "flex", flexDirection: "column", gap: 10 }}>
           {cards.map(([t, pair, v, d]) => (
@@ -1393,7 +1408,41 @@ function HelpView({ data, setView }) {
 
       <div style={{ marginTop: 18, background: `${C.proxy}12`, border: `1px solid ${C.proxy}44`, borderRadius: 12, padding: "16px 18px" }}>
         <b style={{ color: C.proxy, fontSize: 13 }}>Jak czytać liczby.</b>
-        <span style={{ fontSize: 13, color: C.steelHi }}> Poziom RC jest liczony automatycznie z realnych metryk StatsBomb (percentyl względem Ekstraklasy) — to działający model, nie wpisywane ręcznie wartości. Dobór metryk oceniających zawodnika na danej pozycji to jednak przyjęte założenie, które warto potwierdzić od strony sportowej. Zawodnicy bez wystarczającej próbki meczowej mają poziom szacowany (znacznik ⚠). Macierz „Formacja" zawiera na razie dane przykładowe. Traktuj liczby jako mocną wersję roboczą, nie ostateczną.</span>
+        <span style={{ fontSize: 13, color: C.steelHi }}> Poziom RC jest liczony automatycznie z realnych metryk StatsBomb (percentyl względem Ekstraklasy) — to działający model, nie wpisywane ręcznie wartości. Dobór metryk oceniających zawodnika na danej pozycji to jednak przyjęte założenie, które warto potwierdzić od strony sportowej. Zawodnicy bez wystarczającej próbki meczowej mają poziom szacowany (znacznik ⚠). Wszystkie ekrany liczą się z realnych danych. Traktuj liczby jako mocną wersję roboczą, nie ostateczną.</span>
+      </div>
+
+      <SectionLabel>Status i ograniczenia modelu</SectionLabel>
+      <div style={{ fontSize: 12.5, color: C.steel, lineHeight: 1.55, marginBottom: 12, maxWidth: 760 }}>
+        Uczciwie o tym, czemu można ufać dziś, a co jest świadomie w wersji roboczej. Nic tu nie jest jeszcze zwalidowane pod <b style={{ color: C.steelHi }}>automatyczne</b> decyzje — to mocne wsparcie do zawężania i stawiania hipotez.
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 12 }}>
+        <div style={{ background: C.panel, border: `1px solid ${C.good}44`, borderRadius: 12, padding: "14px 16px" }}>
+          <div className="cond" style={{ fontSize: 12, letterSpacing: 1, color: C.good, fontWeight: 700, marginBottom: 8 }}>DZIAŁA</div>
+          {[
+            "Poziom RC — percentyl metryk StatsBomb vs Ekstraklasa (≥540 min)",
+            "Koherencja stylu — podobieństwo profili (technika + fizyka + Game Intelligence)",
+            "Handicapy lig — korekta poziomu o siłę ligi per linia",
+            "Zależności formacji — podobieństwo stylu ról, z miarą sygnał/szum",
+          ].map((t, i) => (
+            <div key={i} style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.5, marginBottom: 5, display: "flex", gap: 7 }}>
+              <span style={{ color: C.good }}>✓</span><span>{t}</span></div>
+          ))}
+        </div>
+        <div style={{ background: C.panel, border: `1px solid ${C.warn}44`, borderRadius: 12, padding: "14px 16px" }}>
+          <div className="cond" style={{ fontSize: 12, letterSpacing: 1, color: C.warn, fontWeight: 700, marginBottom: 8 }}>W TOKU / ŚWIADOME OGRANICZENIA</div>
+          {[
+            "Większość metryk NIE jest possession-adjusted — zawyża wolumen (skrzydła, „6”), zaniża obrońców",
+            "Brak analizy multikolinearności i stabilności (ICC) metryk wejściowych",
+            "Brak shrinkage percentyli przy małej próbie minut",
+            "Handicap: jedna metryka reprezentuje linię (miesza tempo z jakością)",
+            "„Spadek formy” w flagach: na razie migawka, bez okna czasowego",
+            "Estymacja ceny: placeholder do kalibracji na realnych transferach",
+            "Walidacja na ocenach trenerów: wstępna, mała próba",
+          ].map((t, i) => (
+            <div key={i} style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.5, marginBottom: 5, display: "flex", gap: 7 }}>
+              <span style={{ color: C.warn }}>•</span><span>{t}</span></div>
+          ))}
+        </div>
       </div>
 
       <button onClick={() => setView("twin")} style={{ marginTop: 18, background: C.red, color: "#fff",
@@ -2011,6 +2060,9 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
   return (
     <div>
       <Lead>Zawodnicy, których model ceni wyżej, niż wskazywałaby ich cena. „Okazja" = percentyl jakości minus percentyl ceny w obrębie pozycji. Zakładka „Wygasające" to potencjalnie tani lub wolni zawodnicy w ostatnim roku kontraktu.</Lead>
+      <div className="mono" style={{ marginTop: 8, fontSize: 10.5, color: C.steel, lineHeight: 1.5, maxWidth: 720 }}>
+        Wartości i kontrakty to snapshot (zrzut Kaggle + oficjalne wartości Scoutastic), a nie dane pobierane na żywo — mogą odbiegać od aktualnego Transfermarktu. Link „Transfermarkt ↗" prowadzi do wersji live.
+      </div>
 
       <div style={{ display: "flex", gap: 6, margin: "16px 0 14px", flexWrap: "wrap" }}>
         {[["okazje", "Jakość za euro"], ["expiring", "Wygasające kontrakty"]].map(([k, l]) => (
