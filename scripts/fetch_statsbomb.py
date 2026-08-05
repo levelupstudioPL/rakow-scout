@@ -296,7 +296,7 @@ def build_squad_from_statsbomb(base_rows, base_stats_by_line, universal_stats, p
         if not mapped:
             continue
         pos, line = mapped
-        model_rc = (coh.quality_level(r, line, base_stats_by_line[line])
+        model_rc = (coh.quality_level(r, line, base_stats_by_line[line], minutes=_player_minutes(r))
                     if _player_minutes(r) >= MIN_MINUTES else None)
         if isinstance(model_rc, (int, float)):
             rc, est = model_rc, False
@@ -335,7 +335,8 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universa
             continue
         sb_row = base_by_name.get(_norm(name)) \
             or _match_by_tokens(name, base_sur, lambda r: r.get("player_id"))
-        model_rc = coh.quality_level(sb_row, line, base_stats_by_line[line]) if sb_row else None
+        model_rc = (coh.quality_level(sb_row, line, base_stats_by_line[line],
+                                      minutes=_player_minutes(sb_row)) if sb_row else None)
         if isinstance(model_rc, (int, float)):
             rc, est = model_rc, False
             rc_from_model += 1
@@ -403,7 +404,7 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_line,
             or _match_by_tokens(name, hist_sur, lambda r: r.get("player_id"))
         if not row or _player_minutes(row) < MIN_MINUTES:
             continue
-        rc = coh.quality_level(row, line, base_stats_by_line[line])
+        rc = coh.quality_level(row, line, base_stats_by_line[line], minutes=_player_minutes(row))
         if not isinstance(rc, (int, float)):
             continue
         e["rc"] = rc
@@ -454,6 +455,11 @@ def build_dataset(sb, creds):
             if n:
                 print(f"[fizyka] {lg['name']}: dopasowano {m}/{n} zawodnikow")
         print(f"[fizyka] Razem dopasowano {total_m} zawodnikow do danych SkillCorner.")
+ 
+    # Normalizacja metryk wolumenowych przez proxy posiadania drużyny (dokończenie
+    # possession-adjustment). MUSI być przed build_league_stats, żeby pola __tpadj
+    # weszły do rozkładów percentyli tak samo dla bazy i kandydatów.
+    _normalize_team_possession(league_rows)
  
     base_rows = league_rows.get(base_name, []) if base_name else []
     if not base_rows:
@@ -532,6 +538,8 @@ def build_dataset(sb, creds):
         squad_by_line.setdefault(s["line"], []).append(s)
  
     pool = []
+    _padj_diag = {}   # pozycja -> [n, suma_adj, suma_raw] do logu wpływu na RC
+    _shr_diag = [0, 0.0]   # [ilu ściągniętych, suma delt] — log wpływu shrinkage
     for lg in LEAGUE_CONFIG:
         if lg.get("base"):
             continue
@@ -546,7 +554,20 @@ def build_dataset(sb, creds):
             if not mapped:
                 continue
             pos, line = mapped
-            level = coh.quality_level(row, line, base_stats_by_line[line])
+            _lvl_pre = coh.quality_level(row, line, base_stats_by_line[line])  # bez shrink
+            level, _shr_d = coh.shrink_rc(_lvl_pre, minutes)                   # shrink wg minut
+            if _shr_d:
+                _shr_diag[0] += 1
+                _shr_diag[1] += _shr_d
+            # DIAGNOSTYKA possession-adjustment: policz RC oboma zestawami metryk
+            # BEZ shrinkage (żeby izolować sam efekt doboru metryk). Tanie — te same
+            # percentyle, inny podzbiór metryk.
+            _d = _padj_diag.setdefault(pos, [0, 0.0, 0.0])
+            _d[0] += 1
+            _d[1] += coh.quality_level(row, line, base_stats_by_line[line],
+                                       coh.QUALITY_METRICS_PADJ.get(line))
+            _d[2] += coh.quality_level(row, line, base_stats_by_line[line],
+                                       coh.QUALITY_METRICS_RAW.get(line))
             # level_estimated: True gdy kandydat NIE ma metryk jakosciowych dla
             # swojej linii — wtedy quality_level zwrocil fallback (nie realny
             # percentyl). Front pokazuje wtedy znacznik "niepelne dane".
@@ -585,6 +606,22 @@ def build_dataset(sb, creds):
                 "profile": coh.style_profile(row, universal_stats),
                 "profile_pos": coh.pos_style_profile(row, line, pos_style_stats[line]),
             })
+ 
+    # LOG wpływu possession-adjustment na RC (per pozycja: adj vs raw).
+    if _padj_diag:
+        mode = "possession-adjusted" if coh.POSSESSION_ADJUST else "SUROWA (raw)"
+        print(f"[RC] Aktywny tryb metryk: {mode}. Wpływ korekty o posiadanie na RC "
+              f"(średnie per pozycja, adj vs raw):", file=sys.stderr)
+        for p in sorted(_padj_diag):
+            n, sa, sr = _padj_diag[p]
+            if n:
+                print(f"      {p:>3}: n={n:<4} adj={sa / n:5.1f}  raw={sr / n:5.1f}  "
+                      f"Δ={(sa - sr) / n:+5.1f}", file=sys.stderr)
+        if coh.SHRINK:
+            nsh, dsum = _shr_diag
+            avg = (dsum / nsh) if nsh else 0
+            print(f"[RC] Shrinkage małej próby: aktywny (K={coh.SHRINK_K:.0f}, prior={coh.SHRINK_PRIOR:.0f}). "
+                  f"Ściągnięto {nsh} zawodników w puli, średnio o {avg:+.1f} pkt RC.", file=sys.stderr)
  
     # Usuń profile metryk ze składu przed zapisem (były tylko do liczenia)
     for s in squad:
@@ -687,6 +724,57 @@ def build_dataset(sb, creds):
         # Zależności formacji = REALNE podobieństwo stylu ról (nie sieć podań).
         "correlations": _formation_style_correlations(pool),
     }
+ 
+ 
+def _normalize_team_possession(league_rows):
+    """Dokończenie possession-adjustment dla metryk wolumenowych bez natywnego wariantu
+    per-posiadanie (coh.TEAM_NORM_METRICS: podania kluczowe, do pola karnego, strzały,
+    touche w polu karnym). Dla każdej ligi liczymy PROXY posiadania drużyny jako
+    minuto-ważoną średnią op_passes_90 jej zawodników, potem współczynnik
+    = proxy_drużyny / średnia_ligi (clamp 0.6–1.6), i dzielimy metryki wolumenowe przez
+    ten współczynnik. Wynik zapisujemy w polach z sufiksem __tpadj. Liczone W OBRĘBIE
+    LIGI (usuwa przewagę wolumenu wynikającą z większego posiadania względem rówieśników
+    z tej samej ligi). To PROXY posiadania (z wolumenu podań), nie oficjalny % — świadome
+    uproszczenie bez dodatkowego zapytania do API. Wyłączalne: TEAM_POSSESSION_ADJUST=0
+    (wtedy __tpadj = wartość surowa, więc RC wraca do niezmienionego wolumenu)."""
+    on = os.getenv("TEAM_POSSESSION_ADJUST", "1") not in ("0", "false", "False")
+    srcs = coh.TEAM_NORM_METRICS
+    suf = coh.TEAM_NORM_SUFFIX
+    n_adj, spread = 0, []
+    for _lg, rows in league_rows.items():
+        num, den = {}, {}
+        for r in rows:
+            op = r.get("player_season_op_passes_90")
+            mn = r.get("player_season_minutes")
+            tid = r.get("team_id") or (_row_team_name(r) or None)
+            if isinstance(op, (int, float)) and isinstance(mn, (int, float)) and mn > 0 and tid is not None:
+                num[tid] = num.get(tid, 0.0) + op * mn
+                den[tid] = den.get(tid, 0.0) + mn
+        prox = {t: num[t] / den[t] for t in num if den[t] > 0}
+        lg_mean = (sum(prox.values()) / len(prox)) if prox else 0.0
+        for r in rows:
+            tid = r.get("team_id") or (_row_team_name(r) or None)
+            if on and lg_mean > 0 and tid in prox:
+                f = max(0.6, min(1.6, prox[tid] / lg_mean))
+            else:
+                f = 1.0
+            if on and abs(f - 1.0) > 1e-9:
+                spread.append(f)
+            for s in srcs:
+                v = r.get(s)
+                if isinstance(v, (int, float)) and not (math.isnan(v) or math.isinf(v)):
+                    r[s + suf] = v / f
+                    if on and abs(f - 1.0) > 1e-9:
+                        n_adj += 1
+    if on:
+        lo = min(spread) if spread else 1.0
+        hi = max(spread) if spread else 1.0
+        print(f"[RC] Normalizacja przez posiadanie drużyny (proxy): aktywna. "
+              f"Skorygowano {n_adj} wartości; współczynnik posiadania {lo:.2f}–{hi:.2f}.",
+              file=sys.stderr)
+    else:
+        print("[RC] Normalizacja przez posiadanie drużyny: WYŁĄCZONA (TEAM_POSSESSION_ADJUST=0).",
+              file=sys.stderr)
  
  
 def _formation_style_correlations(pool):
@@ -1221,4 +1309,5 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
  
