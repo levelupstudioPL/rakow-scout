@@ -1420,6 +1420,8 @@ function HelpView({ data, setView }) {
           <div className="cond" style={{ fontSize: 12, letterSpacing: 1, color: C.good, fontWeight: 700, marginBottom: 8 }}>DZIAŁA</div>
           {[
             "Poziom RC — percentyl metryk StatsBomb vs Ekstraklasa (≥540 min)",
+            "Possession-adjustment RC — metryki per-posiadanie (obrona, pomoc) + normalizacja wolumenu przez posiadanie drużyny",
+            "Shrinkage RC — mała próba minut ściągana w stronę średniej",
             "Koherencja stylu — podobieństwo profili (technika + fizyka + Game Intelligence)",
             "Handicapy lig — korekta poziomu o siłę ligi per linia",
             "Zależności formacji — podobieństwo stylu ról, z miarą sygnał/szum",
@@ -1431,9 +1433,7 @@ function HelpView({ data, setView }) {
         <div style={{ background: C.panel, border: `1px solid ${C.warn}44`, borderRadius: 12, padding: "14px 16px" }}>
           <div className="cond" style={{ fontSize: 12, letterSpacing: 1, color: C.warn, fontWeight: 700, marginBottom: 8 }}>W TOKU / ŚWIADOME OGRANICZENIA</div>
           {[
-            "Większość metryk NIE jest possession-adjusted — zawyża wolumen (skrzydła, „6”), zaniża obrońców",
             "Brak analizy multikolinearności i stabilności (ICC) metryk wejściowych",
-            "Brak shrinkage percentyli przy małej próbie minut",
             "Handicap: jedna metryka reprezentuje linię (miesza tempo z jakością)",
             "„Spadek formy” w flagach: na razie migawka, bez okna czasowego",
             "Estymacja ceny: placeholder do kalibracji na realnych transferach",
