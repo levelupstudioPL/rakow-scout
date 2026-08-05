@@ -13,6 +13,7 @@
 # =====================================================================
  
 import math
+import os
  
 # --- Metryki definiujące PROFIL GRY per linia ---
 # Do koherencji (podobieństwa) i do poziomu. Nazwy = pola StatsBomb.
@@ -71,7 +72,22 @@ LINE_METRICS = {
 # UCZCIWOŚĆ: dobór i waga tych metryk to założenie piłkarskie — do weryfikacji
 # przez kogoś znającego Ekstraklasę i te ligi. Rozszerzenie pogłębia model, ale
 # nie zmniejsza potrzeby jego walidacji.
-QUALITY_METRICS = {
+# Metryki wolumenowe bez natywnego wariantu per-posiadanie — normalizowane przez
+# PROXY posiadania drużyny (współczynnik z wolumenu podań drużyny w obrębie ligi).
+# fetch_statsbomb dolicza do wierszy pola z sufiksem __tpadj PRZED liczeniem RC.
+TEAM_NORM_SUFFIX = "__tpadj"
+TEAM_NORM_METRICS = [
+    "player_season_key_passes_90",
+    "player_season_passes_into_box_90",
+    "player_season_np_shots_90",
+    "player_season_touches_inside_box_90",
+]
+ 
+# WERSJA SUROWA (per-90, wolumen) — historyczna. Problem, na który słusznie zwrócił
+# uwagę audyt: metryki wolumenowe (podania, xgchain/xgbuildup na 90) zawyżają zawodników
+# drużyn dużo posiadających piłkę (skrzydła, „szóstki”), a zaniżają obrońców drużyn
+# broniących się nisko — bo więcej piłki = więcej akcji, niezależnie od jakości.
+QUALITY_METRICS_RAW = {
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
                "player_season_positive_outcome_90", "player_season_obv_gk_90",
                "player_season_op_passes_90"],
@@ -86,6 +102,38 @@ QUALITY_METRICS = {
              "player_season_np_shots_90", "player_season_touches_inside_box_90",
              "player_season_xa_90"],
 }
+ 
+# WERSJA POSSESSION-ADJUSTED — używa natywnych metryk StatsBomb skorygowanych o
+# posiadanie tam, gdzie problem jest największy (Obrona, Pomoc):
+#   • padj_clearances / padj_pressures — obronne akcje znormalizowane o posiadanie
+#     rywala (obrońca broniącej się drużyny nie jest już karany za „mało piłki”);
+#   • *_per_possession (xgchain/xgbuildup) — wkład w rozgrywanie NA POSIADANIE,
+#     a nie na 90 min → znika premia za sam wolumen posiadania drużyny.
+# RC liczy każdą metrykę jako PERCENTYL vs Ekstraklasa, więc mieszanie skal
+# (per-90 i per-posiadanie) jest bezpieczne. Bramka i Atak bez zmian — tam problem
+# posiadania praktycznie nie występuje (metryki bramkarskie i xG/output).
+QUALITY_METRICS_PADJ = {
+    "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
+               "player_season_positive_outcome_90", "player_season_obv_gk_90",
+               "player_season_op_passes_90"],
+    "Obrona": ["player_season_padj_tackles_and_interceptions_90",
+               "player_season_padj_clearances_90", "player_season_padj_pressures_90",
+               "player_season_aerial_wins_90",
+               "player_season_op_xgbuildup_per_possession"],
+    "Pomoc": ["player_season_op_xgchain_per_possession",
+              "player_season_xgbuildup_per_possession",
+              "player_season_key_passes_90__tpadj", "player_season_xa_90",
+              "player_season_passes_into_box_90__tpadj",
+              "player_season_padj_tackles_and_interceptions_90"],
+    "Atak": ["player_season_np_xg_90", "player_season_npg_90",
+             "player_season_np_shots_90__tpadj",
+             "player_season_touches_inside_box_90__tpadj",
+             "player_season_xa_90"],
+}
+ 
+# Przełącznik: POSSESSION_ADJUST=0 wraca do wersji surowej (do porównań A/B).
+POSSESSION_ADJUST = os.getenv("POSSESSION_ADJUST", "1") not in ("0", "false", "False")
+QUALITY_METRICS = QUALITY_METRICS_PADJ if POSSESSION_ADJUST else QUALITY_METRICS_RAW
  
  
 # --- Fizyka (SkillCorner) w profilu KOHERENCJI (styl gry) ---
@@ -163,8 +211,13 @@ def _val(row, key):
  
 def build_league_stats(rows, line):
     """Dla każdej metryki linii liczy min/max/średnią/odchylenie w populacji ligi.
-    Służy do normalizacji (percentyl / z-score)."""
-    metrics = _profile_metrics(line)
+    Służy do normalizacji (percentyl / z-score). Obejmuje profil koherencji ORAZ
+    obie wersje metryk jakościowych (surową i possession-adjusted), żeby dało się
+    policzyć RC dowolnym zestawem — także do diagnostyki A/B."""
+    metrics = list(dict.fromkeys(
+        _profile_metrics(line)
+        + QUALITY_METRICS_RAW.get(line, [])
+        + QUALITY_METRICS_PADJ.get(line, [])))
     stats = {}
     for m in metrics:
         vals = [_val(r, m) for r in rows]
@@ -192,9 +245,34 @@ def _percentile(value, sorted_vals):
 # metryki sa puste w danych StatsBomb (wtedy sa po cichu pomijane).
 DIAG = {}
  
-def quality_level(row, line, league_stats):
-    """POZIOM 0-100: średni percentyl metryk jakościowych względem ligi bazowej."""
-    metrics = QUALITY_METRICS.get(line, [])
+# --- SHRINKAGE percentyla przy małej próbie minut (odpowiedź na audyt, p.9) ---
+# Problem: zawodnik tuż powyżej progu minut (mała próba) potrafi mieć zawyżony
+# percentyl z jednego dobrego okresu. Empirical-Bayes: ściągamy RC w stronę PRIORU
+# (mediana rozkładu = ~50 percentyl) tym mocniej, im mniej minut.
+#   waga w = minuty / (minuty + K);  RC' = w*RC + (1-w)*PRIOR
+# K = liczba minut, przy której ufamy próbie w połowie (domyślnie 300 ~ 3-4 mecze
+# ponad progiem 540). Pełny sezon (~2500+ min) → shrink pomijalny.
+SHRINK = os.getenv("SHRINK", "1") not in ("0", "false", "False")
+SHRINK_K = float(os.getenv("SHRINK_K", "300"))
+SHRINK_PRIOR = float(os.getenv("SHRINK_PRIOR", "50"))
+ 
+ 
+def shrink_rc(rc, minutes):
+    """Ściąga RC w stronę prioru proporcjonalnie do małej próby minut. Zwraca
+    (rc_po, delta). Gdy SHRINK wyłączony albo brak minut — bez zmian."""
+    if not SHRINK or not isinstance(minutes, (int, float)) or minutes <= 0:
+        return rc, 0
+    w = minutes / (minutes + SHRINK_K)
+    out = max(0, min(100, round(w * rc + (1 - w) * SHRINK_PRIOR)))
+    return out, out - rc
+ 
+ 
+def quality_level(row, line, league_stats, metrics=None, minutes=None):
+    """POZIOM 0-100: średni percentyl metryk jakościowych względem ligi bazowej.
+    metrics=None → aktywny zestaw (QUALITY_METRICS); można podać własny (do A/B).
+    minutes podane → stosujemy shrinkage małej próby (patrz shrink_rc). Diagnostyka
+    possession-adjustment woła bez minut, żeby izolować sam efekt doboru metryk."""
+    metrics = metrics if metrics is not None else QUALITY_METRICS.get(line, [])
     pcts = []
     used, missing = [], []
     for m in metrics:
@@ -217,7 +295,8 @@ def quality_level(row, line, league_stats):
     avg = sum(pcts) / len(pcts)
     if math.isnan(avg) or math.isinf(avg):
         return 72
-    return max(0, min(100, round(avg)))
+    rc = max(0, min(100, round(avg)))
+    return shrink_rc(rc, minutes)[0]  # shrinkage tylko gdy podano minuty
  
  
 def _zprofile(row, line, base_stats):
@@ -296,118 +375,6 @@ def style_profile(row, ustats):
     return vec
  
  
-# =====================================================================
-#  PROFIL DOPASOWANY DO POZYCJI (position-fitted)
-#  Bogatszy zestaw atrybutów DLA KAŻDEJ LINII osobno — pod panele
-#  "mocne strony" i "kandydat vs nasz". Z-score liczony względem
-#  zawodników TEJ SAMEJ LINII w Ekstraklasie (position-fair). Kolejność
-#  (metryka, etykieta) jest źródłem prawdy — etykiety trafiają do
-#  data.json (meta.style_labels), więc front ich nie powiela.
-#  Wszystkie kolumny potwierdzone w statsbomb_columns.txt.
-# =====================================================================
-_PHYS_LABELED = [
-    ("total_metersperminute_full_all", "Dystans / intensywność"),
-    ("psv99", "Prędkość maksymalna"),
-    ("sprint_count_full_all", "Liczba sprintów"),
-]
-POS_STYLE = {
-    "Bramka": [
-        ("player_season_gsaa_90", "Obrony ponad oczekiwane (GSAA)"),
-        ("player_season_save_ratio", "Skuteczność obron"),
-        ("player_season_positive_outcome_90", "Pozytywne interwencje"),
-        ("player_season_obv_gk_90", "Wartość działań GK (OBV)"),
-        ("player_season_op_passes_90", "Podania (wolumen)"),
-        ("player_season_passing_ratio", "Celność podań"),
-        ("player_season_long_balls_90", "Długie podania"),
-        ("player_season_long_ball_ratio", "Udział długich podań"),
-        ("player_season_pass_length", "Śr. długość podania"),
-    ],
-    "Obrona": [
-        ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
-        ("player_season_padj_tackles_90", "Odbiory (PAdj)"),
-        ("player_season_padj_interceptions_90", "Przechwyty (PAdj)"),
-        ("player_season_aerial_wins_90", "Pojedynki powietrzne"),
-        ("player_season_aerial_ratio", "Skuteczność w powietrzu"),
-        ("player_season_padj_clearances_90", "Wybicia (PAdj)"),
-        ("player_season_blocks_per_shot", "Bloki strzałów"),
-        ("player_season_ball_recoveries_90", "Odzyski piłki"),
-        ("player_season_pressures_90", "Pressing (liczba)"),
-        ("player_season_op_passes_90", "Podania (wolumen)"),
-        ("player_season_passing_ratio", "Celność podań"),
-        ("player_season_forward_pass_proportion", "Podania do przodu"),
-        ("player_season_deep_progressions_90", "Progresja piłki"),
-        ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
-        ("player_season_carries_90", "Prowadzenia piłki"),
-        ("player_season_obv_90", "Wartość działań (OBV)"),
-    ] + _PHYS_LABELED,
-    "Pomoc": [
-        ("player_season_op_xgchain_90", "Udział w akcjach (xGChain)"),
-        ("player_season_xgbuildup_90", "Budowanie akcji (xGBuildup)"),
-        ("player_season_key_passes_90", "Podania kluczowe"),
-        ("player_season_xa_90", "Asysty oczekiwane (xA)"),
-        ("player_season_passes_into_box_90", "Podania w pole karne"),
-        ("player_season_op_passes_90", "Podania (wolumen)"),
-        ("player_season_passing_ratio", "Celność podań"),
-        ("player_season_forward_pass_proportion", "Podania do przodu"),
-        ("player_season_deep_progressions_90", "Progresja piłki"),
-        ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
-        ("player_season_dribbles_90", "Drybling"),
-        ("player_season_dribble_ratio", "Skuteczność dryblingu"),
-        ("player_season_carries_90", "Prowadzenia piłki"),
-        ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
-        ("player_season_pressures_90", "Pressing (liczba)"),
-        ("player_season_ball_recoveries_90", "Odzyski piłki"),
-        ("player_season_obv_90", "Wartość działań (OBV)"),
-    ] + _PHYS_LABELED,
-    "Atak": [
-        ("player_season_np_xg_90", "Groźność pod bramką (xG)"),
-        ("player_season_npg_90", "Gole (bez karnych)"),
-        ("player_season_np_shots_90", "Strzały"),
-        ("player_season_conversion_ratio", "Skuteczność wykończenia"),
-        ("player_season_touches_inside_box_90", "Kontakty w polu karnym"),
-        ("player_season_shot_touch_ratio", "Strzały na kontakt"),
-        ("player_season_xa_90", "Asysty oczekiwane (xA)"),
-        ("player_season_key_passes_90", "Podania kluczowe"),
-        ("player_season_aerial_wins_90", "Pojedynki powietrzne"),
-        ("player_season_aerial_ratio", "Skuteczność w powietrzu"),
-        ("player_season_dribbles_90", "Drybling"),
-        ("player_season_dribble_ratio", "Skuteczność dryblingu"),
-        ("player_season_op_xgchain_90", "Udział w akcjach (xGChain)"),
-        ("player_season_fouls_won_90", "Wymuszone faule"),
-        ("player_season_carries_90", "Prowadzenia piłki"),
-        ("player_season_obv_90", "Wartość działań (OBV)"),
-    ] + _PHYS_LABELED,
-}
- 
- 
-def pos_style_labels(line):
-    """Etykiety (po polsku) profilu pozycyjnego — do meta.style_labels."""
-    return [lab for _, lab in POS_STYLE.get(line, [])]
- 
- 
-def build_pos_style_stats(rows_of_line, line):
-    """Średnia/odchylenie metryk POS_STYLE[line] w populacji TEJ linii (Ekstraklasa)."""
-    stats = {}
-    for m, _lab in POS_STYLE.get(line, []):
-        vals = [v for v in (_val(r, m) for r in rows_of_line) if v is not None]
-        if not vals:
-            continue
-        mean = sum(vals) / len(vals)
-        var = sum((v - mean) ** 2 for v in vals) / len(vals)
-        stats[m] = {"mean": mean, "std": math.sqrt(var) or 1.0}
-    return stats
- 
- 
-def pos_style_profile(row, line, stats):
-    """Wektor z-score atrybutów dopasowanych do pozycji (kolejność = POS_STYLE[line])."""
-    vec = []
-    for m, _lab in POS_STYLE.get(line, []):
-        v = _val(row, m)
-        st = stats.get(m)
-        vec.append(0.0 if (v is None or not st) else round((v - st["mean"]) / st["std"], 2))
-    return vec
- 
- 
 if __name__ == "__main__":
     # Test na danych syntetycznych
     base = [
@@ -424,3 +391,4 @@ if __name__ == "__main__":
     print("Poziom gracza 1:", quality_level(base[0], "Pomoc", st))
     print("Koherencja 1↔2:", coherence(base[0], base[1], "Pomoc", st), "%")
     print("Koherencja 1↔1:", coherence(base[0], base[0], "Pomoc", st), "% (powinno ~100)")
+ 
