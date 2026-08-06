@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { computePriorities, computeOkazje, computeExpiring, computeRedFlags } from "./analytics.js";
+import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations } from "./analytics.js";
 
 // ============================ TOKENS ============================
 const C = {
@@ -287,7 +287,7 @@ export default function App() {
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
-    { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["help", "Jak to działa"]] },
+    { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
 
@@ -393,6 +393,7 @@ export default function App() {
             {view === "okazje" && "Okazje — jakość za euro"}
             {view === "flags" && "Czerwone flagi składu"}
             {view === "leagues" && "Handicapy lig"}
+            {view === "metrics" && "Multikolinearność metryk stylu"}
             {view === "corr" && "Zależności formacji"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
@@ -420,6 +421,7 @@ export default function App() {
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
           {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
+          {view === "metrics" && <MetricsView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
         </div>
@@ -1337,6 +1339,71 @@ function CorrView({ data }) {
         </div>
       </div>
       <Note>Podobieństwo stylu ról = kosinus między średnimi profilami stylu pozycji (z-score względem Ekstraklasy, 17 wymiarów: podania, odbiory, gra w powietrzu, drybling, xG/xA, fizyka…), liczony z całej puli lig. To mapa <b>stylistycznego pokrewieństwa ról</b>, nie sieć podań — „kto z kim realnie gra" wymaga danych zdarzeniowych (pas po pasie) i jest naturalnym kolejnym krokiem, skoro dostęp do eventów StatsBomb jest.</Note>
+    </div>
+  );
+}
+
+function MetricsView({ data }) {
+  const cr = useMemo(() => computeStyleCorrelations(data.pool), [data]);
+  const { labels, M, NN, clusters, count } = cr;
+  const mix = (a, b, t) => a.map((x, i) => Math.round(x + (b[i] - x) * t));
+  const surf = [20, 49, 95], red = [228, 2, 43], blue = [62, 123, 236];
+  const cellBg = (r) => { if (r === null) return "#0b1a33"; const t = Math.min(1, Math.abs(r)); return `rgb(${mix(surf, r >= 0 ? red : blue, t).join(",")})`; };
+  const fmtR = (r) => (r === null ? "" : r.toFixed(2).replace("0.", ".").replace("-0.", "-."));
+  const maxr = (c) => { let m = 0; for (let a = 0; a < c.length; a++) for (let b = a + 1; b < c.length; b++) { const r = Math.abs(M[c[a]][c[b]]); if (r > m) m = r; } return m; };
+  return (
+    <div>
+      <Lead>Które metryki stylu w praktyce mierzą to samo (odpowiedź na pytanie o multikolinearność). Korelacja 17 wymiarów profilu, liczona z profili <b className="mono" style={{ color: C.redHi }}>{count}</b> zawodników puli — parami, bez strukturalnych zer. Czerwień = korelacja dodatnia (dublują się), niebieski = ujemna, ciemne = niezależne. Najedź na pole: para, r i próba.</Lead>
+      <div style={{ display: "flex", gap: 24, marginTop: 18, flexWrap: "wrap", alignItems: "flex-start" }}>
+        <div className="hscroll">
+          <table style={{ borderCollapse: "separate", borderSpacing: 2 }}>
+            <thead><tr><th></th>{labels.map((l, j) => (
+              <th key={j} style={{ height: 116, verticalAlign: "bottom" }}>
+                <div style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", color: C.steel, fontSize: 10, fontWeight: 600, whiteSpace: "nowrap" }}>{l}</div>
+              </th>))}</tr></thead>
+            <tbody>
+              {labels.map((l, i) => (
+                <tr key={i}>
+                  <td className="mono" style={{ color: C.steelHi, fontSize: 10.5, textAlign: "right", paddingRight: 8, whiteSpace: "nowrap", fontWeight: 600 }}>{l}</td>
+                  {labels.map((_, j) => {
+                    const r = M[i][j], self = i === j, t = r === null ? 0 : Math.abs(r);
+                    return (
+                      <td key={j}>
+                        <div title={`${l} ↔ ${labels[j]}:  r=${r === null ? "—" : r.toFixed(2)}  (n=${NN[i][j]})`}
+                          className="mono" style={{ width: 32, height: 32, borderRadius: 4, textAlign: "center", lineHeight: "32px",
+                            fontSize: 9.5, fontWeight: 700, color: "#fff", background: cellBg(r), opacity: (self || t > 0.45) ? 1 : 0.66 }}>
+                          {self ? "1" : fmtR(r)}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mono" style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12, fontSize: 11, color: C.steel }}>
+            <span>−1</span>
+            <span style={{ height: 12, width: 180, borderRadius: 3, background: "linear-gradient(90deg,#3E7BEC,#14315F 50%,#E4022B)" }} />
+            <span>+1</span><span style={{ marginLeft: 8 }}>korelacja (r)</span>
+          </div>
+        </div>
+        <div style={{ flex: "1 1 300px", maxWidth: 440 }}>
+          <SectionLabel>Klastry redundancji (|r| ≥ 0,70)</SectionLabel>
+          <div style={{ display: "grid", gap: 8 }}>
+            {clusters.map((c, k) => (
+              <div key={k} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9, padding: "9px 12px", fontSize: 13 }}>
+                <b style={{ color: C.bone }}>{c.map((x) => labels[x]).join(" + ")}</b>
+                <span className="mono" style={{ color: C.proxy, fontSize: 11, marginLeft: 8 }}>r≈{maxr(c).toFixed(2)}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, background: `${C.warn}12`, border: `1px solid ${C.warn}44`, borderRadius: 12, padding: "14px 16px", fontSize: 12.5, color: C.steelHi, lineHeight: 1.55 }}>
+            <b style={{ color: C.bone }}>Wniosek.</b> Część wymiarów zwija się do grup mierzących ten sam sygnał. Koherencja (kosinus na z-score) podwójnie waży te czynniki — np. „kreacja" (podania w tercji + kluczowe + xA) liczy się kilka razy, a niezależna „gra w powietrzu" tylko raz.<br /><br />
+            <b style={{ color: C.bone }}>Kierunek naprawy.</b> Przyciąć duplikaty (po jednym reprezentancie na klaster) albo przejść koherencję na dystans Mahalanobisa, który sam odważa skorelowane wymiary przez macierz kowariancji.
+          </div>
+        </div>
+      </div>
+      <Note>Korelacja liczona parami, tylko po zawodnikach z niezerową wartością obu metryk (brak fizyki/GI = 0 nie zaniża sztucznie). Dotyczy przestrzeni profilu stylu (koherencja i „Zależności formacji"). Analogiczna diagnostyka dla metryk RC wymaga surowych wartości — do dołożenia jako log pipeline.</Note>
     </div>
   );
 }
