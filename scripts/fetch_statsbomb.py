@@ -474,6 +474,14 @@ def build_dataset(sb, creds):
     # --- Statystyki populacji ligi bazowej per linia (do normalizacji) ---
     base_stats_by_line = {ln: coh.build_league_stats(base_pop, ln)
                           for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
+    # Macierze precyzji (Σ⁻¹) do WYBIELONEGO KOSINUSA w koherencji (Mahalanobis, p.17).
+    # None dla linii, gdzie się nie da (mała próba / wyłączone) → coherence spada do kosinusa.
+    precision_by_line = {ln: coh.build_precision(base_pop, ln, base_stats_by_line[ln])
+                         for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
+    _pc_ok = [ln for ln, p in precision_by_line.items() if p is not None]
+    print(f"[koherencja] Metryka: {'Mahalanobis (wybielony kosinus)' if coh.COH_MAHALANOBIS else 'kosinus'}"
+          f" · precyzja policzona dla linii: {_pc_ok or '(żadnej — fallback do kosinusa)'}",
+          file=sys.stderr)
     # Uniwersalny profil stylu (do koherencji „każdy z każdym" w składzie).
     universal_stats = coh.build_universal_stats(base_pop)
     # Profil DOPASOWANY DO POZYCJI: populacja bazowa podzielona wg linii, żeby
@@ -584,7 +592,8 @@ def build_dataset(sb, creds):
             for s in refs:
                 if not s.get("_sb"):
                     continue
-                c = coh.coherence(row, s["_sb"], line, base_stats_by_line[line])
+                c = coh.coherence(row, s["_sb"], line, base_stats_by_line[line],
+                                  precision=precision_by_line.get(line))
                 if c > best_coh:
                     best_coh, best_ref = c, s["name"]
  
@@ -1309,5 +1318,6 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
  
  
