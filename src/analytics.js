@@ -376,3 +376,4 @@ export function computeStyleCorrelations(pool, opts = {}) {
   return { N, labels: STYLE_DIM_LABELS, M, NN, clusters, topPairs: pairs.slice(0, 10), count: vecs.length };
 }
  
+ 
