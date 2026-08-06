@@ -319,3 +319,60 @@ export function computeRedFlags(data, opts = {}) {
   return { players, counts, hasContract, hasAge, hasPeak, cur, total: squad.length };
 }
  
+// ---------------------------------------------------------------------------
+// MULTIKOLINEARNOŚĆ metryk stylu (odpowiedź na audyt, p. 6)
+// Korelacja (Pearson) 17 wymiarów profilu stylu, liczona z profili WSZYSTKICH
+// zawodników puli, PARAMI, z pominięciem strukturalnych zer (brak fizyki/GI = 0,
+// nie zaniża sztucznie). Zwraca macierz r, próby, klastry redundancji (|r|>=thr)
+// i najsilniejsze pary. Wszystko liczone na froncie z data.json — bez pipeline.
+// ---------------------------------------------------------------------------
+export const STYLE_DIM_LABELS = [
+  "Podania (wol.)", "Celność podań", "Podania do przodu", "Podania w tercji at.",
+  "Odbiory+przechwyty", "Gra w powietrzu", "Drybling", "Podania kluczowe", "xA",
+  "xG", "xGChain", "Dystans/intens.", "Sprinty", "Prędkość maks.", "Biegi bez piłki",
+  "Śr. dł. podania", "Zaang. z piłką",
+];
+ 
+export function computeStyleCorrelations(pool, opts = {}) {
+  const N = STYLE_DIM_LABELS.length;
+  const minN = opts.minN || 50;
+  const thr = opts.thr || 0.7;
+  const vecs = (pool || []).map((p) => p.profile).filter((v) => Array.isArray(v) && v.length === N);
+  const M = Array.from({ length: N }, () => Array(N).fill(null));
+  const NN = Array.from({ length: N }, () => Array(N).fill(0));
+  for (let i = 0; i < N; i++) {
+    for (let j = i; j < N; j++) {
+      if (i === j) { M[i][j] = 1; NN[i][j] = vecs.length; continue; }
+      const xs = [], ys = [];
+      for (const v of vecs) { const a = v[i], b = v[j]; if (a !== 0 && b !== 0) { xs.push(a); ys.push(b); } }
+      const n = xs.length; NN[i][j] = NN[j][i] = n;
+      if (n < minN) continue;
+      const mx = xs.reduce((s, x) => s + x, 0) / n, my = ys.reduce((s, y) => s + y, 0) / n;
+      let sx = 0, sy = 0, cov = 0;
+      for (let k = 0; k < n; k++) { const dx = xs[k] - mx, dy = ys[k] - my; sx += dx * dx; sy += dy * dy; cov += dx * dy; }
+      M[i][j] = M[j][i] = (sx > 0 && sy > 0) ? cov / Math.sqrt(sx * sy) : null;
+    }
+  }
+  // klastry redundancji = spójne składowe grafu par |r|>=thr
+  const adj = Array.from({ length: N }, () => new Set());
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
+    const r = M[i][j]; if (r !== null && Math.abs(r) >= thr) { adj[i].add(j); adj[j].add(i); }
+  }
+  const seen = new Set(), clusters = [];
+  for (let i = 0; i < N; i++) {
+    if (seen.has(i) || adj[i].size === 0) continue;
+    const comp = [], stack = [i];
+    while (stack.length) {
+      const x = stack.pop(); if (comp.includes(x)) continue;
+      comp.push(x); seen.add(x); for (const y of adj[x]) if (!comp.includes(y)) stack.push(y);
+    }
+    if (comp.length > 1) clusters.push(comp.sort((a, b) => a - b));
+  }
+  const pairs = [];
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
+    const r = M[i][j]; if (r !== null) pairs.push({ i, j, r, ar: Math.abs(r) });
+  }
+  pairs.sort((a, b) => b.ar - a.ar);
+  return { N, labels: STYLE_DIM_LABELS, M, NN, clusters, topPairs: pairs.slice(0, 10), count: vecs.length };
+}
+ 
