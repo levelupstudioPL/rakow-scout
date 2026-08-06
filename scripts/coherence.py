@@ -305,13 +305,98 @@ def _zprofile(row, line, base_stats):
     return vec
  
  
-def coherence(candidate_row, rakow_row, line, base_stats):
+# --- Mahalanobis (wybielony kosinus) w koherencji (audyt, p. 17) ---
+# Zwykły kosinus na z-score PODWÓJNIE liczy skorelowane metryki (patrz p. 6:
+# xA↔podania kluczowe r=0,90 itd.). Wybielony kosinus = kosinus w przestrzeni
+# ZDEKORELOWANEJ macierzą kowariancji: aᵀP·b / sqrt(aᵀP·a · bᵀP·b), gdzie P = Σ⁻¹
+# (precyzja) profilu w populacji bazowej. Zachowuje magnitude-invariance kosinusa
+# (koherencja = STYL, nie poziom), a jednocześnie odważa redundancję — czyli lek na
+# multikolinearność. Przełącznik: COH_MAHALANOBIS=0 wraca do zwykłego kosinusa.
+COH_MAHALANOBIS = os.getenv("COH_MAHALANOBIS", "1") not in ("0", "false", "False")
+COH_SHRINK = float(os.getenv("COH_SHRINK", "0.15"))  # ściąganie kowariancji do diagonali
+ 
+ 
+def _invert(mat):
+    """Odwrotność macierzy kwadratowej (Gauss-Jordan, pure Python). None gdy osobliwa."""
+    n = len(mat)
+    A = [list(mat[i]) + [1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]
+    for col in range(n):
+        piv = max(range(col, n), key=lambda r: abs(A[r][col]))
+        if abs(A[piv][col]) < 1e-12:
+            return None
+        A[col], A[piv] = A[piv], A[col]
+        pv = A[col][col]
+        A[col] = [x / pv for x in A[col]]
+        for r in range(n):
+            if r != col and A[r][col] != 0.0:
+                f = A[r][col]
+                A[r] = [A[r][k] - f * A[col][k] for k in range(2 * n)]
+    return [row[n:] for row in A]
+ 
+ 
+def build_precision(base_rows, line, base_stats):
+    """Macierz precyzji P = Σ⁻¹ profilu koherencji w populacji bazowej (do wybielonego
+    kosinusa). Kowariancja ściągana do diagonali (COH_SHRINK) + drobny ridge, żeby była
+    zawsze odwracalna. Zwraca None (→ coherence spada do zwykłego kosinusa) gdy Mahalanobis
+    wyłączony, próba za mała albo macierz osobliwa."""
+    if not COH_MAHALANOBIS:
+        return None
+    metrics = _profile_metrics(line)
+    d = len(metrics)
+    if d == 0:
+        return None
+    vecs = [_zprofile(r, line, base_stats) for r in base_rows]
+    n = len(vecs)
+    if n < d + 5:
+        return None
+    means = [sum(v[i] for v in vecs) / n for i in range(d)]
+    cov = [[0.0] * d for _ in range(d)]
+    for v in vecs:
+        dv = [v[i] - means[i] for i in range(d)]
+        for i in range(d):
+            di = dv[i]
+            if di == 0.0:
+                continue
+            row = cov[i]
+            for j in range(i, d):
+                row[j] += di * dv[j]
+    for i in range(d):
+        for j in range(i, d):
+            c = cov[i][j] / n
+            cov[i][j] = c
+            cov[j][i] = c
+    diag = [cov[i][i] for i in range(d)]
+    s = COH_SHRINK
+    for i in range(d):
+        for j in range(d):
+            if i == j:
+                cov[i][j] = cov[i][j] + 1e-3 * (diag[i] or 1.0) + 1e-6
+            else:
+                cov[i][j] = (1.0 - s) * cov[i][j]
+    return _invert(cov)
+ 
+ 
+def coherence(candidate_row, rakow_row, line, base_stats, precision=None):
     """KOHERENCJA 0-100: podobieństwo profili gry (kandydat vs zawodnik Rakowa).
-    Liczone jako podobieństwo kosinusowe wektorów z-score, przeskalowane 0-100."""
+    Gdy podano precision i Mahalanobis włączony — WYBIELONY KOSINUS (odważa skorelowane
+    metryki). Inaczej zwykły kosinus wektorów z-score. Oba magnitude-invariant (styl)."""
     a = _zprofile(candidate_row, line, base_stats)
     b = _zprofile(rakow_row, line, base_stats)
     if not a or not b:
         return 50
+    if COH_MAHALANOBIS and precision is not None:
+        d = len(a)
+        Pb = [sum(precision[i][k] * b[k] for k in range(d)) for i in range(d)]
+        Pa = [sum(precision[i][k] * a[k] for k in range(d)) for i in range(d)]
+        num = sum(a[i] * Pb[i] for i in range(d))   # aᵀ P b
+        da = sum(a[i] * Pa[i] for i in range(d))     # aᵀ P a
+        db = sum(b[i] * Pb[i] for i in range(d))     # bᵀ P b
+        if da > 0 and db > 0:
+            cos = max(-1.0, min(1.0, num / math.sqrt(da * db)))
+            res = (cos + 1) / 2 * 100
+            if not (math.isnan(res) or math.isinf(res)):
+                return max(0, min(100, round(res)))
+        # w innym razie: fallback do zwykłego kosinusa poniżej
     dot = sum(x * y for x, y in zip(a, b))
     na = math.sqrt(sum(x * x for x in a))
     nb = math.sqrt(sum(y * y for y in b))
