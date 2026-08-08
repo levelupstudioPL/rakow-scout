@@ -2386,15 +2386,33 @@ function RecentView({ data, setSel, setView }) {
   const jump = (id) => { const s = data.squad.find((x) => x.id === id); if (s) { setSel(s); setView("match"); } };
 
   if (!V.available) {
+    const seasons = (V.seasonsUsed || []).map((s) => s.season_id).join(", ");
     return (
       <div>
         <Lead>Ostatnie mecze Rakowa jako walidator modelu: zestawiamy <b>minuty</b> (kogo trener realnie wystawia) i <b>realny output</b> z naszym RC, i wskazujemy rozjazdy — kandydatów do rotacji oraz punkty do obserwacji.</Lead>
-        <InfoBanner>
-          Dane meczowe pojawią się po najbliższym odświeżeniu pipeline'u (moduł „ostatnie mecze" pobiera je ze StatsBomb — <span className="mono">RECENT_MATCHES</span>). Jeśli endpoint meczowy nie jest dostępny na koncie, ten ekran pozostaje pusty, a reszta aplikacji działa bez zmian.
-        </InfoBanner>
-        <div style={{ marginTop: 16 }}>
-          <Empty>Brak pobranych meczów{V.reason ? ` (${V.reason})` : ""}. Uruchom odświeżenie danych, żeby zasilić walidację.</Empty>
-        </div>
+        {V.provisional ? (
+          <>
+            <div style={{ marginTop: 14, display: "flex", alignItems: "flex-start", gap: 10,
+              background: `${C.red}14`, border: `1px solid ${C.red}66`, borderRadius: 10, padding: "12px 15px",
+              fontSize: 13, color: C.steelHi, lineHeight: 1.55, maxWidth: 860 }}>
+              <span style={{ color: C.redHi, fontSize: 16, flexShrink: 0 }}>■</span>
+              <span>
+                <b style={{ color: C.bone }}>Walidacja wstrzymana — feed StatsBomb nowego sezonu jest niespójny.</b> Wykryliśmy wpisy niemożliwe dla realnego terminarza (dwa mecze Rakowa tego samego dnia, wyniki/mecze, których nie było{seasons ? `; sezon(y): ${seasons}` : ""}). Świadomie <b>nie pokazujemy</b> tych meczów ani rekomendacji, żeby nie walidować modelu na zmyślonych danych.
+                <br /><br />
+                Gdy StatsBomb zbierze poprawnie bieżący sezon, ekran zadziała automatycznie. Można też wskazać właściwy sezon ręcznie: <span className="mono">RECENT_SEASON_ID=&lt;id&gt;</span> (a <span className="mono">RECENT_DEBUG=1</span> wypisze w logu listę sezonów i surowe mecze do zidentyfikowania poprawnego id).
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <InfoBanner>
+              Dane meczowe pojawią się po najbliższym odświeżeniu pipeline'u (moduł „ostatnie mecze" pobiera je ze StatsBomb — <span className="mono">RECENT_MATCHES</span>). Jeśli endpoint meczowy nie jest dostępny na koncie, ten ekran pozostaje pusty, a reszta aplikacji działa bez zmian.
+            </InfoBanner>
+            <div style={{ marginTop: 16 }}>
+              <Empty>Brak pobranych meczów{V.reason ? ` (${V.reason})` : ""}. Uruchom odświeżenie danych, żeby zasilić walidację.</Empty>
+            </div>
+          </>
+        )}
       </div>
     );
   }
