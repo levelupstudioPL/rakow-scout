@@ -287,7 +287,7 @@ export default function App() {
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
-    { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["help", "Jak to działa"]] },
+    { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
 
@@ -395,6 +395,7 @@ export default function App() {
             {view === "flags" && "Czerwone flagi składu"}
             {view === "leagues" && "Handicapy lig"}
             {view === "metrics" && "Multikolinearność metryk stylu"}
+            {view === "stability" && "Stabilność metryk (test-retest)"}
             {view === "corr" && "Zależności formacji"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
@@ -424,6 +425,7 @@ export default function App() {
           {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "metrics" && <MetricsView data={data} />}
+          {view === "stability" && <StabilityView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
         </div>
@@ -1410,6 +1412,80 @@ function MetricsView({ data }) {
   );
 }
 
+// ============================ STABILNOŚĆ METRYK (ICC / test-retest) ============================
+const STAB_TIER = {
+  stable:   { c: C.good,  label: "stabilna" },
+  moderate: { c: C.proxy, label: "umiarkowana" },
+  noisy:    { c: C.bad,   label: "szumna" },
+};
+function StabilityView({ data }) {
+  const S = data.stability;
+  if (!S || S.available === false || !Array.isArray(S.metrics) || !S.metrics.length) {
+    return (
+      <div>
+        <Lead>Stabilność metryk wejściowych: mierzymy powtarzalność każdej metryki między sezonami (test-retest). Metryki niepowtarzalne wnoszą do modelu głównie szum — to kandydaci do obniżenia wagi albo usunięcia.</Lead>
+        <InfoBanner>
+          Analiza pojawi się po najbliższym odświeżeniu — pipeline liczy ją z zestawienia sezonu bieżącego i historycznego Ekstraklasy (<span className="mono">STABILITY</span>). Jeśli sezon historyczny nie jest dostępny, ekran pozostaje pusty, a reszta aplikacji działa bez zmian.
+        </InfoBanner>
+        <div style={{ marginTop: 16 }}>
+          <Empty>Brak danych stabilności{S && S.reason ? ` (${S.reason})` : ""}. Uruchom odświeżenie danych.</Empty>
+        </div>
+      </div>
+    );
+  }
+  const { metrics, summary, n_players, seasons } = S;
+  const barW = (r) => `${Math.round(Math.max(0, Math.min(1, r)) * 100)}%`;
+
+  return (
+    <div>
+      <Lead>Które metryki są <b>powtarzalne</b> (odpowiedź na p.7 audytu). Dla każdej metryki liczymy korelację rang (Spearman) tej samej wartości między sezonem bieżącym a poprzednim, na <b className="mono" style={{ color: C.redHi }}>{n_players}</b> zawodnikach Ekstraklasy z ≥{S.min_minutes} min w obu sezonach. Wysoka = sygnał (metryka mówi o zawodniku, nie o kontekście); niska = szum — kandydat do odchudzenia modelu.</Lead>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, margin: "16px 0 18px" }}>
+        <Kpi l="Stabilne (≥0,60)" v={summary.stable} c={summary.stable ? C.good : C.steel} />
+        <Kpi l="Umiarkowane" v={summary.moderate} c={summary.moderate ? C.proxy : C.steel} />
+        <Kpi l="Szumne (<0,40)" v={summary.noisy} c={summary.noisy ? C.bad : C.steel} />
+        <Kpi l="Zawodnicy" v={n_players} />
+      </div>
+
+      <div style={{ display: "grid", gap: 7 }}>
+        {metrics.map((m) => {
+          const t = STAB_TIER[m.tier] || STAB_TIER.moderate;
+          return (
+            <div key={m.key} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <div style={{ flex: "1 1 220px", minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 13.5, fontWeight: 600, color: C.bone }}>{m.label}</span>
+                    {(m.lines || []).map((ln) => (
+                      <span key={ln} className="mono" style={{ fontSize: 9.5, color: C.steel, border: `1px solid ${C.line}`, borderRadius: 4, padding: "0 5px" }}>{ln}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ flex: "2 1 260px", display: "flex", alignItems: "center", gap: 10, minWidth: 200 }}>
+                  <div style={{ flex: 1, height: 8, background: C.ink, borderRadius: 5, overflow: "hidden" }}>
+                    <div style={{ width: barW(m.rho), height: "100%", background: t.c, borderRadius: 5 }} />
+                  </div>
+                  <span className="mono" style={{ fontSize: 12.5, fontWeight: 700, color: t.c, width: 46, textAlign: "right" }}>
+                    {m.rho.toFixed(2).replace("0.", ".").replace("-0.", "-.")}
+                  </span>
+                  <span className="mono" style={{ fontSize: 10, color: t.c, background: `${t.c}18`, borderRadius: 5, padding: "1px 6px", width: 82, textAlign: "center" }}>{t.label}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ marginTop: 18, background: `${C.warn}12`, border: `1px solid ${C.warn}44`, borderRadius: 12, padding: "14px 16px", fontSize: 12.5, color: C.steelHi, lineHeight: 1.55, maxWidth: 820 }}>
+        <b style={{ color: C.bone }}>Wniosek.</b> Metryki „szumne" (niskie ρ) słabo powtarzają się między sezonami — w równoważonym modelu RC wnoszą tyle samo, co stabilne, mimo że mierzą głównie kontekst/wariancję. To one są kandydatami do obniżenia wagi lub usunięcia.<br /><br />
+        <b style={{ color: C.bone }}>Kierunek naprawy.</b> Zważyć metryki przez ich stabilność (albo odciąć poniżej progu ρ) — analogicznie do korekty multikolinearności. Zmiana jest zaplanowana jako przełączalna, żeby zwalidować wpływ na zgodność z ocenami trenerów przed włączeniem na stałe.
+      </div>
+
+      <Note>Test-retest MIĘDZY sezonami ({seasons ? `${seasons.previous_label} → bieżący` : "poprzedni → bieżący"}). To miara uczciwa, ale miesza prawdziwą niestabilność metryki z realną zmianą zawodnika (forma, rola, drużyna, wiek), więc bezwzględne wartości ρ traktujemy jako orientacyjne, a ranking metryk jako sygnał. Ściślejszy split-half w obrębie sezonu (po meczach) to naturalny, cięższy upgrade — wymaga danych meczowych całej populacji.</Note>
+    </div>
+  );
+}
+
 function HelpView({ data, setView }) {
   const steps = [
     ["Skład", "Zakładka „Skład” to obecny zespół ułożony liniami, jak na tablicy taktycznej. Każda karta ma poziom RC (Ekstraklasa = baza). Klik przenosi do odpowiedników."],
@@ -2330,6 +2406,17 @@ function RecentView({ data, setSel, setView }) {
   return (
     <div>
       <Lead>Ostatnie <b className="mono" style={{ color: C.redHi }}>{V.nMatches}</b> meczów Rakowa jako walidator. <b>Minuty</b> to ujawniona preferencja trenera — kto realnie gra. Zestawiamy je z RC i realnym outputem, żeby wyłapać rozjazdy: wysoki RC bez minut (do obserwacji), zaufanie trenera mimo niskiego RC (model może niedoszacowywać), oraz pełne obciążenie (do rotacji). Klik zawodnika → jego odpowiednicy w Europie.</Lead>
+
+      {V.stale && (
+        <InfoBanner>
+          Uwaga: najświeższy zebrany mecz to <b>{V.newestDate}</b>{V.daysSince != null ? ` (${V.daysSince} dni temu)` : ""} — to końcówka poprzedniego sezonu. StatsBomb nie zebrał jeszcze meczów nowego sezonu, więc walidacja pokazuje ostatnie dostępne spotkania i będzie niemiarodajna dla bieżącej formy, dopóki nie pojawią się dane nowego sezonu. Odśwież po pierwszych kolejkach.
+        </InfoBanner>
+      )}
+      {!V.stale && V.smallSample && (
+        <InfoBanner>
+          Nowy sezon ma dopiero <b>{V.nMatches}</b> {V.nMatches === 1 ? "mecz" : "mecze"} — próba jest mała. Minuty (kto gra) są już czytelne, ale output i formę traktuj ostrożnie; pełniejszy obraz po kilku kolejkach.
+        </InfoBanner>
+      )}
 
       {/* Podsumowanie drużyny */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, margin: "16px 0 14px" }}>
