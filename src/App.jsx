@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations } from "./analytics.js";
+import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations, computeRecentValidation } from "./analytics.js";
 
 // ============================ TOKENS ============================
 const C = {
@@ -284,7 +284,7 @@ export default function App() {
   const realCount = data.squad.filter((p) => p.real).length;
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
     { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["help", "Jak to działa"]] },
@@ -388,6 +388,7 @@ export default function App() {
           <div className="cond" style={{ fontSize: 11, letterSpacing: ".18em", color: C.redHi, fontWeight: 700 }}>{curSection.label}</div>
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
+            {view === "mecze" && "Ostatnie mecze — walidator"}
             {view === "match" && "Odpowiednicy z Europy"}
             {view === "priorities" && "Priorytety transferowe"}
             {view === "okazje" && "Okazje — jakość za euro"}
@@ -411,6 +412,7 @@ export default function App() {
 
         <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
+          {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
           {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
@@ -2285,6 +2287,171 @@ function FlagsView({ data, setSel, setView }) {
       </div>
 
       <Note>Flagi: wygasający kontrakt (do 1 rok), wiek schyłkowy (bramka 34+, obrona 31+, pomoc/atak 30+), poziom &gt;8 pkt poniżej mediany swojej linii, brak danych meczowych (b.d.), spadek wartości poniżej 60% szczytu. To migawka bieżącego ryzyka — śledzenie zmian w czasie dołożymy, gdy pipeline zacznie zapisywać historię odświeżeń.</Note>
+    </div>
+  );
+}
+
+// ============================ OSTATNIE MECZE (WALIDATOR) ============================
+const RES_COLOR = { W: C.good, D: C.proxy, L: C.bad };
+const VERDICT_META = {
+  ok:      { label: "zgodne", c: C.good },
+  watch:   { label: "obserwuj", c: C.warn },
+  trusted: { label: "wybór trenera", c: C.blueHi },
+  neutral: { label: "—", c: C.steel },
+};
+const ROLE_META = {
+  filar:   { label: "filar", c: C.redHi },
+  rotacja: { label: "rotacja", c: C.proxy },
+  rezerwa: { label: "rezerwa", c: C.steel },
+};
+
+function RecentView({ data, setSel, setView }) {
+  const V = useMemo(() => computeRecentValidation(data), [data]);
+  const jump = (id) => { const s = data.squad.find((x) => x.id === id); if (s) { setSel(s); setView("match"); } };
+
+  if (!V.available) {
+    return (
+      <div>
+        <Lead>Ostatnie mecze Rakowa jako walidator modelu: zestawiamy <b>minuty</b> (kogo trener realnie wystawia) i <b>realny output</b> z naszym RC, i wskazujemy rozjazdy — kandydatów do rotacji oraz punkty do obserwacji.</Lead>
+        <InfoBanner>
+          Dane meczowe pojawią się po najbliższym odświeżeniu pipeline'u (moduł „ostatnie mecze" pobiera je ze StatsBomb — <span className="mono">RECENT_MATCHES</span>). Jeśli endpoint meczowy nie jest dostępny na koncie, ten ekran pozostaje pusty, a reszta aplikacji działa bez zmian.
+        </InfoBanner>
+        <div style={{ marginTop: 16 }}>
+          <Empty>Brak pobranych meczów{V.reason ? ` (${V.reason})` : ""}. Uruchom odświeżenie danych, żeby zasilić walidację.</Empty>
+        </div>
+      </div>
+    );
+  }
+
+  const t = V.team || {};
+  const form = (t.form || "").split("");
+  const { rotate, observe } = V.recommendations;
+
+  return (
+    <div>
+      <Lead>Ostatnie <b className="mono" style={{ color: C.redHi }}>{V.nMatches}</b> meczów Rakowa jako walidator. <b>Minuty</b> to ujawniona preferencja trenera — kto realnie gra. Zestawiamy je z RC i realnym outputem, żeby wyłapać rozjazdy: wysoki RC bez minut (do obserwacji), zaufanie trenera mimo niskiego RC (model może niedoszacowywać), oraz pełne obciążenie (do rotacji). Klik zawodnika → jego odpowiednicy w Europie.</Lead>
+
+      {/* Podsumowanie drużyny */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, margin: "16px 0 14px" }}>
+        <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "12px 15px" }}>
+          <div className="mono" style={{ fontSize: 9.5, color: C.steel, letterSpacing: 1, textTransform: "uppercase" }}>Forma</div>
+          <div className="disp" style={{ fontSize: 22, marginTop: 4, display: "flex", gap: 5 }}>
+            {form.length ? form.map((r, i) => (
+              <span key={i} style={{ color: RES_COLOR[r] || C.steel, width: 20, height: 20, lineHeight: "20px",
+                textAlign: "center", fontSize: 13, fontWeight: 800, borderRadius: 5, background: `${RES_COLOR[r] || C.steel}1e` }}>{r}</span>
+            )) : <span style={{ color: C.steel }}>—</span>}
+          </div>
+        </div>
+        <Kpi l="Punkty" v={`${t.points ?? 0} / ${V.nMatches * 3}`} />
+        <Kpi l="Pkt / mecz" v={t.ppg ?? 0} c={t.ppg >= 2 ? C.good : t.ppg >= 1.3 ? C.proxy : C.bad} />
+        <Kpi l="Bilans bramek" v={`${t.gf ?? 0}:${t.ga ?? 0}`} c={(t.gf ?? 0) >= (t.ga ?? 0) ? C.good : C.bad} />
+      </div>
+
+      {/* Pasek meczów */}
+      <div className="hscroll" style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+        {V.matches.map((m, i) => (
+          <div key={i} style={{ flex: "0 0 auto", background: C.panel, border: `1px solid ${C.line}`,
+            borderLeft: `3px solid ${RES_COLOR[m.result] || C.line}`, borderRadius: 9, padding: "8px 12px", minWidth: 120 }}>
+            <div className="mono" style={{ fontSize: 10, color: C.steel }}>{m.home ? "dom" : "wyjazd"} · {m.date || ""}</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.bone, margin: "2px 0", whiteSpace: "nowrap" }}>{m.opponent || "—"}</div>
+            <div className="mono" style={{ fontSize: 12, color: RES_COLOR[m.result] || C.steel, fontWeight: 700 }}>
+              {m.result || "?"} {m.gf != null ? `${m.gf}:${m.ga}` : ""}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Rekomendacje */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginTop: 20 }}>
+        <div>
+          <SectionLabel>Do rotacji · obciążenie</SectionLabel>
+          {rotate.length === 0
+            ? <Empty>Nikt nie gra kompletu minut we wszystkich meczach — obciążenie rozłożone.</Empty>
+            : <div style={{ display: "grid", gap: 8 }}>
+                {rotate.map((r, i) => (
+                  <div key={i} style={{ background: C.panel, border: `1px solid ${sevColor(r.sev)}55`, borderRadius: 10, padding: "10px 13px" }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                      <b style={{ fontSize: 13.5, color: C.bone }}>{r.name}</b>
+                      <span className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{r.pos}</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: C.steelHi, marginTop: 4, lineHeight: 1.5 }}>{r.reason}</div>
+                  </div>
+                ))}
+              </div>}
+        </div>
+        <div>
+          <SectionLabel>Punkty do obserwacji</SectionLabel>
+          {observe.length === 0
+            ? <Empty>Model i wybory trenera są zgodne — brak wyraźnych rozjazdów do obserwacji.</Empty>
+            : <div style={{ display: "grid", gap: 8 }}>
+                {observe.map((o, i) => (
+                  <div key={i} style={{ background: C.panel, border: `1px solid ${sevColor(o.sev)}55`, borderRadius: 10, padding: "10px 13px" }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                      <b style={{ fontSize: 13.5, color: C.bone }}>{o.name}</b>
+                      <span className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{o.pos}</span>
+                      {o.rc != null && <span className="mono" style={{ fontSize: 10.5, color: C.steel }}>RC {o.rc}</span>}
+                    </div>
+                    <div style={{ fontSize: 12, color: C.steelHi, marginTop: 4, lineHeight: 1.5 }}>{o.reason}</div>
+                  </div>
+                ))}
+              </div>}
+        </div>
+      </div>
+
+      {/* Tabela zawodników: minuty vs RC */}
+      <SectionLabel>Zawodnicy · minuty vs RC</SectionLabel>
+      <div style={{ display: "grid", gap: 7 }}>
+        {V.players.map((p) => {
+          const vm = VERDICT_META[p.verdict] || VERDICT_META.neutral;
+          const rm = ROLE_META[p.role] || ROLE_META.rezerwa;
+          const pct = Math.round(Math.min(1, p.share) * 100);
+          return (
+            <div key={p.id || p.name} className="rowh" style={{ background: C.panel,
+              border: `1px solid ${p.verdict === "watch" ? `${C.warn}66` : p.verdict === "trusted" ? `${C.blueHi}55` : C.line}`,
+              borderRadius: 11, padding: "12px 15px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                <div style={{ minWidth: 0, flex: "1 1 210px" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: C.bone }}>{p.name}</span>
+                    {p.pos && <span className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{p.pos}</span>}
+                    {p.rcEstimated
+                      ? <span className="mono" style={{ fontSize: 11, color: C.warn }}>b.d.</span>
+                      : <span className="mono" style={{ fontSize: 11, color: C.steel }}>RC {p.rc}</span>}
+                    <span className="mono" style={{ fontSize: 10, color: rm.c, border: `1px solid ${rm.c}55`, borderRadius: 5, padding: "1px 6px" }}>{rm.label}</span>
+                    <span className="mono" style={{ fontSize: 10, color: vm.c, background: `${vm.c}18`, borderRadius: 5, padding: "1px 6px" }}>{vm.label}</span>
+                  </div>
+                  {/* pasek udziału minut */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 8 }}>
+                    <div style={{ flex: "1 1 120px", maxWidth: 200, height: 6, background: C.ink, borderRadius: 4, overflow: "hidden" }}>
+                      <div style={{ width: `${pct}%`, height: "100%", background: rm.c, borderRadius: 4 }} />
+                    </div>
+                    <span className="mono" style={{ fontSize: 10.5, color: C.steel, whiteSpace: "nowrap" }}>
+                      {p.minutes}′ · {pct}% · {p.starts}/{V.nMatches} w wyjściowym
+                    </span>
+                  </div>
+                  {p.signals.length > 0 && (
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
+                      {p.signals.map((s, i) => (
+                        <span key={i} style={{ fontSize: 11.5, color: C.steelHi, background: `${s.sev === "ok" ? C.good : s.sev === "med" ? C.warn : C.steel}15`,
+                          border: `1px solid ${s.sev === "ok" ? C.good : s.sev === "med" ? C.warn : C.steel}44`, borderRadius: 7, padding: "3px 9px" }}>{s.text}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {p.inSquad && p.id && (
+                  <button onClick={() => jump(p.id)}
+                    style={{ flexShrink: 0, background: "transparent", color: C.redHi, border: `1px solid ${C.red}66`,
+                      borderRadius: 8, padding: "7px 13px", fontSize: 12, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}>
+                    Odpowiednicy →
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <Note>Walidator opiera się na tym, co odporne: <b>minuty</b> (ujawniona preferencja trenera) i <b>realny output per 90</b> (miękko, bo próba {V.nMatches} meczów jest mała — traktujemy jako sygnał, nie wyrok). <b>Koherencji ten ekran nie waliduje wprost</b> — koherencja to podobieństwo stylu między zawodnikami, nie wielkość meczowa; walidujemy ją pośrednio przez to, że XI realnie wystawiane przez trenera to zestaw opisywany przez ekran „Zależności formacji". Output ofensywny komentujemy dopiero od ~180 minut.</Note>
     </div>
   );
 }
