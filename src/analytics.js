@@ -376,4 +376,150 @@ export function computeStyleCorrelations(pool, opts = {}) {
   return { N, labels: STYLE_DIM_LABELS, M, NN, clusters, topPairs: pairs.slice(0, 10), count: vecs.length };
 }
  
+// ============================================================================
+// WALIDACJA NA OSTATNICH MECZACH — mecz jako walidator RC i preferencji trenera.
+// Wejście: data.recent (z pipeline'u) + data.squad. Zasada uczciwości:
+//   • MINUTY = ujawniona preferencja trenera (kto realnie gra). To główny walidator.
+//   • OUTPUT per 90 = miękka walidacja RC (mała próba → tylko sygnał, nie wyrok).
+//   • KOHERENCJI mecz NIE waliduje wprost (to podobieństwo stylu MIĘDZY zawodnikami,
+//     nie wielkość meczowa) — walidujemy ją pośrednio: XI, które trener realnie
+//     wystawia, to właśnie zestaw opisywany przez nasz ekran koherencji składu.
+// Zwraca gotowe do renderu: per-zawodnik role+sygnały+werdykt oraz rekomendacje
+// (rotacje / punkty do obserwacji). Czysta funkcja — testowalna w node.
+// ============================================================================
+ 
+// Progi udziału minut (share = minuty / (n_meczów*90)).
+const SHARE_CORE = 0.6;   // filar
+const SHARE_ROT = 0.25;   // rotacja (poniżej = rezerwa)
+const RC_GOOD = 65;       // "wysoki RC" — model uważa za jakość
+const RC_WEAK = 55;       // "niski RC"
+ 
+function _sig(type, sev, text) { return { type, sev, text }; }
+ 
+export function computeRecentValidation(data, opts = {}) {
+  const rec = data && data.recent;
+  if (!rec || rec.available === false || !Array.isArray(rec.players) || !rec.players.length) {
+    return { available: false, reason: (rec && rec.reason) || "no_data" };
+  }
+  const nM = rec.n_matches || (Array.isArray(rec.matches) ? rec.matches.length : 5);
+  const avail = num(rec.team && rec.team.minutes_available) || nM * 90;
+ 
+  // Indeks składu po id/nazwie — dołączamy RC/wiek/pozycję, gdyby pipeline nie dołączył.
+  const squad = Array.isArray(data.squad) ? data.squad : [];
+  const byId = {}, byName = {};
+  for (const s of squad) {
+    if (s.id) byId[s.id] = s;
+    byName[(s.name || "").toLowerCase()] = s;
+  }
+ 
+  const players = rec.players.map((p) => {
+    const s = (p.id && byId[p.id]) || byName[(p.name || "").toLowerCase()] || null;
+    const rc = num(p.rc != null ? p.rc : (s ? s.rc : 0));
+    const rcEst = p.rc_estimated != null ? p.rc_estimated : (s ? !!s.rc_estimated : false);
+    const line = p.line || (s ? s.line : lineOfPos(p.pos));
+    const mins = num(p.minutes);
+    const share = num(p.share != null ? p.share : (avail ? mins / avail : 0));
+    const st = p.stats || {};
+    const per90 = (v) => (mins > 0 ? (num(v) / mins) * 90 : 0);
+    const gc = num(st.goals) + num(st.assists);            // realne gole+asysty
+    const gc90 = per90(gc);
+    const xgi90 = per90(num(st.np_xg) + num(st.xa));        // oczekiwane zaangażowanie
+    const def90 = per90(num(st.tackles) + num(st.interceptions));
+ 
+    const role = share >= SHARE_CORE ? "filar" : (share >= SHARE_ROT ? "rotacja" : "rezerwa");
+    const offensive = line === "Atak" || ["AM", "W", "ST"].includes(p.pos);
+    const defensive = line === "Obrona" || p.pos === "DM";
+    const enoughMin = mins >= 180; // ~2 pełne mecze — minimum, by w ogóle komentować output
+ 
+    const signals = [];
+    // --- Zgodność modelu (RC) z preferencją trenera (minuty) ---
+    if (rc >= RC_GOOD && role === "filar" && !rcEst) {
+      signals.push(_sig("confirmed", "ok",
+        "Model i trener zgodni — wysoki RC i pełne minuty. Filar potwierdzony."));
+    }
+    if (rc >= RC_GOOD && share < SHARE_ROT && !rcEst) {
+      signals.push(_sig("underused", "med",
+        "Wysoki RC, a mało minut — kandydat do większej roli / punkt do obserwacji."));
+    }
+    if (role === "filar" && (rcEst || rc < RC_WEAK)) {
+      signals.push(_sig("trusted", "med",
+        rcEst
+          ? "Trener stawia na niego mimo braku pewnego RC (mała próba) — model może go niedoszacowywać."
+          : "Trener ufa mimo niskiego RC — sprawdź, czy model nie pomija jego roli w systemie."));
+    }
+    // --- Miękka walidacja RC realnym outputem (tylko przy sensownej próbie) ---
+    if (enoughMin && offensive) {
+      if (gc90 <= 0 && xgi90 < 0.25 && rc >= RC_GOOD) {
+        signals.push(_sig("output_low", "med",
+          "Wysoki RC, ale zero realnej produkcji ofensywnej w ostatnich meczach — obserwuj formę."));
+      } else if (gc90 >= 0.6) {
+        signals.push(_sig("output_high", "ok",
+          "Mocna produkcja ofensywna (g+a/90) — realny output potwierdza RC."));
+      } else if (gc90 >= 0.4 && rc < RC_GOOD) {
+        signals.push(_sig("output_over", "ok",
+          "Produkcja wyższa, niż sugeruje RC — obserwuj, czy to trend, czy krótka forma."));
+      }
+    }
+    if (enoughMin && defensive && def90 >= 4 && rc < RC_GOOD) {
+      signals.push(_sig("output_over", "ok",
+        "Wysoka aktywność obronna (odbiory+przechwyty/90) mimo umiarkowanego RC — obserwuj."));
+    }
+ 
+    // Werdykt jednym słowem do etykiety na froncie.
+    let verdict = "neutral";
+    if (signals.some((x) => x.type === "confirmed" || x.type === "output_high")) verdict = "ok";
+    if (signals.some((x) => x.type === "underused" || x.type === "output_low")) verdict = "watch";
+    if (signals.some((x) => x.type === "trusted")) verdict = "trusted";
+ 
+    return {
+      name: p.name, id: p.id, pos: p.pos, line, rc, rcEstimated: rcEst,
+      minutes: Math.round(mins), matchesPlayed: p.matches_played || 0,
+      starts: p.starts || 0, share, role,
+      gc: Math.round(gc), gc90: +gc90.toFixed(2), xgi90: +xgi90.toFixed(2),
+      def90: +def90.toFixed(2), stats: st, inSquad: p.in_squad !== false && !!s,
+      signals, verdict,
+    };
+  });
+ 
+  players.sort((a, b) => b.minutes - a.minutes);
+ 
+  // --- Rekomendacje: rotacje (obciążenie) + obserwacje (rozjazd model↔trener) ---
+  const rotate = [], observe = [];
+  for (const pl of players) {
+    const s = (pl.id && byId[pl.id]) || byName[(pl.name || "").toLowerCase()];
+    const age = s && s.age ? num(s.age) : 0;
+    // Rotacja: pełne obciążenie we WSZYSTKICH meczach (>=90% minut, komplet startów).
+    if (pl.share >= 0.9 && pl.starts >= nM) {
+      const heavy = age >= 30;
+      rotate.push({
+        name: pl.name, pos: pl.pos, minutes: pl.minutes,
+        reason: heavy
+          ? `Komplet minut (${pl.starts}/${nM}) przy wieku ${age} — rozważ rotację dla świeżości.`
+          : `Komplet minut (${pl.starts}/${nM}) — brak oddechu, monitoruj obciążenie.`,
+        sev: heavy ? "med" : "low",
+      });
+    }
+    // Obserwacje: rozjazd między RC a rolą.
+    for (const sig of pl.signals) {
+      if (sig.type === "underused" || sig.type === "trusted" || sig.type === "output_low" || sig.type === "output_over") {
+        observe.push({ name: pl.name, pos: pl.pos, rc: pl.rc, reason: sig.text, sev: sig.sev });
+        break;
+      }
+    }
+  }
+ 
+  const team = rec.team || {};
+  const points = num(team.points), ppg = nM ? +(points / nM).toFixed(2) : 0;
+  return {
+    available: true,
+    generated: rec.generated || (data.meta && data.meta.generated) || "",
+    nMatches: nM,
+    matches: Array.isArray(rec.matches) ? rec.matches : [],
+    team: { ...team, ppg },
+    players,
+    recommendations: { rotate, observe },
+    note: rec.note || "",
+  };
+}
+ 
  
