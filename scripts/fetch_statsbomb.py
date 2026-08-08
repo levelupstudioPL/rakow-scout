@@ -423,6 +423,217 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_line,
     return recovered
  
  
+# =====================================================================
+#  OSTATNIE MECZE RAKOWA — walidator RC/koherencji na realnym boisku.
+#  Pobiera ostatnie N meczów Ekstraklasy i per-zawodnik statystyki meczowe.
+#  UCZCIWOŚĆ: mecz waliduje POZIOM (RC) i ujawnia preferencję trenera
+#  (minuty = kto realnie gra), ale NIE waliduje koherencji wprost —
+#  koherencja to podobieństwo stylu MIĘDZY zawodnikami, nie wielkość meczowa.
+#  Front (analytics.js) zamienia te surowe agregaty na sygnały/rekomendacje.
+#  DEFENSYWNIE: każdy błąd API jest łapany i NIE wywala pipeline'u —
+#  w najgorszym razie recent.available=false i aplikacja działa jak dotąd.
+# =====================================================================
+ 
+# Kandydaci kolumn player_match_stats (statsbombpy). Bierzemy PIERWSZĄ istniejącą —
+# nazwy bywają wersjonowane, więc nie zakładamy jednej. Klucz = nazwa u nas.
+RECENT_STAT_COLS = {
+    "minutes":       ["player_match_minutes"],
+    "goals":         ["player_match_goals", "player_match_np_goals"],
+    "np_xg":         ["player_match_np_xg"],
+    "assists":       ["player_match_assists", "player_match_goal_assists"],
+    "xa":            ["player_match_xa", "player_match_op_xa", "player_match_key_passes_xa"],
+    "key_passes":    ["player_match_key_passes"],
+    "np_shots":      ["player_match_np_shots", "player_match_shots"],
+    "passes":        ["player_match_passes"],
+    "tackles":       ["player_match_tackles"],
+    "interceptions": ["player_match_interceptions"],
+    "pressures":     ["player_match_pressures"],
+}
+ 
+ 
+def _first_col(row, candidates):
+    """Pierwsza istniejąca, liczbowa i skończona wartość z listy kandydatów kolumn."""
+    for c in candidates:
+        v = row.get(c)
+        if isinstance(v, (int, float)) and not (math.isnan(v) or math.isinf(v)):
+            return float(v)
+    return None
+ 
+ 
+def _fetch_recent_matches(sb, creds, squad, n_matches=5):
+    """Ostatnie N meczów Rakowa w Ekstraklasie + per-zawodnik statystyki meczowe.
+    Zwraca obiekt do data.json['recent'] albo {'available': False, ...} przy braku
+    danych/błędzie. NIGDY nie rzuca — wszystko w try/except, bo endpointów meczowych
+    nie da się zweryfikować lokalnie, a run danych nie może się od tego wywalić.
+ 
+    Wyłączalne: RECENT_MATCHES=0. Liczba meczów: RECENT_MATCHES_N (domyślnie 5)."""
+    if os.getenv("RECENT_MATCHES", "1") in ("0", "false", "False"):
+        print("[mecze] Ostatnie mecze: WYŁĄCZONE (RECENT_MATCHES=0).", file=sys.stderr)
+        return {"available": False, "reason": "disabled"}
+    try:
+        n_matches = int(os.getenv("RECENT_MATCHES_N", str(n_matches)))
+    except ValueError:
+        n_matches = 5
+ 
+    # Bazowa liga = Ekstraklasa (competition/season z konfiguracji base).
+    base_cfg = next((lg for lg in LEAGUE_CONFIG if lg.get("base")), None)
+    if not base_cfg:
+        return {"available": False, "reason": "no_base_league"}
+    comp_id, season_id = base_cfg["competition_id"], base_cfg["season_id"]
+ 
+    # --- 1. Lista meczów ligi ---
+    try:
+        matches_df = sb.matches(competition_id=comp_id, season_id=season_id, creds=creds)
+        match_rows = matches_df.to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[mecze] Nie pobrano listy meczów: {e}", file=sys.stderr)
+        return {"available": False, "reason": f"matches_endpoint: {e}"}
+ 
+    def _team(row, side):
+        for k in (f"{side}_team", f"{side}_team_name"):
+            v = row.get(k)
+            if isinstance(v, str) and v.strip():
+                return v
+        return ""
+ 
+    def _is_rakow(name):
+        return "rakow" in _norm_ascii(name)
+ 
+    # Tylko mecze Rakowa z zebranymi danymi (status available), posortowane po dacie.
+    rk = []
+    for m in match_rows:
+        home, away = _team(m, "home"), _team(m, "away")
+        if not (_is_rakow(home) or _is_rakow(away)):
+            continue
+        status = str(m.get("match_status") or m.get("match_status_360") or "available").lower()
+        if "available" not in status and status not in ("", "nan"):
+            # np. "scheduled" — mecz jeszcze nierozegrany/niezebrany
+            continue
+        rk.append(m)
+ 
+    def _date_key(m):
+        d = m.get("match_date") or m.get("match_date_time") or ""
+        return str(d)
+ 
+    rk.sort(key=_date_key)
+    recent = rk[-n_matches:] if rk else []
+    if not recent:
+        print("[mecze] Brak rozegranych meczów Rakowa w danych ligi.", file=sys.stderr)
+        return {"available": False, "reason": "no_rakow_matches"}
+ 
+    # Indeks składu po znormalizowanej nazwie — do złączenia z RC na froncie.
+    squad_by_norm = {}
+    for s in squad:
+        squad_by_norm[_norm_ascii(s.get("name", ""))] = s
+ 
+    matches_out, players_agg, cols_seen = [], {}, None
+    team_gf = team_ga = team_pts = 0
+    form = []
+ 
+    for m in recent:
+        mid = m.get("match_id")
+        home, away = _team(m, "home"), _team(m, "away")
+        rk_home = _is_rakow(home)
+        opp = away if rk_home else home
+        hs = m.get("home_score"); as_ = m.get("away_score")
+        gf = ga = None
+        if isinstance(hs, (int, float)) and isinstance(as_, (int, float)):
+            gf, ga = (int(hs), int(as_)) if rk_home else (int(as_), int(hs))
+            res = "W" if gf > ga else ("D" if gf == ga else "L")
+            team_gf += gf; team_ga += ga
+            team_pts += 3 if res == "W" else (1 if res == "D" else 0)
+            form.append(res)
+        else:
+            res = None
+        matches_out.append({
+            "match_id": mid, "date": _date_key(m)[:10], "opponent": opp,
+            "home": rk_home, "gf": gf, "ga": ga, "result": res,
+            "week": m.get("match_week"),
+        })
+ 
+        # --- Per-zawodnik statystyki meczowe (defensywnie) ---
+        try:
+            pms = sb.player_match_stats(mid, creds=creds).to_dict("records")
+        except Exception as e:  # noqa: BLE001
+            print(f"[mecze] player_match_stats({mid}) niedostępne: {e}", file=sys.stderr)
+            continue
+        for pr in pms:
+            tname = pr.get("team_name") or pr.get("team") or ""
+            if not _is_rakow(tname):
+                continue
+            pname = pr.get("player_name")
+            if not _is_valid_name(pname):
+                continue
+            if cols_seen is None:
+                cols_seen = {k: next((c for c in cands if c in pr), None)
+                             for k, cands in RECENT_STAT_COLS.items()}
+            key = _norm_ascii(pname)
+            agg = players_agg.setdefault(key, {
+                "name": pname, "minutes": 0.0, "matches_played": 0, "starts": 0,
+                "stats": {k: 0.0 for k in RECENT_STAT_COLS if k != "minutes"},
+            })
+            mins = _first_col(pr, RECENT_STAT_COLS["minutes"]) or 0.0
+            if mins > 0:
+                agg["matches_played"] += 1
+                agg["minutes"] += mins
+                if mins >= 60:
+                    agg["starts"] += 1
+            for k, cands in RECENT_STAT_COLS.items():
+                if k == "minutes":
+                    continue
+                v = _first_col(pr, cands)
+                if v is not None:
+                    agg["stats"][k] += v
+ 
+    # Domknij złączenie ze składem (RC, pozycja) — front i tak dokłada z squad,
+    # ale zapisujemy id/pos/rc dla wygody i żeby ekran działał bez re-joinu.
+    players_out = []
+    minutes_available = float(n_matches * 90)
+    for key, a in players_agg.items():
+        s = squad_by_norm.get(key)
+        players_out.append({
+            "name": a["name"],
+            "id": s.get("id") if s else None,
+            "pos": s.get("pos") if s else None,
+            "line": s.get("line") if s else None,
+            "rc": s.get("rc") if s else None,
+            "rc_estimated": s.get("rc_estimated") if s else None,
+            "in_squad": s is not None,
+            "minutes": round(a["minutes"], 1),
+            "matches_played": a["matches_played"],
+            "starts": a["starts"],
+            "share": round(a["minutes"] / minutes_available, 3) if minutes_available else 0.0,
+            "stats": {k: round(v, 3) for k, v in a["stats"].items()},
+        })
+    players_out.sort(key=lambda p: p["minutes"], reverse=True)
+ 
+    n_joined = sum(1 for p in players_out if p["in_squad"])
+    have_stats = any(p["minutes"] > 0 for p in players_out)
+    print(f"[mecze] Ostatnie {len(matches_out)} meczów Rakowa: forma {''.join(form) or '—'}, "
+          f"bilans {team_gf}:{team_ga}, {team_pts} pkt. "
+          f"Zawodników ze statystykami: {len(players_out)} (w składzie: {n_joined}).",
+          file=sys.stderr)
+    if cols_seen:
+        missing = [k for k, c in cols_seen.items() if c is None]
+        if missing:
+            print(f"[mecze] Uwaga: brak kolumn dla metryk: {missing}.", file=sys.stderr)
+ 
+    return {
+        "available": have_stats and bool(matches_out),
+        "generated": __import__("datetime").date.today().isoformat(),
+        "n_matches": len(matches_out),
+        "matches": matches_out,
+        "players": players_out,
+        "team": {
+            "gf": team_gf, "ga": team_ga, "points": team_pts,
+            "form": "".join(form), "minutes_available": minutes_available,
+        },
+        "note": ("Mecz waliduje POZIOM (RC) i ujawnia preferencję trenera (minuty). "
+                 "Koherencji nie waliduje wprost — to podobieństwo stylu między "
+                 "zawodnikami, nie wielkość meczowa."),
+    }
+ 
+ 
 def build_dataset(sb, creds):
     if not LEAGUE_CONFIG:
         die("LEAGUE_CONFIG jest puste — uzupełnij competition_id/season_id.")
@@ -732,6 +943,8 @@ def build_dataset(sb, creds):
         "pool": pool,
         # Zależności formacji = REALNE podobieństwo stylu ról (nie sieć podań).
         "correlations": _formation_style_correlations(pool),
+        # Ostatnie mecze Rakowa jako walidator RC/preferencji trenera (defensywnie).
+        "recent": _fetch_recent_matches(sb, creds, squad),
     }
  
  
@@ -1318,6 +1531,5 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
  
  
