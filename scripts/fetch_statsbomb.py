@@ -573,18 +573,27 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
         except Exception as e:  # noqa: BLE001
             print(f"[mecze] Nie pobrano meczów sezonu {sid}: {e}", file=sys.stderr)
             continue
-        ms = []
+        ms, seen_mid = [], set()
         for m in match_rows:
             home, away = _team(m, "home"), _team(m, "away")
             if not (_is_rakow(home) or _is_rakow(away)):
                 continue
             if not _played(m):
                 continue
+            # DEDUP po match_id: feed potrafi zwracać ten sam mecz wielokrotnie (to właśnie
+            # dawało "duplikaty dat" w zakończonych sezonach i zawyżało liczbę meczów/zawodników).
+            mid = m.get("match_id")
+            if mid is not None:
+                if mid in seen_mid:
+                    continue
+                seen_mid.add(mid)
             m["__season_id"] = sid
             ms.append(m)
         if not ms:
             continue
-        dates = [_date_key(m)[:10] for m in ms]
+        # Sygnał WSTĘPNOŚCI liczony na meczach UNIKALNYCH (po dedupie): dwa RÓŻNE mecze
+        # Rakowa w tej samej dacie = niemożliwe w realnym terminarzu → feed zmyślony/wstępny.
+        dates = [_date_key(m)[:10] for m in ms if _date_key(m)[:10]]
         dup = len(dates) != len(set(dates))
         per_season.append({"sid": sid, "matches": ms, "n": len(ms), "provisional": dup})
         if debug:
