@@ -518,6 +518,12 @@ export function computeRecentValidation(data, opts = {}) {
     team: { ...team, ppg },
     players,
     recommendations: { rotate, observe },
+    // Świeżość danych — front ostrzega, gdy najświeższy mecz jest stary (brak nowego sezonu).
+    stale: !!rec.stale,
+    daysSince: rec.days_since != null ? rec.days_since : null,
+    newestDate: rec.newest_date || "",
+    seasonsUsed: Array.isArray(rec.seasons_used) ? rec.seasons_used : [],
+    smallSample: nM < 3,
     note: rec.note || "",
   };
 }
