@@ -401,6 +401,15 @@ export function computeRecentValidation(data, opts = {}) {
   if (!rec || rec.available === false || !Array.isArray(rec.players) || !rec.players.length) {
     return { available: false, reason: (rec && rec.reason) || "no_data" };
   }
+  // Feed wstępny/błędny (StatsBomb nie ma jeszcze czystego sezonu): NIE pokazujemy
+  // analizy ani rekomendacji z niewiarygodnych meczów — tylko jawne ostrzeżenie.
+  if (rec.provisional) {
+    return {
+      available: false, provisional: true, reason: "provisional_feed",
+      newestDate: rec.newest_date || "",
+      seasonsUsed: Array.isArray(rec.seasons_used) ? rec.seasons_used : [],
+    };
+  }
   const nM = rec.n_matches || (Array.isArray(rec.matches) ? rec.matches.length : 5);
   const avail = num(rec.team && rec.team.minutes_available) || nM * 90;
  
@@ -527,5 +536,6 @@ export function computeRecentValidation(data, opts = {}) {
     note: rec.note || "",
   };
 }
+ 
  
  
