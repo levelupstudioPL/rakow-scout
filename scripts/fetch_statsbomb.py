@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # =====================================================================
 # fetch_statsbomb.py — pobiera realne dane ze StatsBomb i zapisuje
@@ -475,19 +476,11 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
     except ValueError:
         n_matches = 5
  
-    # Bazowa liga = Ekstraklasa (competition/season z konfiguracji base).
+    # Bazowa liga = Ekstraklasa (competition z konfiguracji base).
     base_cfg = next((lg for lg in LEAGUE_CONFIG if lg.get("base")), None)
     if not base_cfg:
         return {"available": False, "reason": "no_base_league"}
-    comp_id, season_id = base_cfg["competition_id"], base_cfg["season_id"]
- 
-    # --- 1. Lista meczów ligi ---
-    try:
-        matches_df = sb.matches(competition_id=comp_id, season_id=season_id, creds=creds)
-        match_rows = matches_df.to_dict("records")
-    except Exception as e:  # noqa: BLE001
-        print(f"[mecze] Nie pobrano listy meczów: {e}", file=sys.stderr)
-        return {"available": False, "reason": f"matches_endpoint: {e}"}
+    comp_id = base_cfg["competition_id"]
  
     def _team(row, side):
         for k in (f"{side}_team", f"{side}_team_name"):
@@ -499,27 +492,113 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
     def _is_rakow(name):
         return "rakow" in _norm_ascii(name)
  
-    # Tylko mecze Rakowa z zebranymi danymi (status available), posortowane po dacie.
-    rk = []
-    for m in match_rows:
-        home, away = _team(m, "home"), _team(m, "away")
-        if not (_is_rakow(home) or _is_rakow(away)):
-            continue
-        status = str(m.get("match_status") or m.get("match_status_360") or "available").lower()
-        if "available" not in status and status not in ("", "nan"):
-            # np. "scheduled" — mecz jeszcze nierozegrany/niezebrany
-            continue
-        rk.append(m)
- 
     def _date_key(m):
         d = m.get("match_date") or m.get("match_date_time") or ""
         return str(d)
  
-    rk.sort(key=_date_key)
-    recent = rk[-n_matches:] if rk else []
-    if not recent:
-        print("[mecze] Brak rozegranych meczów Rakowa w danych ligi.", file=sys.stderr)
+    # --- 1. WYBÓR SEZONÓW ---
+    # KLUCZOWE (fix): NIE bierzemy na sztywno sezonu bazowego modelu (318 = 2025/26),
+    # bo jego ostatnie mecze to koniec sezonu (maj) — a „ostatni tydzień" to już nowy
+    # sezon z INNYM season_id. Odpytujemy sb.competitions(), sortujemy sezony
+    # Ekstraklasy od najnowszego i skanujemy kilka najnowszych, żeby złapać realnie
+    # najświeższe spotkania. Override: RECENT_SEASON_ID wymusza konkretny sezon.
+    forced = os.getenv("RECENT_SEASON_ID")
+    if forced:
+        try:
+            season_ids = [int(forced)]
+        except ValueError:
+            season_ids = [base_cfg["season_id"]]
+    else:
+        season_ids = []
+        try:
+            comps = sb.competitions(creds=creds).to_dict("records")
+            import re as _re
+            seas = [c for c in comps if c.get("competition_id") == comp_id]
+ 
+            def _seas_recency(c):
+                nm = str(c.get("season_name") or "")
+                yrs = _re.findall(r"\d{4}", nm)
+                yr = int(yrs[-1]) if yrs else 0
+                return (yr, c.get("season_id") or 0)
+ 
+            seas.sort(key=_seas_recency, reverse=True)
+            for c in seas:
+                sid = c.get("season_id")
+                if sid is not None and sid not in season_ids:
+                    season_ids.append(sid)
+        except Exception as e:  # noqa: BLE001
+            print(f"[mecze] Nie pobrano listy sezonów (competitions): {e} — "
+                  f"używam sezonu bazowego.", file=sys.stderr)
+        # Zawsze dołóż sezon bazowy jako bezpieczny fallback; przytnij do 3 najnowszych.
+        if base_cfg["season_id"] not in season_ids:
+            season_ids.append(base_cfg["season_id"])
+        season_ids = season_ids[:3]
+ 
+    # --- 2. ZBIERZ MECZE RAKOWA z wybranych sezonów, globalnie po dacie ---
+    rk = []
+    seasons_hit = []
+    for sid in season_ids:
+        try:
+            match_rows = sb.matches(competition_id=comp_id, season_id=sid, creds=creds).to_dict("records")
+        except Exception as e:  # noqa: BLE001
+            print(f"[mecze] Nie pobrano meczów sezonu {sid}: {e}", file=sys.stderr)
+            continue
+        got = 0
+        for m in match_rows:
+            home, away = _team(m, "home"), _team(m, "away")
+            if not (_is_rakow(home) or _is_rakow(away)):
+                continue
+            status = str(m.get("match_status") or m.get("match_status_360") or "available").lower()
+            if "available" not in status and status not in ("", "nan"):
+                continue  # np. "scheduled" — mecz jeszcze nierozegrany/niezebrany
+            m["__season_id"] = sid
+            rk.append(m)
+            got += 1
+        if got:
+            seasons_hit.append({"season_id": sid, "matches": got})
+ 
+    if not rk:
+        print("[mecze] Brak rozegranych meczów Rakowa w pobranych sezonach.", file=sys.stderr)
         return {"available": False, "reason": "no_rakow_matches"}
+ 
+    rk.sort(key=_date_key)
+ 
+    # --- OKNO ŚWIEŻOŚCI: nie mieszaj końcówki starego sezonu (maj) z nowym (sierpień) ---
+    # Bierzemy tylko mecze w oknie RECENT_WINDOW_DAYS (domyślnie 60) od najświeższego
+    # rozegranego meczu, POTEM ostatnie N. Dzięki temu, gdy nowy sezon ma dopiero 2
+    # kolejki, pokazujemy właśnie te 2 (a nie doklejamy 3 sprzed transferów z maja);
+    # w trakcie sezonu (mecze co tydzień) okno spokojnie mieści 5–6 spotkań.
+    try:
+        import datetime as _dt2
+        _newest = _dt2.date.fromisoformat(_date_key(rk[-1])[:10])
+        _win = int(os.getenv("RECENT_WINDOW_DAYS", "60"))
+ 
+        def _within(m):
+            try:
+                return (_newest - _dt2.date.fromisoformat(_date_key(m)[:10])).days <= _win
+            except Exception:  # noqa: BLE001
+                return True
+        windowed = [m for m in rk if _within(m)]
+    except Exception:  # noqa: BLE001
+        windowed = rk
+    recent = windowed[-n_matches:]
+ 
+    # --- STALENESS: ostrzeżenie, gdy najświeższy mecz jest wyraźnie stary ---
+    # (np. StatsBomb nie zebrał jeszcze nowego sezonu → pokazujemy końcówkę poprzedniego).
+    newest_date = _date_key(recent[-1])[:10]
+    stale = False
+    days_since = None
+    try:
+        import datetime as _dt
+        d = _dt.date.fromisoformat(newest_date)
+        days_since = (_dt.date.today() - d).days
+        stale = days_since is not None and days_since > int(os.getenv("RECENT_STALE_DAYS", "45"))
+    except Exception:  # noqa: BLE001
+        pass
+    if stale:
+        print(f"[mecze] UWAGA: najświeższy zebrany mecz to {newest_date} "
+              f"({days_since} dni temu) — prawdopodobnie brak danych nowego sezonu. "
+              f"Pokazuję końcówkę dostępnego sezonu.", file=sys.stderr)
  
     # Indeks składu po znormalizowanej nazwie — do złączenia z RC na froncie.
     squad_by_norm = {}
@@ -548,7 +627,7 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
         matches_out.append({
             "match_id": mid, "date": _date_key(m)[:10], "opponent": opp,
             "home": rk_home, "gf": gf, "ga": ga, "result": res,
-            "week": m.get("match_week"),
+            "week": m.get("match_week"), "season_id": m.get("__season_id"),
         })
  
         # --- Per-zawodnik statystyki meczowe (defensywnie) ---
@@ -588,7 +667,9 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
     # Domknij złączenie ze składem (RC, pozycja) — front i tak dokłada z squad,
     # ale zapisujemy id/pos/rc dla wygody i żeby ekran działał bez re-joinu.
     players_out = []
-    minutes_available = float(n_matches * 90)
+    # Podstawa udziału minut = FAKTYCZNA liczba pokazanych meczów (nie żądane N),
+    # inaczej share byłby zaniżony, gdy nowy sezon ma mniej meczów niż N.
+    minutes_available = float(len(matches_out) * 90) or 90.0
     for key, a in players_agg.items():
         s = squad_by_norm.get(key)
         players_out.append({
@@ -618,6 +699,11 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
         if missing:
             print(f"[mecze] Uwaga: brak kolumn dla metryk: {missing}.", file=sys.stderr)
  
+    if seasons_hit:
+        print(f"[mecze] Sezony użyte (najnowsze pierwsze): "
+              f"{[s['season_id'] for s in seasons_hit]}; najświeższy mecz {newest_date}.",
+              file=sys.stderr)
+ 
     return {
         "available": have_stats and bool(matches_out),
         "generated": __import__("datetime").date.today().isoformat(),
@@ -628,9 +714,193 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
             "gf": team_gf, "ga": team_ga, "points": team_pts,
             "form": "".join(form), "minutes_available": minutes_available,
         },
+        # Świeżość danych: z jakich sezonów zebrano i czy najświeższy mecz nie jest stary.
+        "seasons_used": seasons_hit,
+        "newest_date": newest_date,
+        "stale": stale,
+        "days_since": days_since,
         "note": ("Mecz waliduje POZIOM (RC) i ujawnia preferencję trenera (minuty). "
                  "Koherencji nie waliduje wprost — to podobieństwo stylu między "
                  "zawodnikami, nie wielkość meczowa."),
+    }
+ 
+ 
+# =====================================================================
+#  STABILNOŚĆ METRYK (ICC / test-retest) — odpowiedź na p.7 audytu Igora.
+#  Mierzymy POWTARZALNOŚĆ każdej metryki wejściowej między sezonami: dla
+#  zawodników Ekstraklasy z ≥MIN_MINUTES w OBU sezonach (bieżący 318 i
+#  historyczny 317) liczymy korelację rang (Spearman) tej samej metryki.
+#  Wysoka = metryka stabilna (sygnał, np. xG/strzały). Niska = kontekstowa/
+#  szumna (np. przechwyty) — kandydat do obniżenia wagi lub usunięcia z modelu.
+#  UCZCIWOŚĆ: to test-retest MIĘDZY sezonami — miesza prawdziwą niestabilność
+#  metryki z realną zmianą zawodnika (forma, rola, drużyna, wiek). Ściślejszy
+#  split-half w obrębie sezonu (po meczach) to naturalny upgrade — wymaga danych
+#  meczowych całej populacji. DEFENSYWNIE: błąd/brak danych → available:false,
+#  reszta pipeline'u działa bez zmian. Wyłączalne: STABILITY=0.
+# =====================================================================
+ 
+# Czytelne etykiety PL dla metryk (native StatsBomb) — front renderuje je wprost.
+STAB_METRIC_LABELS = {
+    "player_season_gsaa_90": "Bramki uratowane (GSAA)",
+    "player_season_save_ratio": "Skuteczność obron",
+    "player_season_positive_outcome_90": "Pozytywne interwencje",
+    "player_season_obv_gk_90": "OBV bramkarza",
+    "player_season_op_passes_90": "Podania z gry",
+    "player_season_passing_ratio": "Celność podań",
+    "player_season_long_balls_90": "Długie podania",
+    "player_season_long_ball_ratio": "Celność długich podań",
+    "player_season_pass_length": "Średnia długość podania",
+    "player_season_padj_tackles_and_interceptions_90": "Odbiory+przechwyty (padj)",
+    "player_season_aerial_wins_90": "Wygrane pojedynki powietrzne",
+    "player_season_aerial_ratio": "Skuteczność w powietrzu",
+    "player_season_clearance_90": "Wybicia",
+    "player_season_padj_clearances_90": "Wybicia (padj)",
+    "player_season_padj_pressures_90": "Pressing (padj)",
+    "player_season_challenge_ratio": "Skuteczność pojedynków",
+    "player_season_op_f3_passes_90": "Podania w tercji ataku",
+    "player_season_op_xgchain_90": "xGChain (gra otwarta)",
+    "player_season_op_xgchain_per_possession": "xGChain / posiadanie",
+    "player_season_xgbuildup_90": "xGBuildup",
+    "player_season_xgbuildup_per_possession": "xGBuildup / posiadanie",
+    "player_season_op_xgbuildup_per_possession": "xGBuildup gry otwartej / pos.",
+    "player_season_key_passes_90": "Podania kluczowe",
+    "player_season_xa_90": "Oczekiwane asysty (xA)",
+    "player_season_passes_into_box_90": "Podania w pole karne",
+    "player_season_forward_pass_proportion": "Udział podań do przodu",
+    "player_season_dribbles_90": "Drybling",
+    "player_season_np_xg_90": "xG (bez karnych)",
+    "player_season_npg_90": "Gole (bez karnych)",
+    "player_season_np_shots_90": "Strzały (bez karnych)",
+    "player_season_touches_inside_box_90": "Kontakty w polu karnym",
+    "player_season_conversion_ratio": "Skuteczność (gole/strzały)",
+}
+ 
+ 
+def _stability_metric_lines():
+    """Mapowanie: metryka (native, bez sufiksu __tpadj) → linie modelu, które jej
+    używają. Bierzemy z aktywnych QUALITY_METRICS + profilu koherencji (LINE_METRICS)."""
+    lines = {}
+    for d in (coh.QUALITY_METRICS, coh.LINE_METRICS):
+        for ln, arr in d.items():
+            for m in arr:
+                base = m.replace(coh.TEAM_NORM_SUFFIX, "")
+                lines.setdefault(base, set()).add(ln)
+    return {k: sorted(v) for k, v in lines.items()}
+ 
+ 
+def _spearman(pairs):
+    """Korelacja rang Spearmana dla listy par (x,y). Odporna na skalę i outliery
+    (rangujemy, potem Pearson na rangach). Zwraca (rho, n) albo (None, n)."""
+    n = len(pairs)
+    if n < 8:
+        return None, n
+ 
+    def _ranks(vals):
+        order = sorted(range(len(vals)), key=lambda i: vals[i])
+        rk = [0.0] * len(vals)
+        i = 0
+        while i < len(order):
+            j = i
+            while j + 1 < len(order) and vals[order[j + 1]] == vals[order[i]]:
+                j += 1
+            avg = (i + j) / 2.0 + 1.0  # średnia ranga dla remisów
+            for k in range(i, j + 1):
+                rk[order[k]] = avg
+            i = j + 1
+        return rk
+ 
+    xs = [p[0] for p in pairs]
+    ys = [p[1] for p in pairs]
+    rx, ry = _ranks(xs), _ranks(ys)
+    mx = sum(rx) / n
+    my = sum(ry) / n
+    sx = sy = cov = 0.0
+    for a, b in zip(rx, ry):
+        dx, dy = a - mx, b - my
+        sx += dx * dx
+        sy += dy * dy
+        cov += dx * dy
+    if sx <= 0 or sy <= 0:
+        return None, n
+    return cov / math.sqrt(sx * sy), n
+ 
+ 
+def _metric_stability(sb, creds, base_current_rows):
+    """Test-retest metryk między sezonem bieżącym a historycznym (Ekstraklasa).
+    Zwraca obiekt do data.json['stability'] albo {'available': False,...}."""
+    if os.getenv("STABILITY", "1") in ("0", "false", "False"):
+        print("[stabilność] Analiza stabilności metryk: WYŁĄCZONA (STABILITY=0).", file=sys.stderr)
+        return {"available": False, "reason": "disabled"}
+    base_cfg = next((lg for lg in LEAGUE_CONFIG if lg.get("base")), None)
+    if not base_cfg:
+        return {"available": False, "reason": "no_base_league"}
+ 
+    # Pełna populacja Ekstraklasy w sezonie historycznym (jedno zapytanie).
+    try:
+        prev_rows = sb.player_season_stats(
+            competition_id=base_cfg["competition_id"], season_id=HIST_SEASON_ID, creds=creds
+        ).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[stabilność] Nie pobrano sezonu {HIST_SEASON_LABEL}: {e}", file=sys.stderr)
+        return {"available": False, "reason": f"hist_season: {e}"}
+ 
+    def _idx(rows):
+        out = {}
+        for r in rows:
+            pid = r.get("player_id")
+            if pid is None:
+                continue
+            if _player_minutes(r) >= MIN_MINUTES:
+                out[pid] = r
+        return out
+ 
+    cur = _idx(base_current_rows)
+    prv = _idx(prev_rows)
+    common = [pid for pid in cur if pid in prv]
+    if len(common) < 12:
+        print(f"[stabilność] Za mała wspólna próba ({len(common)} zawodników w obu sezonach).", file=sys.stderr)
+        return {"available": False, "reason": f"small_overlap:{len(common)}"}
+ 
+    lines_of = _stability_metric_lines()
+    metrics_out = []
+    for key in sorted(lines_of):
+        pairs = []
+        for pid in common:
+            a = cur[pid].get(key)
+            b = prv[pid].get(key)
+            if (isinstance(a, (int, float)) and isinstance(b, (int, float))
+                    and not (math.isnan(a) or math.isinf(a) or math.isnan(b) or math.isinf(b))):
+                pairs.append((float(a), float(b)))
+        rho, n = _spearman(pairs)
+        if rho is None:
+            continue
+        tier = "stable" if rho >= 0.6 else ("moderate" if rho >= 0.4 else "noisy")
+        metrics_out.append({
+            "key": key,
+            "label": STAB_METRIC_LABELS.get(key, key.replace("player_season_", "").replace("_", " ")),
+            "rho": round(rho, 3), "n": n, "tier": tier, "lines": lines_of[key],
+        })
+    metrics_out.sort(key=lambda m: m["rho"], reverse=True)
+ 
+    summary = {
+        "stable": sum(1 for m in metrics_out if m["tier"] == "stable"),
+        "moderate": sum(1 for m in metrics_out if m["tier"] == "moderate"),
+        "noisy": sum(1 for m in metrics_out if m["tier"] == "noisy"),
+    }
+    print(f"[stabilność] Test-retest {len(metrics_out)} metryk na {len(common)} zawodnikach "
+          f"(≥{MIN_MINUTES} min w obu sezonach): stabilne {summary['stable']}, "
+          f"umiarkowane {summary['moderate']}, szumne {summary['noisy']}.", file=sys.stderr)
+    return {
+        "available": bool(metrics_out),
+        "generated": __import__("datetime").date.today().isoformat(),
+        "min_minutes": MIN_MINUTES,
+        "n_players": len(common),
+        "seasons": {"current": base_cfg["season_id"], "previous": HIST_SEASON_ID,
+                    "previous_label": HIST_SEASON_LABEL},
+        "metrics": metrics_out,
+        "summary": summary,
+        "note": ("Test-retest MIĘDZY sezonami (Spearman) — miesza niestabilność metryki "
+                 "z realną zmianą zawodnika. Split-half po meczach to ściślejszy upgrade."),
     }
  
  
@@ -945,6 +1215,8 @@ def build_dataset(sb, creds):
         "correlations": _formation_style_correlations(pool),
         # Ostatnie mecze Rakowa jako walidator RC/preferencji trenera (defensywnie).
         "recent": _fetch_recent_matches(sb, creds, squad),
+        # Stabilność metryk (ICC/test-retest między sezonami) — diagnostyka p.7.
+        "stability": _metric_stability(sb, creds, base_rows),
     }
  
  
@@ -1531,5 +1803,3 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
- 
