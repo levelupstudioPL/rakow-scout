@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # =====================================================================
 # fetch_statsbomb.py — pobiera realne dane ze StatsBomb i zapisuje
@@ -522,6 +521,10 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
                 return (yr, c.get("season_id") or 0)
  
             seas.sort(key=_seas_recency, reverse=True)
+            if os.getenv("RECENT_DEBUG") not in (None, "0", "false", "False"):
+                print("[mecze:debug] Sezony Ekstraklasy (od najnowszego): "
+                      + "; ".join(f"{c.get('season_id')}={c.get('season_name')}" for c in seas),
+                      file=sys.stderr)
             for c in seas:
                 sid = c.get("season_id")
                 if sid is not None and sid not in season_ids:
@@ -534,32 +537,76 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
             season_ids.append(base_cfg["season_id"])
         season_ids = season_ids[:3]
  
-    # --- 2. ZBIERZ MECZE RAKOWA z wybranych sezonów, globalnie po dacie ---
-    rk = []
-    seasons_hit = []
+    debug = os.getenv("RECENT_DEBUG") not in (None, "0", "false", "False")
+ 
+    import datetime as _dtx
+    try:
+        _today = _dtx.date.today()
+    except Exception:  # noqa: BLE001
+        _today = None
+ 
+    def _played(m):
+        """Mecz REALNIE rozegrany: status available + wynik obecny + data nie z przyszłości.
+        Chroni przed wstępnymi/terminarzowymi wpisami (mecz, którego jeszcze nie było)."""
+        status = str(m.get("match_status") or m.get("match_status_360") or "available").lower()
+        if "available" not in status and status not in ("", "nan"):
+            return False
+        hs, as_ = m.get("home_score"), m.get("away_score")
+        if not (isinstance(hs, (int, float)) and isinstance(as_, (int, float))):
+            return False
+        if _today is not None:
+            try:
+                if _dtx.date.fromisoformat(_date_key(m)[:10]) > _today:
+                    return False  # mecz w przyszłości = terminarz, nie wynik
+            except Exception:  # noqa: BLE001
+                pass
+        return True
+ 
+    # --- 2. ZBIERZ MECZE RAKOWA per sezon + WYKRYJ FEED WSTĘPNY/BŁĘDNY ---
+    # Sygnał brudnego feedu: dwa mecze Rakowa tego samego dnia (drużyna nie gra 2× dziennie)
+    # albo mecze z przyszłości oznaczone jako rozegrane. Taki sezon oznaczamy jako
+    # 'provisional' i wolimy od niego sezon czysty; brudny bierzemy tylko, gdy nie ma innego.
+    per_season = []
     for sid in season_ids:
         try:
             match_rows = sb.matches(competition_id=comp_id, season_id=sid, creds=creds).to_dict("records")
         except Exception as e:  # noqa: BLE001
             print(f"[mecze] Nie pobrano meczów sezonu {sid}: {e}", file=sys.stderr)
             continue
-        got = 0
+        ms = []
         for m in match_rows:
             home, away = _team(m, "home"), _team(m, "away")
             if not (_is_rakow(home) or _is_rakow(away)):
                 continue
-            status = str(m.get("match_status") or m.get("match_status_360") or "available").lower()
-            if "available" not in status and status not in ("", "nan"):
-                continue  # np. "scheduled" — mecz jeszcze nierozegrany/niezebrany
+            if not _played(m):
+                continue
             m["__season_id"] = sid
-            rk.append(m)
-            got += 1
-        if got:
-            seasons_hit.append({"season_id": sid, "matches": got})
+            ms.append(m)
+        if not ms:
+            continue
+        dates = [_date_key(m)[:10] for m in ms]
+        dup = len(dates) != len(set(dates))
+        per_season.append({"sid": sid, "matches": ms, "n": len(ms), "provisional": dup})
+        if debug:
+            print(f"[mecze:debug] sezon {sid}: {len(ms)} meczów Rakowa, duplikaty dat: {dup}", file=sys.stderr)
+            for m in sorted(ms, key=_date_key)[-8:]:
+                print(f"[mecze:debug]   {_date_key(m)[:10]} | {_team(m,'home')} {m.get('home_score')}"
+                      f":{m.get('away_score')} {_team(m,'away')} | status={m.get('match_status')}",
+                      file=sys.stderr)
+        if dup:
+            print(f"[mecze] UWAGA: sezon {sid} ma mecze Rakowa w tej samej dacie — "
+                  f"feed wygląda na wstępny/błędny; wolę sezon czysty.", file=sys.stderr)
  
-    if not rk:
+    if not per_season:
         print("[mecze] Brak rozegranych meczów Rakowa w pobranych sezonach.", file=sys.stderr)
         return {"available": False, "reason": "no_rakow_matches"}
+ 
+    # Preferuj sezony czyste (bez sygnału wstępności). Brudne tylko w ostateczności.
+    clean = [s for s in per_season if not s["provisional"]]
+    chosen = clean if clean else per_season
+    provisional_used = not clean
+    rk = [m for s in chosen for m in s["matches"]]
+    seasons_hit = [{"season_id": s["sid"], "matches": s["n"], "provisional": s["provisional"]} for s in chosen]
  
     rk.sort(key=_date_key)
  
@@ -703,6 +750,10 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
         print(f"[mecze] Sezony użyte (najnowsze pierwsze): "
               f"{[s['season_id'] for s in seasons_hit]}; najświeższy mecz {newest_date}.",
               file=sys.stderr)
+    if provisional_used:
+        print("[mecze] UWAGA: nie znaleziono czystego sezonu — dane oznaczone jako WSTĘPNE. "
+              "Walidacja na froncie zostanie wstrzymana. Rozważ RECENT_SEASON_ID=<id> "
+              "(RECENT_DEBUG=1 wypisze listę sezonów).", file=sys.stderr)
  
     return {
         "available": have_stats and bool(matches_out),
@@ -719,6 +770,8 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
         "newest_date": newest_date,
         "stale": stale,
         "days_since": days_since,
+        # Feed wstępny/błędny (nie znaleziono czystego sezonu) — front ostrzega mocno.
+        "provisional": provisional_used,
         "note": ("Mecz waliduje POZIOM (RC) i ujawnia preferencję trenera (minuty). "
                  "Koherencji nie waliduje wprost — to podobieństwo stylu między "
                  "zawodnikami, nie wielkość meczowa."),
@@ -1803,3 +1856,6 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
+ 
+ 
