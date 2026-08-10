@@ -1,200 +1,134 @@
 #!/usr/bin/env python3
-# =====================================================================
-# physical.py — dołączanie danych SkillCornera (FIZYKA + GAME INTELLIGENCE)
-# do wierszy zawodników StatsBomb (join po nazwisku, w obrębie ligi).
-#
-# Dane SkillCorner zasilają WYŁĄCZNIE profil KOHERENCJI (styl gry) — patrz
-# PHYS_STYLE_METRICS / GI_STYLE_METRICS w coherence.py. NIE wchodzą do RC
-# (poziomu): walidacja na ocenach trenerów pokazała, że to pogarsza zgodność.
-#
-# Źródła (kolumna 'league' = etykieta ligi jak w LEAGUE_CONFIG / data.json):
-#   scripts/skillcorner_physical_all.csv               — fizyka
-#   scripts/skillcorner_gi_off_ball_runs_all.csv       — GI: biegi bez piłki
-#   scripts/skillcorner_gi_passes_all.csv              — GI: podania
-#   scripts/skillcorner_gi_passing_options_all.csv     — GI: opcje podań
-#   scripts/skillcorner_gi_possessions_all.csv         — GI: posiadanie
-#   scripts/skillcorner_gi_on_ball_engagements_all.csv — GI: angażowanie
-# Brak dowolnego pliku = pipeline działa dalej bez tej części danych.
-# =====================================================================
+"""
+SONDA API Scoutastic v4 — rozstrzyga, czy ROZEGRANE mecze Rakowa mają wypełniony
+skład z minutami (to decyduje, czy adapter meczowy z Scoutastic ma sens).
  
-import re
+Wiemy: Ekstraklasa = competitionId=PL1; filtr działa jako ?competitionId=PL1&season=2026
+(306 meczów = pełny terminarz 2026/27). Mecze Rakowa (ext=9644) w próbce miały pusty
+homeTeamPlayers — ale to głównie przyszłe spotkania. Ta sonda:
+  1. Przechodzi WSZYSTKIE strony sezonu 2026, zbiera mecze Rakowa, dzieli na
+     rozegrane vs terminarz, i pokazuje ile mają zawodników/eventów.
+  2. Dla rozegranego meczu próbuje SZCZEGÓŁU /matches/{internalId} (lista bywa skrócona).
+  3. Dumpuje kształt wpisu zawodnika (minuty/gole) i eventu.
+  4. Dumpuje /teams/9644 (może mieć skład / referencje).
+ 
+Uruchom przez workflow. Nic nie zapisuje, nie loguje tokenu.
+"""
+import json
+import os
 import sys
-import unicodedata
-from pathlib import Path
-from collections import defaultdict
+import urllib.parse
  
-HERE = Path(__file__).resolve().parent
-PHYS_CSV = HERE / "skillcorner_physical_all.csv"
+import scoutastic as sc
  
-# --- FIZYKA: metryki stylu ruchu (per mecz) ---
-PHYS_COLUMNS = [
-    "total_metersperminute_full_all",
-    "hsr_distance_full_all",
-    "sprint_count_full_all",
-    "hi_count_full_all",
-    "psv99",
-    "highaccel_count_full_all",
-    "cod_count_full_all",
-]
- 
-# --- GAME INTELLIGENCE: wyselekcjonowane metryki stylu (per mecz) ---
-# Po ~4 z każdej rodziny — najbardziej „stylotwórcze", bez rozmywania sygnału.
-GI_FILES = {
-    "off_ball_runs":       "skillcorner_gi_off_ball_runs_all.csv",
-    "passes":              "skillcorner_gi_passes_all.csv",
-    "passing_options":     "skillcorner_gi_passing_options_all.csv",
-    "possessions":         "skillcorner_gi_possessions_all.csv",
-    "on_ball_engagements": "skillcorner_gi_on_ball_engagements_all.csv",
-}
-GI_COLUMNS = [
-    # biegi bez piłki (jak dużo/gdzie biega bez piłki)
-    "offballrun_count", "offballrun_count_dangerous",
-    "offballrun_count_penaltyarea", "offballrun_count_abovehsr",
-    # podania (zasięg, przecinanie linii)
-    "pass_count_completed", "pass_avgdistance",
-    "pass_count_longrange_attempted", "pass_count_linebreak_completed",
-    # oferowanie się do podania
-    "optionoffered_count", "optionoffered_count_inspace",
-    "optionoffered_count_penaltyarea", "optionoffered_count_dangerous",
-    # posiadanie / prowadzenie / odporność na pressing
-    "possession_count", "longcarry_count_forwardtrajectory",
-    "possession_count_forwardmomentum", "possession_count_escapedpressure",
-    # angażowanie / pressing / odbiory
-    "onballengagement_count", "onballengagement_count_directregain",
-    "onballengagement_count_pressingchain", "onballengagement_count_forwardtrajectory",
-]
- 
-# wszystkie kolumny SkillCornera wstrzykiwane do wiersza zawodnika
-ALL_COLUMNS = PHYS_COLUMNS + GI_COLUMNS
+MAXLEN = 1500
+COMP = os.getenv("PROBE_COMP", "PL1")
+SEASON = os.getenv("PROBE_SEASON", "2026")
+EXT = "9644"  # Raków Częstochowa (externalId), potwierdzony wcześniej
  
  
-def _norm(s):
-    if not isinstance(s, str):
-        return ""
-    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
-    s = re.sub(r"[^a-z ]", " ", s.lower())
-    return re.sub(r"\s+", " ", s).strip()
- 
- 
-def _toks(s):
-    return [t for t in _norm(s).split() if len(t) > 1]
- 
- 
-def _row_name(row):
-    for k in ("player_name", "player_known_name", "player_common_name"):
-        v = row.get(k)
-        if isinstance(v, str) and v.strip():
-            return v
-    return ""
- 
- 
-# --- Wczytanie i scalenie źródeł SkillCornera w jedną szeroką tabelę ---
-_WIDE = None
-_LOADED = False
- 
- 
-def _load_wide():
-    """Scala fizykę + 5 rodzin GI po (league, player_id). Zwraca DataFrame albo None."""
-    global _WIDE, _LOADED
-    if _LOADED:
-        return _WIDE
-    _LOADED = True
+def _short(obj):
     try:
-        import pandas as pd
-    except ImportError:
-        print("[skillcorner] Brak pandas — pomijam dane SkillCorner.", file=sys.stderr)
-        _WIDE = None
-        return None
- 
-    frames = []
- 
-    def _take(path, cols):
-        if not path.exists():
-            print(f"[skillcorner] Brak {path.name} — pomijam.", file=sys.stderr)
-            return None
-        df = pd.read_csv(path)
-        keys = [c for c in ("league", "player_id", "player_name", "player_short_name")
-                if c in df.columns]
-        use = keys + [c for c in cols if c in df.columns]
-        return df[use].copy()
- 
-    base = _take(PHYS_CSV, PHYS_COLUMNS)
-    if base is not None:
-        frames.append(base)
-    for fname in GI_FILES.values():
-        g = _take(HERE / fname, GI_COLUMNS)
-        if g is not None:
-            frames.append(g)
- 
-    if not frames:
-        _WIDE = None
-        return None
- 
-    def _merge(a, b):
-        m = a.merge(b, on=["league", "player_id"], how="outer", suffixes=("", "_r"))
-        for col in ("player_name", "player_short_name"):
-            r = col + "_r"
-            if r in m.columns:
-                m[col] = m[col].fillna(m[r])
-                m.drop(columns=[r], inplace=True)
-        return m
- 
-    from functools import reduce
-    wide = reduce(_merge, frames)
-    _WIDE = wide
-    return wide
+        s = json.dumps(obj, ensure_ascii=False)
+    except Exception:  # noqa: BLE001
+        s = str(obj)
+    return s[:MAXLEN] + (" …[ucięto]" if len(s) > MAXLEN else "")
  
  
-_INDEX_CACHE = {}
+def _get(c, path, params=None):
+    try:
+        return c._request("GET", path, params=params), None
+    except sc.ApiError as e:
+        return None, f"HTTP {e.code}"
+    except Exception as e:  # noqa: BLE001
+        return None, str(e)
  
  
-def _index_for_league(league_label):
-    if league_label in _INDEX_CACHE:
-        return _INDEX_CACHE[league_label]
-    wide = _load_wide()
-    idx = defaultdict(list)
-    if wide is not None and "league" in wide.columns:
-        import pandas as pd  # noqa
-        sub = wide[wide["league"] == league_label]
-        present = [c for c in ALL_COLUMNS if c in sub.columns]
-        for _, r in sub.iterrows():
-            feats = {}
-            for c in present:
-                v = r[c]
-                feats[c] = None if pd.isna(v) else float(v)
-            for nm in (r.get("player_name"), r.get("player_short_name")):
-                t = _toks(nm)
-                if t:
-                    idx[t[-1]].append((set(t), feats))
-    _INDEX_CACHE[league_label] = idx
-    return idx
+def _played(m):
+    """Rozegrany = ma liczbowy wynik (scoreHome/Away nie '-')."""
+    sh, sa = str(m.get("scoreHome")), str(m.get("scoreAway"))
+    return sh.isdigit() and sa.isdigit()
  
  
-def _match(name, idx):
-    ts = set(_toks(name))
-    if not ts:
-        return None
-    lk = _toks(name)[-1]
-    for cand, feats in idx.get(lk, []):
-        if lk in cand and (
-            cand <= ts or ts <= cand or len(cand & ts) >= 2
-            or any(len(a) == 1 and a in {x[0] for x in ts} for a in cand)
-        ):
-            return feats
-    return None
+def main():
+    if not os.getenv("SCOUTASTIC_TOKEN"):
+        print("[sonda] Brak SCOUTASTIC_TOKEN.", file=sys.stderr)
+        sys.exit(1)
+    c = sc.Client(os.getenv("SCOUTASTIC_TOKEN"))
+ 
+    # --- 1) Zbierz wszystkie mecze Rakowa z sezonu (paginacja) ---
+    rk = []
+    for page in range(1, 6):
+        res, err = _get(c, "/matches", {"competitionId": COMP, "season": SEASON,
+                                        "limit": 100, "page": page})
+        if err:
+            print(f"[sonda] strona {page}: {err}")
+            break
+        docs = res.get("docs") if isinstance(res, dict) else None
+        if not docs:
+            break
+        for m in docs:
+            if EXT in (str(m.get("homeTeamId")), str(m.get("awayTeamId"))):
+                rk.append(m)
+        if not (isinstance(res, dict) and res.get("hasNextPage")):
+            break
+ 
+    print(f"[sonda] Mecze Rakowa w {COMP}/{SEASON}: {len(rk)}")
+    played = [m for m in rk if _played(m)]
+    print(f"[sonda] rozegrane (liczbowy wynik): {len(played)} / terminarz: {len(rk) - len(played)}")
+    for m in sorted(rk, key=lambda x: str(x.get("date")))[:12]:
+        nh = len(m.get("homeTeamPlayers") or [])
+        na = len(m.get("awayTeamPlayers") or [])
+        ne = len(m.get("events") or [])
+        print(f"[sonda]   {str(m.get('date'))[:10]} {m.get('homeTeamName')} "
+              f"{m.get('scoreHome')}:{m.get('scoreAway')} {m.get('awayTeamName')} "
+              f"| status={m.get('status')} | players {nh}/{na} events {ne}")
+ 
+    # --- 2) Rozegrany mecz: skład z listy albo ze SZCZEGÓŁU /matches/{internalId} ---
+    target = None
+    for m in sorted(played, key=lambda x: str(x.get("date")), reverse=True):
+        target = m
+        break
+    if target:
+        iid = target.get("internalId") or target.get("transfermarktId")
+        print(f"\n[sonda] Rozegrany mecz: {str(target.get('date'))[:10]} "
+              f"{target.get('homeTeamName')} {target.get('scoreHome')}:{target.get('scoreAway')} "
+              f"{target.get('awayTeamName')} (internalId={iid})")
+        src = target
+        if not (target.get("homeTeamPlayers") or target.get("awayTeamPlayers")):
+            print("[sonda]   lista ma pusty skład — próbuję szczegółu…")
+            for path in (f"/matches/{urllib.parse.quote(str(iid))}",
+                         f"/matches/{urllib.parse.quote(str(target.get('transfermarktId')))}"):
+                det, err = _get(c, path)
+                if isinstance(det, dict):
+                    print(f"[sonda]   {path} -> klucze: {sorted(det.keys())[:30]}")
+                    if det.get("homeTeamPlayers") or det.get("awayTeamPlayers"):
+                        src = det
+                        break
+                else:
+                    print(f"[sonda]   {path} -> {err}")
+        side = src.get("homeTeamPlayers") or src.get("awayTeamPlayers") or []
+        print(f"[sonda]   skład: home={len(src.get('homeTeamPlayers') or [])} "
+              f"away={len(src.get('awayTeamPlayers') or [])}")
+        if side:
+            print(f"[sonda]   player[0]: {_short(side[0])}")
+        ev = src.get("events") or []
+        print(f"[sonda]   events: {len(ev)}; events[0]: {_short(ev[0]) if ev else '(brak)'}")
+    else:
+        print("\n[sonda] Brak rozegranego meczu Rakowa w tym sezonie (za wcześnie?).")
+ 
+    # --- 3) /teams/9644 — co zawiera ---
+    det, err = _get(c, f"/teams/{EXT}")
+    if isinstance(det, dict):
+        print(f"\n[sonda] /teams/{EXT} klucze: {sorted(det.keys())}")
+        for k in ("squad", "players", "matches", "currentSeason", "seasons"):
+            if k in det:
+                v = det[k]
+                print(f"[sonda]   • '{k}': {('lista['+str(len(v))+']') if isinstance(v, list) else type(v).__name__}")
+ 
+    print("\n[sonda] Gotowe. Wklej mi wszystkie linie [sonda].")
  
  
-def enrich_rows(rows, league_label):
-    """Dokłada pola SkillCornera (fizyka + GI) do wierszy danej ligi. In-place.
-    Zwraca (dopasowane, wszystkie)."""
-    idx = _index_for_league(league_label)
-    if not idx:
-        return (0, len(rows))
-    matched = 0
-    for row in rows:
-        feats = _match(_row_name(row), idx)
-        if feats is not None:
-            row.update({k: v for k, v in feats.items() if v is not None})
-            matched += 1
-    return (matched, len(rows))
+if __name__ == "__main__":
+    main()
  
