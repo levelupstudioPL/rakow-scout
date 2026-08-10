@@ -460,16 +460,168 @@ def _first_col(row, candidates):
     return None
  
  
-def _fetch_recent_matches(sb, creds, squad, n_matches=5):
-    """Ostatnie N meczów Rakowa w Ekstraklasie + per-zawodnik statystyki meczowe.
-    Zwraca obiekt do data.json['recent'] albo {'available': False, ...} przy braku
-    danych/błędzie. NIGDY nie rzuca — wszystko w try/except, bo endpointów meczowych
-    nie da się zweryfikować lokalnie, a run danych nie może się od tego wywalić.
+def _rakow_scoutastic_season():
+    """Sezon Ekstraklasy w konwencji Scoutastic/TM (rok STARTU). Ekstraklasa startuje
+    ~lipiec, więc miesiąc >= 7 → rok bieżący, inaczej rok poprzedni. Override: env."""
+    forced = os.getenv("RECENT_SCOUTASTIC_SEASON")
+    if forced:
+        return forced
+    try:
+        import datetime as _d
+        t = _d.date.today()
+        return str(t.year if t.month >= 7 else t.year - 1)
+    except Exception:  # noqa: BLE001
+        return "2026"
  
-    Wyłączalne: RECENT_MATCHES=0. Liczba meczów: RECENT_MATCHES_N (domyślnie 5)."""
+ 
+def _fetch_recent_scoutastic(squad, n_matches=5):
+    """Ostatnie N meczów Rakowa ze SCOUTASTIC (Transfermarkt) — źródło niezależne od
+    dziurawego feedu meczowego StatsBomb. Mecz w /matches ma pełny skład
+    (homeTeamPlayers/awayTeamPlayers: minutesPlayed, goals, assists, inLineup) i wynik.
+    Zwraca obiekt data.json['recent'] w TYM SAMYM kształcie co ścieżka StatsBomb, żeby
+    front był bez zmian. minutesPlayed = główny sygnał; xG/xA/tackles: brak (Scoutastic
+    ich nie ma) → output pozostaje sygnałem miękkim. NIGDY nie rzuca."""
+    token = os.getenv("SCOUTASTIC_TOKEN")
+    if not token:
+        return {"available": False, "reason": "no_scoutastic_token"}
+    try:
+        import scoutastic as sco
+    except Exception as e:  # noqa: BLE001
+        return {"available": False, "reason": f"no_module: {e}"}
+ 
+    comp = os.getenv("RECENT_SCOUTASTIC_COMP", "PL1")           # Ekstraklasa (potw. sondą)
+    season = _rakow_scoutastic_season()                         # np. "2026" = 2026/27
+    team_ext = str(os.getenv("RAKOW_SCOUTASTIC_TEAM", "9644"))  # Raków (externalId, potw.)
+    try:
+        client = sco.Client(token)
+        matches = client.league_matches(comp, season)
+    except Exception as e:  # noqa: BLE001
+        print(f"[mecze] Scoutastic /matches błąd: {e}", file=sys.stderr)
+        return {"available": False, "reason": f"scoutastic: {e}"}
+ 
+    def _sco_played(m):
+        sh, sa = str(m.get("scoreHome")), str(m.get("scoreAway"))
+        return sh.lstrip("-").isdigit() and sa.lstrip("-").isdigit() and sh != "-" and sa != "-"
+ 
+    def _dk(m):
+        return str(m.get("date") or "")
+ 
+    rk = [m for m in matches
+          if team_ext in (str(m.get("homeTeamId")), str(m.get("awayTeamId"))) and _sco_played(m)]
+    if not rk:
+        print(f"[mecze] Scoutastic: brak rozegranych meczów Rakowa w {comp}/{season}.", file=sys.stderr)
+        return {"available": False, "reason": "no_played_matches"}
+    rk.sort(key=_dk)
+    recent = rk[-n_matches:]
+ 
+    squad_by_norm = {_norm_ascii(s.get("name", "")): s for s in squad}
+    matches_out, players_agg = [], {}
+    team_gf = team_ga = team_pts = 0
+    form = []
+    for m in recent:
+        rk_home = str(m.get("homeTeamId")) == team_ext
+        opp = m.get("awayTeamName") if rk_home else m.get("homeTeamName")
+        try:
+            gf = int(m.get("scoreHome")) if rk_home else int(m.get("scoreAway"))
+            ga = int(m.get("scoreAway")) if rk_home else int(m.get("scoreHome"))
+            res = "W" if gf > ga else ("D" if gf == ga else "L")
+            team_gf += gf; team_ga += ga
+            team_pts += 3 if res == "W" else (1 if res == "D" else 0)
+            form.append(res)
+        except Exception:  # noqa: BLE001
+            gf = ga = None; res = None
+        matches_out.append({
+            "match_id": m.get("internalId") or m.get("transfermarktId"),
+            "date": _dk(m)[:10], "opponent": opp, "home": rk_home,
+            "gf": gf, "ga": ga, "result": res, "week": m.get("matchday"),
+        })
+        side = (m.get("homeTeamPlayers") if rk_home else m.get("awayTeamPlayers")) or []
+        for p in side:
+            nm = f"{p.get('firstName','')} {p.get('lastName','')}".strip()
+            if not _is_valid_name(nm):
+                continue
+            key = _norm_ascii(nm)
+            agg = players_agg.setdefault(key, {
+                "name": nm, "minutes": 0.0, "matches_played": 0, "starts": 0,
+                "goals": 0.0, "assists": 0.0})
+            mins = p.get("minutesPlayed")
+            mins = float(mins) if isinstance(mins, (int, float)) else 0.0
+            if mins > 0:
+                agg["matches_played"] += 1
+                agg["minutes"] += mins
+                if p.get("inLineup") or mins >= 60:
+                    agg["starts"] += 1
+            for k in ("goals", "assists"):
+                v = p.get(k)
+                if isinstance(v, (int, float)):
+                    agg[k] += float(v)
+ 
+    minutes_available = float(len(matches_out) * 90) or 90.0
+    players_out = []
+    for key, a in players_agg.items():
+        s = squad_by_norm.get(key)
+        players_out.append({
+            "name": a["name"], "id": s.get("id") if s else None,
+            "pos": s.get("pos") if s else None, "line": s.get("line") if s else None,
+            "rc": s.get("rc") if s else None,
+            "rc_estimated": s.get("rc_estimated") if s else None,
+            "in_squad": s is not None,
+            "minutes": round(a["minutes"], 1), "matches_played": a["matches_played"],
+            "starts": a["starts"],
+            "share": round(a["minutes"] / minutes_available, 3),
+            "stats": {"goals": a["goals"], "assists": a["assists"]},
+        })
+    players_out.sort(key=lambda p: p["minutes"], reverse=True)
+ 
+    newest = matches_out[-1]["date"] if matches_out else ""
+    stale = False
+    days_since = None
+    try:
+        import datetime as _d
+        days_since = (_d.date.today() - _d.date.fromisoformat(newest)).days
+        stale = days_since is not None and days_since > int(os.getenv("RECENT_STALE_DAYS", "45"))
+    except Exception:  # noqa: BLE001
+        pass
+ 
+    n_joined = sum(1 for p in players_out if p["in_squad"])
+    print(f"[mecze] Scoutastic: {len(matches_out)} rozegranych meczów Rakowa "
+          f"({comp}/{season}), forma {''.join(form) or '—'}, bilans {team_gf}:{team_ga}, "
+          f"{team_pts} pkt. Zawodników: {len(players_out)} (w składzie: {n_joined}).",
+          file=sys.stderr)
+    return {
+        "available": bool(players_out) and bool(matches_out),
+        "source": "scoutastic",
+        "generated": __import__("datetime").date.today().isoformat(),
+        "n_matches": len(matches_out), "matches": matches_out, "players": players_out,
+        "team": {"gf": team_gf, "ga": team_ga, "points": team_pts,
+                 "form": "".join(form), "minutes_available": minutes_available},
+        "seasons_used": [{"season_id": season, "matches": len(matches_out), "provisional": False}],
+        "newest_date": newest, "stale": stale, "days_since": days_since, "provisional": False,
+        "note": ("Źródło: Scoutastic/Transfermarkt (minuty/gole/asysty). Mecz waliduje "
+                 "minuty (preferencja trenera) i wynik; output miękko (bez xG/xA)."),
+    }
+ 
+ 
+def _fetch_recent_matches(sb, creds, squad, n_matches=5):
+    """Dyspozytor źródła meczowego walidatora. RECENT_SOURCE: 'scoutastic' (domyślnie —
+    Transfermarkt, realne wyniki bieżącego sezonu) albo 'statsbomb' (stary feed, bywa
+    dziurawy). Wyłączalne: RECENT_MATCHES=0."""
     if os.getenv("RECENT_MATCHES", "1") in ("0", "false", "False"):
         print("[mecze] Ostatnie mecze: WYŁĄCZONE (RECENT_MATCHES=0).", file=sys.stderr)
         return {"available": False, "reason": "disabled"}
+    source = os.getenv("RECENT_SOURCE", "scoutastic").lower()
+    if source == "scoutastic":
+        out = _fetch_recent_scoutastic(squad, n_matches=n_matches)
+        if out.get("available"):
+            return out
+        print(f"[mecze] Scoutastic niedostępne ({out.get('reason')}) — "
+              f"fallback do StatsBomb.", file=sys.stderr)
+    return _fetch_recent_statsbomb(sb, creds, squad, n_matches=n_matches)
+ 
+ 
+def _fetch_recent_statsbomb(sb, creds, squad, n_matches=5):
+    """Ostatnie N meczów Rakowa ze STATSBOMB (feed bywa dziurawy — patrz strażnik
+    wstępności). Zachowane jako fallback. Liczba meczów: RECENT_MATCHES_N."""
     try:
         n_matches = int(os.getenv("RECENT_MATCHES_N", str(n_matches)))
     except ValueError:
