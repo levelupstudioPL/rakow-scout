@@ -521,6 +521,7 @@ export function computeRecentValidation(data, opts = {}) {
   const points = num(team.points), ppg = nM ? +(points / nM).toFixed(2) : 0;
   return {
     available: true,
+    source: rec.source || "statsbomb",
     generated: rec.generated || (data.meta && data.meta.generated) || "",
     nMatches: nM,
     matches: Array.isArray(rec.matches) ? rec.matches : [],
@@ -536,6 +537,4 @@ export function computeRecentValidation(data, opts = {}) {
     note: rec.note || "",
   };
 }
- 
- 
  
