@@ -148,6 +148,29 @@ class Client:
             print(f"[scoutastic] get_player {external_id}: błąd ({e})", file=sys.stderr)
             return None
  
+    def league_matches(self, competition_id, season, limit=100, max_pages=8):
+        """GET /matches?competitionId=&season= (stronicowane) -> lista meczów ligi.
+        Każdy mecz zawiera homeTeamPlayers/awayTeamPlayers (skład z minutesPlayed,
+        goals, assists, inLineup) i events. Zwraca listę dokumentów (może być pusta).
+        Potwierdzone sondą: Ekstraklasa = competitionId 'PL1', sezon = rok startu
+        (np. '2026' = 2026/27); filtr działa TYLKO dla pary competitionId+season."""
+        out = []
+        for page in range(1, max_pages + 1):
+            try:
+                res = self._request("GET", "/matches", params={
+                    "competitionId": competition_id, "season": season,
+                    "limit": limit, "page": page})
+            except Exception as e:  # noqa: BLE001
+                print(f"[scoutastic] matches str.{page}: błąd ({e})", file=sys.stderr)
+                break
+            docs = res.get("docs") if isinstance(res, dict) else (res if isinstance(res, list) else None)
+            if not docs:
+                break
+            out.extend(docs)
+            if not (isinstance(res, dict) and res.get("hasNextPage")):
+                break
+        return out
+ 
  
 def dob_to_unix(date_str):
     """'YYYY-MM-DD' -> Unix (sekundy, UTC). Zwraca None gdy nie da się sparsować."""
