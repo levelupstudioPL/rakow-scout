@@ -2556,7 +2556,7 @@ function RecentView({ data, setSel, setView }) {
         })}
       </div>
 
-      <Note>Walidator opiera się na tym, co odporne: <b>minuty</b> (ujawniona preferencja trenera) i <b>realny output per 90</b> (miękko, bo próba {V.nMatches} meczów jest mała — traktujemy jako sygnał, nie wyrok). <b>Koherencji ten ekran nie waliduje wprost</b> — koherencja to podobieństwo stylu między zawodnikami, nie wielkość meczowa; walidujemy ją pośrednio przez to, że XI realnie wystawiane przez trenera to zestaw opisywany przez ekran „Zależności formacji". Output ofensywny komentujemy dopiero od ~180 minut.</Note>
+      <Note>Źródło danych meczowych: <b>{V.source === "scoutastic" ? "Scoutastic / Transfermarkt" : "StatsBomb"}</b>{V.source === "scoutastic" ? " (minuty, gole, asysty — bez xG/xA)" : ""}; RC i koherencja liczone ze StatsBomb. Walidator opiera się na tym, co odporne: <b>minuty</b> (ujawniona preferencja trenera) i <b>realny output</b> (miękko, bo próba {V.nMatches} meczów jest mała — traktujemy jako sygnał, nie wyrok). <b>Koherencji ten ekran nie waliduje wprost</b> — koherencja to podobieństwo stylu między zawodnikami, nie wielkość meczowa; walidujemy ją pośrednio przez to, że XI realnie wystawiane przez trenera to zestaw opisywany przez ekran „Zależności formacji". Output ofensywny komentujemy dopiero od ~180 minut.</Note>
     </div>
   );
 }
