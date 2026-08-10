@@ -534,6 +534,9 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
             "match_id": m.get("internalId") or m.get("transfermarktId"),
             "date": _dk(m)[:10], "opponent": opp, "home": rk_home,
             "gf": gf, "ga": ga, "result": res, "week": m.get("matchday"),
+            # id klubów (Transfermarkt) do herbów na froncie; przeciwnik + Raków.
+            "opp_id": str(m.get("awayTeamId") if rk_home else m.get("homeTeamId") or ""),
+            "rk_id": team_ext,
         })
         side = (m.get("homeTeamPlayers") if rk_home else m.get("awayTeamPlayers")) or []
         for p in side:
@@ -2017,6 +2020,5 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
  
  
