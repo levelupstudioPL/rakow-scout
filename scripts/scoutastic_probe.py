@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-SONDA API Scoutastic v3 — ustalenie FILTRA /matches, competitionId Ekstraklasy
-oraz kształtu składu w ROZEGRANYM meczu (homeTeamPlayers/events).
+SONDA API Scoutastic v4 — rozstrzyga, czy ROZEGRANE mecze Rakowa mają wypełniony
+skład z minutami (to decyduje, czy adapter meczowy z Scoutastic ma sens).
  
-Ustalone wcześniej: mecz w /matches ma pola homeTeamId/awayTeamId (external),
-competitionId, season, status, score(Home/Away), homeTeamPlayers/awayTeamPlayers,
-events. Raków: externalId=9644. Brakuje: działającego parametru filtrującego
-/matches (team/teamId/club/clubId NIE zawężały), competitionId Ekstraklasy oraz
-kształtu wpisu zawodnika w składzie (minuty? gole?).
+Wiemy: Ekstraklasa = competitionId=PL1; filtr działa jako ?competitionId=PL1&season=2026
+(306 meczów = pełny terminarz 2026/27). Mecze Rakowa (ext=9644) w próbce miały pusty
+homeTeamPlayers — ale to głównie przyszłe spotkania. Ta sonda:
+  1. Przechodzi WSZYSTKIE strony sezonu 2026, zbiera mecze Rakowa, dzieli na
+     rozegrane vs terminarz, i pokazuje ile mają zawodników/eventów.
+  2. Dla rozegranego meczu próbuje SZCZEGÓŁU /matches/{internalId} (lista bywa skrócona).
+  3. Dumpuje kształt wpisu zawodnika (minuty/gole) i eventu.
+  4. Dumpuje /teams/9644 (może mieć skład / referencje).
  
-Uruchom przez workflow „Scoutastic — sonda danych meczowych".
-Bezpieczne: nic nie zapisuje, nie loguje tokenu.
+Uruchom przez workflow. Nic nie zapisuje, nie loguje tokenu.
 """
 import json
 import os
@@ -19,7 +21,10 @@ import urllib.parse
  
 import scoutastic as sc
  
-MAXLEN = 1400
+MAXLEN = 1500
+COMP = os.getenv("PROBE_COMP", "PL1")
+SEASON = os.getenv("PROBE_SEASON", "2026")
+EXT = "9644"  # Raków Częstochowa (externalId), potwierdzony wcześniej
  
  
 def _short(obj):
@@ -28,14 +33,6 @@ def _short(obj):
     except Exception:  # noqa: BLE001
         s = str(obj)
     return s[:MAXLEN] + (" …[ucięto]" if len(s) > MAXLEN else "")
- 
- 
-def _docs(res):
-    if isinstance(res, dict) and isinstance(res.get("docs"), list):
-        return res["docs"], res.get("totalDocs")
-    if isinstance(res, list):
-        return res, len(res)
-    return [], None
  
  
 def _get(c, path, params=None):
@@ -47,29 +44,10 @@ def _get(c, path, params=None):
         return None, str(e)
  
  
-def _rakow_team(c):
-    """Zwraca (externalId, internalId) Rakowa z pierwszego znalezionego zawodnika."""
-    try:
-        here = os.path.dirname(os.path.abspath(__file__))
-        names = [p.get("name") for p in json.load(
-            open(os.path.join(here, "..", "public", "squad.json"), encoding="utf-8")) if p.get("name")]
-    except Exception:  # noqa: BLE001
-        names = ["Kacper Trelowski", "Stratos Svarnas"]
-    for name in names:
-        try:
-            res = c.search_player(name)
-        except Exception:  # noqa: BLE001
-            continue
-        if res and (res[0].get("playerId") or res[0].get("id")):
-            ext = res[0].get("playerId") or res[0].get("id")
-            pl = c.get_player(ext)
-            teams = (pl or {}).get("teams") or []
-            for t in teams:
-                if "rakow" in (t.get("name", "").lower().replace("ó", "o")):
-                    return t.get("externalId"), t.get("internalId"), name
-            if teams:
-                return teams[0].get("externalId"), teams[0].get("internalId"), name
-    return None, None, None
+def _played(m):
+    """Rozegrany = ma liczbowy wynik (scoreHome/Away nie '-')."""
+    sh, sa = str(m.get("scoreHome")), str(m.get("scoreAway"))
+    return sh.isdigit() and sa.isdigit()
  
  
 def main():
@@ -78,98 +56,78 @@ def main():
         sys.exit(1)
     c = sc.Client(os.getenv("SCOUTASTIC_TOKEN"))
  
-    ext, internal, via = _rakow_team(c)
-    print(f"[sonda] Raków team: externalId={ext}, internalId={internal} (przez {via})")
- 
-    # --- A) Ekstraklasa: competitionId (TM code Ekstraklasy to zwykle 'PL1') ---
-    print("\n[sonda] Szukam Ekstraklasy w /competitions:")
-    comp_id = None
-    for params in ({"transfermarktId": "PL1"}, {"area": "Poland"}, {"name": "Ekstraklasa"},
-                   {"search": "Ekstraklasa"}, {"query": "Ekstraklasa"}):
-        res, err = _get(c, "/competitions", {**params, "limit": 10})
-        docs, total = _docs(res)
-        hit = None
-        for d in (docs or []):
-            nm = (d.get("name") or "").lower()
-            if "ekstraklasa" in nm or (d.get("area") == "Poland" and d.get("level") == 1):
-                hit = d
-                break
-        tag = f"-> total={total}" + (f", TRAFIENIE: id={hit.get('transfermarktId')} name={hit.get('name')} "
-                                     f"seasons={hit.get('availableSeasons')}" if hit else "")
-        print(f"[sonda]   /competitions?{urllib.parse.urlencode(params)} {tag}")
-        if hit and not comp_id:
-            comp_id = hit.get("transfermarktId") or hit.get("id") or hit.get("internalId")
-    if not comp_id:
-        comp_id = "PL1"
-        print(f"[sonda]   (nie potwierdzono — próbuję domyślnie competitionId={comp_id})")
- 
-    # --- B) Który parametr FILTRUJE /matches? (szukam totalDocs << 135416) ---
-    print(f"\n[sonda] Test filtrów /matches (Raków ext={ext}, comp={comp_id}):")
-    trials = [
-        {"competitionId": comp_id},
-        {"competition": comp_id},
-        {"competitionId": comp_id, "season": "2026"},
-        {"competitionId": comp_id, "season": "2025"},
-        {"homeTeamId": ext}, {"awayTeamId": ext},
-        {"homeTeamId": ext, "season": "2025"},
-        {"teamId": internal}, {"homeTeamInternalId": internal},
-        {"teamExternalId": ext}, {"teams": ext},
-    ]
-    working = None
-    for params in trials:
-        res, err = _get(c, "/matches", {**params, "limit": 3})
-        docs, total = _docs(res)
-        flag = ""
-        if isinstance(total, int) and total < 135416:
-            flag = "  <<< ZAWĘŻA"
-            if working is None and docs:
-                working = (params, docs)
-        print(f"[sonda]   /matches?{urllib.parse.urlencode(params)} -> total={total}"
-              f"{'  '+err if err else ''}{flag}")
- 
-    # --- C) Kształt ROZEGRANEGO meczu: skład (minuty/gole) + events ---
-    # Bierzemy zakończony sezon Ekstraklasy (pewne, że są pełne składy) i skanujemy
-    # po mecz Rakowa z niepustym homeTeamPlayers/awayTeamPlayers.
-    print("\n[sonda] Szukam rozegranego meczu Rakowa ze składem (competitionId + sezon):")
-    found = False
-    for season in ("2025", "2024", "2026"):
-        for params in ({"competitionId": comp_id, "season": season},
-                       {"competition": comp_id, "season": season}):
-            res, err = _get(c, "/matches", {**params, "limit": 100})
-            docs, total = _docs(res)
-            if not docs:
-                continue
-            rk = [m for m in docs if ext in (str(m.get("homeTeamId")), str(m.get("awayTeamId")))]
-            print(f"[sonda]   {urllib.parse.urlencode(params)} -> total={total}, w próbce meczów Rakowa={len(rk)}")
-            for m in rk:
-                players = (m.get("homeTeamPlayers") or []) + (m.get("awayTeamPlayers") or [])
-                if players:
-                    print(f"[sonda]   MECZ {m.get('date')} | {m.get('homeTeamName')} "
-                          f"{m.get('score')} {m.get('awayTeamName')} | status={m.get('status')}")
-                    print(f"[sonda]   pola meczu: {sorted(m.keys())}")
-                    side = m.get("homeTeamPlayers") or m.get("awayTeamPlayers")
-                    print(f"[sonda]   player[0]: {_short(side[0])}")
-                    ev = m.get("events") or []
-                    print(f"[sonda]   events[0]: {_short(ev[0]) if ev else '(brak events)'}")
-                    found = True
-                    break
-            if found:
-                break
-        if found:
+    # --- 1) Zbierz wszystkie mecze Rakowa z sezonu (paginacja) ---
+    rk = []
+    for page in range(1, 6):
+        res, err = _get(c, "/matches", {"competitionId": COMP, "season": SEASON,
+                                        "limit": 100, "page": page})
+        if err:
+            print(f"[sonda] strona {page}: {err}")
             break
-    if not found:
-        print("[sonda]   (nie znalazłem meczu Rakowa z niepustym składem — wklej mimo to resztę)")
+        docs = res.get("docs") if isinstance(res, dict) else None
+        if not docs:
+            break
+        for m in docs:
+            if EXT in (str(m.get("homeTeamId")), str(m.get("awayTeamId"))):
+                rk.append(m)
+        if not (isinstance(res, dict) and res.get("hasNextPage")):
+            break
  
-    # --- D) Alternatywa: endpoint drużyny ---
-    print("\n[sonda] Endpoity drużyny:")
-    for path in (f"/teams/{ext}", f"/teams/{ext}/matches", f"/clubs/{ext}", f"/clubs/{ext}/matches"):
-        res, err = _get(c, path)
-        docs, total = _docs(res)
-        print(f"[sonda]   {path} -> {'OK '+ (str(total) if total is not None else 'obiekt') if not err else err}")
+    print(f"[sonda] Mecze Rakowa w {COMP}/{SEASON}: {len(rk)}")
+    played = [m for m in rk if _played(m)]
+    print(f"[sonda] rozegrane (liczbowy wynik): {len(played)} / terminarz: {len(rk) - len(played)}")
+    for m in sorted(rk, key=lambda x: str(x.get("date")))[:12]:
+        nh = len(m.get("homeTeamPlayers") or [])
+        na = len(m.get("awayTeamPlayers") or [])
+        ne = len(m.get("events") or [])
+        print(f"[sonda]   {str(m.get('date'))[:10]} {m.get('homeTeamName')} "
+              f"{m.get('scoreHome')}:{m.get('scoreAway')} {m.get('awayTeamName')} "
+              f"| status={m.get('status')} | players {nh}/{na} events {ne}")
+ 
+    # --- 2) Rozegrany mecz: skład z listy albo ze SZCZEGÓŁU /matches/{internalId} ---
+    target = None
+    for m in sorted(played, key=lambda x: str(x.get("date")), reverse=True):
+        target = m
+        break
+    if target:
+        iid = target.get("internalId") or target.get("transfermarktId")
+        print(f"\n[sonda] Rozegrany mecz: {str(target.get('date'))[:10]} "
+              f"{target.get('homeTeamName')} {target.get('scoreHome')}:{target.get('scoreAway')} "
+              f"{target.get('awayTeamName')} (internalId={iid})")
+        src = target
+        if not (target.get("homeTeamPlayers") or target.get("awayTeamPlayers")):
+            print("[sonda]   lista ma pusty skład — próbuję szczegółu…")
+            for path in (f"/matches/{urllib.parse.quote(str(iid))}",
+                         f"/matches/{urllib.parse.quote(str(target.get('transfermarktId')))}"):
+                det, err = _get(c, path)
+                if isinstance(det, dict):
+                    print(f"[sonda]   {path} -> klucze: {sorted(det.keys())[:30]}")
+                    if det.get("homeTeamPlayers") or det.get("awayTeamPlayers"):
+                        src = det
+                        break
+                else:
+                    print(f"[sonda]   {path} -> {err}")
+        side = src.get("homeTeamPlayers") or src.get("awayTeamPlayers") or []
+        print(f"[sonda]   skład: home={len(src.get('homeTeamPlayers') or [])} "
+              f"away={len(src.get('awayTeamPlayers') or [])}")
+        if side:
+            print(f"[sonda]   player[0]: {_short(side[0])}")
+        ev = src.get("events") or []
+        print(f"[sonda]   events: {len(ev)}; events[0]: {_short(ev[0]) if ev else '(brak)'}")
+    else:
+        print("\n[sonda] Brak rozegranego meczu Rakowa w tym sezonie (za wcześnie?).")
+ 
+    # --- 3) /teams/9644 — co zawiera ---
+    det, err = _get(c, f"/teams/{EXT}")
+    if isinstance(det, dict):
+        print(f"\n[sonda] /teams/{EXT} klucze: {sorted(det.keys())}")
+        for k in ("squad", "players", "matches", "currentSeason", "seasons"):
+            if k in det:
+                v = det[k]
+                print(f"[sonda]   • '{k}': {('lista['+str(len(v))+']') if isinstance(v, list) else type(v).__name__}")
  
     print("\n[sonda] Gotowe. Wklej mi wszystkie linie [sonda].")
  
  
 if __name__ == "__main__":
     main()
- 
