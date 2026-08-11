@@ -408,7 +408,7 @@ export default function App() {
           <div style={{ display: "flex", gap: 22, marginTop: 14, flexWrap: "wrap" }}>
             <Stat n={data.squad.length} l="zawodników" />
             <Stat n={realCount} l="realnych profili" accent />
-            <Stat n={data.leagues.length - 1} l="lig w puli" />
+            <Stat n={data.leagues.length} l="lig w puli" />
             <Stat n={data.pool.length} l="kandydatów" />
             {squadValue > 0 && (
               <Stat n={`~€${squadValue.toFixed(1)}M`}
