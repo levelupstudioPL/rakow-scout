@@ -147,6 +147,11 @@ EDITIONS = {
     1173: "Super Liga (RS)",
     1207: "Liga I (RO)",
     1263: "Super League (GR)",
+    1208: "1. SNL (SI)",          # Słowenia 1. SNL 2025/26
+    1396: "Eliteserien (NO)",     # Norwegia Eliteserien 2026 (rok kalendarzowy)
+    1227: "Bundesliga (AT)",      # Austria Bundesliga 2025/26
+    1209: "Niké Liga (SK)",       # Słowacja Niké Liga 2025/26
+    # (Bułgaria — brak w SkillCornerze; liga wchodzi do StatsBomb bez fizyki.)
 }
  
  
@@ -164,14 +169,30 @@ def _pull_physical(client, eid, group="player"):
  
  
 def _maybe_combine(frames):
-    """Gdy pobrano >1 ligi, zapisz też jeden plik zbiorczy z tagiem ligi."""
-    if len(frames) <= 1:
-        return
+    """Przebuduj plik zbiorczy _all ze WSZYSTKICH plików per-edycja na dysku (nie tylko
+    z bieżącego uruchomienia). Dzięki temu dobranie pojedynczej ligi (np. Grecji) NIE
+    kasuje pozostałych — a to była pułapka: wcześniej _all nadpisywało się tylko tym,
+    co akurat pobrano."""
+    import glob
     import pandas as pd
-    combined = pd.concat(frames, ignore_index=True)
+    files = [f for f in sorted(glob.glob(str(HERE / "skillcorner_physical_*.csv")))
+             if not f.endswith("skillcorner_physical_all.csv")]
+    if len(files) <= 1:
+        return
+    parts = []
+    for f in files:
+        try:
+            parts.append(pd.read_csv(f))
+        except Exception as e:  # noqa: BLE001
+            print(f"[uwaga] pomijam {f}: {e}", file=sys.stderr)
+    if not parts:
+        return
+    combined = pd.concat(parts, ignore_index=True)
     out = HERE / "skillcorner_physical_all.csv"
     combined.to_csv(out, index=False)
-    print(f"[OK] Zbiorczo: {len(combined)} wierszy z {len(frames)} lig → {out.name}")
+    nlig = combined["league"].nunique() if "league" in combined.columns else len(files)
+    print(f"[OK] Zbiorczo (z {len(files)} plików per-edycja, {nlig} lig): "
+          f"{len(combined)} wierszy → {out.name}")
  
  
 def physical(edition_ids, group="player"):
@@ -255,12 +276,24 @@ def gi(edition_ids, group="player"):
             frames.append(df)
             print(f"[OK] GI {key} {eid} ({EDITIONS.get(eid, '?')}): "
                   f"{len(df)} wierszy, {len(df.columns)} kolumn → {out.name}")
-        if len(frames) > 1:
+        # Przebuduj _all z WSZYSTKICH plików per-edycja tego endpointu na dysku
+        # (nie tylko z bieżącego uruchomienia) — dobranie ligi nie kasuje reszty.
+        import glob as _glob
+        gfiles = [f for f in sorted(_glob.glob(str(HERE / f"skillcorner_gi_{key}_*.csv")))
+                  if not f.endswith(f"skillcorner_gi_{key}_all.csv")]
+        if len(gfiles) > 1:
             import pandas as pd
-            comb = pd.concat(frames, ignore_index=True)
-            out = HERE / f"skillcorner_gi_{key}_all.csv"
-            comb.to_csv(out, index=False)
-            print(f"[OK] GI {key} zbiorczo: {len(comb)} wierszy z {len(frames)} lig → {out.name}")
+            gparts = []
+            for f in gfiles:
+                try:
+                    gparts.append(pd.read_csv(f))
+                except Exception as e:  # noqa: BLE001
+                    print(f"[uwaga] pomijam {f}: {e}", file=sys.stderr)
+            if gparts:
+                comb = pd.concat(gparts, ignore_index=True)
+                out = HERE / f"skillcorner_gi_{key}_all.csv"
+                comb.to_csv(out, index=False)
+                print(f"[OK] GI {key} zbiorczo (z {len(gfiles)} edycji): {len(comb)} wierszy → {out.name}")
  
  
 def gi_all(group="player"):
