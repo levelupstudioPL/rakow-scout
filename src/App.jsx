@@ -282,6 +282,10 @@ export default function App() {
 
   const isLive = data.meta.source && data.meta.source.includes("live");
   const realCount = data.squad.filter((p) => p.real).length;
+  // Szacowana wartość rynkowa kadry = suma mv zawodników (Scoutastic/Transfermarkt + Kaggle).
+  // Uczciwie: to suma po WYCENIONYCH; część zawodników może nie mieć ceny w bazie.
+  const squadPriced = data.squad.filter((p) => Number(p.mv) > 0);
+  const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
@@ -406,6 +410,12 @@ export default function App() {
             <Stat n={realCount} l="realnych profili" accent />
             <Stat n={data.leagues.length - 1} l="lig w puli" />
             <Stat n={data.pool.length} l="kandydatów" />
+            {squadValue > 0 && (
+              <Stat n={`~€${squadValue.toFixed(1)}M`}
+                l={squadPriced.length < data.squad.length
+                  ? `wartość kadry (${squadPriced.length}/${data.squad.length})`
+                  : "wartość kadry"} />
+            )}
           </div>
         </div>
 
@@ -2369,6 +2379,17 @@ function FlagsView({ data, setSel, setView }) {
 
 // ============================ OSTATNIE MECZE (WALIDATOR) ============================
 const RES_COLOR = { W: C.good, D: C.proxy, L: C.bad };
+// Herb klubu z Transfermarktu po id (id = externalId ze Scoutastic = TM). Jeśli się
+// nie załaduje (hotlink/404), obrazek chowamy w onError i zostaje sama nazwa.
+const crestUrl = (id) => (id ? `https://tmssl.akamaized.net/images/wappen/head/${id}.png` : null);
+function Crest({ id, size = 18 }) {
+  if (!id) return null;
+  return (
+    <img src={crestUrl(id)} alt="" width={size} height={size} loading="lazy"
+      onError={(e) => { e.currentTarget.style.display = "none"; }}
+      style={{ objectFit: "contain", flexShrink: 0, verticalAlign: "middle" }} />
+  );
+}
 const VERDICT_META = {
   ok:      { label: "zgodne", c: C.good },
   watch:   { label: "obserwuj", c: C.warn },
@@ -2458,7 +2479,10 @@ function RecentView({ data, setSel, setView }) {
           <div key={i} style={{ flex: "0 0 auto", background: C.panel, border: `1px solid ${C.line}`,
             borderLeft: `3px solid ${RES_COLOR[m.result] || C.line}`, borderRadius: 9, padding: "8px 12px", minWidth: 120 }}>
             <div className="mono" style={{ fontSize: 10, color: C.steel }}>{m.home ? "dom" : "wyjazd"} · {m.date || ""}</div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: C.bone, margin: "2px 0", whiteSpace: "nowrap" }}>{m.opponent || "—"}</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0" }}>
+              <Crest id={m.opp_id} size={18} />
+              <span style={{ fontSize: 13, fontWeight: 600, color: C.bone, whiteSpace: "nowrap" }}>{m.opponent || "—"}</span>
+            </div>
             <div className="mono" style={{ fontSize: 12, color: RES_COLOR[m.result] || C.steel, fontWeight: 700 }}>
               {m.result || "?"} {m.gf != null ? `${m.gf}:${m.ga}` : ""}
             </div>
