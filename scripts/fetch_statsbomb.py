@@ -64,6 +64,14 @@ LEAGUE_CONFIG = [
     {"name": "Super Liga (RS)",         "competition_id": 79,  "season_id": 318, "base": False},
     {"name": "Liga I (RO)",             "competition_id": 349, "season_id": 318, "base": False},
     {"name": "Super League (GR)",       "competition_id": 60,  "season_id": 318, "base": False},
+    {"name": "1. SNL (SI)",             "competition_id": 1714, "season_id": 318, "base": False},
+    # Norwegia gra wiosna–jesień (rok kalendarzowy): bieżący sezon 2026 = season_id 316.
+    {"name": "Eliteserien (NO)",        "competition_id": 88,  "season_id": 316, "base": False},
+    {"name": "Bundesliga (AT)",         "competition_id": 47,   "season_id": 318, "base": False},
+    {"name": "Niké Liga (SK)",          "competition_id": 124,  "season_id": 318, "base": False},
+    # Bułgaria — jest w StatsBombie, ale BRAK w SkillCornerze (koherencja bez fizyki).
+    {"name": "First League (BG)",       "competition_id": 1865, "season_id": 318, "base": False},
+    # (Turcja/Süper Lig — BRAK w licencji StatsBomb, więc nie da się dodać do modelu.)
     # (Węgry NB I — brak w licencji StatsBomb, więc pominięte mimo dostępności w SkillCorner.)
     {"name": "Jupiler / inne — dodaj wg potrzeb", "competition_id": None, "season_id": None, "base": False},
 ]
