@@ -18,37 +18,42 @@ import os
 # --- Metryki definiujące PROFIL GRY per linia ---
 # Do koherencji (podobieństwa) i do poziomu. Nazwy = pola StatsBomb.
 LINE_METRICS = {
+    # KOHERENCJA = OŚ STYLU (po audycie analityka). Tu wchodzą TYLKO deskryptory
+    # SPOSOBU gry — wolumeny podań/strzałów, proporcje, tendencje, prowadzenia,
+    # aktywność defensywna — a NIE metryki jakości/outputu (xG, xGChain, xGBuildup,
+    # xA, gsaa, save_ratio, obv, gole). Te ostatnie przeniesione do RC (poziom).
+    # Dzięki temu symetryczna kara Mahalanobisa jest uzasadniona: szukamy zawodnika
+    # o IDENTYCZNYM stylu (koherencja), a jakość rozstrzyga osobno RC. Do koherencji
+    # dochodzą jeszcze fizyka (waga 0.5) i Game Intelligence (0.35) — też czysto stylowe.
     "Bramka": [
-        # Rozbudowany profil bramkarza: shot-stopping + wartość ogólna + styl
-        # gry nogą (krótka vs długa dystrybucja). Metryki realnie dostępne w
-        # StatsBomb dla tych lig (potwierdzone w statsbomb_columns.txt).
-        "player_season_gsaa_90", "player_season_save_ratio",
-        "player_season_positive_outcome_90", "player_season_obv_gk_90",
+        # Styl dystrybucji bramkarza (krótka vs długa gra nogą) — bez shot-stoppingu.
         "player_season_op_passes_90", "player_season_passing_ratio",
         "player_season_long_balls_90", "player_season_long_ball_ratio",
         "player_season_pass_length",
     ],
     "Obrona": [
+        # Aktywność i styl defensywny + styl wyprowadzenia (bez ratio jakościowych,
+        # które poszły do RC).
         "player_season_padj_tackles_and_interceptions_90",
-        "player_season_aerial_wins_90", "player_season_aerial_ratio",
-        "player_season_clearance_90", "player_season_challenge_ratio",
+        "player_season_aerial_wins_90", "player_season_clearance_90",
         "player_season_op_passes_90", "player_season_passing_ratio",
-        "player_season_op_f3_passes_90",
+        "player_season_op_f3_passes_90", "player_season_forward_pass_proportion",
     ],
     "Pomoc": [
-        "player_season_op_xgchain_90", "player_season_xgbuildup_90",
-        "player_season_key_passes_90", "player_season_xa_90",
-        "player_season_passes_into_box_90", "player_season_op_passes_90",
-        "player_season_passing_ratio", "player_season_forward_pass_proportion",
+        # Styl gry środka: wolumen kreacji i penetracji, tendencja do przodu, drybling,
+        # aktywność defensywna. Sama JAKOŚĆ kreacji (xA, xGChain) jest w RC.
+        "player_season_key_passes_90", "player_season_passes_into_box_90",
+        "player_season_op_passes_90", "player_season_passing_ratio",
+        "player_season_forward_pass_proportion",
         "player_season_padj_tackles_and_interceptions_90",
         "player_season_dribbles_90", "player_season_op_f3_passes_90",
     ],
     "Atak": [
-        "player_season_np_xg_90", "player_season_npg_90",
+        # Styl napastnika: wolumen strzałów, pozycjonowanie w polu, kreacja,
+        # gra w powietrzu, drybling. JAKOŚĆ (xG, gole, xA, efektywność) jest w RC.
         "player_season_np_shots_90", "player_season_touches_inside_box_90",
-        "player_season_xa_90", "player_season_key_passes_90",
-        "player_season_conversion_ratio", "player_season_aerial_wins_90",
-        "player_season_op_xgchain_90",
+        "player_season_key_passes_90", "player_season_aerial_wins_90",
+        "player_season_dribbles_90",
     ],
 }
  
@@ -86,19 +91,18 @@ TEAM_NORM_METRICS = [
 # WERSJA SUROWA (per-90, wolumen) — Twój dotychczasowy zestaw. Problem z audytu:
 # metryki wolumenowe zawyżają zawodników drużyn dużo posiadających piłkę.
 QUALITY_METRICS_RAW = {
+    # RC = OŚ JAKOŚCI (audyt analityka): tylko jakość/efektywność, bez surowego wolumenu.
+    # Obrona: wartość działań obronnych (obv_defensive_action) + skuteczność
+    # (aerial_ratio, challenge_ratio, blocks_per_shot) zamiast liczby akcji.
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
-               "player_season_positive_outcome_90", "player_season_obv_gk_90",
-               "player_season_op_passes_90"],
-    "Obrona": ["player_season_padj_tackles_and_interceptions_90",
-               "player_season_aerial_wins_90", "player_season_clearance_90",
-               "player_season_op_passes_90", "player_season_op_f3_passes_90"],
+               "player_season_positive_outcome_90", "player_season_obv_gk_90"],
+    "Obrona": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
+               "player_season_challenge_ratio", "player_season_blocks_per_shot",
+               "player_season_op_xgbuildup_90"],
     "Pomoc": ["player_season_op_xgchain_90", "player_season_xgbuildup_90",
-              "player_season_key_passes_90", "player_season_xa_90",
-              "player_season_passes_into_box_90",
-              "player_season_padj_tackles_and_interceptions_90"],
+              "player_season_xa_90", "player_season_obv_defensive_action_90"],
     "Atak": ["player_season_np_xg_90", "player_season_npg_90",
-             "player_season_np_shots_90", "player_season_touches_inside_box_90",
-             "player_season_xa_90"],
+             "player_season_xa_90", "player_season_np_xg_per_shot"],
 }
  
 # WERSJA POSSESSION-ADJUSTED — natywne metryki StatsBomb skorygowane o posiadanie
@@ -107,22 +111,18 @@ QUALITY_METRICS_RAW = {
 # RC liczy każdą metrykę jako PERCENTYL vs Ekstraklasa, więc mieszanie skal jest OK.
 # Bramka i Atak (xG/output) — bez zmian, tam problem posiadania nie występuje.
 QUALITY_METRICS_PADJ = {
+    # Jak RAW, ale budowanie/rozgrywanie liczone per-posiadanie. Wskaźniki skuteczności
+    # (ratio, per_shot) są niewrażliwe na posiadanie → identyczne jak w RAW.
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
-               "player_season_positive_outcome_90", "player_season_obv_gk_90",
-               "player_season_op_passes_90"],
-    "Obrona": ["player_season_padj_tackles_and_interceptions_90",
-               "player_season_padj_clearances_90", "player_season_padj_pressures_90",
-               "player_season_aerial_wins_90",
+               "player_season_positive_outcome_90", "player_season_obv_gk_90"],
+    "Obrona": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
+               "player_season_challenge_ratio", "player_season_blocks_per_shot",
                "player_season_op_xgbuildup_per_possession"],
     "Pomoc": ["player_season_op_xgchain_per_possession",
               "player_season_xgbuildup_per_possession",
-              "player_season_key_passes_90__tpadj", "player_season_xa_90",
-              "player_season_passes_into_box_90__tpadj",
-              "player_season_padj_tackles_and_interceptions_90"],
+              "player_season_xa_90", "player_season_obv_defensive_action_90"],
     "Atak": ["player_season_np_xg_90", "player_season_npg_90",
-             "player_season_np_shots_90__tpadj",
-             "player_season_touches_inside_box_90__tpadj",
-             "player_season_xa_90"],
+             "player_season_xa_90", "player_season_np_xg_per_shot"],
 }
  
 # Przełącznik: POSSESSION_ADJUST=0 wraca do wersji surowej (do porównań A/B).
