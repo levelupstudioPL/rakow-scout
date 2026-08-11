@@ -1255,9 +1255,13 @@ def build_dataset(sb, creds):
     _padj_diag = {}   # pozycja -> [n, suma_adj, suma_raw] do logu wpływu na RC
     _shr_diag = [0, 0.0]   # [ilu ściągniętych, suma delt] — log wpływu shrinkage
     for lg in LEAGUE_CONFIG:
-        if lg.get("base"):
-            continue
+        is_base = lg.get("base")
         for row in league_rows[lg["name"]]:
+            # LIGA BAZOWA (Ekstraklasa): bierzemy kandydatów z INNYCH klubów — bez Rakowa.
+            # Zawodnicy Rakowa są w składzie, nie w puli sugestii. Handicap Ekstraklasy = 0
+            # (to liga odniesienia), więc ich poziom = surowe RC, bez premii/kary.
+            if is_base and _is_rakow_row(row):
+                continue
             # FILTR MINUT: pomiń zawodników z małą próbką (zawyżone per-90).
             minutes = row.get("player_season_minutes")
             if not isinstance(minutes, (int, float)) or minutes < MIN_MINUTES:
