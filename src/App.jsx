@@ -13,6 +13,17 @@ const C = {
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const tmUrl = (name) => `https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(name || "")}`;
+// Mnożnik poziomu rynkowego ligi do estymacji ceny (heurystyka: droższe ligi = wyższy
+// mnożnik). Nazwy MUSZĄ zgadzać się z LEAGUE_CONFIG (wcześniej były nieaktualne —
+// „Championship (EN)"/„Liga Portugalska" — przez co mnożnik dla większości lig = 1).
+const LIG_TIER = {
+  "Eredivisie (NL)": 1.15, "Primeira Liga (PT)": 1.15, "Jupiler Pro League (BE)": 1.10,
+  "2. Bundesliga (DE)": 1.05, "Super League (CH)": 1.00, "Bundesliga (AT)": 0.95,
+  "Ekstraklasa (PL)": 0.95, "Superliga (DK)": 0.95, "Czech Liga (CZ)": 0.90,
+  "Eliteserien (NO)": 0.90, "Super League (GR)": 0.90, "Liga I (RO)": 0.85,
+  "1. HNL (HR)": 0.85, "Super Liga (RS)": 0.80, "Niké Liga (SK)": 0.78,
+  "1. SNL (SI)": 0.75, "First League (BG)": 0.75,
+};
 const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
   LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
 const lineOfPos = (pos) => {
@@ -200,8 +211,7 @@ export default function App() {
     const ageF = calAgeMult(Number(p.age) || 0);
     const yearsLeft = Math.max(0, (p.contract || 2026) - 2026);
     const contractF = yearsLeft >= 3 ? 1.2 : yearsLeft === 2 ? 1.0 : yearsLeft === 1 ? 0.75 : 0.5;
-    const ligF = { "Championship (EN)": 1.3, "Eredivisie (NL)": 1.15, "Liga Portugalska": 1.2,
-      "Liga Belgijska": 1.1, "2. Bundesliga (DE)": 1.05, "Superliga (DK)": 0.95 }[p.lg] || 1;
+    const ligF = LIG_TIER[p.lg] || 1;
     const est = base * levelF * ageF * contractF * ligF;
     return { est, lo: est * 0.8, hi: est * 1.25, calibrated: !!CAL };
   };
