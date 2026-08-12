@@ -26,10 +26,15 @@ LINE_METRICS = {
     # o IDENTYCZNYM stylu (koherencja), a jakość rozstrzyga osobno RC. Do koherencji
     # dochodzą jeszcze fizyka (waga 0.5) i Game Intelligence (0.35) — też czysto stylowe.
     "Bramka": [
-        # Styl dystrybucji bramkarza (krótka vs długa gra nogą) — bez shot-stoppingu.
+        # Styl dystrybucji + pozycjonowanie (sweeper) bramkarza — bez shot-stoppingu (to RC).
+        # Pogłębione z 5 do 8 wymiarów: sam profil dystrybucji był zbyt cienki (koherencja
+        # GK zbijała się do ~100). Dokładamy długość dystrybucji i tendencję do wychodzenia.
         "player_season_op_passes_90", "player_season_passing_ratio",
         "player_season_long_balls_90", "player_season_long_ball_ratio",
         "player_season_pass_length",
+        "player_season_np_optimal_gk_dlength",   # optymalna długość dystrybucji (styl gry nogą)
+        "player_season_da_aggressive_distance",  # jak wysoko od bramki interweniuje (sweeper)
+        "player_season_aggressive_actions_90",   # proaktywne akcje poza polem karnym
     ],
     "Obrona": [
         # Aktywność i styl defensywny + styl wyprowadzenia (bez ratio jakościowych,
@@ -475,6 +480,9 @@ POS_STYLE = {
         ("player_season_long_balls_90", "Długie podania"),
         ("player_season_long_ball_ratio", "Udział długich podań"),
         ("player_season_pass_length", "Śr. długość podania"),
+        ("player_season_np_optimal_gk_dlength", "Długość dystrybucji"),
+        ("player_season_da_aggressive_distance", "Wysokość interwencji"),
+        ("player_season_aggressive_actions_90", "Akcje poza polem"),
     ],
     "Obrona": [
         ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
