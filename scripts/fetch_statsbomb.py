@@ -1251,6 +1251,17 @@ def build_dataset(sb, creds):
         squad_by_pos.setdefault(s["pos"], []).append(s)
         squad_by_line.setdefault(s["line"], []).append(s)
  
+    # Zbiór zawodników Rakowa (po player_id + nazwisku) — do wykluczenia z puli.
+    # Solidniej niż _is_rakow_row: łapie też świeży transfer, którego StatsBomb wciąż
+    # przypisuje do POPRZEDNIEGO klubu (jak Abraham Ojo), więc nie sugerujemy zawodnika,
+    # którego już mamy.
+    _squad_ids, _squad_names = set(), set()
+    for s in squad:
+        sb = s.get("_sb")
+        if sb and sb.get("player_id") is not None:
+            _squad_ids.add(sb.get("player_id"))
+        _squad_names.add(_norm(s.get("name", "")))
+ 
     pool = []
     _padj_diag = {}   # pozycja -> [n, suma_adj, suma_raw] do logu wpływu na RC
     _shr_diag = [0, 0.0]   # [ilu ściągniętych, suma delt] — log wpływu shrinkage
@@ -1261,6 +1272,11 @@ def build_dataset(sb, creds):
             # Zawodnicy Rakowa są w składzie, nie w puli sugestii. Handicap Ekstraklasy = 0
             # (to liga odniesienia), więc ich poziom = surowe RC, bez premii/kary.
             if is_base and _is_rakow_row(row):
+                continue
+            # WYKLUCZENIE ZE SKŁADU (dowolna liga): nie sugeruj zawodnika, którego mamy,
+            # nawet jeśli StatsBomb trzyma go pod innym/poprzednim klubem.
+            if (row.get("player_id") in _squad_ids
+                    or _norm(row.get("player_name", "")) in _squad_names):
                 continue
             # FILTR MINUT: pomiń zawodników z małą próbką (zawyżone per-90).
             minutes = row.get("player_season_minutes")
@@ -2032,5 +2048,7 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
+ 
  
  
