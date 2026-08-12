@@ -1162,10 +1162,14 @@ def build_dataset(sb, creds):
                 print(f"[fizyka] {lg['name']}: dopasowano {m}/{n} zawodnikow")
         print(f"[fizyka] Razem dopasowano {total_m} zawodnikow do danych SkillCorner.")
  
-    # Normalizacja metryk wolumenowych przez proxy posiadania drużyny (dokończenie
-    # possession-adjustment). MUSI być przed build_league_stats, żeby pola __tpadj
-    # weszły do rozkładów percentyli tak samo dla bazy i kandydatów.
-    _normalize_team_possession(league_rows)
+    # POSSESSION-ADJUSTMENT: RC korzysta teraz z NATYWNYCH metryk StatsBomb per-posiadanie
+    # (op_xgbuildup_per_possession, op_xgchain_per_possession, xgbuildup_per_possession) —
+    # liczonych na poziomie akcji, więc lepszych niż jakikolwiek proxy/% posiadania drużyny.
+    # Stary proxy z op_passes (pola __tpadj) po oczyszczeniu metryk RC nie jest już przez nic
+    # czytany, więc go NIE uruchamiamy (funkcja _normalize_team_possession zostaje na wypadek
+    # powrotu metryki wolumenowej do RC, ale domyślnie jest wyłączona: TEAM_POSSESSION_ADJUST).
+    if os.getenv("TEAM_POSSESSION_ADJUST", "0") not in ("0", "false", "False"):
+        _normalize_team_possession(league_rows)
  
     base_rows = league_rows.get(base_name, []) if base_name else []
     if not base_rows:
@@ -2048,7 +2052,3 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
- 
- 
- 
