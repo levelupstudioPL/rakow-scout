@@ -2043,11 +2043,11 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
               <div className="disp" style={{ fontSize: 16, color: C.proxy, lineHeight: 0.9 }}>{fmt(c.price.est)}</div>
               <div style={{ fontSize: 9, color: C.steel }}>cena</div>
             </div>
-            <div title="Wskaźnik wartości = jakość / cena">
+            <div title="Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena">
               <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
                 <div style={{ width: `${(c.value / maxV) * 100}%`, height: "100%", background: C.proxy }} />
               </div>
-              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wartość</div>
+              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wsk. obs.</div>
             </div>
             <button onClick={() => toggleShort(c.p.id)} title="Lista obserwowanych"
               style={{ background: short.includes(c.p.id) ? C.red : "transparent",
@@ -2059,7 +2059,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
         ))}
       </div></div>
       <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>
-        Wartość = (0,45·poziom + 0,55·koherencja) / √cena. Tylko kandydaci z wyceną i policzonym poziomem. To podpowiedź do obserwacji, nie ostateczny ranking.
+        Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena — łączy jakość i dopasowanie stylu, karząc za cenę. To NIE to samo co „Okazja" (percentyl jakości minus percentyl ceny, w zakładce Okazje) ani „wycena" (wartość rynkowa). Podpowiedź do obserwacji, nie ostateczny ranking.
       </div>
     </div>
   );
