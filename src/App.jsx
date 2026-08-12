@@ -24,6 +24,41 @@ const LIG_TIER = {
   "1. HNL (HR)": 0.85, "Super Liga (RS)": 0.80, "Niké Liga (SK)": 0.78,
   "1. SNL (SI)": 0.75, "First League (BG)": 0.75,
 };
+
+// ============================ WATCHLISTA (localStorage) ============================
+// Trwała lista obserwowanych — per przeglądarka (nie współdzielona; upgrade do backendu
+// możliwy później bez utraty danych). Wpis: id -> {s:status, n:notatka, nm,pos,lg,mv,ts}.
+// Statusy: "obserwowany" | "sprawdzic" | "odrzucony". To ich własna apka (nie artefakt),
+// więc localStorage działa normalnie.
+const WATCH_KEY = "rk_watch_v1";
+const WATCH_STATUSES = {
+  obserwowany: { label: "Obserwowany", short: "obs.", icon: "★" },
+  sprawdzic:   { label: "Do sprawdzenia", short: "sprawdź", icon: "?" },
+  odrzucony:   { label: "Odrzucony", short: "odrzuc.", icon: "✕" },
+};
+function _loadWatch() {
+  try { return JSON.parse(localStorage.getItem(WATCH_KEY)) || {}; } catch { return {}; }
+}
+function useWatchlist() {
+  const [wl, setWl] = useState(_loadWatch);
+  useEffect(() => {
+    try { localStorage.setItem(WATCH_KEY, JSON.stringify(wl)); } catch { /* quota/prywatny tryb */ }
+  }, [wl]);
+  // item = {id, name, pos, lg, mv}; status=null usuwa wpis.
+  const setStatus = (item, status) => setWl((w) => {
+    const id = item.id; if (!id) return w;
+    const next = { ...w };
+    if (!status) { delete next[id]; return next; }
+    const prev = next[id] || {};
+    next[id] = { ...prev, s: status,
+      nm: item.name || prev.nm || "", pos: item.pos || prev.pos || "",
+      lg: item.lg || prev.lg || "", mv: Number(item.mv) || prev.mv || 0,
+      ts: Date.now() };
+    return next;
+  });
+  const setNote = (id, note) => setWl((w) => (w[id] ? { ...w, [id]: { ...w[id], n: note } } : w));
+  return { wl, setStatus, setNote };
+}
 const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
   LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
 const lineOfPos = (pos) => {
@@ -108,7 +143,11 @@ export default function App() {
   const [sel, setSel] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("coherence");
-  const [short, setShort] = useState([]);
+  // Watchlista (localStorage). „short" = obserwowani (zgodność ze starą gwiazdką).
+  const { wl, setStatus, setNote } = useWatchlist();
+  const short = useMemo(() => Object.keys(wl).filter((id) => wl[id].s === "obserwowany"), [wl]);
+  // toggleShort przyjmuje OBIEKT zawodnika (żeby zapisać meta do watchlisty offline).
+  const toggleShort = (item) => setStatus(item, wl[item.id] && wl[item.id].s === "obserwowany" ? null : "obserwowany");
   const [query, setQuery] = useState("");   // wyszukiwarka ręczna (po nazwisku, cała pula)
   // --- FILTRY kandydatów (widok "Odpowiednicy") ---
   const FILTERS_DEFAULT = {
@@ -128,7 +167,6 @@ export default function App() {
   const applyFilters = () => setFilters(draft);
   const resetFilters = () => { setDraft(FILTERS_DEFAULT); setFilters(FILTERS_DEFAULT); };
   const filtersDirty = JSON.stringify(draft) !== JSON.stringify(filters);
-  const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
   useEffect(() => { loadData("data.json"); }, []);
 
@@ -299,7 +337,7 @@ export default function App() {
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
-    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"]] },
+    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
     { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
@@ -413,6 +451,7 @@ export default function App() {
             {view === "corr" && "Zależności formacji"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
+            {view === "watch" && "Watchlista skauta"}
             {view === "help" && "Jak korzystać"}
           </h1>
           <div style={{ display: "flex", gap: 22, marginTop: 14, flexWrap: "wrap" }}>
@@ -442,6 +481,7 @@ export default function App() {
           {view === "okazje" && <OkazjeView {...{ data, fmt, short, toggleShort, setSel, setView }} />}
           {view === "flags" && <FlagsView {...{ data, setSel, setView }} />}
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
+          {view === "watch" && <WatchlistView {...{ data, wl, setStatus, setNote, setSel, setView, fmt }} />}
           {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "metrics" && <MetricsView data={data} />}
@@ -765,7 +805,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                     cursor: "pointer", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>
                   vs {surnameU(sel.name)}
                 </button>
-                <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
+                <button onClick={() => toggleShort(p)} title="Lista obserwowanych"
                   style={{ background: short.includes(p.id) ? C.red : "transparent",
                     color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
                     borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
@@ -870,7 +910,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                     : <div style={{ fontSize: 12, color: C.steel }}>brak wyceny</div>}
                   <div style={{ fontSize: 10, color: C.steel }}>wartość rynkowa</div>
                 </div>
-                <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
+                <button onClick={() => toggleShort(p)} title="Lista obserwowanych"
                   style={{ background: short.includes(p.id) ? C.red : "transparent",
                     color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
                     borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
@@ -881,6 +921,108 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
           </div></div>
         </>
       )}
+    </div>
+  );
+}
+
+// ============================ WATCHLISTA — WIDOK ============================
+const WATCH_COL = { obserwowany: "#E4022B", sprawdzic: "#E8A13A", odrzucony: "#7C90B0" };
+function WatchlistView({ data, wl, setStatus, setNote, setSel, setView, fmt }) {
+  // Indeks żywych danych (pula + skład) do odświeżenia RC/koherencji.
+  const byId = useMemo(() => {
+    const m = {};
+    for (const p of data.pool || []) m[p.id] = p;
+    for (const s of data.squad || []) m[s.id] = s;
+    return m;
+  }, [data]);
+  const ids = Object.keys(wl);
+  const entries = ids.map((id) => ({ id, ...wl[id], live: byId[id] || null }))
+    .sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  const order = ["obserwowany", "sprawdzic", "odrzucony"];
+  const groups = order.map((st) => ({ st, items: entries.filter((e) => e.s === st) }));
+  const jump = (e) => {
+    if (!e.live) return;
+    const cand = data.pool.find((p) => p.id === e.id);
+    if (cand) { setSel(cand); setView("match"); }
+  };
+
+  return (
+    <div>
+      <Lead>Twoja lista obserwowanych — zapisywana lokalnie w tej przeglądarce (nie współdzielona między osobami). Gwiazdką w „Odpowiednikach", „Okazjach" i „Szukaj" dodajesz zawodnika; tu zmieniasz status i dopisujesz notatki. RC i koherencja odświeżają się z aktualnych danych.</Lead>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 8px" }}>
+        {order.map((st) => (
+          <Kpi key={st} l={WATCH_STATUSES[st].label} v={groups.find((g) => g.st === st).items.length}
+            c={groups.find((g) => g.st === st).items.length ? WATCH_COL[st] : C.steel} />
+        ))}
+      </div>
+
+      {ids.length === 0 && <Empty>Watchlista jest pusta. Oznacz zawodników gwiazdką ☆ w Odpowiednikach / Okazjach / Szukaj — pojawią się tutaj.</Empty>}
+
+      {groups.map(({ st, items }) => items.length > 0 && (
+        <div key={st}>
+          <SectionLabel>{WATCH_STATUSES[st].label} · {items.length}</SectionLabel>
+          <div style={{ display: "grid", gap: 9 }}>
+            {items.map((e) => {
+              const rc = e.live ? (typeof e.live.raw === "number" ? Math.round(e.live.raw) : e.live.rc) : null;
+              const coh = e.live && typeof e.live.coherence === "number" ? Math.round(e.live.coherence) : null;
+              const mv = Number((e.live && e.live.mv) || e.mv) || 0;
+              return (
+                <div key={e.id} style={{ background: C.panel, border: `1px solid ${WATCH_COL[st]}44`, borderRadius: 12, padding: "13px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }}>
+                    <div style={{ flex: "1 1 220px", minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                        <span style={{ fontSize: 14.5, fontWeight: 600, color: C.bone }}>{e.nm || e.id}</span>
+                        {e.pos && <span className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{e.pos}</span>}
+                        {e.lg && <span style={{ fontSize: 11, color: C.steel }}>{e.lg}</span>}
+                        {!e.live && <span className="mono" style={{ fontSize: 10.5, color: C.warn }}>poza pulą</span>}
+                      </div>
+                      <div className="mono" style={{ display: "flex", gap: 14, marginTop: 6, fontSize: 11.5, color: C.steel }}>
+                        {rc != null && <span>RC <b style={{ color: C.bone }}>{rc}</b></span>}
+                        {coh != null && <span>koh. <b style={{ color: C.bone }}>{coh}%</b></span>}
+                        {mv > 0 && <span>{fmt(mv)}</span>}
+                      </div>
+                      <textarea value={e.n || ""} onChange={(ev) => setNote(e.id, ev.target.value)}
+                        placeholder="Notatka skauta…" rows={2}
+                        style={{ width: "100%", marginTop: 9, background: C.ink, color: C.bone,
+                          border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 10px",
+                          fontSize: 12.5, fontFamily: "inherit", resize: "vertical" }} />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
+                      <div style={{ display: "flex", gap: 5 }}>
+                        {order.map((s2) => (
+                          <button key={s2} onClick={() => setStatus({ id: e.id, name: e.nm, pos: e.pos, lg: e.lg, mv }, s2)}
+                            title={WATCH_STATUSES[s2].label}
+                            style={{ background: e.s === s2 ? WATCH_COL[s2] : "transparent",
+                              color: e.s === s2 ? "#fff" : C.steel, border: `1px solid ${e.s === s2 ? WATCH_COL[s2] : C.line}`,
+                              borderRadius: 8, padding: "5px 9px", fontSize: 12, cursor: "pointer", fontWeight: 700 }}>
+                            {WATCH_STATUSES[s2].icon}
+                          </button>
+                        ))}
+                      </div>
+                      <div style={{ display: "flex", gap: 5 }}>
+                        {e.live && (
+                          <button onClick={() => jump(e)} style={{ flex: 1, background: "transparent", color: C.redHi,
+                            border: `1px solid ${C.red}66`, borderRadius: 8, padding: "5px 9px", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>
+                            Odpowiednicy →
+                          </button>
+                        )}
+                        <button onClick={() => setStatus({ id: e.id }, null)} title="Usuń z watchlisty"
+                          style={{ background: "transparent", color: C.steel, border: `1px solid ${C.line}`,
+                            borderRadius: 8, padding: "5px 10px", fontSize: 11.5, cursor: "pointer" }}>
+                          Usuń
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <Note>Dane zapisane lokalnie w przeglądarce (klucz <span className="mono">{WATCH_KEY}</span>) — nie synchronizują się między osobami ani urządzeniami. Gdy dopniemy backend, przeniesiemy je do wersji współdzielonej bez utraty notatek. „poza pulą" = zawodnik wypadł z bieżących danych (np. za mało minut po odświeżeniu) — notatka zostaje, RC/koherencji chwilowo brak.</Note>
     </div>
   );
 }
@@ -2049,7 +2191,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
               </div>
               <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wsk. obs.</div>
             </div>
-            <button onClick={() => toggleShort(c.p.id)} title="Lista obserwowanych"
+            <button onClick={() => toggleShort(c.p)} title="Lista obserwowanych"
               style={{ background: short.includes(c.p.id) ? C.red : "transparent",
                 color: short.includes(c.p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(c.p.id) ? C.red : C.line}`,
                 borderRadius: 9, width: 34, height: 34, cursor: "pointer", fontSize: 15 }}>
@@ -2302,7 +2444,7 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
                 <div style={{ fontSize: 10, color: C.steel }}>{r.free ? "wolny" : "ost. rok"}</div>
               </div>
             )}
-            <button onClick={() => toggleShort(r.id)} title="Lista obserwowanych"
+            <button onClick={() => toggleShort(r)} title="Lista obserwowanych"
               style={{ background: short.includes(r.id) ? C.red : "transparent",
                 color: short.includes(r.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(r.id) ? C.red : C.line}`,
                 borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
