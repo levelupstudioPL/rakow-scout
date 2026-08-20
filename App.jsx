@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations, computeRecentValidation } from "./analytics.js";
+import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations, computeRecentValidation, adjLevel } from "./analytics.js";
 
 // ============================ TOKENS ============================
 const C = {
@@ -13,6 +13,52 @@ const C = {
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const tmUrl = (name) => `https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(name || "")}`;
+// Mnożnik poziomu rynkowego ligi do estymacji ceny (heurystyka: droższe ligi = wyższy
+// mnożnik). Nazwy MUSZĄ zgadzać się z LEAGUE_CONFIG (wcześniej były nieaktualne —
+// „Championship (EN)"/„Liga Portugalska" — przez co mnożnik dla większości lig = 1).
+const LIG_TIER = {
+  "Eredivisie (NL)": 1.15, "Primeira Liga (PT)": 1.15, "Jupiler Pro League (BE)": 1.10,
+  "2. Bundesliga (DE)": 1.05, "Super League (CH)": 1.00, "Bundesliga (AT)": 0.95,
+  "Ekstraklasa (PL)": 0.95, "Superliga (DK)": 0.95, "Czech Liga (CZ)": 0.90,
+  "Eliteserien (NO)": 0.90, "Super League (GR)": 0.90, "Liga I (RO)": 0.85,
+  "1. HNL (HR)": 0.85, "Super Liga (RS)": 0.80, "Niké Liga (SK)": 0.78,
+  "1. SNL (SI)": 0.75, "First League (BG)": 0.75,
+};
+
+// ============================ WATCHLISTA (localStorage) ============================
+// Trwała lista obserwowanych — per przeglądarka (nie współdzielona; upgrade do backendu
+// możliwy później bez utraty danych). Wpis: id -> {s:status, n:notatka, nm,pos,lg,mv,ts}.
+// Statusy: "obserwowany" | "sprawdzic" | "odrzucony". To ich własna apka (nie artefakt),
+// więc localStorage działa normalnie.
+const WATCH_KEY = "rk_watch_v1";
+const WATCH_STATUSES = {
+  obserwowany: { label: "Obserwowany", short: "obs.", icon: "★" },
+  sprawdzic:   { label: "Do sprawdzenia", short: "sprawdź", icon: "?" },
+  odrzucony:   { label: "Odrzucony", short: "odrzuc.", icon: "✕" },
+};
+function _loadWatch() {
+  try { return JSON.parse(localStorage.getItem(WATCH_KEY)) || {}; } catch { return {}; }
+}
+function useWatchlist() {
+  const [wl, setWl] = useState(_loadWatch);
+  useEffect(() => {
+    try { localStorage.setItem(WATCH_KEY, JSON.stringify(wl)); } catch { /* quota/prywatny tryb */ }
+  }, [wl]);
+  // item = {id, name, pos, lg, mv}; status=null usuwa wpis.
+  const setStatus = (item, status) => setWl((w) => {
+    const id = item.id; if (!id) return w;
+    const next = { ...w };
+    if (!status) { delete next[id]; return next; }
+    const prev = next[id] || {};
+    next[id] = { ...prev, s: status,
+      nm: item.name || prev.nm || "", pos: item.pos || prev.pos || "",
+      lg: item.lg || prev.lg || "", mv: Number(item.mv) || prev.mv || 0,
+      ts: Date.now() };
+    return next;
+  });
+  const setNote = (id, note) => setWl((w) => (w[id] ? { ...w, [id]: { ...w[id], n: note } } : w));
+  return { wl, setStatus, setNote };
+}
 const LINE_MAP = { GK: "Bramka", RCB: "Obrona", CCB: "Obrona", LCB: "Obrona", RWB: "Obrona",
   LWB: "Obrona", DM: "Pomoc", CM: "Pomoc", AM: "Pomoc", ST: "Atak" };
 const lineOfPos = (pos) => {
@@ -97,7 +143,11 @@ export default function App() {
   const [sel, setSel] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("coherence");
-  const [short, setShort] = useState([]);
+  // Watchlista (localStorage). „short" = obserwowani (zgodność ze starą gwiazdką).
+  const { wl, setStatus, setNote } = useWatchlist();
+  const short = useMemo(() => Object.keys(wl).filter((id) => wl[id].s === "obserwowany"), [wl]);
+  // toggleShort przyjmuje OBIEKT zawodnika (żeby zapisać meta do watchlisty offline).
+  const toggleShort = (item) => setStatus(item, wl[item.id] && wl[item.id].s === "obserwowany" ? null : "obserwowany");
   const [query, setQuery] = useState("");   // wyszukiwarka ręczna (po nazwisku, cała pula)
   // --- FILTRY kandydatów (widok "Odpowiednicy") ---
   const FILTERS_DEFAULT = {
@@ -117,7 +167,6 @@ export default function App() {
   const applyFilters = () => setFilters(draft);
   const resetFilters = () => { setDraft(FILTERS_DEFAULT); setFilters(FILTERS_DEFAULT); };
   const filtersDirty = JSON.stringify(draft) !== JSON.stringify(filters);
-  const toggleShort = (id) => setShort((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
   useEffect(() => { loadData("data.json"); }, []);
 
@@ -200,8 +249,7 @@ export default function App() {
     const ageF = calAgeMult(Number(p.age) || 0);
     const yearsLeft = Math.max(0, (p.contract || 2026) - 2026);
     const contractF = yearsLeft >= 3 ? 1.2 : yearsLeft === 2 ? 1.0 : yearsLeft === 1 ? 0.75 : 0.5;
-    const ligF = { "Championship (EN)": 1.3, "Eredivisie (NL)": 1.15, "Liga Portugalska": 1.2,
-      "Liga Belgijska": 1.1, "2. Bundesliga (DE)": 1.05, "Superliga (DK)": 0.95 }[p.lg] || 1;
+    const ligF = LIG_TIER[p.lg] || 1;
     const est = base * levelF * ageF * contractF * ligF;
     return { est, lo: est * 0.8, hi: est * 1.25, calibrated: !!CAL };
   };
@@ -282,10 +330,14 @@ export default function App() {
 
   const isLive = data.meta.source && data.meta.source.includes("live");
   const realCount = data.squad.filter((p) => p.real).length;
+  // Szacowana wartość rynkowa kadry = suma mv zawodników (Scoutastic/Transfermarkt + Kaggle).
+  // Uczciwie: to suma po WYCENIONYCH; część zawodników może nie mieć ceny w bazie.
+  const squadPriced = data.squad.filter((p) => Number(p.mv) > 0);
+  const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
-    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"]] },
+    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
     { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
@@ -326,6 +378,17 @@ export default function App() {
           h1.disp{font-size:26px!important;}
         }
         @media(max-width:480px){ .content{padding:14px 14px 0!important;} }
+        /* DRUK / EKSPORT PDF: chowamy chrome aplikacji, zostaje sam raport. */
+        @media print {
+          .rail, .mobabar, .pagehead, .bgwall, .noprint { display:none !important; }
+          .shell, .content, main { display:block !important; padding:0 !important; margin:0 !important; background:#fff !important; }
+          .report-print { color:#111 !important; }
+          .report-print .rp-muted { color:#444 !important; }
+          .report-print .rp-card { border:1px solid #ccc !important; break-inside:avoid; }
+          .report-print .rp-section { break-inside:avoid; }
+          * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+          @page { margin:12mm; size:A4; }
+        }
       `}</style>
 
       <div className="bgwall" aria-hidden="true" />
@@ -399,13 +462,21 @@ export default function App() {
             {view === "corr" && "Zależności formacji"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
+            {view === "watch" && "Watchlista skauta"}
+            {view === "raport" && "Raport skautingowy"}
             {view === "help" && "Jak korzystać"}
           </h1>
           <div style={{ display: "flex", gap: 22, marginTop: 14, flexWrap: "wrap" }}>
             <Stat n={data.squad.length} l="zawodników" />
             <Stat n={realCount} l="realnych profili" accent />
-            <Stat n={data.leagues.length - 1} l="lig w puli" />
+            <Stat n={data.leagues.length} l="lig w puli" />
             <Stat n={data.pool.length} l="kandydatów" />
+            {squadValue > 0 && (
+              <Stat n={`~€${squadValue.toFixed(1)}M`}
+                l={squadPriced.length < data.squad.length
+                  ? `wartość kadry (${squadPriced.length}/${data.squad.length})`
+                  : "wartość kadry"} />
+            )}
           </div>
         </div>
 
@@ -422,6 +493,8 @@ export default function App() {
           {view === "okazje" && <OkazjeView {...{ data, fmt, short, toggleShort, setSel, setView }} />}
           {view === "flags" && <FlagsView {...{ data, setSel, setView }} />}
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
+          {view === "watch" && <WatchlistView {...{ data, wl, setStatus, setNote, setSel, setView, fmt }} />}
+          {view === "raport" && <ReportView {...{ data, wl, fmt }} />}
           {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "metrics" && <MetricsView data={data} />}
@@ -505,6 +578,11 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                     <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
                       <span className="cond" style={{ fontSize: 11.5, fontWeight: 800, color: "#fff",
                         background: C.red, borderRadius: 4, padding: "1px 7px" }}>{p.pos}</span>
+                      {roleName(p) && (
+                        <span className="cond" title="Rola w modelu (RC + koherencja)"
+                          style={{ fontSize: 10, fontWeight: 700, color: C.steelHi, background: "transparent",
+                            border: `1px solid ${C.line}`, borderRadius: 4, padding: "0px 5px" }}>{roleName(p)}</span>
+                      )}
                       {Array.isArray(p.alt_pos) && p.alt_pos.length > 0 && (
                         <span className="cond" title={`Gra też na: ${p.alt_pos.join(", ")} (pozycja alternatywna)`}
                           style={{ fontSize: 10, fontWeight: 700, color: C.steelHi, background: "transparent",
@@ -606,6 +684,11 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
           <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.15 }}>{sel.name}</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 3 }}>
             <span className="cond" style={{ fontSize: 12, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 7px" }}>{sel.pos}</span>
+            {roleName(sel) && (
+              <span className="cond" title="Rola w modelu — na niej liczone są RC i koherencja (dobór KPI wg analityków)"
+                style={{ fontSize: 11, fontWeight: 700, color: C.steelHi, background: C.panel2,
+                  border: `1px solid ${C.line}`, borderRadius: 4, padding: "1px 6px", cursor: "help" }}>{roleName(sel)}</span>
+            )}
             {Array.isArray(sel.alt_pos) && sel.alt_pos.length > 0 && (
               <span className="cond" title={`Gra też na: ${sel.alt_pos.join(", ")} (pozycja alternatywna)`}
                 style={{ fontSize: 11, fontWeight: 700, color: C.steelHi, border: `1px solid ${C.line}`,
@@ -693,7 +776,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
               gridTemplateColumns: "1.5fr 0.9fr 1fr 1fr auto", gap: 16, alignItems: "center" }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name && p.name !== "?" ? p.name : p.lg}</div>
-                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}</div>
                 {p.name && p.name !== "?" && (
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>
@@ -745,7 +828,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                     cursor: "pointer", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>
                   vs {surnameU(sel.name)}
                 </button>
-                <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
+                <button onClick={() => toggleShort(p)} title="Lista obserwowanych"
                   style={{ background: short.includes(p.id) ? C.red : "transparent",
                     color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
                     borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
@@ -850,7 +933,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                     : <div style={{ fontSize: 12, color: C.steel }}>brak wyceny</div>}
                   <div style={{ fontSize: 10, color: C.steel }}>wartość rynkowa</div>
                 </div>
-                <button onClick={() => toggleShort(p.id)} title="Lista obserwowanych"
+                <button onClick={() => toggleShort(p)} title="Lista obserwowanych"
                   style={{ background: short.includes(p.id) ? C.red : "transparent",
                     color: short.includes(p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(p.id) ? C.red : C.line}`,
                     borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
@@ -861,6 +944,260 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
           </div></div>
         </>
       )}
+    </div>
+  );
+}
+
+// ============================ RAPORT / EKSPORT PDF ============================
+// Drukowalny raport skautingowy. Źródło: watchlista (obserwowani + do sprawdzenia)
+// albo TOP per pozycja z puli. „Zapisz jako PDF" = window.print() + CSS @media print
+// (czysty, zaznaczalny tekst, bez zależności). Układ jasny (na biały papier).
+const RP_POS = ["GK", "CB", "WB", "DM", "CM", "AM", "WM", "W", "ST"];
+function ReportView({ data, wl, fmt }) {
+  const [source, setSource] = useState("watch");
+  const [topN, setTopN] = useState(3);
+  const lgIdx = useMemo(() => Object.fromEntries((data.leagues || []).map((l) => [l.lg, l])), [data]);
+  const byId = useMemo(() => {
+    const m = {}; for (const p of data.pool || []) m[p.id] = p; for (const s of data.squad || []) m[s.id] = s; return m;
+  }, [data]);
+  const today = (data.meta && data.meta.generated) || "";
+
+  // Wiersze raportu, pogrupowane wg pozycji.
+  const sections = useMemo(() => {
+    const grp = {};
+    if (source === "watch") {
+      for (const id of Object.keys(wl)) {
+        const e = wl[id]; if (e.s === "odrzucony") continue;
+        const live = byId[id];
+        const pos = (live && live.pos) || e.pos || "—";
+        const rc = live ? (typeof live.raw === "number" ? Math.round(adjLevel(live, lgIdx)) : live.rc) : null;
+        const coh = live && typeof live.coherence === "number" ? Math.round(live.coherence) : null;
+        (grp[pos] = grp[pos] || []).push({
+          name: e.nm || id, pos, lg: (live && live.lg) || e.lg || "", age: live && live.age,
+          rc, coh, mv: Number((live && live.mv) || e.mv) || 0, note: e.n || "",
+          status: e.s, ref: live && live.coherence_ref,
+        });
+      }
+    } else {
+      const byPos = {};
+      for (const p of data.pool || []) {
+        if (!p.pos || typeof p.raw !== "number") continue;
+        (byPos[p.pos] = byPos[p.pos] || []).push(p);
+      }
+      for (const pos of Object.keys(byPos)) {
+        const top = byPos[pos].map((p) => ({ p, adj: adjLevel(p, lgIdx) }))
+          .sort((a, b) => b.adj - a.adj).slice(0, topN);
+        grp[pos] = top.map(({ p, adj }) => ({
+          name: p.name, pos, lg: p.lg, age: p.age, rc: Math.round(adj),
+          coh: typeof p.coherence === "number" ? Math.round(p.coherence) : null,
+          mv: Number(p.mv) || 0, note: "", ref: p.coherence_ref,
+        }));
+      }
+    }
+    return RP_POS.filter((pos) => grp[pos] && grp[pos].length).map((pos) => ({ pos, rows: grp[pos] }));
+  }, [source, topN, wl, data, byId, lgIdx]);
+
+  const total = sections.reduce((s, x) => s + x.rows.length, 0);
+
+  return (
+    <div>
+      {/* Pasek narzędzi — NIE drukuje się */}
+      <div className="noprint" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
+        <div style={{ display: "flex", gap: 6 }}>
+          {[["watch", "Z watchlisty"], ["top", "TOP per pozycja"]].map(([k, lab]) => (
+            <button key={k} onClick={() => setSource(k)}
+              style={{ background: source === k ? C.red : "transparent", color: source === k ? "#fff" : C.steelHi,
+                border: `1px solid ${source === k ? C.red : C.line}`, borderRadius: 9, padding: "8px 14px", fontSize: 13, cursor: "pointer", fontWeight: 600 }}>
+              {lab}
+            </button>
+          ))}
+        </div>
+        {source === "top" && (
+          <label className="mono" style={{ fontSize: 12, color: C.steel, display: "flex", alignItems: "center", gap: 7 }}>
+            TOP
+            <select value={topN} onChange={(e) => setTopN(Number(e.target.value))}
+              style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 7, padding: "5px 8px" }}>
+              {[3, 5, 8].map((n) => <option key={n} value={n}>{n}</option>)}
+            </select>
+            per pozycja
+          </label>
+        )}
+        <button onClick={() => window.print()}
+          style={{ marginLeft: "auto", background: C.red, color: "#fff", border: "none", borderRadius: 9,
+            padding: "9px 18px", fontSize: 13.5, cursor: "pointer", fontWeight: 700 }}>
+          ⭳ Zapisz jako PDF
+        </button>
+      </div>
+      <div className="noprint" style={{ fontSize: 12, color: C.steel, marginBottom: 14 }}>
+        Podgląd raportu (jasny — pod druk). „Zapisz jako PDF" otwiera okno drukowania — wybierz „Zapisz jako PDF" jako drukarkę. {source === "watch" && "Bierze obserwowanych i do sprawdzenia z watchlisty (bez odrzuconych)."}
+      </div>
+
+      {/* DOKUMENT (drukowalny) */}
+      <div className="report-print" style={{ background: "#fff", color: "#111", borderRadius: 8, padding: "28px 30px", maxWidth: 900 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid #E4022B", paddingBottom: 12, marginBottom: 18 }}>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: ".01em" }}>Raków Częstochowa — raport skautingowy</div>
+            <div className="rp-muted" style={{ fontSize: 12.5, marginTop: 3 }}>
+              {source === "watch" ? "Lista obserwowanych (watchlista)" : `TOP ${topN} kandydatów per pozycja`} · {total} zawodników{today ? ` · dane: ${today}` : ""}
+            </div>
+          </div>
+          <div style={{ fontSize: 11, color: "#E4022B", fontWeight: 800, letterSpacing: 1 }}>RAKÓW SCOUT</div>
+        </div>
+
+        {total === 0 && (
+          <div className="rp-muted" style={{ fontSize: 13 }}>
+            {source === "watch" ? "Watchlista jest pusta — oznacz zawodników gwiazdką, żeby weszli do raportu." : "Brak kandydatów w puli."}
+          </div>
+        )}
+
+        {sections.map(({ pos, rows }) => (
+          <div key={pos} className="rp-section" style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#E4022B", borderBottom: "1px solid #eee", paddingBottom: 4, marginBottom: 8 }}>
+              {POS_LABEL[pos] || pos} <span style={{ color: "#999", fontWeight: 600 }}>· {rows.length}</span>
+            </div>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+              <thead>
+                <tr style={{ color: "#666", textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: ".04em" }}>
+                  <th style={{ padding: "3px 6px" }}>Zawodnik</th><th style={{ padding: "3px 6px" }}>Liga</th>
+                  <th style={{ padding: "3px 6px" }}>Wiek</th><th style={{ padding: "3px 6px" }}>RC</th>
+                  <th style={{ padding: "3px 6px" }}>Koh.</th><th style={{ padding: "3px 6px" }}>Wycena</th>
+                  {source === "watch" && <th style={{ padding: "3px 6px" }}>Notatka</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={i} style={{ borderTop: "1px solid #f0f0f0" }}>
+                    <td style={{ padding: "4px 6px", fontWeight: 600 }}>
+                      {r.name}{r.status === "sprawdzic" ? <span className="rp-muted" style={{ fontWeight: 400 }}> (do sprawdzenia)</span> : ""}
+                    </td>
+                    <td className="rp-muted" style={{ padding: "4px 6px" }}>{r.lg}</td>
+                    <td className="rp-muted" style={{ padding: "4px 6px" }}>{r.age || "—"}</td>
+                    <td style={{ padding: "4px 6px", fontWeight: 700 }}>{r.rc != null ? r.rc : "—"}</td>
+                    <td style={{ padding: "4px 6px" }}>{r.coh != null ? `${r.coh}%` : "—"}</td>
+                    <td style={{ padding: "4px 6px" }}>{r.mv > 0 ? fmt(r.mv) : "—"}</td>
+                    {source === "watch" && <td className="rp-muted" style={{ padding: "4px 6px", fontStyle: r.note ? "normal" : "italic" }}>{r.note || "—"}</td>}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+
+        <div className="rp-muted" style={{ fontSize: 10, marginTop: 18, borderTop: "1px solid #eee", paddingTop: 8 }}>
+          RC = poziom skorygowany o handicap ligi (percentyl vs Ekstraklasa). Koh. = dopasowanie stylu do zawodnika Rakowa{sections[0] && sections[0].rows[0] && sections[0].rows[0].ref ? "" : ""}. Wycena = wartość rynkowa (Transfermarkt/Scoutastic). Raport generowany z narzędzia skautingowego Rakowa.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================ WATCHLISTA — WIDOK ============================
+const WATCH_COL = { obserwowany: "#E4022B", sprawdzic: "#E8A13A", odrzucony: "#7C90B0" };
+function WatchlistView({ data, wl, setStatus, setNote, setSel, setView, fmt }) {
+  // Indeks żywych danych (pula + skład) do odświeżenia RC/koherencji.
+  const byId = useMemo(() => {
+    const m = {};
+    for (const p of data.pool || []) m[p.id] = p;
+    for (const s of data.squad || []) m[s.id] = s;
+    return m;
+  }, [data]);
+  const ids = Object.keys(wl);
+  const entries = ids.map((id) => ({ id, ...wl[id], live: byId[id] || null }))
+    .sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  const order = ["obserwowany", "sprawdzic", "odrzucony"];
+  const groups = order.map((st) => ({ st, items: entries.filter((e) => e.s === st) }));
+  const jump = (e) => {
+    if (!e.live) return;
+    const cand = data.pool.find((p) => p.id === e.id);
+    if (cand) { setSel(cand); setView("match"); }
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+        <Lead>Twoja lista obserwowanych — zapisywana lokalnie w tej przeglądarce (nie współdzielona między osobami). Gwiazdką w „Odpowiednikach", „Okazjach" i „Szukaj" dodajesz zawodnika; tu zmieniasz status i dopisujesz notatki. RC i koherencja odświeżają się z aktualnych danych.</Lead>
+        {Object.keys(wl).length > 0 && (
+          <button onClick={() => setView("raport")}
+            style={{ flexShrink: 0, background: "transparent", color: C.redHi, border: `1px solid ${C.red}66`,
+              borderRadius: 9, padding: "8px 14px", fontSize: 13, cursor: "pointer", fontWeight: 600, whiteSpace: "nowrap" }}>
+            ⭳ Eksportuj do PDF
+          </button>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 8px" }}>
+        {order.map((st) => (
+          <Kpi key={st} l={WATCH_STATUSES[st].label} v={groups.find((g) => g.st === st).items.length}
+            c={groups.find((g) => g.st === st).items.length ? WATCH_COL[st] : C.steel} />
+        ))}
+      </div>
+
+      {ids.length === 0 && <Empty>Watchlista jest pusta. Oznacz zawodników gwiazdką ☆ w Odpowiednikach / Okazjach / Szukaj — pojawią się tutaj.</Empty>}
+
+      {groups.map(({ st, items }) => items.length > 0 && (
+        <div key={st}>
+          <SectionLabel>{WATCH_STATUSES[st].label} · {items.length}</SectionLabel>
+          <div style={{ display: "grid", gap: 9 }}>
+            {items.map((e) => {
+              const rc = e.live ? (typeof e.live.raw === "number" ? Math.round(e.live.raw) : e.live.rc) : null;
+              const coh = e.live && typeof e.live.coherence === "number" ? Math.round(e.live.coherence) : null;
+              const mv = Number((e.live && e.live.mv) || e.mv) || 0;
+              return (
+                <div key={e.id} style={{ background: C.panel, border: `1px solid ${WATCH_COL[st]}44`, borderRadius: 12, padding: "13px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 14, flexWrap: "wrap" }}>
+                    <div style={{ flex: "1 1 220px", minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                        <span style={{ fontSize: 14.5, fontWeight: 600, color: C.bone }}>{e.nm || e.id}</span>
+                        {e.pos && <span className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}>{e.pos}</span>}
+                        {e.lg && <span style={{ fontSize: 11, color: C.steel }}>{e.lg}</span>}
+                        {!e.live && <span className="mono" style={{ fontSize: 10.5, color: C.warn }}>poza pulą</span>}
+                      </div>
+                      <div className="mono" style={{ display: "flex", gap: 14, marginTop: 6, fontSize: 11.5, color: C.steel }}>
+                        {rc != null && <span>RC <b style={{ color: C.bone }}>{rc}</b></span>}
+                        {coh != null && <span>koh. <b style={{ color: C.bone }}>{coh}%</b></span>}
+                        {mv > 0 && <span>{fmt(mv)}</span>}
+                      </div>
+                      <textarea value={e.n || ""} onChange={(ev) => setNote(e.id, ev.target.value)}
+                        placeholder="Notatka skauta…" rows={2}
+                        style={{ width: "100%", marginTop: 9, background: C.ink, color: C.bone,
+                          border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 10px",
+                          fontSize: 12.5, fontFamily: "inherit", resize: "vertical" }} />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
+                      <div style={{ display: "flex", gap: 5 }}>
+                        {order.map((s2) => (
+                          <button key={s2} onClick={() => setStatus({ id: e.id, name: e.nm, pos: e.pos, lg: e.lg, mv }, s2)}
+                            title={WATCH_STATUSES[s2].label}
+                            style={{ background: e.s === s2 ? WATCH_COL[s2] : "transparent",
+                              color: e.s === s2 ? "#fff" : C.steel, border: `1px solid ${e.s === s2 ? WATCH_COL[s2] : C.line}`,
+                              borderRadius: 8, padding: "5px 9px", fontSize: 12, cursor: "pointer", fontWeight: 700 }}>
+                            {WATCH_STATUSES[s2].icon}
+                          </button>
+                        ))}
+                      </div>
+                      <div style={{ display: "flex", gap: 5 }}>
+                        {e.live && (
+                          <button onClick={() => jump(e)} style={{ flex: 1, background: "transparent", color: C.redHi,
+                            border: `1px solid ${C.red}66`, borderRadius: 8, padding: "5px 9px", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>
+                            Odpowiednicy →
+                          </button>
+                        )}
+                        <button onClick={() => setStatus({ id: e.id }, null)} title="Usuń z watchlisty"
+                          style={{ background: "transparent", color: C.steel, border: `1px solid ${C.line}`,
+                            borderRadius: 8, padding: "5px 10px", fontSize: 11.5, cursor: "pointer" }}>
+                          Usuń
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <Note>Dane zapisane lokalnie w przeglądarce (klucz <span className="mono">{WATCH_KEY}</span>) — nie synchronizują się między osobami ani urządzeniami. Gdy dopniemy backend, przeniesiemy je do wersji współdzielonej bez utraty notatek. „poza pulą" = zawodnik wypadł z bieżących danych (np. za mało minut po odświeżeniu) — notatka zostaje, RC/koherencji chwilowo brak.</Note>
     </div>
   );
 }
@@ -1230,6 +1567,16 @@ function LeaguesView({ data }) {
 
 const POS_LABEL = { GK: "Bramkarz", CB: "Środek obrony", WB: "Wahadło", WM: "Pomoc boczna",
   DM: "Defen. pomoc", CM: "Środek pomocy", AM: "Ofens. pomoc", W: "Skrzydło", ST: "Napastnik" };
+
+// ROLA MODELU (6 grup wg KPI Igora) — oś, na której liczone są RC i koherencja.
+// Etykieta czytelna dla skauta; klucz = pole player.role z data.json.
+const ROLE_LABEL = { "Bramka": "Bramka", "ŚO": "Środkowy obrońca", "Boczny": "Boczny / wahadło",
+  "Skrzydłowy": "Skrzydłowy", "6-8": "Środek pola (6/8)", "10-9": "Ofensywa (10/9)" };
+// Awaryjne mapowanie (gdy starszy data.json bez pola role) — lustro ROLE_OF_POS z modelu.
+const ROLE_OF_POS = { GK: "Bramka", CB: "ŚO", WB: "Boczny", W: "Skrzydłowy", WM: "Skrzydłowy",
+  DM: "6-8", CM: "6-8", AM: "10-9", ST: "10-9" };
+const roleKey = (p) => (p && p.role) || (p && ROLE_OF_POS[p.pos]) || null;
+const roleName = (p) => { const k = roleKey(p); return k ? (ROLE_LABEL[k] || k) : null; };
 
 function CorrView({ data }) {
   const corr = (data && data.correlations) || {};
@@ -2023,13 +2370,13 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
               <div className="disp" style={{ fontSize: 16, color: C.proxy, lineHeight: 0.9 }}>{fmt(c.price.est)}</div>
               <div style={{ fontSize: 9, color: C.steel }}>cena</div>
             </div>
-            <div title="Wskaźnik wartości = jakość / cena">
+            <div title="Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena">
               <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
                 <div style={{ width: `${(c.value / maxV) * 100}%`, height: "100%", background: C.proxy }} />
               </div>
-              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wartość</div>
+              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wsk. obs.</div>
             </div>
-            <button onClick={() => toggleShort(c.p.id)} title="Lista obserwowanych"
+            <button onClick={() => toggleShort(c.p)} title="Lista obserwowanych"
               style={{ background: short.includes(c.p.id) ? C.red : "transparent",
                 color: short.includes(c.p.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(c.p.id) ? C.red : C.line}`,
                 borderRadius: 9, width: 34, height: 34, cursor: "pointer", fontSize: 15 }}>
@@ -2039,7 +2386,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
         ))}
       </div></div>
       <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>
-        Wartość = (0,45·poziom + 0,55·koherencja) / √cena. Tylko kandydaci z wyceną i policzonym poziomem. To podpowiedź do obserwacji, nie ostateczny ranking.
+        Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena — łączy jakość i dopasowanie stylu, karząc za cenę. To NIE to samo co „Okazja" (percentyl jakości minus percentyl ceny, w zakładce Okazje) ani „wycena" (wartość rynkowa). Podpowiedź do obserwacji, nie ostateczny ranking.
       </div>
     </div>
   );
@@ -2282,7 +2629,7 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
                 <div style={{ fontSize: 10, color: C.steel }}>{r.free ? "wolny" : "ost. rok"}</div>
               </div>
             )}
-            <button onClick={() => toggleShort(r.id)} title="Lista obserwowanych"
+            <button onClick={() => toggleShort(r)} title="Lista obserwowanych"
               style={{ background: short.includes(r.id) ? C.red : "transparent",
                 color: short.includes(r.id) ? "#fff" : C.steel, border: `1px solid ${short.includes(r.id) ? C.red : C.line}`,
                 borderRadius: 9, width: 38, height: 38, cursor: "pointer", fontSize: 17 }}>
