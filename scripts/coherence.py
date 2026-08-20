@@ -261,11 +261,35 @@ GI_STYLE_METRICS = {
 # Wagi w profilu koherencji (<1 = warstwa wzbogaca, nie dominuje techniki).
 # GI ma dużo metryk, więc niższa waga na metrykę niż fizyka, by SkillCorner
 # łącznie nie przytłoczył sygnału technicznego StatsBomb.
+# --- Typy biegów bez piłki (SkillCorner In-Possession) w profilu KOHERENCJI ---
+# Czwarta warstwa stylu (obok techniki, fizyki, GI). Też TYLKO koherencja, nie RC.
+# "Kategoryzacja biegów" z listy Igora: rozkład zawodnika na 10 nazwanych typów
+# (za obrońcę / naddanie / do nogi / w kanał...). Bardzo stylowe. GK: bez.
+# Kolumny doszywane przez physical.enrich_rows (z skillcorner_runtypes_all.csv).
+_RUNTYPE_STYLE = [
+    "runtype_run_in_behind", "runtype_cross_receiver_run", "runtype_overlap_run",
+    "runtype_underlap_run", "runtype_coming_short_run", "runtype_pulling_half_space_run",
+    "runtype_run_ahead_of_the_ball", "runtype_pulling_wide_run", "runtype_support_run",
+    "runtype_dropping_off_run",
+]
+RUNTYPE_STYLE_METRICS = {
+    "Bramka": [],
+    "ŚO": _RUNTYPE_STYLE,
+    "Boczny": _RUNTYPE_STYLE,
+    "Skrzydłowy": _RUNTYPE_STYLE,
+    "6-8": _RUNTYPE_STYLE,
+    "10-9": _RUNTYPE_STYLE,
+}
+ 
 PHYS_WEIGHT = 0.5
 GI_WEIGHT = 0.35
+# Typy biegów: dużo kolumn (10), skorelowane z GI biegów — niższa waga, by
+# rozkład biegów wzbogacał sygnał, a nie zdominował techniki StatsBomb.
+RUNTYPE_WEIGHT = 0.3
 METRIC_WEIGHTS = {}
 METRIC_WEIGHTS.update({m: PHYS_WEIGHT for m in _PHYS_STYLE})
 METRIC_WEIGHTS.update({m: GI_WEIGHT for m in _GI_STYLE})
+METRIC_WEIGHTS.update({m: RUNTYPE_WEIGHT for m in _RUNTYPE_STYLE})
  
  
 def _profile_metrics(line):
@@ -273,7 +297,8 @@ def _profile_metrics(line):
     (te z warstw SkillCornera, które realnie dołączono do wiersza)."""
     return (LINE_METRICS.get(line, [])
             + PHYS_STYLE_METRICS.get(line, [])
-            + GI_STYLE_METRICS.get(line, []))
+            + GI_STYLE_METRICS.get(line, [])
+            + RUNTYPE_STYLE_METRICS.get(line, []))
  
  
 def _val(row, key):
@@ -664,3 +689,4 @@ if __name__ == "__main__":
     print("Poziom gracza 1:", quality_level(base[0], "6-8", st))
     print("Koherencja 1↔2:", coherence(base[0], base[1], "6-8", st), "%")
     print("Koherencja 1↔1:", coherence(base[0], base[0], "6-8", st), "% (powinno ~100)")
+ 
