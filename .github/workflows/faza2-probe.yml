@@ -1,0 +1,54 @@
+name: Faza 2 — sonda danych eventowych
+ 
+# Jednorazowa diagnostyka pod Fazę 2 (KPI eventowe Igora). Sprawdza:
+#   A. StatsBomb — czy licencja daje dane EVENTOWE i jakie pola (pod łamanie
+#      linii B1/B2/B3, mapy stref przyjęć, liczenie minut z eventów).
+#   B. SkillCorner — czy Off-Ball Runs ma rozbicie na TYPY biegów.
+#
+# JAK UŻYĆ:
+#   1. Actions → „Faza 2 — sonda danych eventowych" → Run workflow.
+#      (opcjonalnie wybierz źródło: both / statsbomb / skillcorner)
+#   2. Otwórz uruchomienie → krok „Sonda Fazy 2".
+#   3. Skopiuj wszystkie linie [sonda2] i wklej do rozmowy.
+#
+# NIC nie zapisuje ani nie commituje — tylko czyta z API i wypisuje wynik.
+# Nie drukuje poświadczeń.
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Źródło do sondy"
+        required: false
+        default: "both"
+        type: choice
+        options:
+          - both
+          - statsbomb
+          - skillcorner
+ 
+permissions:
+  contents: read
+ 
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod repo
+        uses: actions/checkout@v4
+ 
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Zainstaluj biblioteki klientów
+        run: pip install statsbombpy skillcorner pandas
+ 
+      - name: Sonda Fazy 2
+        env:
+          SB_USERNAME: ${{ secrets.SB_USERNAME }}
+          SB_PASSWORD: ${{ secrets.SB_PASSWORD }}
+          SKILLCORNER_USERNAME: ${{ secrets.SKILLCORNER_USERNAME }}
+          SKILLCORNER_PASSWORD: ${{ secrets.SKILLCORNER_PASSWORD }}
+        run: python scripts/faza2_probe.py ${{ github.event.inputs.source }}
