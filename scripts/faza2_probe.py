@@ -114,6 +114,29 @@ def probe_statsbomb():
         return
     _p(f"[SB] OK — EVENTY DOSTĘPNE. Wierszy: {len(ev)}, kolumn: {len(ev.columns)}.")
  
+    # 3b) DANE 360 (freeze frames) — potrzebne do PRAWDZIWEGO packingu i B1/B2/B3
+    #     (pozycje rywali). Bez 360 zrobimy tylko proxy progresji przez tercje.
+    has_360 = False
+    try:
+        ev360 = sb.events(match_id=mid, creds=creds, include_360_metrics=True)
+        cols360 = [c for c in ev360.columns if "360" in c.lower() or "freeze" in c.lower()
+                   or "visible" in c.lower() or "teammate" in c.lower()]
+        nonnull = {c: int(ev360[c].notna().sum()) for c in cols360}
+        has_360 = any(v > 0 for v in nonnull.values())
+        _p(f"[SB] 360 przez include_360_metrics: kolumny={cols360}, niepuste={nonnull}")
+    except Exception as e:  # noqa: BLE001
+        _p(f"[SB] include_360_metrics nie przeszło: {type(e).__name__}: {e}")
+    if not has_360:
+        try:
+            fr = sb.frames(match_id=mid, creds=creds)
+            _p(f"[SB] sb.frames(): {len(fr)} wierszy, kolumny={list(fr.columns)[:12]}"
+               f"{' …' if len(fr.columns) > 12 else ''}. 360 DOSTĘPNE.")
+            has_360 = len(fr) > 0
+        except Exception as e:  # noqa: BLE001
+            _p(f"[SB] sb.frames() nie przeszło: {type(e).__name__}: {e}")
+    _p(f"[SB] >>> DANE 360 (freeze frames): {'DOSTĘPNE' if has_360 else 'BRAK'} "
+       f"— {'zrobimy prawdziwy packing + B1/B2/B3' if has_360 else 'tylko proxy progresji przez tercje'}.")
+ 
     # 4) Typy eventów (to jest kręgosłup wszystkich KPI eventowych).
     try:
         vc = ev["type"].value_counts()
@@ -236,12 +259,28 @@ def probe_skillcorner():
             except Exception:  # noqa: BLE001
                 pass
  
-    # próbujemy zakresu na competition_edition z limitem; jeśli endpoint wymaga meczu,
-    # 400 nam to powie (jak przy group_by).
+    # 3a) get_in_possession_off_ball_runs: 'limit' niedozwolony, ale 'run_type' TAK
+    #     (jako filtr) + group_by=player. Najpierw agregat bez filtra (kolumny/kształt).
     _dump("get_in_possession_off_ball_runs",
-          {"competition_edition": EK, "limit": 50}, "in_possession (event-level)")
-    _dump("get_dynamic_events_off_ball_runs",
-          {"competition_edition": EK, "limit": 50}, "dynamic_events (event-level)")
+          {"competition_edition": EK, "group_by": "player"}, "in_possession (agregat/player)")
+ 
+    # 3b) ENUMERACJA wartości run_type — podajemy nieprawidłową wartość i czytamy z
+    #     błędu listę dozwolonych (ten sam trik, co przy group_by).
+    try:
+        client.get_in_possession_off_ball_runs(
+            params={"competition_edition": EK, "group_by": "player", "run_type": "__enumeruj__"})
+        _p("[SC] run_type='__enumeruj__' NIE zwrócił błędu — sprawdź kolumny wyżej.")
+    except Exception as e:  # noqa: BLE001
+        _p(f"[SC] Dozwolone wartości run_type (z błędu API): {e}")
+ 
+    # 3c) To samo dla 'channel' i 'third' (kanał/tercja) — mogą się przydać do
+    #     lokalizacji biegów; enumerujemy przy okazji.
+    for prm in ("channel", "third"):
+        try:
+            client.get_in_possession_off_ball_runs(
+                params={"competition_edition": EK, "group_by": "player", prm: "__enumeruj__"})
+        except Exception as e:  # noqa: BLE001
+            _p(f"[SC] Dozwolone wartości {prm}: {e}")
  
     _p("[SC] === koniec sondy SkillCorner ===")
  
