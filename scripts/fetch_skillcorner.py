@@ -318,34 +318,86 @@ RUN_TYPES = [
 RUNTYPE_METRIC = "count_runs_per_match"   # metryka na typ (wolumen biegów danego typu / mecz)
  
  
+_RUNTYPE_DIAG = {"done": False}   # jednorazowa diagnostyka kolumn
+ 
+ 
+def _sc_get_runs(client, params, tries=4):
+    """Wywołanie in_possession_off_ball_runs z retry na 5xx (CloudFront 502 bywa
+    przejściowy przy wielu zapytaniach). 401/403 = twardy stop."""
+    import time
+    last = None
+    for i in range(tries):
+        try:
+            return client.get_in_possession_off_ball_runs(params=params)
+        except Exception as e:  # noqa: BLE001
+            status = getattr(getattr(e, "response", None), "status_code", None)
+            # HTTPStatusError z fitrequest bywa tuplą (status, body, ...) w e.args
+            if status is None and e.args and isinstance(e.args[0], int):
+                status = e.args[0]
+            if status in (401, 403):
+                die(f"{status} przy get_in_possession_off_ball_runs. "
+                    f"Sprawdź SKILLCORNER_USERNAME/PASSWORD i dostęp do In-Possession Off-Ball Runs.")
+            last = e
+            if status and 500 <= status < 600:
+                time.sleep(1.5 * (i + 1))   # backoff na błąd serwera
+                continue
+            raise
+    if last:
+        raise last
+ 
+ 
+def _pick(cols, *cands):
+    """Pierwsza pasująca kolumna z listy kandydatów (dokładna albo po fragmencie)."""
+    for c in cands:
+        if c in cols:
+            return c
+    for c in cols:
+        lc = c.lower()
+        if any(k in lc for k in cands):
+            return c
+    return None
+ 
+ 
 def _pull_runtypes(client, eid, group="player"):
-    """Szeroka tabela typów biegów dla jednej edycji (albo None)."""
-    import pandas as pd
+    """Szeroka tabela typów biegów dla jednej edycji (albo None). Odporna na
+    różnice kształtu odpowiedzi (player_id vs player.id, nazwa kolumny metryki)."""
+    import time
     base = None
     for rt in RUN_TYPES:
         try:
-            data = client.get_in_possession_off_ball_runs(
-                params={"competition_edition": eid, "group_by": group, "run_type": rt})
+            data = _sc_get_runs(client, {"competition_edition": eid, "group_by": group, "run_type": rt})
         except Exception as e:  # noqa: BLE001
-            status = getattr(getattr(e, "response", None), "status_code", None)
-            if status in (401, 403):
-                die(f"{status} przy get_in_possession_off_ball_runs (run_type={rt}). "
-                    f"Sprawdź SKILLCORNER_USERNAME/PASSWORD i dostęp do In-Possession Off-Ball Runs.")
             print(f"[uwaga] runtype {rt} edycja {eid}: {type(e).__name__}: {e}", file=sys.stderr)
             continue
         df = to_frame(data)
-        if len(df) == 0 or RUNTYPE_METRIC not in df.columns or "player_id" not in df.columns:
+        # DIAGNOSTYKA (raz): pokaż realny kształt odpowiedzi filtrowanej po run_type.
+        if not _RUNTYPE_DIAG["done"] and len(df):
+            _RUNTYPE_DIAG["done"] = True
+            print(f"[diag] in_possession(run_type={rt}, ed={eid}): {len(df)} wierszy, "
+                  f"kolumny: {list(df.columns)}", file=sys.stderr)
+        if len(df) == 0:
             continue
-        cols = ["player_id", RUNTYPE_METRIC]
-        for extra in ("player_name", "short_name"):
-            if extra in df.columns:
-                cols.insert(1, extra)
-        sub = df[cols].rename(columns={"short_name": "player_short_name",
-                                       RUNTYPE_METRIC: f"runtype_{rt}"})
+        pid_col = _pick(df.columns, "player_id", "player.id", "id")
+        met_col = _pick(df.columns, "count_runs_per_match", "count_runs", "runs_per_match",
+                        "count_runs_in_sample")
+        if pid_col is None or met_col is None:
+            print(f"[uwaga] runtype {rt} edycja {eid}: brak player_id/metryki w kolumnach "
+                  f"{list(df.columns)[:12]} — pomijam.", file=sys.stderr)
+            time.sleep(0.3)
+            continue
+        name_col = _pick(df.columns, "player_name", "player.name", "name")
+        short_col = _pick(df.columns, "short_name", "player_short_name", "player.short_name")
+        keep = {pid_col: "player_id", met_col: f"runtype_{rt}"}
+        if name_col:
+            keep[name_col] = "player_name"
+        if short_col:
+            keep[short_col] = "player_short_name"
+        sub = df[list(keep)].rename(columns=keep)
         if base is None:
             base = sub
         else:
             base = base.merge(sub[["player_id", f"runtype_{rt}"]], on="player_id", how="outer")
+        time.sleep(0.3)   # łagodnie dla API (unikamy 502)
     if base is None or len(base) == 0:
         return None
     base.insert(0, "competition_edition", eid)
