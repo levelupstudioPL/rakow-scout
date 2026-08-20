@@ -266,6 +266,7 @@ def _alt_positions(sb_row, manual_alt, primary_pos):
 def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_stats, manual_alt=None):
     return {
         "id": f"rk-{_slug(name)}", "name": name, "pos": pos, "line": line,
+        "role": coh.role_of(pos, line),   # oś modelu (KPI Igora); line zostaje dla UI
         "alt_pos": _alt_positions(sb_row, manual_alt, pos),
         "rc": rc, "real": True, "rc_estimated": est,
         # wiek/wartość/kontrakt — zasilają moduły Priorytety i Czerwone flagi.
@@ -280,7 +281,7 @@ def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_st
     }
  
  
-def build_squad_from_statsbomb(base_rows, base_stats_by_line, universal_stats, pos_style_stats):
+def build_squad_from_statsbomb(base_rows, base_stats_by_role, universal_stats, pos_style_stats):
     """SKŁAD RAKOWA — automatycznie ze StatsBomb: zawodnicy z minutami dla Rakowa
     w bieżącym sezonie Ekstraklasy. Odświeża się sam przy każdym pobraniu danych.
     RC z modelu, gdy próbka >= MIN_MINUTES; inaczej 'b.d.'.
@@ -304,7 +305,8 @@ def build_squad_from_statsbomb(base_rows, base_stats_by_line, universal_stats, p
         if not mapped:
             continue
         pos, line = mapped
-        model_rc = (coh.quality_level(r, line, base_stats_by_line[line], minutes=_player_minutes(r))
+        role = coh.role_of(pos, line)
+        model_rc = (coh.quality_level(r, role, base_stats_by_role[role], minutes=_player_minutes(r))
                     if _player_minutes(r) >= MIN_MINUTES else None)
         if isinstance(model_rc, (int, float)):
             rc, est = model_rc, False
@@ -316,7 +318,7 @@ def build_squad_from_statsbomb(base_rows, base_stats_by_line, universal_stats, p
     return squad, rc_from_model
  
  
-def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universal_stats, pos_style_stats):
+def build_squad_from_file(squad_path, base_by_name, base_stats_by_role, universal_stats, pos_style_stats):
     """Awaryjny skład z ręcznego public/squad.json (gdy auto ze StatsBomb zawiedzie)."""
     try:
         static_squad = json.loads(squad_path.read_text(encoding="utf-8"))
@@ -343,7 +345,8 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universa
             continue
         sb_row = base_by_name.get(_norm(name)) \
             or _match_by_tokens(name, base_sur, lambda r: r.get("player_id"))
-        model_rc = (coh.quality_level(sb_row, line, base_stats_by_line[line],
+        role = coh.role_of(pos, line)
+        model_rc = (coh.quality_level(sb_row, role, base_stats_by_role[role],
                                       minutes=_player_minutes(sb_row)) if sb_row else None)
         if isinstance(model_rc, (int, float)):
             rc, est = model_rc, False
@@ -374,7 +377,7 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_line, universa
     return squad, rc_from_model
  
  
-def _apply_historical_fallback(sb, creds, squad, base_stats_by_line,
+def _apply_historical_fallback(sb, creds, squad, base_stats_by_role,
                                universal_stats, pos_style_stats):
     """Dla zawodników składu bez danych w bieżącym sezonie (rc_estimated) szuka ich
     w SEZONIE POPRZEDNIM (HIST_SEASON_ID) we wszystkich skonfigurowanych ligach i —
@@ -408,11 +411,12 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_line,
     recovered = 0
     for e in todo:
         name, line = e["name"], e["line"]
+        role = e.get("role") or coh.role_of(e.get("pos"), line)
         row = hist_by_name.get(_norm(name)) \
             or _match_by_tokens(name, hist_sur, lambda r: r.get("player_id"))
         if not row or _player_minutes(row) < MIN_MINUTES:
             continue
-        rc = coh.quality_level(row, line, base_stats_by_line[line], minutes=_player_minutes(row))
+        rc = coh.quality_level(row, role, base_stats_by_role[role], minutes=_player_minutes(row))
         if not isinstance(rc, (int, float)):
             continue
         e["rc"] = rc
@@ -574,6 +578,7 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
         players_out.append({
             "name": a["name"], "id": s.get("id") if s else None,
             "pos": s.get("pos") if s else None, "line": s.get("line") if s else None,
+            "role": s.get("role") if s else None,
             "rc": s.get("rc") if s else None,
             "rc_estimated": s.get("rc_estimated") if s else None,
             "in_squad": s is not None,
@@ -896,6 +901,7 @@ def _fetch_recent_statsbomb(sb, creds, squad, n_matches=5):
             "id": s.get("id") if s else None,
             "pos": s.get("pos") if s else None,
             "line": s.get("line") if s else None,
+            "role": s.get("role") if s else None,
             "rc": s.get("rc") if s else None,
             "rc_estimated": s.get("rc_estimated") if s else None,
             "in_squad": s is not None,
@@ -1181,21 +1187,22 @@ def build_dataset(sb, creds):
         return isinstance(m, (int, float)) and m >= MIN_MINUTES
     base_pop = [r for r in base_rows if _enough_minutes(r)] or base_rows
  
-    # --- Statystyki populacji ligi bazowej per linia (do normalizacji) ---
-    base_stats_by_line = {ln: coh.build_league_stats(base_pop, ln)
-                          for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
+    # --- Statystyki populacji ligi bazowej per ROLA (oś modelu: RC + koherencja) ---
+    # Rola = grupa Igora (Bramka/ŚO/Boczny/Skrzydłowy/6-8/10-9), drobniej niż 4 linie.
+    base_stats_by_role = {ro: coh.build_league_stats(base_pop, ro) for ro in coh.ROLES}
     # Macierze precyzji (Σ⁻¹) do WYBIELONEGO KOSINUSA w koherencji (Mahalanobis, p.17).
-    # None dla linii, gdzie się nie da (mała próba / wyłączone) → coherence spada do kosinusa.
-    precision_by_line = {ln: coh.build_precision(base_pop, ln, base_stats_by_line[ln])
-                         for ln in ("Bramka", "Obrona", "Pomoc", "Atak")}
-    _pc_ok = [ln for ln, p in precision_by_line.items() if p is not None]
+    # None dla roli, gdzie się nie da (mała próba / wyłączone) → coherence spada do kosinusa.
+    precision_by_role = {ro: coh.build_precision(base_pop, ro, base_stats_by_role[ro])
+                         for ro in coh.ROLES}
+    _pc_ok = [ro for ro, p in precision_by_role.items() if p is not None]
     print(f"[koherencja] Metryka: {'Mahalanobis (wybielony kosinus)' if coh.COH_MAHALANOBIS else 'kosinus'}"
-          f" · precyzja policzona dla linii: {_pc_ok or '(żadnej — fallback do kosinusa)'}",
+          f" · precyzja policzona dla ról: {_pc_ok or '(żadnej — fallback do kosinusa)'}",
           file=sys.stderr)
     # Uniwersalny profil stylu (do koherencji „każdy z każdym" w składzie).
     universal_stats = coh.build_universal_stats(base_pop)
-    # Profil DOPASOWANY DO POZYCJI: populacja bazowa podzielona wg linii, żeby
-    # z-score liczyć względem rówieśników z tej samej pozycji (position-fair).
+    # Profil DOPASOWANY DO POZYCJI (panel „mocne strony"): populacja bazowa podzielona
+    # wg 4 LINII TAKTYCZNYCH (kontrakt frontu: meta.style_labels[line] + profile_pos).
+    # To jest oś WYŚWIETLANIA — celowo pozostaje 4-liniowa, niezależnie od ról modelu.
     LINES = ("Bramka", "Obrona", "Pomoc", "Atak")
     base_pop_by_line = {ln: [] for ln in LINES}
     for r in base_pop:
@@ -1221,13 +1228,13 @@ def build_dataset(sb, creds):
     squad_path = OUT.parent / "squad.json"
     base_by_name = _name_index(base_rows)
     squad, rc_from_model = build_squad_from_file(
-        squad_path, base_by_name, base_stats_by_line, universal_stats, pos_style_stats)
+        squad_path, base_by_name, base_stats_by_role, universal_stats, pos_style_stats)
     src = "squad.json"
     if len(squad) < 11:
         print(f"[skład] squad.json dało tylko {len(squad)} zawodników — "
               f"awaryjnie buduję skład automatycznie ze StatsBomb.", file=sys.stderr)
         squad, rc_from_model = build_squad_from_statsbomb(
-            base_rows, base_stats_by_line, universal_stats, pos_style_stats)
+            base_rows, base_stats_by_role, universal_stats, pos_style_stats)
         src = "auto-StatsBomb"
  
     # FALLBACK HISTORYCZNY: dolicz RC z poprzedniego sezonu dla zawodników bez danych
@@ -1237,7 +1244,7 @@ def build_dataset(sb, creds):
     if squad:
         try:
             rc_hist = _apply_historical_fallback(
-                sb, creds, squad, base_stats_by_line, universal_stats, pos_style_stats)
+                sb, creds, squad, base_stats_by_role, universal_stats, pos_style_stats)
         except Exception as e:  # noqa: BLE001
             print(f"[hist] Fallback historyczny pominięty: {e}", file=sys.stderr)
  
@@ -1251,9 +1258,11 @@ def build_dataset(sb, creds):
     # --- Pula kandydatów z lig europejskich: poziom + koherencja ---
     squad_by_pos = {}
     squad_by_line = {}
+    squad_by_role = {}
     for s in squad:
         squad_by_pos.setdefault(s["pos"], []).append(s)
         squad_by_line.setdefault(s["line"], []).append(s)
+        squad_by_role.setdefault(s.get("role") or coh.role_of(s.get("pos"), s.get("line")), []).append(s)
  
     # Zbiór zawodników Rakowa (po player_id + nazwisku) — do wykluczenia z puli.
     # Solidniej niż _is_rakow_row: łapie też świeży transfer, którego StatsBomb wciąż
@@ -1292,7 +1301,8 @@ def build_dataset(sb, creds):
             if not mapped:
                 continue
             pos, line = mapped
-            _lvl_pre = coh.quality_level(row, line, base_stats_by_line[line])  # bez shrink
+            role = coh.role_of(pos, line)
+            _lvl_pre = coh.quality_level(row, role, base_stats_by_role[role])  # bez shrink
             level, _shr_d = coh.shrink_rc(_lvl_pre, minutes)                   # shrink wg minut
             if _shr_d:
                 _shr_diag[0] += 1
@@ -1302,14 +1312,14 @@ def build_dataset(sb, creds):
             # percentyle, inny podzbiór metryk.
             _d = _padj_diag.setdefault(pos, [0, 0.0, 0.0])
             _d[0] += 1
-            _d[1] += coh.quality_level(row, line, base_stats_by_line[line],
-                                       coh.QUALITY_METRICS_PADJ.get(line))
-            _d[2] += coh.quality_level(row, line, base_stats_by_line[line],
-                                       coh.QUALITY_METRICS_RAW.get(line))
+            _d[1] += coh.quality_level(row, role, base_stats_by_role[role],
+                                       coh.QUALITY_METRICS_PADJ.get(role))
+            _d[2] += coh.quality_level(row, role, base_stats_by_role[role],
+                                       coh.QUALITY_METRICS_RAW.get(role))
             # level_estimated: True gdy kandydat NIE ma metryk jakosciowych dla
             # swojej linii — wtedy quality_level zwrocil fallback (nie realny
             # percentyl). Front pokazuje wtedy znacznik "niepelne dane".
-            _qm = coh.QUALITY_METRICS.get(line, [])
+            _qm = coh.QUALITY_METRICS.get(role, [])
             _has_metrics = any(
                 isinstance(row.get(m), (int, float)) for m in _qm
             )
@@ -1317,20 +1327,20 @@ def build_dataset(sb, creds):
  
             # Koherencja: najpierw z zawodnikiem Rakowa z tej samej pozycji;
             # jeśli brak — porównaj do zawodników z tej samej LINII (szerszy kubełek).
-            refs = squad_by_pos.get(pos) or squad_by_line.get(line, [])
+            refs = squad_by_pos.get(pos) or squad_by_role.get(role, []) or squad_by_line.get(line, [])
             best_coh, best_ref = 0, None
             for s in refs:
                 if not s.get("_sb"):
                     continue
-                c = coh.coherence(row, s["_sb"], line, base_stats_by_line[line],
-                                  precision=precision_by_line.get(line))
+                c = coh.coherence(row, s["_sb"], role, base_stats_by_role[role],
+                                  precision=precision_by_role.get(role))
                 if c > best_coh:
                     best_coh, best_ref = c, s["name"]
  
             pool.append({
                 "id": f"pl-{row.get('player_id')}",
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
-                "lg": lg["name"], "pos": pos, "line": line,
+                "lg": lg["name"], "pos": pos, "line": line, "role": role,
                 "raw": level,
                 "level_estimated": level_estimated,
                 "coherence": best_coh,
@@ -2052,3 +2062,4 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
