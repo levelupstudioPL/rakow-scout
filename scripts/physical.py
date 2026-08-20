@@ -64,8 +64,20 @@ GI_COLUMNS = [
     "onballengagement_count_pressingchain", "onballengagement_count_forwardtrajectory",
 ]
  
+# --- OFF-BALL RUN TYPES (In-Possession) — nazwane typy biegów bez piłki ---
+# Osobne źródło (skillcorner_runtypes_all.csv z fetch_skillcorner.py runtypes-all).
+# Każda kolumna = wolumen biegów danego typu / mecz. To "kategoryzacja biegów"
+# z listy KPI Igora — czysto stylowa, wchodzi tylko do koherencji.
+RUNTYPES_CSV = HERE / "skillcorner_runtypes_all.csv"
+RUNTYPE_COLUMNS = [
+    "runtype_run_in_behind", "runtype_cross_receiver_run", "runtype_overlap_run",
+    "runtype_underlap_run", "runtype_coming_short_run", "runtype_pulling_half_space_run",
+    "runtype_run_ahead_of_the_ball", "runtype_pulling_wide_run", "runtype_support_run",
+    "runtype_dropping_off_run",
+]
+ 
 # wszystkie kolumny SkillCornera wstrzykiwane do wiersza zawodnika
-ALL_COLUMNS = PHYS_COLUMNS + GI_COLUMNS
+ALL_COLUMNS = PHYS_COLUMNS + GI_COLUMNS + RUNTYPE_COLUMNS
  
  
 def _norm(s):
@@ -125,6 +137,9 @@ def _load_wide():
         g = _take(HERE / fname, GI_COLUMNS)
         if g is not None:
             frames.append(g)
+    rt = _take(RUNTYPES_CSV, RUNTYPE_COLUMNS)
+    if rt is not None:
+        frames.append(rt)
  
     if not frames:
         _WIDE = None
@@ -197,5 +212,6 @@ def enrich_rows(rows, league_label):
             row.update({k: v for k, v in feats.items() if v is not None})
             matched += 1
     return (matched, len(rows))
+ 
  
  
