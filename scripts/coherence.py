@@ -17,6 +17,37 @@ import os
  
 # --- Metryki definiujące PROFIL GRY per linia ---
 # Do koherencji (podobieństwa) i do poziomu. Nazwy = pola StatsBomb.
+# =====================================================================
+#  ROLE (dobór ekspercki analityków — lista KPI Igora Rybińskiego).
+#  Model liczy JAKOŚĆ (RC) i KOHERENCJĘ per ROLA, drobniej niż 4 linie
+#  taktyczne używane w UI/formacji. Rola = grupa Igora:
+#    Bramka | ŚO | Boczny | Skrzydłowy | 6-8 | 10-9
+#  Mapowanie z kodu pozycji StatsBomb (pos: GK/CB/WB/DM/CM/WM/AM/W/ST).
+#  UWAGA: to jest OŚ MODELU. Osobno UI trzyma 4 linie (Bramka/Obrona/
+#  Pomoc/Atak) do formacji, grupowania składu i panelu "mocne strony"
+#  (POS_STYLE) — kontrakt frontu (data.json: player.line, meta.style_labels)
+#  pozostaje bez zmian. Model dokłada tylko dodatkowe pole player.role.
+# =====================================================================
+ROLES = ("Bramka", "ŚO", "Boczny", "Skrzydłowy", "6-8", "10-9")
+ 
+ROLE_OF_POS = {
+    "GK": "Bramka",
+    "CB": "ŚO",
+    "WB": "Boczny",
+    "W": "Skrzydłowy", "WM": "Skrzydłowy",
+    "DM": "6-8", "CM": "6-8",
+    "AM": "10-9", "ST": "10-9",
+}
+ 
+# Awaryjne mapowanie z 4 linii UI na rolę modelu (gdy brak kodu pozycji).
+ROLE_OF_LINE = {"Bramka": "Bramka", "Obrona": "ŚO", "Pomoc": "6-8", "Atak": "10-9"}
+ 
+ 
+def role_of(pos, line=None):
+    """Rola modelu z kodu pozycji; awaryjnie z linii UI; ostatecznie '6-8'."""
+    return ROLE_OF_POS.get(pos) or ROLE_OF_LINE.get(line) or "6-8"
+ 
+ 
 LINE_METRICS = {
     # KOHERENCJA = OŚ STYLU (po audycie analityka). Tu wchodzą TYLKO deskryptory
     # SPOSOBU gry — wolumeny podań/strzałów, proporcje, tendencje, prowadzenia,
@@ -25,10 +56,11 @@ LINE_METRICS = {
     # Dzięki temu symetryczna kara Mahalanobisa jest uzasadniona: szukamy zawodnika
     # o IDENTYCZNYM stylu (koherencja), a jakość rozstrzyga osobno RC. Do koherencji
     # dochodzą jeszcze fizyka (waga 0.5) i Game Intelligence (0.35) — też czysto stylowe.
+    # KLUCZ = ROLA (nie linia). Rozszerzone o metryki z listy KPI Igora, które są
+    # dostępne w feedzie sezonowym StatsBomb (lbp, gra pod presją, dośrodkowania,
+    # progresja, podania prostopadłe) — bez nowej infrastruktury eventowej.
     "Bramka": [
         # Styl dystrybucji + pozycjonowanie (sweeper) bramkarza — bez shot-stoppingu (to RC).
-        # Pogłębione z 5 do 8 wymiarów: sam profil dystrybucji był zbyt cienki (koherencja
-        # GK zbijała się do ~100). Dokładamy długość dystrybucji i tendencję do wychodzenia.
         "player_season_op_passes_90", "player_season_passing_ratio",
         "player_season_long_balls_90", "player_season_long_ball_ratio",
         "player_season_pass_length",
@@ -36,29 +68,53 @@ LINE_METRICS = {
         "player_season_da_aggressive_distance",  # jak wysoko od bramki interweniuje (sweeper)
         "player_season_aggressive_actions_90",   # proaktywne akcje poza polem karnym
     ],
-    "Obrona": [
-        # Aktywność i styl defensywny + styl wyprowadzenia (bez ratio jakościowych,
-        # które poszły do RC).
+    "ŚO": [
+        # Środkowy obrońca: aktywność/styl defensywny + styl wyprowadzenia. Igor:
+        # ŚO "z piłką" = pierwszy rozgrywający → lbp + gra pod presją.
         "player_season_padj_tackles_and_interceptions_90",
         "player_season_aerial_wins_90", "player_season_clearance_90",
         "player_season_op_passes_90", "player_season_passing_ratio",
         "player_season_op_f3_passes_90", "player_season_forward_pass_proportion",
+        "player_season_lbp_90",                  # podania łamiące linie (Igor)
+        "player_season_pressured_passing_ratio", # celność pod presją (Igor)
     ],
-    "Pomoc": [
-        # Styl gry środka: wolumen kreacji i penetracji, tendencja do przodu, drybling,
-        # aktywność defensywna. Sama JAKOŚĆ kreacji (xA, xGChain) jest w RC.
-        "player_season_key_passes_90", "player_season_passes_into_box_90",
+    "Boczny": [
+        # Boczny obrońca / wahadłowy: dośrodkowania + progresja + drybling + defensywa.
+        "player_season_crosses_90", "player_season_crossing_ratio",
+        "player_season_box_cross_ratio",
+        "player_season_op_passes_90", "player_season_passes_into_box_90",
+        "player_season_deep_progressions_90", "player_season_dribbles_90",
+        "player_season_padj_tackles_and_interceptions_90",
+        "player_season_forward_pass_proportion",
+    ],
+    "Skrzydłowy": [
+        # Skrzydłowy / boczny pomocnik: drybling, wolumen strzałów, kreacja, penetracja.
+        "player_season_np_shots_90", "player_season_dribbles_90",
+        "player_season_crosses_90", "player_season_key_passes_90",
+        "player_season_touches_inside_box_90",
+        "player_season_passes_into_box_90", "player_season_deep_progressions_90",
+        "player_season_carries_90",
+    ],
+    "6-8": [
+        # Środek pola (6/8): wolumen i tendencja gry, progresja, drybling, defensywa.
+        # Igor: "6/8 z piłką" = progresja + odporność na presję → change_in_passing_ratio.
         "player_season_op_passes_90", "player_season_passing_ratio",
         "player_season_forward_pass_proportion",
         "player_season_padj_tackles_and_interceptions_90",
-        "player_season_dribbles_90", "player_season_op_f3_passes_90",
+        "player_season_pressured_passing_ratio",   # celność pod presją (Igor)
+        "player_season_change_in_passing_ratio",   # spadek celności pod presją (Igor)
+        "player_season_deep_progressions_90",       # progresja (Igor)
+        "player_season_lbp_90",                     # łamanie linii (Igor)
+        "player_season_op_f3_passes_90",
     ],
-    "Atak": [
-        # Styl napastnika: wolumen strzałów, pozycjonowanie w polu, kreacja,
-        # gra w powietrzu, drybling. JAKOŚĆ (xG, gole, xA, efektywność) jest w RC.
+    "10-9": [
+        # Ofensywny pomocnik / napastnik (10/9): wolumen strzałów, pozycjonowanie,
+        # kreacja, gra w powietrzu, drybling, podania prostopadłe.
         "player_season_np_shots_90", "player_season_touches_inside_box_90",
         "player_season_key_passes_90", "player_season_aerial_wins_90",
         "player_season_dribbles_90",
+        "player_season_through_balls_90",           # podania prostopadłe (Igor)
+        "player_season_op_passes_into_and_touches_inside_box_90",  # penetracja pola (Igor)
     ],
 }
  
@@ -97,17 +153,26 @@ TEAM_NORM_METRICS = [
 # metryki wolumenowe zawyżają zawodników drużyn dużo posiadających piłkę.
 QUALITY_METRICS_RAW = {
     # RC = OŚ JAKOŚCI (audyt analityka): tylko jakość/efektywność, bez surowego wolumenu.
-    # Obrona: wartość działań obronnych (obv_defensive_action) + skuteczność
-    # (aerial_ratio, challenge_ratio, blocks_per_shot) zamiast liczby akcji.
+    # KLUCZ = ROLA. Rozszerzone o metryki jakości z listy Igora dostępne sezonowo
+    # (OBV pass/carry/shot, nadwyżka akcji obronnych ponad oczekiwane).
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
                "player_season_positive_outcome_90", "player_season_obv_gk_90"],
-    "Obrona": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
-               "player_season_challenge_ratio", "player_season_blocks_per_shot",
-               "player_season_op_xgbuildup_90"],
-    "Pomoc": ["player_season_op_xgchain_90", "player_season_xgbuildup_90",
-              "player_season_xa_90", "player_season_obv_defensive_action_90"],
-    "Atak": ["player_season_np_xg_90", "player_season_npg_90",
-             "player_season_xa_90", "player_season_np_xg_per_shot"],
+    "ŚO": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
+           "player_season_challenge_ratio", "player_season_blocks_per_shot",
+           "player_season_op_xgbuildup_90",
+           "player_season_defensive_actions_above_expectation_90"],  # nadwyżka (Igor)
+    "Boczny": ["player_season_obv_dribble_carry_90", "player_season_obv_pass_90",
+               "player_season_xa_90", "player_season_op_xgbuildup_90",
+               "player_season_challenge_ratio"],
+    "Skrzydłowy": ["player_season_np_xg_90", "player_season_xa_90",
+                   "player_season_obv_dribble_carry_90", "player_season_np_xg_per_shot",
+                   "player_season_dribble_ratio"],
+    "6-8": ["player_season_op_xgchain_90", "player_season_xgbuildup_90",
+            "player_season_xa_90", "player_season_obv_defensive_action_90",
+            "player_season_obv_pass_90"],  # wartość podania (Igor)
+    "10-9": ["player_season_np_xg_90", "player_season_npg_90",
+             "player_season_xa_90", "player_season_np_xg_per_shot",
+             "player_season_obv_shot_90"],  # wartość strzału (Igor)
 }
  
 # WERSJA POSSESSION-ADJUSTED — natywne metryki StatsBomb skorygowane o posiadanie
@@ -120,14 +185,23 @@ QUALITY_METRICS_PADJ = {
     # (ratio, per_shot) są niewrażliwe na posiadanie → identyczne jak w RAW.
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
                "player_season_positive_outcome_90", "player_season_obv_gk_90"],
-    "Obrona": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
-               "player_season_challenge_ratio", "player_season_blocks_per_shot",
-               "player_season_op_xgbuildup_per_possession"],
-    "Pomoc": ["player_season_op_xgchain_per_possession",
-              "player_season_xgbuildup_per_possession",
-              "player_season_xa_90", "player_season_obv_defensive_action_90"],
-    "Atak": ["player_season_np_xg_90", "player_season_npg_90",
-             "player_season_xa_90", "player_season_np_xg_per_shot"],
+    "ŚO": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
+           "player_season_challenge_ratio", "player_season_blocks_per_shot",
+           "player_season_op_xgbuildup_per_possession",
+           "player_season_defensive_actions_above_expectation_90"],
+    "Boczny": ["player_season_obv_dribble_carry_90", "player_season_obv_pass_90",
+               "player_season_xa_90", "player_season_op_xgbuildup_per_possession",
+               "player_season_challenge_ratio"],
+    "Skrzydłowy": ["player_season_np_xg_90", "player_season_xa_90",
+                   "player_season_obv_dribble_carry_90", "player_season_np_xg_per_shot",
+                   "player_season_dribble_ratio"],
+    "6-8": ["player_season_op_xgchain_per_possession",
+            "player_season_xgbuildup_per_possession",
+            "player_season_xa_90", "player_season_obv_defensive_action_90",
+            "player_season_obv_pass_90"],
+    "10-9": ["player_season_np_xg_90", "player_season_npg_90",
+             "player_season_xa_90", "player_season_np_xg_per_shot",
+             "player_season_obv_shot_90"],
 }
  
 # Przełącznik: POSSESSION_ADJUST=0 wraca do wersji surowej (do porównań A/B).
@@ -152,9 +226,11 @@ _PHYS_STYLE = [
 ]
 PHYS_STYLE_METRICS = {
     "Bramka": [],
-    "Obrona": _PHYS_STYLE,
-    "Pomoc": _PHYS_STYLE,
-    "Atak": _PHYS_STYLE,
+    "ŚO": _PHYS_STYLE,
+    "Boczny": _PHYS_STYLE,
+    "Skrzydłowy": _PHYS_STYLE,
+    "6-8": _PHYS_STYLE,
+    "10-9": _PHYS_STYLE,
 }
  
 # --- Game Intelligence (SkillCorner) w profilu KOHERENCJI (styl gry) ---
@@ -175,9 +251,11 @@ _GI_STYLE = [
 ]
 GI_STYLE_METRICS = {
     "Bramka": [],
-    "Obrona": _GI_STYLE,
-    "Pomoc": _GI_STYLE,
-    "Atak": _GI_STYLE,
+    "ŚO": _GI_STYLE,
+    "Boczny": _GI_STYLE,
+    "Skrzydłowy": _GI_STYLE,
+    "6-8": _GI_STYLE,
+    "10-9": _GI_STYLE,
 }
  
 # Wagi w profilu koherencji (<1 = warstwa wzbogaca, nie dominuje techniki).
@@ -582,7 +660,7 @@ if __name__ == "__main__":
          "player_season_xa_90": 0.05, "player_season_op_passes_90": 25,
          "player_season_padj_tackles_and_interceptions_90": 2.0},
     ]
-    st = build_league_stats(base, "Pomoc")
-    print("Poziom gracza 1:", quality_level(base[0], "Pomoc", st))
-    print("Koherencja 1↔2:", coherence(base[0], base[1], "Pomoc", st), "%")
-    print("Koherencja 1↔1:", coherence(base[0], base[0], "Pomoc", st), "% (powinno ~100)")
+    st = build_league_stats(base, "6-8")
+    print("Poziom gracza 1:", quality_level(base[0], "6-8", st))
+    print("Koherencja 1↔2:", coherence(base[0], base[1], "6-8", st), "%")
+    print("Koherencja 1↔1:", coherence(base[0], base[0], "6-8", st), "% (powinno ~100)")
