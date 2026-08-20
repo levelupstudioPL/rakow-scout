@@ -302,6 +302,101 @@ def gi_all(group="player"):
  
  
 # ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# OFF-BALL RUN TYPES (In-Possession) — NAZWANE typy biegów bez piłki.
+# Zagregowany GI (get_metrics_gi_ip_off_ball_runs) NIE rozbija na typy
+# (potwierdzone sondą: group_by nie przyjmuje run_type). Rozbicie jest w
+# endpokoncie get_in_possession_off_ball_runs, gdzie run_type to FILTR.
+# Robimy po jednym wywołaniu na typ i sklejamy w szeroką tabelę:
+#   1 wiersz / zawodnik, kolumna runtype_<typ> = count_runs_per_match tego typu.
+# To jest "kategoryzacja biegów" z listy KPI Igora → nowa warstwa stylu koherencji.
+RUN_TYPES = [
+    "run_in_behind", "cross_receiver_run", "overlap_run", "underlap_run",
+    "coming_short_run", "pulling_half_space_run", "run_ahead_of_the_ball",
+    "pulling_wide_run", "support_run", "dropping_off_run",
+]
+RUNTYPE_METRIC = "count_runs_per_match"   # metryka na typ (wolumen biegów danego typu / mecz)
+ 
+ 
+def _pull_runtypes(client, eid, group="player"):
+    """Szeroka tabela typów biegów dla jednej edycji (albo None)."""
+    import pandas as pd
+    base = None
+    for rt in RUN_TYPES:
+        try:
+            data = client.get_in_possession_off_ball_runs(
+                params={"competition_edition": eid, "group_by": group, "run_type": rt})
+        except Exception as e:  # noqa: BLE001
+            status = getattr(getattr(e, "response", None), "status_code", None)
+            if status in (401, 403):
+                die(f"{status} przy get_in_possession_off_ball_runs (run_type={rt}). "
+                    f"Sprawdź SKILLCORNER_USERNAME/PASSWORD i dostęp do In-Possession Off-Ball Runs.")
+            print(f"[uwaga] runtype {rt} edycja {eid}: {type(e).__name__}: {e}", file=sys.stderr)
+            continue
+        df = to_frame(data)
+        if len(df) == 0 or RUNTYPE_METRIC not in df.columns or "player_id" not in df.columns:
+            continue
+        cols = ["player_id", RUNTYPE_METRIC]
+        for extra in ("player_name", "short_name"):
+            if extra in df.columns:
+                cols.insert(1, extra)
+        sub = df[cols].rename(columns={"short_name": "player_short_name",
+                                       RUNTYPE_METRIC: f"runtype_{rt}"})
+        if base is None:
+            base = sub
+        else:
+            base = base.merge(sub[["player_id", f"runtype_{rt}"]], on="player_id", how="outer")
+    if base is None or len(base) == 0:
+        return None
+    base.insert(0, "competition_edition", eid)
+    base.insert(1, "league", EDITIONS.get(eid, ""))
+    return base
+ 
+ 
+def runtypes(edition_ids, group="player"):
+    client = make_client()
+    frames = []
+    for raw in edition_ids:
+        try:
+            eid = int(raw)
+        except (ValueError, TypeError):
+            print(f"[pomijam] '{raw}' nie jest liczbą (edition id).", file=sys.stderr)
+            continue
+        df = _pull_runtypes(client, eid, group)
+        if df is None:
+            print(f"[uwaga] Typy biegów edycja {eid}: brak danych/pominięto.")
+            continue
+        out = HERE / f"skillcorner_runtypes_{eid}.csv"
+        df.to_csv(out, index=False)
+        frames.append(df)
+        ncols = len([c for c in df.columns if c.startswith("runtype_")])
+        print(f"[OK] Typy biegów {eid} ({EDITIONS.get(eid, '?')}): "
+              f"{len(df)} zawodników, {ncols} typów → {out.name}")
+    # Zbiorczy _all z WSZYSTKICH plików per-edycja (dobranie ligi nie kasuje reszty).
+    import glob as _glob
+    rfiles = [f for f in sorted(_glob.glob(str(HERE / "skillcorner_runtypes_*.csv")))
+              if not f.endswith("skillcorner_runtypes_all.csv")]
+    if len(rfiles) > 1:
+        import pandas as pd
+        parts = []
+        for f in rfiles:
+            try:
+                parts.append(pd.read_csv(f))
+            except Exception as e:  # noqa: BLE001
+                print(f"[uwaga] pomijam {f}: {e}", file=sys.stderr)
+        if parts:
+            comb = pd.concat(parts, ignore_index=True)
+            out = HERE / "skillcorner_runtypes_all.csv"
+            comb.to_csv(out, index=False)
+            print(f"[OK] Typy biegów zbiorczo (z {len(rfiles)} edycji): "
+                  f"{len(comb)} wierszy → {out.name}")
+ 
+ 
+def runtypes_all(group="player"):
+    """Typy biegów dla wszystkich lig modelu (EDITIONS)."""
+    runtypes(list(EDITIONS.keys()), group)
+ 
+ 
 def main():
     args = sys.argv[1:]
     mode = args[0] if args else "discover"
@@ -320,11 +415,18 @@ def main():
         if len(args) < 2:
             die("Podaj co najmniej jeden competition_edition id (albo użyj 'gi-all').")
         gi(args[1:])
+    elif mode == "runtypes-all":
+        runtypes_all()
+    elif mode == "runtypes":
+        if len(args) < 2:
+            die("Podaj co najmniej jeden competition_edition id (albo użyj 'runtypes-all').")
+        runtypes(args[1:])
     else:
         die(f"Nieznany tryb '{mode}'. Użyj: discover | physical-all | physical <id> [...] "
-            f"| gi-all | gi <id> [...]")
+            f"| gi-all | gi <id> [...] | runtypes-all | runtypes <id> [...]")
  
  
 if __name__ == "__main__":
     main()
+ 
  
