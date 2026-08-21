@@ -386,14 +386,16 @@ def _pull_runtypes(client, eid, group="player"):
             if allmask.any():
                 df = df[allmask]
         pid_col = _pick(df.columns, "player_id", "player.id", "id")
-        # Metryka: przy filtrze run_type kolumna nazywa się per typ, np.
-        # count_runs_in_behind_per_match. Chcemy ZWYKŁY wolumen na mecz danego typu
-        # (nie dangerous/leading/targeted/received/threat, nie *_in_sample).
+        # Metryka: przy filtrze run_type kolumna jest nazwana per typ, a słowo "runs"
+        # bywa w różnym miejscu: count_runs_in_behind_per_match, ale też
+        # count_overlap_runs_per_match / count_cross_receiver_runs_per_match. Bierzemy
+        # ZWYKŁY wolumen biegów na mecz: zawiera 'runs', kończy się '_per_match',
+        # bez dangerous/leading/targeted/received/threat (i bez *_in_sample).
         met_cands = [c for c in df.columns
-                     if c.startswith("count_runs_") and c.endswith("_per_match")
+                     if "runs" in c.lower() and c.endswith("_per_match")
                      and not any(x in c for x in
                                  ("dangerous", "leading", "targeted", "received", "threat"))]
-        met_col = met_cands[0] if met_cands else _pick(df.columns, "count_runs_per_match")
+        met_col = met_cands[0] if met_cands else None
         if pid_col is None or met_col is None:
             print(f"[uwaga] runtype {rt} edycja {eid}: brak player_id/metryki w kolumnach "
                   f"{list(df.columns)[:12]} — pomijam.", file=sys.stderr)
