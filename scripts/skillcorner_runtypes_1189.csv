@@ -1,0 +1,1332 @@
+competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_cross_receiver_run,runtype_overlap_run,runtype_underlap_run,runtype_coming_short_run,runtype_pulling_half_space_run,runtype_run_ahead_of_the_ball,runtype_pulling_wide_run,runtype_support_run,runtype_dropping_off_run
+1189,Superliga (DK),173,12,Adam Buksa,A. Buksa,5.67,0.33,0.0,2.33,0.33,12,0.0,2.0,0.0
+1189,Superliga (DK),2217,1,Daniel Mathias Høegh,D. Høegh,0.1,0.05,0.05,0.5,0.0,4,0.05,0.35,3.15
+1189,Superliga (DK),2252,9,Daniel Wass,D. Wass,1.13,0.2,0.4,5.07,0.47,45,0.87,7.73,0.67
+1189,Superliga (DK),4286,0,Henrik Dalsgaard,H. Dalsgaard,0.05,0.24,0.1,0.24,0.0,8,0.29,0.86,4.1
+1189,Superliga (DK),4830,190,Jay-Roy Grot,J. Grot,5.85,0.05,0.15,1.85,0.8,104,0.4,1.6,0.1
+1189,Superliga (DK),5334,4,Jordi Vanlerberghe,J. Vanlerberghe,0.17,0.17,0.5,0.17,0.0,6,0.17,2.33,2.83
+1189,Superliga (DK),5843,3,Kevin Mbabu,K. Mbabu,0.28,1.89,0.28,0.5,0.0,48,0.89,3.83,1.17
+1189,Superliga (DK),5899,0,Kian Hansen,K. Hansen,0.0,0.0,0.0,0.8,0.0,1,0.2,0.2,2.6
+1189,Superliga (DK),6058,0,Lasse Nielsen,L. Nielsen,0.21,0.11,0.26,0.58,0.0,4,0.0,1.16,3.84
+1189,Superliga (DK),7429,28,Michael Gregoritsch,M. Gregoritsch,3.36,0.0,0.09,0.55,0.18,23,0.36,0.55,0.09
+1189,Superliga (DK),8352,1,Pantelis Hatzidiakos,P. Hatzidiakos,0.1,0.1,0.0,0.3,0.0,5,0.45,1.6,3.85
+1189,Superliga (DK),9624,17,Sean Klaiber,S. Klaiber,1.0,0.85,0.62,0.31,0.0,46,1.69,6.92,2.23
+1189,Superliga (DK),10839,0,Wessel Dammers,W. Dammers,0.14,0.0,0.05,0.19,0.0,5,0.05,0.71,4.05
+1189,Superliga (DK),11192,0,Thomas Delaney,T. Delaney,0.54,0.31,0.38,5.62,0.38,18,0.15,4.08,0.92
+1189,Superliga (DK),11193,77,Andreas Cornelius,A. Cornelius,3.6,0.0,0.0,0.6,0.1,25,0.2,0.8,0.0
+1189,Superliga (DK),11491,132,Viktor Claesson,V. Claesson,4.4,0.65,0.35,4.3,2.25,120,0.45,2.2,0.2
+1189,Superliga (DK),11509,46,Lukas Lerager,L. Lerager,1.35,0.18,0.76,4.06,0.35,59,0.53,4.76,1.06
+1189,Superliga (DK),11640,19,Philip Billing,P. Billing,1.33,0.42,1.0,8.33,1.08,41,1.58,6.67,0.83
+1189,Superliga (DK),12026,10,Birger Solberg Meling,B. Meling,0.54,2.31,2.31,0.46,0.08,43,1.77,4.08,2.31
+1189,Superliga (DK),12642,125,Mohamed Amine Elyounoussi,M. Elyounoussi,5.16,0.32,0.79,3.21,1.11,151,1.16,3.68,0.53
+1189,Superliga (DK),12675,22,Emmanuel Bonaventure Dennis,E. Dennis,4.67,0.0,0.0,1.33,1.33,18,0.33,0.33,0.0
+1189,Superliga (DK),12881,18,Peter Ankersen,P. Ankersen,1.4,2.35,0.75,1.05,0.25,93,1.75,7.7,4.8
+1189,Superliga (DK),12885,1,Rasmus Falk Jensen,R. Falk,0.78,0.17,0.33,10.61,0.22,60,1.11,5.61,2.17
+1189,Superliga (DK),13292,49,Mikkel Duelund,M. Duelund,4.41,0.59,0.29,2.94,1.35,166,2.41,2.88,0.47
+1189,Superliga (DK),13547,15,Oliver Olsen,O. Olsen,1.88,3.53,1.47,0.35,0.06,99,1.59,5.35,1.29
+1189,Superliga (DK),13923,50,Andrew Hjulsager,A. Hjulsager,2.5,1.0,1.64,3.79,0.93,120,1.36,7.86,0.93
+1189,Superliga (DK),14272,144,Tim Freriks,T. Freriks,5.5,0.06,0.06,1.17,0.78,54,0.17,0.44,0.0
+1189,Superliga (DK),14294,21,Leeroy Owusu,L. Owusu,1.38,2.29,0.29,1.29,0.14,78,1.95,5.71,1.71
+1189,Superliga (DK),14314,2,Mees Hoedemakers,M. Hoedemakers,1.0,0.0,0.18,1.82,0.18,10,0.0,2.64,0.18
+1189,Superliga (DK),14628,5,Aurélio Gabriel Ulineia Buta,Aurélio Buta,0.0,2.67,0.0,0.0,0.0,14,1.33,3.67,2.0
+1189,Superliga (DK),14729,0,Tobias Salquist Nielsen,T. Salquist,0.11,0.0,0.0,0.67,0.0,1,0.06,1.0,3.78
+1189,Superliga (DK),15863,1,German Onugkha,G. Onugkha,4.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1189,Superliga (DK),16274,12,Stephen Odey,S. Odey,1.83,0.17,0.17,1.83,0.83,13,0.5,0.67,0.17
+1189,Superliga (DK),16383,143,Patrick Mortensen,P. Mortensen,10.43,0.1,0.05,2.05,0.19,73,0.0,0.71,0.0
+1189,Superliga (DK),16436,27,Jens Martin Gammelby,J. Gammelby,0.35,1.7,0.35,0.6,0.05,135,2.3,4.35,2.25
+1189,Superliga (DK),16441,7,Mikael Uhre,M. Uhre,2.0,0.0,0.0,1.0,0.0,9,0.0,0.0,0.0
+1189,Superliga (DK),16473,11,Jonathan Amon,J. Amon,0.5,0.25,0.12,0.0,0.25,22,1.25,0.62,0.12
+1189,Superliga (DK),16499,21,Edward Chilufya,E. Chilufya,1.5,0.17,0.17,0.0,0.17,18,0.5,0.33,0.0
+1189,Superliga (DK),16519,13,Kevin Enkido Yakob,K. Yakob,0.94,0.5,1.06,5.5,1.69,69,0.69,5.38,0.94
+1189,Superliga (DK),17310,57,Marko Divković,M. Divković,1.47,2.0,2.0,0.68,0.16,114,1.63,4.05,0.63
+1189,Superliga (DK),17412,5,Alexi Pitu,A. Pitu,0.5,0.0,0.25,1.12,0.62,10,0.62,1.25,0.12
+1189,Superliga (DK),18579,0,Ben Godfrey,B. Godfrey,0.0,0.0,0.0,1.0,0.33,0,0.33,2.33,6.0
+1189,Superliga (DK),18662,0,Kristian Pedersen,K. Pedersen,0.0,0.2,0.0,0.0,0.0,2,0.0,0.2,0.2
+1189,Superliga (DK),18956,0,Mads Bech Sørensen,M. Bech,0.11,0.11,0.0,0.37,0.05,7,0.42,0.74,4.47
+1189,Superliga (DK),19068,24,Felix Beijmo,F. Beijmo,1.0,3.24,0.62,0.38,0.1,85,2.24,5.57,6.48
+1189,Superliga (DK),19077,18,Jean-Manuel Mbom,J. Mbom,0.58,2.37,0.58,0.32,0.05,93,2.0,6.11,3.63
+1189,Superliga (DK),19132,25,Andreas Poulsen,A. Poulsen,0.5,1.75,0.44,0.81,0.0,138,2.75,2.62,2.81
+1189,Superliga (DK),19366,61,Jann-Fiete Arp,J. Arp,3.74,0.63,0.53,4.84,1.21,118,3.63,3.68,0.63
+1189,Superliga (DK),19485,16,Janni Serra,J. Serra,2.44,0.0,0.0,0.78,0.11,18,0.11,0.44,0.0
+1189,Superliga (DK),19888,0,Martin Erlić,M. Erlić,0.0,0.0,0.0,0.27,0.0,0,0.0,0.45,1.45
+1189,Superliga (DK),20040,0,Bartosz Slisz,B. Slisz,0.0,0.67,2.0,10.33,1.0,8,0.67,9.67,2.33
+1189,Superliga (DK),23178,1,Nicolas Bürgy,N. Bürgy,0.35,0.4,0.3,1.0,0.05,18,0.6,2.55,6.25
+1189,Superliga (DK),23507,7,Daníel Leó Grétarsson,D. Grétarsson,0.39,1.78,0.39,0.22,0.0,64,0.94,3.89,1.61
+1189,Superliga (DK),24884,3,Stefan Velkov,S. Velkov,0.05,0.05,0.05,0.74,0.05,9,0.05,0.79,4.0
+1189,Superliga (DK),25041,31,Mats Köhlert,M. Köhlert,1.0,4.0,2.0,1.27,0.07,137,2.4,4.67,2.73
+1189,Superliga (DK),26175,0,Lucas Lissens,L. Lissens,0.17,0.5,0.0,0.0,0.17,2,0.33,0.5,0.33
+1189,Superliga (DK),26221,142,Jordan Larsson,J. Larsson,3.33,1.62,0.33,1.52,1.1,190,2.1,3.29,0.24
+1189,Superliga (DK),26781,16,Rami Al Hajj,R. Al Hajj,1.42,0.47,0.42,4.05,0.95,125,2.32,3.89,1.21
+1189,Superliga (DK),27343,0,Nicolai Poulsen,N. Poulsen,0.31,0.0,0.25,9.88,0.62,30,1.06,6.38,1.31
+1189,Superliga (DK),27344,0,Frederik Tingager,F. Tingager,0.17,0.08,0.0,0.75,0.0,6,0.0,0.17,5.08
+1189,Superliga (DK),27347,47,Gift Links,G. Links,1.43,2.38,1.0,0.9,0.19,206,1.71,5.29,0.86
+1189,Superliga (DK),27375,1,Daniel Anyembe,D. Anyembe,0.35,0.1,0.15,0.45,0.05,7,0.25,1.35,4.35
+1189,Superliga (DK),27377,90,Nicklas Røjkjær,N. Røjkjær,3.52,1.0,1.33,13.76,2.57,383,3.14,11.0,2.57
+1189,Superliga (DK),27378,30,Mads Larsen,M. Larsen,0.55,0.55,1.45,14.05,1.7,291,2.3,11.15,1.45
+1189,Superliga (DK),27380,45,Patrick Hessellund Egelund,P. Egelund,1.89,0.33,0.33,0.56,0.22,36,0.11,0.89,0.11
+1189,Superliga (DK),27408,0,James Gomez,J. Gomez,0.0,0.0,0.0,0.25,0.0,0,0.58,0.92,2.25
+1189,Superliga (DK),27420,72,Gustav Ølsted Marcussen,G. Marcussen,2.71,0.52,0.38,3.1,1.1,166,1.38,2.48,0.24
+1189,Superliga (DK),27424,36,Adam Sørensen,A. Sørensen,2.24,3.86,0.29,0.81,0.1,129,1.14,3.1,1.29
+1189,Superliga (DK),27435,19,Nikolas Langberg Dyhr,N. Dyhr,1.57,1.19,1.1,0.57,0.05,100,0.52,2.81,1.19
+1189,Superliga (DK),27436,22,Oliver Villadsen,O. Villadsen,0.55,1.15,1.3,0.05,0.0,86,0.85,3.75,1.25
+1189,Superliga (DK),27449,21,Moses Opondo,M. Opondo,1.83,0.17,0.42,2.75,1.33,69,0.67,2.58,0.08
+1189,Superliga (DK),27450,7,Mads Frøkjær-Jensen,M. Frøkjær-Jensen,3.33,0.67,1.33,3.33,1.33,17,2.0,2.33,0.33
+1189,Superliga (DK),27456,0,André Römer,A. Rømer,0.25,0.06,0.06,4.12,0.25,29,0.44,1.75,0.62
+1189,Superliga (DK),27462,19,Mathias Peter Greve Petersen,M. Greve,3.39,0.28,1.39,5.22,1.56,140,2.06,8.83,0.61
+1189,Superliga (DK),27463,2,Frederik Lauenborg,F. Lauenborg,0.93,0.0,0.2,2.07,0.07,16,0.2,2.93,0.27
+1189,Superliga (DK),27472,8,Mark Brink Christensen,M. Brink,0.61,0.11,0.39,11.0,0.44,55,0.83,5.83,1.83
+1189,Superliga (DK),27473,25,Svenn Crone,S. Crone,1.24,1.76,0.81,1.05,0.24,173,3.57,5.24,3.0
+1189,Superliga (DK),27478,36,Mads Emil Madsen,M. Emil Madsen,2.0,0.63,1.53,6.89,0.79,87,0.63,7.11,0.79
+1189,Superliga (DK),27482,48,Rasmus Carstensen,R. Carstensen,1.76,2.71,1.1,1.38,0.1,118,2.86,3.05,2.86
+1189,Superliga (DK),27483,116,Nicolai Vallys,N. Vallys,5.0,0.58,1.0,4.89,2.37,153,3.05,4.37,1.05
+1189,Superliga (DK),27493,3,Rasmus Hjorth Vinderslev,R. Vinderslev,0.0,0.06,0.31,4.0,0.31,19,0.25,1.75,0.88
+1189,Superliga (DK),27494,29,Anders Kvindebjerg Jacobsen,A. Jacobsen,3.14,0.0,0.14,0.43,1.29,28,0.43,0.43,0.0
+1189,Superliga (DK),28105,2,John Björkengren,J. Björkengren,0.45,0.05,0.25,9.3,0.6,64,1.1,5.2,2.5
+1189,Superliga (DK),28113,5,Jeppe Andrup Andersen,J. Andersen,0.36,0.09,0.27,4.73,0.64,32,0.18,2.64,0.45
+1189,Superliga (DK),28176,1,Rasmus Steensbæk Lauritsen,R. Lauritsen,0.0,0.0,0.0,0.12,0.12,0,0.0,0.5,1.12
+1189,Superliga (DK),28835,2,Magnus Jensen,M. Jensen,0.1,0.0,0.0,0.95,0.05,8,0.0,1.14,3.24
+1189,Superliga (DK),28844,0,Robin Dahl Østrøm,R. Østrøm,0.0,0.16,0.16,0.32,0.0,13,1.05,2.95,5.89
+1189,Superliga (DK),28857,15,Tobias Klysner Breuner,T. Klysner,0.38,0.54,0.23,0.0,0.0,41,1.08,3.38,0.38
+1189,Superliga (DK),28862,14,Paulo Victor da Silva,Paulinho,1.62,1.0,1.38,0.12,0.0,41,0.38,2.38,0.0
+1189,Superliga (DK),28871,0,Frederik Alves Ibsen,F. Alves,0.07,0.0,0.0,0.4,0.0,2,0.13,1.0,3.8
+1189,Superliga (DK),28873,26,Sebastian Vinther Jørgensen,S. Jørgensen,1.17,0.28,0.33,0.67,0.44,41,0.61,1.11,0.06
+1189,Superliga (DK),28874,167,Alexander Lucas Lind Rasmussen,A. Lind,9.33,0.17,0.08,2.0,1.33,58,0.17,1.17,0.08
+1189,Superliga (DK),28889,44,José Francisco dos Santos Júnior,Júnior Brumado,3.13,0.0,0.07,1.27,0.33,57,0.33,1.13,0.0
+1189,Superliga (DK),28894,26,Doguhan Aral Şimşir,A. Şimşir,1.53,0.68,0.89,3.16,0.63,107,1.0,3.95,0.53
+1189,Superliga (DK),28898,31,Emilio Simonsen,E. Simonsen,1.58,0.42,0.67,3.92,0.5,122,1.08,4.92,0.25
+1189,Superliga (DK),29147,4,Stijn Spierings,S. Spierings,0.47,0.0,0.41,5.0,0.41,35,0.47,6.06,0.65
+1189,Superliga (DK),29952,6,Oliver Sørensen Jensen,O. Sørensen,2.67,1.67,0.0,5.67,0.33,23,0.0,7.67,1.0
+1189,Superliga (DK),29961,0,Pelle Mattsson,P. Mattsson,0.0,0.0,0.0,6.67,0.33,19,0.17,5.83,0.67
+1189,Superliga (DK),29968,123,Filip Bundgaard Kristensen,F. Bundgaard,5.0,0.18,1.35,1.59,1.12,111,1.35,1.35,0.06
+1189,Superliga (DK),30590,1,Eric Kahl,E. Kahl,0.1,1.29,1.19,0.29,0.0,57,1.05,3.62,5.38
+1189,Superliga (DK),30604,4,Mayckel Lahdo,M. Lahdo,1.67,0.33,0.0,1.0,0.67,10,0.67,1.0,0.0
+1189,Superliga (DK),31256,99,Youssoufa Moukoko,Y. Moukoko,4.88,0.06,0.06,1.82,0.94,65,0.18,1.41,0.12
+1189,Superliga (DK),32211,0,Stipe Radić,S. Radić,0.0,0.06,0.0,0.83,0.0,3,0.0,0.61,3.33
+1189,Superliga (DK),32414,12,Marcos Johan López Lanfranco,M. López,0.18,3.47,1.12,0.65,0.12,111,1.53,5.53,2.53
+1189,Superliga (DK),32456,7,Youssouph Mamadou Badji,Y. Badji,0.83,0.0,0.0,0.17,0.0,5,0.0,0.17,0.0
+1189,Superliga (DK),32785,98,Kristian Fredrik Malt Arnstad,K. Arnstad,3.8,0.55,2.5,5.55,2.6,169,2.5,4.65,0.7
+1189,Superliga (DK),33029,78,Lirim Qamili,L. Qamili,1.86,0.64,0.14,1.29,1.14,85,1.0,1.36,0.0
+1189,Superliga (DK),33030,26,Wahid Faghir,W. Faghir,2.11,0.0,0.11,0.56,0.44,11,0.0,0.56,0.0
+1189,Superliga (DK),33036,5,Thomas Gundelund Nielsen,T. Gundelund,0.11,1.61,0.61,1.22,0.22,43,1.61,4.61,2.44
+1189,Superliga (DK),33038,11,Leonel Montano Dahl,L. Montano,0.92,1.5,0.17,0.58,0.08,42,0.92,1.42,0.33
+1189,Superliga (DK),33153,20,Warren Caddy,W. Caddy,10.0,0.0,0.0,0.33,3.0,19,0.67,1.33,0.0
+1189,Superliga (DK),33157,54,Elies Mahmoud,E. Mahmoud,2.1,1.19,0.81,2.95,0.52,174,1.86,3.86,0.33
+1189,Superliga (DK),34847,154,Matthew Hoppe,M. Hoppe,5.61,0.33,0.28,2.28,2.39,139,1.11,1.28,0.06
+1189,Superliga (DK),35166,2,Andreas Pyndt Andersen,A. Pyndt,0.11,0.22,0.11,7.11,0.28,48,0.17,4.83,1.11
+1189,Superliga (DK),35947,2,Pedro Luís Machado Ganchas,Pedro Ganchas,0.22,0.17,0.22,0.5,0.0,12,0.5,1.5,3.06
+1189,Superliga (DK),36504,0,Luis Binks,L. Binks,0.19,0.12,0.38,0.56,0.06,7,0.25,1.12,4.06
+1189,Superliga (DK),36518,6,Milan Iloski,M. Iloski,3.0,0.0,0.0,0.0,2.0,1,1.0,0.0,0.0
+1189,Superliga (DK),36989,0,Luka Hujber,L. Hujber,0.5,0.0,0.5,0.0,0.0,4,2.0,1.5,1.5
+1189,Superliga (DK),37901,34,Tobias Sommer Sørensen,T. Sommer,2.0,0.5,1.0,5.85,1.0,159,0.75,5.55,1.15
+1189,Superliga (DK),37995,3,Jelle Duin,J. Duin,0.0,0.0,0.0,0.5,0.0,0,0.0,0.5,0.0
+1189,Superliga (DK),38086,3,Rocco Ascone,R. Ascone,3.0,0.0,0.0,0.0,0.0,4,0.0,1.0,0.0
+1189,Superliga (DK),39815,4,Maxime Soulas,M. Soulas,0.35,0.1,0.15,0.6,0.0,14,0.2,1.45,2.9
+1189,Superliga (DK),41025,4,Mads Enggård,M. Enggård,1.0,0.25,0.56,5.5,0.25,48,0.81,4.0,1.31
+1189,Superliga (DK),42258,10,Adam Gabriel,A. Gabriel,1.29,1.29,0.29,0.14,0.14,18,0.71,2.57,0.71
+1189,Superliga (DK),42614,0,Jonas Jensen-Abbew,J. Jensen-Abbew,0.0,0.33,0.0,0.11,0.0,4,0.56,0.89,1.89
+1189,Superliga (DK),47338,1,Michael Amir Richardson,A. Richardson,1.33,0.33,0.67,3.33,0.67,14,0.67,6.0,0.33
+1189,Superliga (DK),49393,125,Ola Solbakken,O. Solbakken,4.53,1.06,0.18,3.94,1.06,135,5.18,2.71,1.47
+1189,Superliga (DK),49689,75,Kristall Máni Ingason,K. Ingason,3.86,0.14,0.64,4.07,1.43,119,0.93,4.07,0.29
+1189,Superliga (DK),50987,152,Mohamed Touré,M. Touré,4.35,0.06,0.12,1.35,1.29,102,0.29,0.41,0.06
+1189,Superliga (DK),51720,146,Callum McCowatt,C. McCowatt,5.15,0.55,1.05,6.1,1.5,229,4.3,3.75,1.3
+1189,Superliga (DK),54519,0,Ivan Näsberg,I. Näsberg,0.0,0.0,0.0,1.0,0.0,0,0.0,1.4,4.4
+1189,Superliga (DK),54555,30,Agon Muçolli,A. Muçolli,1.31,0.56,0.56,1.38,0.25,81,1.19,1.69,0.56
+1189,Superliga (DK),58791,5,Pedro Antonio Bravo Landazuri,P. Bravo,0.29,0.29,0.47,4.88,0.24,46,0.35,3.35,0.88
+1189,Superliga (DK),58963,8,Sofus Berger Brix,S. Berger,1.1,0.0,0.4,1.9,0.5,38,0.8,1.4,0.1
+1189,Superliga (DK),58964,144,Tobias Bech Kristensen,T. Bech,6.86,0.43,0.9,4.05,1.57,224,2.67,2.29,0.38
+1189,Superliga (DK),58965,63,Younes Bakiz,Y. Bakiz,2.71,0.35,0.18,7.41,1.47,133,3.12,3.47,0.59
+1189,Superliga (DK),58968,1,Jeppe Grønning,J. Grønning,0.29,0.14,0.24,7.19,0.05,30,0.19,3.95,0.95
+1189,Superliga (DK),58970,0,Christian Nikolaj  Sørensen,C. Sørensen,0.07,3.27,0.73,0.27,0.0,48,0.47,4.6,1.87
+1189,Superliga (DK),59966,30,Bilal Brahimi,B. Brahimi,2.2,0.3,0.8,3.4,1.8,69,2.9,3.6,0.8
+1189,Superliga (DK),60449,2,Andreas Oggesen,A. Oggesen,0.37,0.95,0.11,5.0,0.26,61,1.11,6.11,1.47
+1189,Superliga (DK),60532,2,Valdemar Lund Jensen,V. Lund,0.0,1.0,0.25,0.25,0.0,5,0.38,1.38,1.75
+1189,Superliga (DK),60534,0,Alexander Magnus Busch,A. Busch,0.0,0.0,0.0,0.0,0.0,1,0.0,0.25,2.25
+1189,Superliga (DK),60535,9,Anders Dahl,A. Dahl,0.5,1.0,0.2,0.6,0.2,51,1.1,1.8,0.4
+1189,Superliga (DK),61124,4,Bjørn Paulsen,B. Paulsen,0.07,0.0,0.21,0.79,0.0,16,0.21,1.14,0.79
+1189,Superliga (DK),61194,0,Adam Wikman,A. Wikman,0.0,0.0,0.0,8.0,0.0,0,0.0,4.5,4.0
+1189,Superliga (DK),61341,75,Mohamed Elias  Achouri,E. Achouri,3.33,0.87,0.47,1.53,0.4,126,1.07,3.13,0.8
+1189,Superliga (DK),61893,4,Anssi Tapio Suhonen,A. Suhonen,1.33,0.33,0.33,3.67,0.33,17,1.67,3.67,0.0
+1189,Superliga (DK),61974,23,Magnus Elkjær Mattsson,M. Mattsson,4.17,0.33,0.83,7.67,1.83,64,1.0,8.83,2.0
+1189,Superliga (DK),63271,27,Rodrigo Jhossel Huescas Hurtado,R. Huescas,1.4,2.6,1.7,0.2,0.2,74,4.2,5.7,4.4
+1189,Superliga (DK),64398,87,Norman Campbell,N. Campbell,2.69,0.38,0.62,0.38,0.44,70,0.56,1.06,0.06
+1189,Superliga (DK),65297,5,Ísak Andri Sigurgeirsson,Í. Sigurgeirsson,2.67,0.0,0.33,0.33,0.33,7,0.0,1.67,0.0
+1189,Superliga (DK),68942,1,Batuhan Zidan Sertdemir,Z. Sertdemir,0.67,0.0,0.0,1.0,0.33,1,0.67,1.67,0.0
+1189,Superliga (DK),70242,117,Christian William Gammelgaard Grøndal,C. Gammelgaard,3.05,1.0,0.25,1.55,1.0,186,1.95,1.9,0.15
+1189,Superliga (DK),70408,0,Daniel Bisgaard Haarbo,D. Haarbo,0.0,0.0,0.0,2.67,0.0,0,0.33,3.0,0.67
+1189,Superliga (DK),70587,3,Gustav Grubbe Madsen,G. Grubbe,0.31,0.15,0.23,1.46,0.54,25,0.54,1.92,0.31
+1189,Superliga (DK),72012,0,Magnus Nordengen Knudsen,M. Knudsen,1.0,0.0,1.0,11.0,1.33,11,1.0,6.0,1.67
+1189,Superliga (DK),72044,89,Sindre Walle Egeli,S. Egeli,5.0,0.17,0.5,3.33,1.0,52,3.33,3.17,0.67
+1189,Superliga (DK),72160,0,Markus Solbakken,M. Solbakken,0.82,0.45,0.64,10.18,0.18,26,0.73,5.73,1.18
+1189,Superliga (DK),72218,45,Runar Robinsønn Norheim,R. Norheim,0.79,0.5,0.64,0.93,0.5,66,1.21,2.5,0.79
+1189,Superliga (DK),72219,2,Felix Vrede Winther,F. Winther,0.06,0.24,0.06,9.12,0.29,39,0.88,6.12,1.53
+1189,Superliga (DK),73267,2,Jeppe Sten Kudsk Pedersen,J. Kudsk,0.19,0.0,0.06,0.44,0.0,10,0.12,0.69,3.5
+1189,Superliga (DK),73353,25,Anosike Victor Ementa,A. Ementa,9.0,0.0,0.0,1.0,1.0,26,0.0,1.33,0.0
+1189,Superliga (DK),75737,85,Denil Daniel Castillo Preciado,D. Castillo,2.25,0.06,0.75,3.38,1.62,129,0.75,3.31,0.62
+1189,Superliga (DK),84587,0,William Clem,W. Clem,0.0,0.0,0.14,3.71,0.21,21,0.07,1.5,0.71
+1189,Superliga (DK),103035,26,Friday Ubi Etim,F. Etim,3.75,0.0,0.25,1.0,1.0,15,0.25,0.5,0.0
+1189,Superliga (DK),110467,2,Daniel Lønborg Thøgersen,D. Thøgersen,0.0,0.0,0.0,0.0,0.0,2,0.5,0.0,0.5
+1189,Superliga (DK),114826,15,Sefer Emini,S. Emini,0.8,0.1,0.3,4.5,1.2,30,0.5,2.3,0.8
+1189,Superliga (DK),118358,0,Wandepanga Ismahila Ouédraogo,I. Ouédraogo,0.0,0.07,0.2,11.53,0.33,22,0.73,4.6,1.47
+1189,Superliga (DK),120298,7,Thibault Klidjé,T. Klidjé,6.0,0.0,0.0,1.0,1.0,3,0.0,0.0,1.0
+1189,Superliga (DK),120953,15,Alexander Illum Simmelhack,A. Simmelhack,1.67,0.17,0.17,1.0,1.0,10,0.0,0.17,0.17
+1189,Superliga (DK),121172,42,Darío Esteban Osorio Osorio,D. Osorio,2.29,0.65,0.53,2.35,0.41,96,1.35,3.24,1.47
+1189,Superliga (DK),133035,38,Mads Søndergaard Clausen,M. Søndergaard,2.69,0.19,0.69,3.44,1.12,91,1.12,5.25,0.38
+1189,Superliga (DK),133036,0,Oliver Ross,O. Ross,0.0,0.0,0.0,0.0,3.0,3,1.0,0.0,1.0
+1189,Superliga (DK),133496,1,Dalton Wilkins,D. Wilkins,0.0,0.0,0.0,0.0,0.0,1,0.5,0.0,0.0
+1189,Superliga (DK),139822,20,Martin Staghøj Huldahl,M. Huldahl,2.12,0.0,0.0,0.25,0.5,14,0.0,0.0,0.0
+1189,Superliga (DK),141051,95,Eskild Munk Dall,E. Dall,3.19,0.06,0.12,0.88,0.75,58,0.19,0.44,0.0
+1189,Superliga (DK),141052,37,Asker Beck Jensen,A. Beck Jensen,1.37,0.74,0.68,4.05,1.16,98,1.47,3.68,0.79
+1189,Superliga (DK),144988,2,Martin André Sjølstad,M. Sjølstad,0.5,1.5,0.5,0.0,0.5,1,0.0,0.5,0.0
+1189,Superliga (DK),154077,164,Franculino Gluda Djú,Franculino Djú,6.65,0.29,0.24,1.88,1.12,119,1.24,1.0,0.18
+1189,Superliga (DK),154078,19,Valdemar Byskov Andreasen,V. Byskov,1.05,0.05,0.05,2.37,1.16,57,0.84,2.47,0.37
+1189,Superliga (DK),160196,1,Daniel Filipe Bandeira e Silva,Dani Silva,0.2,0.0,0.2,4.8,0.4,23,0.1,3.9,0.5
+1189,Superliga (DK),161145,1,Marius Elvius Kolind-Jørgensen,M. Elvius,1.0,0.0,0.0,0.5,0.0,0,0.5,0.5,0.0
+1189,Superliga (DK),162426,33,Victor Bak Jensen,V. Bak Jensen,1.0,1.79,1.63,1.16,0.53,104,2.53,3.63,2.05
+1189,Superliga (DK),163820,110,Cho Gue-Sung,Cho Gue-Sung,5.43,0.14,0.07,1.71,1.21,53,0.79,0.71,0.0
+1189,Superliga (DK),169258,7,Amin Al Hamawi,Amin Al Hamawi,1.75,0.0,0.0,1.75,1.0,14,0.25,2.0,0.25
+1189,Superliga (DK),172044,23,Srdjan Kuzmić,S. Kuzmić,0.69,3.88,1.44,0.31,0.12,98,1.56,4.94,2.38
+1189,Superliga (DK),173402,101,Charly Nouck Horneman,C. Nouck,2.11,0.47,0.16,0.74,0.47,115,1.26,1.26,0.05
+1189,Superliga (DK),176185,23,Max Isaac Ejdum,M. Ejdum,1.56,0.12,0.75,6.75,2.12,156,2.62,7.69,0.56
+1189,Superliga (DK),179560,2,Sérgio Pereira Andrade,Serginho,0.5,1.0,0.0,0.5,0.5,4,1.0,2.0,0.0
+1189,Superliga (DK),180600,231,Tonni Adamsen,T. Adamsen,5.95,0.15,0.2,7.45,1.6,170,2.4,2.35,0.45
+1189,Superliga (DK),184438,336,Noah  Ganaus,N. Ganaus,5.62,0.38,0.48,1.62,2.19,142,1.29,0.9,0.05
+1189,Superliga (DK),184718,2,Masaki Murata,M. Murata,0.0,0.0,0.0,1.33,0.0,5,0.0,1.0,0.33
+1189,Superliga (DK),205998,12,William Madsen,W. Madsen,0.67,0.39,0.39,3.94,0.61,58,0.44,3.61,0.28
+1189,Superliga (DK),206007,133,Oscar Buch,O. Buch,4.18,0.53,0.47,1.71,1.29,188,1.94,1.41,0.29
+1189,Superliga (DK),206009,140,Alexander Lyng,A. Lyng,4.74,0.21,0.79,2.05,1.58,179,2.58,2.05,0.47
+1189,Superliga (DK),206047,6,Mads Freundlich,M. Freundlich,0.0,0.24,0.24,7.88,0.35,40,0.65,4.0,2.35
+1189,Superliga (DK),254582,11,Junnosuke Suzuki,J. Suzuki,0.64,1.82,0.45,0.09,0.0,57,1.45,6.27,3.36
+1189,Superliga (DK),285130,4,Chidiebube Gideon Duru,C. Duru,0.46,1.23,0.23,0.23,0.0,60,1.23,3.69,1.0
+1189,Superliga (DK),285199,13,Ousmane Sow,O. Sow,2.67,0.67,0.0,1.0,0.33,22,2.0,2.67,0.0
+1189,Superliga (DK),335907,13,Benjamin Tahirović,B. Tahirović,1.26,0.21,0.26,6.11,0.63,93,0.53,5.68,0.68
+1189,Superliga (DK),365781,44,Thomas Jørgensen,T. Jørgensen,3.0,0.3,0.45,5.7,0.95,117,1.35,5.9,1.1
+1189,Superliga (DK),365787,122,Amin Chiakha,A. Chiakha,4.36,0.07,0.36,0.71,0.21,83,0.43,1.14,0.0
+1189,Superliga (DK),365789,1,Victor Froholdt,V. Froholdt,2.0,3.0,7.0,5.0,0.0,5,3.0,16.0,2.0
+1189,Superliga (DK),381223,5,Marcus McCoy,M. McCoy,0.4,0.6,0.2,0.3,0.0,40,0.95,1.8,0.7
+1189,Superliga (DK),441633,3,Daniel Freyr Kristjansson,D. Kristjansson,0.0,0.8,0.0,1.0,0.0,15,0.2,2.4,1.2
+1189,Superliga (DK),470959,9,Asbjørn Bøndergaard,A. Bøndergaard,3.0,0.0,0.0,0.67,1.0,4,0.0,0.0,0.0
+1189,Superliga (DK),470975,7,Villads Westh,V. Westh,0.33,0.25,1.25,14.5,0.75,94,2.0,9.5,1.17
+1189,Superliga (DK),470981,15,Sabil Osman Hansen,S. Hansen,0.47,1.47,0.65,0.18,0.0,42,1.12,3.06,0.53
+1189,Superliga (DK),470982,3,Oskar Boesen,O. Boesen,0.5,0.38,1.0,7.12,1.62,56,0.75,5.5,0.88
+1189,Superliga (DK),470988,3,Elias Hansborg-Sørensen,E. Hansborg-Sørensen,0.57,0.0,0.0,0.86,0.14,6,0.14,0.29,0.14
+1189,Superliga (DK),470989,15,Jakob Jessen,J. Jessen,0.76,2.33,1.57,0.33,0.24,126,1.38,4.05,1.24
+1189,Superliga (DK),470991,0,Nikolaj Juul-Sandberg,N. Juul-Sandberg,0.0,0.0,0.0,2.0,0.0,0,0.0,3.0,0.0
+1189,Superliga (DK),471003,8,Mikel Johan Gogorza Krüger-Johnsen,M. Krüger-Johnsen,0.93,0.36,0.57,1.43,0.07,62,0.71,1.36,0.43
+1189,Superliga (DK),526182,204,Mads Fauerholdt Agger,M. Agger,4.38,0.43,0.62,1.33,0.62,156,2.14,1.9,0.19
+1189,Superliga (DK),536939,1,Gabriel Pereira Magalhães dos Santos,Gabriel Pereira,0.0,0.21,0.0,0.32,0.05,7,0.42,1.74,3.11
+1189,Superliga (DK),550011,57,Jona Niemiec,J. Niemiec,3.08,0.0,0.0,1.0,0.85,52,0.46,0.54,0.31
+1189,Superliga (DK),556546,0,Munashe Garananga,M. Garananga,0.0,0.0,0.0,0.4,0.2,1,0.0,0.4,2.0
+1189,Superliga (DK),560993,0,Marcus Younis,M. Younis,0.5,0.0,0.0,0.0,0.0,6,1.0,0.5,0.0
+1189,Superliga (DK),580086,0,Lucas Hogsberg,L. Hogsberg,0.0,0.0,0.0,1.67,0.0,0,0.0,0.33,5.33
+1189,Superliga (DK),590872,41,Jakob Vester Nielsen,J. Vester,1.07,0.33,0.33,1.8,0.13,38,1.4,1.27,0.2
+1189,Superliga (DK),627219,0,Alexander Priesborg Madsen,A. Priesborg Madsen,0.0,0.0,0.0,0.0,0.0,0,0.0,2.0,5.0
+1189,Superliga (DK),634418,0,Laurits Raun Pedersen,L. Pedersen,0.26,0.05,0.05,4.79,0.11,16,0.58,3.74,1.26
+1189,Superliga (DK),640030,84,Dorian Junior Hanza Meha,Dorian Hanza,3.45,0.0,0.1,0.5,0.45,67,0.1,0.6,0.0
+1189,Superliga (DK),641116,7,Yoram Zague,Y. Zague,0.17,1.0,0.5,0.0,0.0,11,1.17,1.67,0.83
+1189,Superliga (DK),641494,50,Florian Danho,F. Danho,4.12,0.12,0.25,0.25,1.88,26,0.62,0.38,0.12
+1189,Superliga (DK),643025,1,Han-Beom Lee,Lee Han-Beom,0.12,0.18,0.06,0.41,0.0,6,0.29,1.06,6.24
+1189,Superliga (DK),655405,101,Bismark Edjeodji,B. Edjeodji,2.67,0.33,0.2,0.87,0.87,63,0.93,0.4,0.07
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,2,Markus Gustav Jensen,M. Jensen,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,1.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,0.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,0.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,0.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,2,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,0.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),667471,7,Markus Gustav Jensen,,2.0,0.0,1.0,1.0,1.0,5,0.0,3.0,0.0
+1189,Superliga (DK),669449,0,Arlet Junior Zé,Junior Zé,2.0,0.0,0.0,1.0,0.0,6,2.0,1.0,0.0
+1189,Superliga (DK),681209,89,Robert Vinicius  Rodrigues Silva,Robert,2.07,0.53,0.47,1.27,0.8,93,2.2,1.47,0.07
+1189,Superliga (DK),713238,0,Matti Bøge Olsen,Matti Olsen,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1189,Superliga (DK),715433,19,Tobias Lauritsen,T. Lauritsen,0.93,0.47,0.6,3.13,1.47,94,1.73,6.13,0.53
+1189,Superliga (DK),723639,0,Lukas Emil Kirkegaard,L. Kirkegaard,0.0,0.25,0.0,0.0,0.0,0,0.0,0.5,4.5
+1189,Superliga (DK),731461,29,Yonis Njoh,Y. Njoh,2.3,0.5,0.5,2.3,1.0,82,2.6,1.7,0.2
+1189,Superliga (DK),735660,3,Ousmane Diao,O. Diao,0.25,0.75,0.25,0.75,0.17,11,1.17,3.25,4.33
+1189,Superliga (DK),738136,25,Jonatan Holm Lindekilde,J. Lindekilde,1.75,0.38,0.5,2.12,0.25,49,1.38,2.25,0.25
+1189,Superliga (DK),742466,31,Sho Fukuda,S. Fukuda,2.25,0.5,0.08,0.58,0.42,59,1.42,1.58,0.0
+1189,Superliga (DK),749127,10,Lasse Flø Borregaard,L. Flø Borregaard,0.06,1.44,0.56,0.31,0.06,33,1.19,3.0,1.38
+1189,Superliga (DK),753074,1,Rúnar Thór Sigurgeirsson,R. Sigurgeirsson,0.67,2.0,0.67,0.0,0.0,3,1.33,3.0,2.0
+1189,Superliga (DK),764505,26,Clement Mutahi Bischoff,C. Bischoff,2.43,0.29,0.57,1.43,1.57,83,3.57,1.57,0.71
+1189,Superliga (DK),771993,22,Simon Sylvest Wæver,S. Wæver,1.53,1.76,0.65,0.18,0.06,78,2.0,4.59,1.12
+1189,Superliga (DK),775009,1,Frederik  Damkjer,F. Damkjer,0.2,0.0,0.4,1.0,0.2,3,0.2,0.6,0.4
+1189,Superliga (DK),786161,8,Nicolas Gammelgaard,,2.0,1.0,0.0,1.0,1.0,6,3.0,3.0,0.0
+1189,Superliga (DK),797153,1,Noah Hessellund Markmann,N. Markmann,0.41,0.29,0.29,0.24,0.0,26,0.35,2.18,5.29
+1189,Superliga (DK),797296,21,Musa Toure,M. Toure,2.44,0.0,0.11,2.0,0.89,37,0.56,3.0,0.0
+1189,Superliga (DK),799993,7,Souleymane Alio,S. Alio,0.0,0.0,0.0,3.5,0.0,6,0.5,1.0,0.0
+1189,Superliga (DK),811238,31,Noah Teye Nartey,N. Nartey,1.94,0.18,1.29,4.88,2.53,194,1.41,6.18,0.41
+1189,Superliga (DK),811239,1,Frederik  Thykær Rieper,F. Rieper,0.29,0.24,0.0,0.48,0.0,2,0.1,1.05,5.24
+1189,Superliga (DK),811499,0,Anders Sønderskov,A. Sønderskov,0.2,0.0,0.0,0.8,0.0,1,0.6,0.2,2.8
+1189,Superliga (DK),811500,41,Tobias  Bach,T. Bach,1.9,1.6,1.1,0.5,0.6,78,1.8,2.3,0.4
+1189,Superliga (DK),811918,79,Mike Themsen Kofod,M. Themsen,5.9,0.25,0.95,4.6,3.35,254,2.55,3.65,0.35
+1189,Superliga (DK),818236,4,Bojang Yaya,Bojang Yaya,0.12,0.18,0.0,0.65,0.12,6,0.29,1.18,5.41
+1189,Superliga (DK),818387,0,Luka Callø Carstensen,L. Callø Carstensen,0.0,0.0,0.5,0.5,0.0,0,0.0,0.0,1.5
+1189,Superliga (DK),818421,27,Julius Nielsen,J. Nielsen,0.81,0.56,0.25,5.94,0.31,92,0.88,4.62,2.0
+1189,Superliga (DK),818598,0,Max Albæk Andersen,M. Albæk,1.0,0.25,0.5,0.5,0.0,2,0.5,1.25,0.25
+1189,Superliga (DK),819528,1,Oliver Højer,O. Højer,1.5,0.0,0.0,2.5,0.0,9,0.5,2.0,0.5
+1189,Superliga (DK),825109,15,Frederik Emmery,F. Emmery,0.93,0.33,0.27,0.53,0.4,45,0.87,0.93,0.4
+1189,Superliga (DK),826906,10,William Christian Martin,W. Martin,1.43,0.0,0.71,2.71,1.0,22,0.43,1.57,0.0
+1189,Superliga (DK),838626,0,Ivan Cabrel Djantou Tchaboutang,I. Djantou,1.0,0.0,0.0,1.0,0.0,0,0.0,0.0,0.0
+1189,Superliga (DK),838627,34,Sidi Mohamed  Cherif Haidara,S. Cherif Haidara,2.89,0.11,0.33,0.94,0.78,50,0.33,1.61,0.0
+1189,Superliga (DK),838628,4,Lukas Björklund,L. Björklund,0.33,0.0,0.67,3.0,1.0,13,1.33,1.67,0.0
+1189,Superliga (DK),838629,103,Caleb Marfo Yirenkyi,C. Yirenkyi,4.0,0.35,0.6,7.65,1.45,224,1.15,8.3,1.6
+1189,Superliga (DK),838630,26,Levy Nene,L. Nene,1.78,0.0,0.11,0.78,0.11,12,0.0,0.0,0.11
+1189,Superliga (DK),839120,1,Julius Berthel Askou Harvey,J. Askou,0.16,0.11,0.05,0.53,0.05,6,0.05,0.84,3.47
+1189,Superliga (DK),840433,8,Giorgi Tabatadze,G. Tabatadze,0.33,0.33,0.67,1.0,0.17,15,1.0,0.83,0.5
+1189,Superliga (DK),840442,14,Hjalte Bidstrup,H. Bidstrup,0.06,2.25,0.44,0.12,0.06,58,1.12,4.12,1.56
+1189,Superliga (DK),841968,56,Viktor Bjarki Daðason,V. Daðason,3.5,0.1,0.1,0.5,0.4,29,0.0,0.6,0.0
+1189,Superliga (DK),842210,3,Mike Løhde Vestergård,M. Vestergård,0.1,0.25,0.3,7.4,0.35,44,0.4,2.4,1.7
+1189,Superliga (DK),842215,70,Sami Jalal,S. Jalal,2.55,0.85,0.65,2.35,0.75,168,1.9,3.3,0.2
+1189,Superliga (DK),847695,1,Osman Abdulkadir Addo,O. Addo,1.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1189,Superliga (DK),850101,2,Justin Meltofte Janssen,J. Meltofte Janssen,0.05,0.0,0.05,4.9,0.15,14,0.1,3.0,1.05
+1189,Superliga (DK),858605,0,Sebastian Biller Mikkelsen,S. Biller Mikkelsen,0.0,0.0,1.0,1.0,1.0,4,2.0,2.0,1.0
+1189,Superliga (DK),886049,0,Abdul Hakim Sulemana,A. Hakim Sulemana,1.0,0.0,0.0,0.0,0.0,0,1.0,1.0,0.0
+1189,Superliga (DK),920530,55,Olti Hyseni,O. Hyseni,2.25,0.7,0.55,2.25,1.05,131,1.6,1.95,0.35
+1189,Superliga (DK),920775,0,Benjamin Dela Hounou Clemmensen,B. Clemmensen,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
+1189,Superliga (DK),962303,13,Sofus Østergaard Grandjean Johannesen,S. Johannesen,1.27,0.45,1.55,2.27,0.18,70,0.91,2.0,0.27
+1189,Superliga (DK),966874,0,Magnus Andersen,M. Andersen,1.0,0.0,0.0,2.0,0.0,5,0.0,0.0,0.0
+1189,Superliga (DK),978575,20,Stefen Erwan Tchamche,S. Tchamche,0.83,0.17,0.0,0.67,0.17,27,0.42,0.33,0.0
+1189,Superliga (DK),982491,0,Adam Nygaard  Andersen,A. Andersen,0.24,0.06,0.06,0.06,0.0,7,0.59,0.47,1.47
+1189,Superliga (DK),984941,99,Peter Villum Berthelsen,V. Berthelsen,4.44,0.06,0.67,4.72,3.28,174,1.44,3.0,0.33
+1189,Superliga (DK),984943,4,Markus Andersen Walker,Markus Walker,0.14,0.57,0.57,0.57,0.14,33,0.86,2.29,1.71
+1189,Superliga (DK),987678,1,William Hammelsvang Kirk,W. Kirk,0.0,0.0,0.0,0.0,0.0,6,2.0,1.0,0.0
+1189,Superliga (DK),987712,0,Vitus Friis,V. Friis,0.0,0.0,0.0,1.0,0.0,0,0.0,1.0,0.0
+1189,Superliga (DK),987719,11,Hjalte Boe Rasmussen,H. Rasmussen,1.5,0.0,0.0,1.0,0.33,17,0.5,0.33,0.0
+1189,Superliga (DK),987749,0,Oskar Skou Haugstrup,O. Haugstrup,1.0,0.0,0.0,6.0,0.0,2,0.5,4.0,0.5
+1189,Superliga (DK),987789,0,Tobias Lykkebak,T. Lykkebak,1.0,0.0,0.0,0.0,1.0,2,0.0,1.0,0.0
+1189,Superliga (DK),987792,0,Sander Ravn,S. Ravn,0.0,0.0,1.0,0.0,0.0,0,0.0,1.0,0.0
+1189,Superliga (DK),988410,43,Juho Väinö Valtteri Lähteenmäki,J. Valtteri Lähteenmäki,2.18,1.88,2.0,1.35,0.29,164,1.65,5.0,3.18
+1189,Superliga (DK),998065,0,Villads Rutkjær,V. Rutkjær,0.0,0.0,0.0,2.0,0.0,0,0.0,3.0,6.0
+1189,Superliga (DK),998071,116,Jacob Brochner Ambæk,J. Ambæk,4.67,0.13,0.27,2.0,1.47,96,1.73,0.8,0.07
+1189,Superliga (DK),998076,10,Malte Såby Heyde,M. Heyde,0.33,0.0,0.17,1.0,0.5,17,0.17,0.17,0.17
+1189,Superliga (DK),999684,5,Mathias Jensen,M. Jensen,0.91,0.09,0.55,5.36,0.55,19,0.18,4.45,0.27
+1189,Superliga (DK),1001173,6,Stephen Acquah,S. Acquah,0.21,0.0,0.21,0.29,0.14,18,0.07,1.43,2.57
+1189,Superliga (DK),1002154,3,Issaka Seidu,I. Seidu,0.6,0.0,0.4,1.0,0.0,5,0.0,1.2,0.0
+1189,Superliga (DK),1003809,0,Mikkel Bach Løndal,M. Løndal,0.0,1.0,0.0,0.0,0.0,1,1.0,5.0,1.0
+1189,Superliga (DK),1004265,6,Albert Rrahmani,A. Rrahmani,1.0,0.0,0.0,0.2,0.2,9,0.4,1.0,0.0
+1189,Superliga (DK),1008873,13,Tómas Óli Kristjánsson,T. Kristjánsson,2.0,0.0,0.5,0.83,0.67,25,0.67,0.83,0.5
+1189,Superliga (DK),1009009,4,Cyril Edudzi,C. Edudzi,0.0,0.0,0.0,0.0,2.0,3,0.0,0.0,0.0
+1189,Superliga (DK),1018406,18,Kotaro Uchino,K. Uchino,1.4,0.0,0.0,0.4,0.0,11,0.0,0.2,0.0
+1189,Superliga (DK),1018407,128,Prince junior Amoako,P. Amoako,2.45,1.1,0.3,1.95,0.85,196,3.0,1.65,0.35
+1189,Superliga (DK),1018408,0,Malthe Riis Ladefoged,M. Riis Ladefoged,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,1.5
+1189,Superliga (DK),1018417,46,Abdoulaye Camara,A. Camara,1.67,0.17,0.08,0.75,0.42,41,1.42,0.58,0.25
+1189,Superliga (DK),1021688,0,Pachanga Cassoma Kristensen,P. Kristensen,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.67
+1189,Superliga (DK),1028036,8,Ousseynou Fall Seck,O. Seck,2.5,0.25,0.38,1.25,0.5,32,1.0,1.25,0.12
+1189,Superliga (DK),1031905,2,Max Jensen,M. Jensen,0.5,1.75,1.0,0.5,0.0,15,1.25,2.5,0.75
+1189,Superliga (DK),1033233,4,Viggo Poulsen,V. Poulsen,1.0,0.25,0.25,0.5,0.0,10,0.25,1.0,0.5
+1189,Superliga (DK),1033234,0,Andrè Escobar Jensen,A. Escobar,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1189,Superliga (DK),1044686,14,Vianney Geovanni ,V. Geovanni,1.67,0.0,0.0,0.33,0.33,6,0.0,0.0,0.0

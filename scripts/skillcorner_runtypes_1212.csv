@@ -1,0 +1,489 @@
+competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_cross_receiver_run,runtype_overlap_run,runtype_underlap_run,runtype_coming_short_run,runtype_pulling_half_space_run,runtype_run_ahead_of_the_ball,runtype_pulling_wide_run,runtype_support_run,runtype_dropping_off_run
+1212,2. Bundesliga (DE),670,6,Amin Younes,A. Younes,1.0,0.0,0.2,3.4,1.6,13,0.4,1.8,0.2
+1212,2. Bundesliga (DE),1442,74,Branimir Hrgota,B. Hrgota,2.23,0.36,0.73,3.32,0.95,93,1.77,3.64,0.18
+1212,2. Bundesliga (DE),1697,166,Cédric Itten,C. Itten,7.19,0.05,0.1,1.0,1.24,118,0.57,1.05,0.0
+1212,2. Bundesliga (DE),2290,0,Danilo Teodoro Soares,Danilo Soares,0.0,1.0,0.5,1.5,0.0,9,1.5,6.0,0.0
+1212,2. Bundesliga (DE),2454,0,David Kinsombi,D. Kinsombi,0.5,0.0,0.0,0.0,0.0,0,0.0,0.5,0.0
+1212,2. Bundesliga (DE),2553,42,Dawid Kownacki,D. Kownacki,6.38,0.08,0.23,2.0,0.69,32,0.38,0.38,0.08
+1212,2. Bundesliga (DE),2938,34,Edin Džeko,E. Džeko,4.6,0.2,0.0,1.2,0.4,16,0.4,1.4,0.0
+1212,2. Bundesliga (DE),3235,3,Fabian Holland,F. Holland,0.0,0.56,0.44,0.31,0.0,16,0.88,1.56,1.25
+1212,2. Bundesliga (DE),3372,65,Felix Klaus,F. Klaus,3.38,1.94,0.69,3.38,0.69,149,3.62,5.94,0.75
+1212,2. Bundesliga (DE),3375,15,Felix Passlack,F. Passlack,1.44,0.75,0.56,0.12,0.06,45,1.25,2.44,1.0
+1212,2. Bundesliga (DE),4168,8,Håvard Kallevik Nielsen,H. Nielsen,1.14,0.0,0.0,0.43,0.0,7,0.0,0.0,0.0
+1212,2. Bundesliga (DE),4864,0,Jean-Paul Boëtius,J. Boëtius,0.25,0.0,0.0,3.0,0.25,6,0.25,2.75,0.25
+1212,2. Bundesliga (DE),5375,17,Jorrit Hendrix,J. Hendrix,2.05,0.63,0.89,7.0,0.58,127,1.42,7.68,0.89
+1212,2. Bundesliga (DE),5573,9,Julian Green,J. Green,0.47,0.41,0.47,2.53,0.53,54,1.18,3.94,0.65
+1212,2. Bundesliga (DE),5775,71,Kenan Karaman,K. Karaman,4.0,0.41,0.45,4.5,2.18,141,1.86,2.32,0.14
+1212,2. Bundesliga (DE),5880,0,Kevin Vogt,K. Vogt,0.29,0.0,0.14,1.43,0.0,2,0.29,1.43,2.43
+1212,2. Bundesliga (DE),7086,15,Marvin Marcel  Schulz,M. Schulz,1.0,0.3,0.6,3.2,0.6,70,0.4,3.8,0.1
+1212,2. Bundesliga (DE),7268,14,Matthias Zimmermann,M. Zimmermann,0.59,1.29,1.0,0.88,0.12,77,1.94,3.41,0.76
+1212,2. Bundesliga (DE),8108,58,Noah Joel Sarenren Bazee,N. Sarenren Bazee,3.56,0.12,0.06,1.25,0.75,53,0.94,0.94,0.06
+1212,2. Bundesliga (DE),8484,0,Paul Seguin,P. Seguin,0.47,0.13,0.2,7.13,0.33,51,0.73,6.27,2.8
+1212,2. Bundesliga (DE),9159,1,Robin Knoche,R. Knoche,0.0,0.0,0.07,0.27,0.0,11,0.13,0.93,1.73
+1212,2. Bundesliga (DE),9648,7,Sebastian Jung,S. Jung,1.12,1.94,0.12,0.0,0.06,89,1.76,4.59,2.41
+1212,2. Bundesliga (DE),9664,26,Sebastian Polter,S. Polter,1.5,0.0,0.1,0.0,0.0,6,0.0,0.4,0.0
+1212,2. Bundesliga (DE),9979,24,Stefan Kutschke,S. Kutschke,1.38,0.0,0.0,0.19,0.31,22,0.0,0.12,0.0
+1212,2. Bundesliga (DE),10725,78,Vincent Vermeij,V. Vermeij,5.46,0.15,0.46,1.92,0.46,68,0.23,0.69,0.08
+1212,2. Bundesliga (DE),11558,9,Deyovaisio Zeefuik,D. Zeefuik,0.53,1.59,0.29,0.47,0.0,40,1.94,3.06,2.47
+1212,2. Bundesliga (DE),11750,1,Diego Demme,D. Demme,0.56,0.0,0.22,8.44,0.78,18,1.0,6.33,1.0
+1212,2. Bundesliga (DE),12202,202,Moussa Sylla,M. Sylla,5.0,0.15,0.35,1.25,0.9,74,0.1,1.05,0.05
+1212,2. Bundesliga (DE),12227,1,Ibrahima Sissoko,I. Sissoko,0.17,0.67,0.0,3.67,0.33,17,0.67,2.33,0.33
+1212,2. Bundesliga (DE),12658,85,Steven Skrzybski,S. Skrzybski,3.8,0.2,0.4,5.33,1.33,114,2.0,2.8,0.53
+1212,2. Bundesliga (DE),12748,9,Dženis Burnić,D. Burnić,0.9,0.05,0.65,6.15,0.9,56,0.25,4.25,1.45
+1212,2. Bundesliga (DE),12791,0,Paul Will,P. Will,0.0,0.2,0.0,4.6,0.2,12,0.2,2.4,0.5
+1212,2. Bundesliga (DE),12921,17,Mahir Madatov Emreli,M. Emreli,2.2,0.2,0.4,2.2,0.4,16,1.2,2.4,1.4
+1212,2. Bundesliga (DE),13029,20,Jón Dagur Thorsteinsson,J. Thorsteinsson,5.0,0.2,1.0,2.5,1.9,69,1.2,2.2,0.2
+1212,2. Bundesliga (DE),13303,3,Stefan Schwab,S. Schwab,1.0,0.4,0.27,2.87,0.6,27,1.0,2.47,0.47
+1212,2. Bundesliga (DE),13308,23,Dejan Ljubičić,D. Ljubičić,4.25,0.0,0.5,2.75,1.0,37,1.5,5.75,0.5
+1212,2. Bundesliga (DE),13547,1,Oliver Olsen,O. Olsen,1.0,1.33,0.33,0.33,0.0,7,1.33,3.0,3.33
+1212,2. Bundesliga (DE),13608,31,Raphael Obermair,R. Obermair,0.4,1.8,0.8,0.9,0.15,97,1.1,4.45,1.6
+1212,2. Bundesliga (DE),13742,0,Raoul Petretta,R. Petretta,0.0,2.0,1.0,0.0,0.0,1,0.0,3.0,1.0
+1212,2. Bundesliga (DE),14132,0,Jacob Rasmussen,J. Rasmussen,0.25,0.25,0.5,0.0,0.0,1,0.25,1.5,4.75
+1212,2. Bundesliga (DE),14270,6,Tim Handwerker,T. Handwerker,0.25,1.69,2.56,0.06,0.38,58,1.06,4.75,3.0
+1212,2. Bundesliga (DE),14381,47,Matúš Bero,M. Bero,2.5,0.29,0.86,2.29,1.07,89,1.29,4.29,0.93
+1212,2. Bundesliga (DE),14716,7,Silas Gnaka,S. Gnaka,0.33,0.06,0.11,5.56,0.22,32,0.39,2.78,1.0
+1212,2. Bundesliga (DE),14747,0,Aleksandar Vukotić,A. Vukotić,0.05,0.0,0.0,0.25,0.0,2,0.1,0.15,2.5
+1212,2. Bundesliga (DE),15183,0,Sotiris Alexandropoulos,S. Alexandropoulos,0.33,0.33,0.17,2.67,0.17,20,1.33,2.33,1.58
+1212,2. Bundesliga (DE),15719,0,Agustín Maximiliano Rogel Paita,Agustín Rogel,,,,,,0,,,
+1212,2. Bundesliga (DE),16291,6,Sam Schreck,S. Schreck,0.11,0.22,0.44,3.89,0.33,34,1.22,3.78,1.11
+1212,2. Bundesliga (DE),16337,7,Nikola Katić,N. Katić,0.05,0.05,0.05,0.36,0.23,9,0.14,0.27,2.59
+1212,2. Bundesliga (DE),16847,0,Erhan Mašović,E. Mašović,0.0,0.0,0.25,0.5,0.12,2,0.0,0.25,1.38
+1212,2. Bundesliga (DE),17283,98,Naatan Skyttä,N. Skyttä,5.68,0.41,0.82,2.82,1.18,180,2.14,3.41,0.68
+1212,2. Bundesliga (DE),17390,1,Virgil-Eugen Ghiţă,V. Ghiţă,0.26,0.3,0.0,0.26,0.0,33,1.78,1.91,4.65
+1212,2. Bundesliga (DE),18498,19,Ibrahim Sissoko,I. Sissoko,1.33,0.0,0.0,0.17,0.67,8,0.17,0.17,0.17
+1212,2. Bundesliga (DE),18586,11,Dennis Srbeny,D. Srbeny,0.75,0.17,0.17,1.0,0.58,25,0.25,0.75,0.08
+1212,2. Bundesliga (DE),18700,0,Toni Leistner,T. Leistner,0.0,0.0,0.0,0.95,0.0,4,0.37,0.47,2.26
+1212,2. Bundesliga (DE),18860,0,Jordy  de Wijs,J. de Wijs,0.33,0.17,0.0,0.0,0.0,3,0.0,0.67,0.17
+1212,2. Bundesliga (DE),19097,3,Josip Brekalo,J. Brekalo,2.33,0.33,0.0,6.0,0.33,16,0.33,1.67,0.0
+1212,2. Bundesliga (DE),19103,4,Gian-Luca Itter,L. Itter,0.14,1.86,0.29,0.07,0.07,39,1.57,3.64,3.79
+1212,2. Bundesliga (DE),19116,3,Marcel Sobottka,M. Sobottka,0.0,0.0,0.0,0.5,0.0,3,0.5,1.5,0.0
+1212,2. Bundesliga (DE),19127,79,Michaël Cuisance,M. Cuisance,5.0,0.45,0.45,5.36,2.41,245,1.91,6.14,0.14
+1212,2. Bundesliga (DE),19161,42,Florent Muslija,F. Muslija,2.14,0.77,0.77,2.55,1.05,135,2.73,4.55,0.86
+1212,2. Bundesliga (DE),19176,48,Gerrit Holtmann,G. Holtmann,1.12,1.06,0.31,0.5,0.38,111,1.75,1.38,0.19
+1212,2. Bundesliga (DE),19180,71,Marco Richter,M. Richter,3.45,0.65,1.05,1.95,1.4,102,1.9,5.35,0.25
+1212,2. Bundesliga (DE),19183,13,Simon Asta,S. Asta,0.67,2.17,0.17,0.33,0.0,28,2.33,3.67,1.33
+1212,2. Bundesliga (DE),19184,8,Romario Rösch,R. Rösch,0.4,0.8,0.4,0.4,0.8,12,1.8,2.6,1.2
+1212,2. Bundesliga (DE),19230,0,Philipp Ziereis,P. Ziereis,0.0,0.0,0.0,0.85,0.0,3,0.25,0.65,3.8
+1212,2. Bundesliga (DE),19232,5,Jeremy  Dudziak,J. Dudziak,3.5,0.0,1.5,2.25,0.5,21,0.5,3.5,0.0
+1212,2. Bundesliga (DE),19250,10,Maximilian Wittek,M. Wittek,0.5,1.45,1.09,0.18,0.05,74,3.09,4.73,2.09
+1212,2. Bundesliga (DE),19257,162,Fabian Reese,F. Reese,4.3,1.52,0.74,1.57,0.65,184,1.87,3.17,0.83
+1212,2. Bundesliga (DE),19261,1,Paul Jaeckel,P. Jaeckel,0.05,0.0,0.05,0.5,0.05,10,0.1,0.5,3.3
+1212,2. Bundesliga (DE),19266,0,Maximilian Bauer,M. Bauer,0.17,0.0,0.0,1.0,0.0,0,0.33,1.67,5.67
+1212,2. Bundesliga (DE),19273,2,Jan Gyamerah,J. Gyamerah,0.25,0.62,1.12,0.38,0.12,37,1.62,3.75,3.19
+1212,2. Bundesliga (DE),19280,6,Tom Baack,T. Baack,1.11,0.22,0.33,2.44,0.56,40,0.89,2.89,0.56
+1212,2. Bundesliga (DE),19287,32,Joshua Mees,J. Mees,4.38,0.25,0.12,4.75,1.5,73,2.12,3.75,0.0
+1212,2. Bundesliga (DE),19290,20,Kenny Prince Redondo,K. Redondo,1.2,0.4,0.0,0.4,0.2,14,0.0,0.6,0.2
+1212,2. Bundesliga (DE),19294,4,Christopher Lenz,C. Lenz,1.27,0.55,0.36,0.91,0.18,24,0.82,1.73,0.82
+1212,2. Bundesliga (DE),19309,5,Matthias Bader,M. Bader,0.22,0.33,0.0,0.44,0.0,13,0.33,0.89,0.67
+1212,2. Bundesliga (DE),19310,69,Niklas Hauptmann,N. Hauptmann,3.71,0.24,0.62,2.14,1.52,126,1.05,2.95,0.57
+1212,2. Bundesliga (DE),19317,15,Emmanuel Iyoha,E. Iyoha,1.67,0.94,0.72,0.94,0.56,115,1.83,4.0,1.17
+1212,2. Bundesliga (DE),19324,0,Nicolai Rapp,N. Rapp,0.2,0.0,0.0,2.0,0.07,8,0.47,1.07,2.07
+1212,2. Bundesliga (DE),19370,15,Moritz-Broni Kwarteng,M. Kwarteng,0.8,0.0,0.0,0.7,0.1,27,0.5,1.6,0.0
+1212,2. Bundesliga (DE),19371,0,Stephan Kofi Ambrosius,S. Ambrosius,0.0,0.0,0.0,0.0,0.0,0,0.33,0.33,2.0
+1212,2. Bundesliga (DE),19378,9,Aaron Opoku,A. Opoku,1.0,1.67,0.33,0.67,0.33,17,2.0,3.0,0.67
+1212,2. Bundesliga (DE),19381,0,Patric Pfeiffer,P. Pfeiffer,0.04,0.0,0.04,0.43,0.0,5,0.52,0.74,4.26
+1212,2. Bundesliga (DE),19397,67,Barış-Fahri Atik,B. Atik,3.0,0.32,0.41,4.32,0.77,152,2.41,3.45,1.14
+1212,2. Bundesliga (DE),19406,46,Marlon Ritter,M. Ritter,3.0,0.48,0.19,0.95,0.67,89,1.0,2.43,0.52
+1212,2. Bundesliga (DE),19409,76,Sven Michel,S. Michel,2.44,0.06,0.11,1.28,0.56,80,0.83,0.89,0.06
+1212,2. Bundesliga (DE),19418,62,Christopher Antwi-Adjei,C. Antwi-Adjei,1.58,0.75,0.33,0.92,0.67,44,0.75,1.67,0.08
+1212,2. Bundesliga (DE),19424,6,Lukas Boeder,L. Boeder,0.44,0.06,0.44,1.75,0.44,36,0.44,2.12,5.44
+1212,2. Bundesliga (DE),19449,15,Alexander Rossipal,A. Rossipal,0.29,2.24,0.76,0.18,0.0,89,1.59,4.94,4.06
+1212,2. Bundesliga (DE),19454,184,Fabian Schleusener,F. Schleusener,5.95,0.29,0.19,1.62,0.95,92,0.86,0.95,0.05
+1212,2. Bundesliga (DE),19465,27,Philipp Förster,P. Förster,3.0,0.38,0.62,5.12,1.31,101,2.38,4.31,0.62
+1212,2. Bundesliga (DE),19472,5,Arne Sicker,A. Sicker,0.18,1.55,1.64,0.27,0.0,25,2.0,2.73,1.82
+1212,2. Bundesliga (DE),19483,12,Jannik Dehm,J. Dehm,0.95,1.11,0.37,0.21,0.0,61,1.63,3.84,2.37
+1212,2. Bundesliga (DE),19487,1,Jonas Meffert,J. Meffert,0.33,0.0,0.0,7.0,0.0,14,1.17,3.5,2.17
+1212,2. Bundesliga (DE),19501,3,Kevin Sessa,K. Sessa,0.25,0.42,0.25,2.58,0.42,17,0.17,1.67,0.17
+1212,2. Bundesliga (DE),19520,59,Marvin Mehlem,M. Mehlem,2.2,0.07,0.73,2.67,2.8,116,1.07,2.67,0.33
+1212,2. Bundesliga (DE),19527,3,Marcel Franke,M. Franke,0.11,0.0,0.06,0.89,0.0,4,0.28,0.22,2.5
+1212,2. Bundesliga (DE),19535,1,Tobias Müller,T. Müller,0.47,0.11,0.0,0.26,0.0,17,0.47,2.16,4.79
+1212,2. Bundesliga (DE),19549,0,Rico Preißinger,R. Preißinger,0.0,0.05,0.11,5.26,0.05,19,0.16,2.11,1.32
+1212,2. Bundesliga (DE),19555,6,Mërgim Berisha,M. Berisha,3.0,0.0,0.0,2.0,0.0,1,0.0,1.0,0.0
+1212,2. Bundesliga (DE),20026,5,Łukasz Poręba,L. Poręba,0.32,0.32,0.09,5.77,0.32,63,0.36,6.73,1.14
+1212,2. Bundesliga (DE),20143,6,Mikkel Kirkeskov Andersen,M. Kirkeskov,0.07,1.36,0.29,0.5,0.0,47,0.64,3.07,3.21
+1212,2. Bundesliga (DE),20197,5,Michael Obafemi,M. Obafemi,0.5,0.0,0.0,0.0,0.5,6,0.0,0.0,0.0
+1212,2. Bundesliga (DE),20243,0,Giovanni Haag,G. Haag,0.0,0.0,0.0,1.0,0.0,2,0.0,0.5,2.0
+1212,2. Bundesliga (DE),22925,212,Benjamin Källman,B. Källman,7.7,0.09,0.17,0.87,0.26,105,0.09,0.43,0.0
+1212,2. Bundesliga (DE),23133,0,Samuel Loric,S. Loric,,,,,,0,,,
+1212,2. Bundesliga (DE),23148,27,Bryan Lasme,B. Lasme,1.5,0.4,0.0,0.3,0.3,19,0.1,0.8,0.0
+1212,2. Bundesliga (DE),23167,1,Jean Hugonet,J. Hugonet,0.12,0.19,0.12,0.44,0.06,15,1.62,1.75,6.0
+1212,2. Bundesliga (DE),23196,8,Adil Aouchiche,A. Aouchiche,4.67,2.67,0.33,0.33,0.0,25,4.33,3.67,0.0
+1212,2. Bundesliga (DE),24118,14,Charalambos Makridis,C. Makridis,0.8,0.13,0.07,0.6,0.13,35,0.47,1.73,0.27
+1212,2. Bundesliga (DE),24147,17,Roberts Uldriķis,R. Uldriķis,5.83,0.0,0.0,1.0,0.33,15,0.17,1.0,0.0
+1212,2. Bundesliga (DE),24231,6,Lino Tempelmann,L. Tempelmann,0.88,0.12,0.38,3.38,0.88,27,0.5,2.5,0.25
+1212,2. Bundesliga (DE),24292,13,Tobias Raschl,T. Raschl,0.89,0.11,0.11,0.89,0.44,16,0.67,1.56,0.22
+1212,2. Bundesliga (DE),24310,4,Kandet Diawara,K. Diawara,0.5,0.0,0.0,0.0,0.0,2,0.0,0.0,0.5
+1212,2. Bundesliga (DE),24342,10,Timo Becker,T. Becker,0.13,0.47,0.33,0.2,0.0,32,1.0,1.33,1.93
+1212,2. Bundesliga (DE),24375,5,Luka Lochoshvili,L. Lochoshvili,0.32,0.27,0.23,0.23,0.09,35,0.18,0.82,1.14
+1212,2. Bundesliga (DE),24425,88,Philipp Hercher,P. Hercher,2.43,1.29,0.52,0.81,0.29,103,1.24,1.95,0.38
+1212,2. Bundesliga (DE),24427,0,Carlo Sickinger,C. Sickinger,0.33,0.11,0.0,1.78,0.11,8,0.22,0.78,0.33
+1212,2. Bundesliga (DE),24438,0,Fabio Kaufmann,F. Kaufmann,0.9,0.2,0.1,0.0,0.0,20,1.5,0.9,0.9
+1212,2. Bundesliga (DE),24464,193,Erencan Yardımcı,E. Yardımcı,4.95,0.35,0.0,1.35,1.0,100,0.95,0.8,0.0
+1212,2. Bundesliga (DE),24615,72,Oliver Batista Meier,O. Batista Meier,1.33,0.71,0.24,4.19,1.29,194,2.24,3.76,0.43
+1212,2. Bundesliga (DE),24694,34,Shinta Appelkamp,S. Appelkamp,3.94,0.62,0.62,3.75,1.06,87,1.06,5.12,0.5
+1212,2. Bundesliga (DE),24941,0,Frederik Jäkel,F. Jäkel,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),25061,23,Koji Miyoshi,K. Miyoshi,4.0,0.18,0.09,1.82,1.09,45,2.18,0.64,0.27
+1212,2. Bundesliga (DE),25094,20,Michał Karbownik,M. Karbownik,0.5,1.44,1.38,0.75,0.0,112,2.62,4.38,2.31
+1212,2. Bundesliga (DE),25452,43,Julian Justvan,J. Justvan,3.91,0.59,0.64,3.59,2.18,155,2.0,4.86,0.64
+1212,2. Bundesliga (DE),25457,1,Márton Dárdai,M. Dárdai,0.1,0.05,0.05,0.25,0.0,3,0.6,1.55,5.65
+1212,2. Bundesliga (DE),25484,0,Stefano Russo,S. Russo,0.12,0.12,0.41,8.94,0.94,47,1.24,8.76,1.12
+1212,2. Bundesliga (DE),25505,5,Fabian Kunze,F. Kunze,0.19,0.1,0.24,3.48,0.48,32,0.33,2.62,0.48
+1212,2. Bundesliga (DE),25510,1,Maxwell Gyamfi,M. Gyamfi,0.06,0.17,0.06,0.39,0.0,3,0.06,0.33,3.17
+1212,2. Bundesliga (DE),25515,10,Finn Ole Becker,F. Becker,1.42,0.32,0.42,4.74,1.11,94,3.42,8.37,1.16
+1212,2. Bundesliga (DE),25519,1,Niklas Schmidt,N. Schmidt,0.2,0.0,0.2,2.0,0.0,6,0.2,1.4,0.4
+1212,2. Bundesliga (DE),25520,0,Sven Köhler,S. Köhler,0.0,0.19,0.06,1.31,0.06,19,0.81,2.06,2.12
+1212,2. Bundesliga (DE),25521,11,Moritz Heyer,M. Heyer,0.38,1.62,1.69,0.77,0.08,44,0.46,4.23,0.77
+1212,2. Bundesliga (DE),25523,58,Etienne Amenyido,E. Amenyido,3.15,0.31,0.38,2.77,1.31,100,1.23,2.08,0.08
+1212,2. Bundesliga (DE),25541,9,Finn Porath,F. Porath,0.74,0.37,0.42,0.16,0.05,34,0.47,1.58,0.79
+1212,2. Bundesliga (DE),25545,11,Fabian Nürnberger,F. Nürnberger,0.93,1.33,0.73,0.27,0.0,60,0.87,4.6,1.47
+1212,2. Bundesliga (DE),25549,5,Immanuel Pherai,I. Pherai,1.0,0.0,0.5,2.5,0.0,20,0.5,5.5,0.0
+1212,2. Bundesliga (DE),26139,5,Aljaž Casar,A. Casar,1.17,0.17,0.17,1.83,0.67,30,0.5,3.67,0.75
+1212,2. Bundesliga (DE),26683,109,Christoph Daferner,C. Daferner,5.45,0.15,0.15,1.05,0.3,62,0.2,0.9,0.05
+1212,2. Bundesliga (DE),27049,64,Philipp Hofmann,P. Hofmann,6.32,0.09,0.14,0.73,0.23,51,0.09,0.86,0.05
+1212,2. Bundesliga (DE),27051,55,Marvin Wanitzek,M. Wanitzek,3.64,0.45,0.82,3.73,0.86,180,2.23,3.73,0.82
+1212,2. Bundesliga (DE),27057,1,Christoph Kobald,C. Kobald,0.0,0.0,0.07,0.4,0.0,10,0.4,1.4,3.8
+1212,2. Bundesliga (DE),27059,28,Dominik Kother,D. Kother,2.17,0.58,0.25,1.25,0.75,52,1.25,0.83,0.58
+1212,2. Bundesliga (DE),27069,2,Kevin Ehlers,K. Ehlers,0.2,0.2,0.2,0.35,0.0,16,1.2,1.95,5.0
+1212,2. Bundesliga (DE),27071,2,Erik Wekesser,E. Wekesser,0.0,0.0,0.0,0.0,0.0,1,0.25,0.25,0.0
+1212,2. Bundesliga (DE),27076,3,Marco Meyerhöfer,M. Meyerhöfer,0.08,1.0,0.25,0.08,0.08,29,0.83,2.42,1.25
+1212,2. Bundesliga (DE),27078,78,Christian Conteh,C. Conteh,2.65,0.47,0.35,1.24,0.71,108,0.76,0.82,0.18
+1212,2. Bundesliga (DE),27082,40,Sebastian Klaas,S. Klaas,2.68,0.26,0.84,6.53,0.84,177,2.05,3.68,0.79
+1212,2. Bundesliga (DE),27641,44,Žan Celar,Ž. Celar,2.15,0.0,0.0,0.54,0.38,21,0.23,0.23,0.0
+1212,2. Bundesliga (DE),27745,86,Benedikt Pichler,B. Pichler,4.23,0.08,0.08,0.69,0.38,38,0.15,0.38,0.08
+1212,2. Bundesliga (DE),28098,0,Carl Johansson,C. Johansson,0.0,0.0,0.0,0.09,0.18,2,0.18,0.45,2.73
+1212,2. Bundesliga (DE),28100,1,Marcus Klingenberg Mathisen,M. Mathisen,0.36,0.14,0.09,2.5,0.14,21,0.68,1.82,3.23
+1212,2. Bundesliga (DE),28128,3,Armin Gigović,A. Gigović,3.0,1.0,0.0,5.0,1.0,11,1.0,7.0,0.0
+1212,2. Bundesliga (DE),28165,122,Nils Fröling,N. Fröling,3.74,0.37,0.63,1.68,0.89,92,1.89,1.53,0.32
+1212,2. Bundesliga (DE),28166,43,Alexander Gustav Kent Ahl Holmström,A. Ahl Holmström,3.67,0.11,0.0,0.22,0.0,16,0.0,0.33,0.0
+1212,2. Bundesliga (DE),28881,51,Mustapha Bundu,M. Bundu,3.15,1.08,1.15,1.08,0.31,72,1.31,2.69,0.23
+1212,2. Bundesliga (DE),28927,1,Herbert Bockhorn,H. Bockhorn,0.0,0.5,0.25,0.25,0.0,5,0.88,2.25,0.25
+1212,2. Bundesliga (DE),28977,19,Jomaine Consbruch,J. Consbruch,1.77,0.08,0.23,1.31,0.54,54,1.0,1.15,0.38
+1212,2. Bundesliga (DE),28979,72,Daniel Hanslik,D. Hanslik,3.59,0.0,0.53,1.47,0.35,44,0.18,1.47,0.0
+1212,2. Bundesliga (DE),29618,26,Lubambo Musonda,L. Musonda,1.0,1.88,1.06,0.35,0.12,88,3.18,4.12,2.24
+1212,2. Bundesliga (DE),29689,9,Bartosz Białek,B. Białek,1.67,0.11,0.22,0.11,0.11,12,0.33,0.22,0.0
+1212,2. Bundesliga (DE),29705,95,Mateusz Żukowski,M. Żukowski,7.82,0.09,0.0,1.18,1.0,50,0.55,1.18,0.09
+1212,2. Bundesliga (DE),29929,164,Fraser Hornby,F. Hornby,6.35,0.2,0.75,2.35,0.75,116,0.4,3.05,0.15
+1212,2. Bundesliga (DE),30004,2,Maximilian Großer,M. Großer,0.57,0.05,0.1,2.52,0.05,27,0.24,2.05,6.76
+1212,2. Bundesliga (DE),30018,4,Jonas Sterner,J. Sterner,0.0,1.57,1.29,0.14,0.0,43,3.57,4.43,2.71
+1212,2. Bundesliga (DE),30020,50,Lilian Egloff,L. Egloff,2.82,0.55,1.27,2.73,1.73,90,1.0,3.64,0.45
+1212,2. Bundesliga (DE),30047,24,Malik Batmaz,M. Batmaz,1.33,0.33,0.17,1.67,0.5,21,0.83,0.0,0.0
+1212,2. Bundesliga (DE),30619,67,Oscar Vilhelmsson,O. Vilhelmsson,3.78,0.0,0.0,1.56,0.44,31,0.11,0.11,0.11
+1212,2. Bundesliga (DE),30962,46,Mickaël Biron,M. Biron,2.64,0.09,0.09,0.73,0.36,39,0.18,0.64,0.09
+1212,2. Bundesliga (DE),31110,0,Ondřej Karafiát,O. Karafiát,0.0,0.0,0.0,0.33,0.0,5,0.33,1.33,1.33
+1212,2. Bundesliga (DE),32270,65,Nick Bätzner,N. Bätzner,2.3,0.45,0.45,1.9,0.95,120,2.0,1.8,0.65
+1212,2. Bundesliga (DE),32275,23,Sergio López Galache,Sergio López,0.42,2.47,0.32,0.37,0.11,69,1.68,4.0,2.16
+1212,2. Bundesliga (DE),32658,22,Imad Rondić,I. Rondić,8.0,0.33,0.33,3.33,0.33,19,0.67,1.67,0.33
+1212,2. Bundesliga (DE),32744,65,Maximilian Breunig ,M. Breunig,3.94,0.0,0.06,0.94,0.41,37,0.24,0.47,0.06
+1212,2. Bundesliga (DE),33219,1,Marvin Rittmüller,M. Rittmüller,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
+1212,2. Bundesliga (DE),33222,1,Ron Schallenberg,R. Schallenberg,0.09,0.0,0.14,3.5,0.14,16,0.14,1.95,0.77
+1212,2. Bundesliga (DE),33224,1,Afeez Aremu,A. Aremu,0.0,0.25,0.25,0.38,0.12,6,0.0,0.88,0.5
+1212,2. Bundesliga (DE),33227,0,Jamil Siebert,J. Siebert,0.0,0.5,0.5,1.0,0.0,0,0.5,0.5,2.5
+1212,2. Bundesliga (DE),33229,0,Marco Komenda,M. Komenda,0.07,0.6,0.33,0.27,0.13,29,1.27,2.0,4.33
+1212,2. Bundesliga (DE),33232,9,Dickson Abiama,D. Abiama,0.9,1.4,0.1,0.6,0.5,46,0.5,1.4,0.5
+1212,2. Bundesliga (DE),33241,1,Jan Elvedi,J. Elvedi,0.0,0.12,0.0,0.56,0.0,6,0.38,1.0,2.81
+1212,2. Bundesliga (DE),33764,92,Lars  Lokotsch,L. Lokotsch,3.8,0.07,0.13,0.53,0.6,56,0.33,0.67,0.0
+1212,2. Bundesliga (DE),33854,0,Noah Loosli,N. Loosli,0.0,0.0,0.06,0.89,0.06,4,0.22,1.0,5.44
+1212,2. Bundesliga (DE),34133,3,Marco John,M. John,0.33,0.33,0.33,4.83,0.33,22,1.33,5.67,0.67
+1212,2. Bundesliga (DE),34179,2,Felix Götze,F. Götze,0.11,0.16,0.37,0.42,0.11,41,1.11,2.74,3.21
+1212,2. Bundesliga (DE),34222,0,Tim Breithaupt ,T. Breithaupt,0.4,0.0,0.7,3.1,0.0,16,0.3,3.3,0.6
+1212,2. Bundesliga (DE),34416,5,Mathias Olesen,M. Olesen,0.73,0.18,0.09,5.73,0.36,36,0.18,3.55,0.91
+1212,2. Bundesliga (DE),34575,138,Lukas Petkov,L. Petkov,3.0,0.68,0.64,1.32,0.45,137,2.41,2.68,0.59
+1212,2. Bundesliga (DE),34849,83,Luca Schuler,L. Schuler,5.33,0.0,0.22,1.44,0.61,62,0.33,0.61,0.0
+1212,2. Bundesliga (DE),34960,21,Merveille Papela,M. Papela,0.91,0.22,0.39,1.3,0.61,52,0.48,2.13,0.35
+1212,2. Bundesliga (DE),35504,171,Steffen Tigges,S. Tigges,6.0,0.25,0.3,3.05,0.95,125,0.6,1.05,0.05
+1212,2. Bundesliga (DE),35624,1,Bastian Allgeier,B. Allgeier,0.14,0.14,0.29,0.0,0.0,7,1.0,1.43,3.0
+1212,2. Bundesliga (DE),35633,0,Max Geschwill,M. Geschwill,0.2,0.1,0.2,0.5,0.1,13,1.5,1.9,2.9
+1212,2. Bundesliga (DE),36620,14,John Tolkin,J. Tolkin,1.32,1.09,1.09,1.45,0.27,162,2.73,3.91,3.14
+1212,2. Bundesliga (DE),36967,83,Roko Šimić,R. Šimić,3.0,0.0,0.06,1.18,0.41,55,0.24,0.53,0.06
+1212,2. Bundesliga (DE),37691,0,David Zec,D. Zec,0.24,0.14,0.05,0.33,0.05,17,0.33,2.14,4.48
+1212,2. Bundesliga (DE),37844,26,Janik Bachmann,J. Bachmann,1.92,0.0,0.08,0.85,0.15,33,0.08,0.77,0.08
+1212,2. Bundesliga (DE),38005,47,Martijn Kaars,M. Kaars,10.33,0.0,0.33,2.67,2.67,16,0.67,2.0,0.0
+1212,2. Bundesliga (DE),39652,86,Christian Theodor Kjelder Rasmussen,C. Rasmussen,1.58,0.26,0.16,1.05,0.26,103,0.63,2.16,0.16
+1212,2. Bundesliga (DE),39812,121,Ivan Prtajin,I. Prtajin,6.0,0.08,0.0,1.0,0.46,51,0.0,0.85,0.0
+1212,2. Bundesliga (DE),40305,3,Christopher Lannert,C. Lannert,0.42,1.84,2.05,0.26,0.11,62,2.53,5.95,3.89
+1212,2. Bundesliga (DE),40311,79,Maël  Corboz,M. Corboz,3.61,0.78,2.35,3.57,2.65,247,4.65,7.0,1.26
+1212,2. Bundesliga (DE),40334,0,Lars Bünning,L. Bünning,0.2,0.1,0.0,0.4,0.0,7,0.3,0.4,2.1
+1212,2. Bundesliga (DE),40352,4,Anas Bakhat,A. Bakhat,3.5,0.5,0.0,0.5,0.5,5,0.5,1.0,0.0
+1212,2. Bundesliga (DE),40365,7,Leon Jensen,L. Jensen,1.86,0.14,1.14,6.57,0.43,20,0.43,5.14,0.86
+1212,2. Bundesliga (DE),40397,1,Connor Krempicki,C. Krempicki,2.5,0.0,0.5,3.0,0.5,8,0.0,0.0,0.0
+1212,2. Bundesliga (DE),40400,20,Julian Hettwer,J. Hettwer,2.5,0.5,0.0,1.25,0.25,13,0.0,0.0,0.5
+1212,2. Bundesliga (DE),40931,0,Florian Flick,F. Flick,0.25,0.25,0.25,3.19,0.38,32,0.69,2.38,2.25
+1212,2. Bundesliga (DE),41063,0,Maik Nawrocki,M. Nawrocki,0.0,0.11,0.11,0.56,0.0,5,0.89,0.56,3.0
+1212,2. Bundesliga (DE),41606,28,Mehmet Can Aydın,M. Aydın,0.52,1.24,0.29,1.33,0.19,66,1.86,3.43,1.48
+1212,2. Bundesliga (DE),42495,26,Waniss Taïbi,W. Taïbi,2.53,0.53,1.35,3.12,1.35,76,0.71,3.0,0.71
+1212,2. Bundesliga (DE),43049,5,William Kokolo,W. Kokolo,0.33,0.56,0.0,0.22,0.0,27,0.89,0.56,0.11
+1212,2. Bundesliga (DE),44873,1,Boris Tomiak,B. Tomiak,0.05,0.09,0.05,1.09,0.05,14,0.5,1.14,4.5
+1212,2. Bundesliga (DE),47128,0,Henning Matriciani,H. Matriciani,0.0,0.0,0.0,0.0,0.0,1,1.0,0.0,0.0
+1212,2. Bundesliga (DE),47129,76,Marten Winkler,M. Winkler,4.14,0.82,0.5,2.09,0.59,133,2.14,1.95,0.73
+1212,2. Bundesliga (DE),48527,1,Sidney Raebiger,S. Raebiger,1.5,0.0,0.5,3.0,0.0,3,0.0,4.5,1.0
+1212,2. Bundesliga (DE),49257,151,Adrián Kaprálik,A. Kaprálik,3.5,0.2,0.6,2.55,0.9,142,1.4,1.65,0.35
+1212,2. Bundesliga (DE),54979,0,Moussa N''Diaye,M. N''Diaye,0.33,3.33,1.67,0.33,0.33,7,1.33,6.33,0.33
+1212,2. Bundesliga (DE),58646,0,Doni Arifi,D. Arifi,0.4,0.0,0.2,4.8,0.4,4,0.6,3.2,1.4
+1212,2. Bundesliga (DE),58966,73,Sebastian Grønning Andersen,S. Grønning,4.53,0.0,0.0,0.82,0.24,41,0.06,0.76,0.0
+1212,2. Bundesliga (DE),59955,17,Ado Onaiwu,A. Onaiwu,4.75,0.0,0.25,2.25,1.75,21,1.25,2.5,0.0
+1212,2. Bundesliga (DE),59975,50,Paul Joly,P. Joly,1.68,2.95,0.42,0.58,0.21,85,2.0,4.05,2.26
+1212,2. Bundesliga (DE),59981,0,Marcel Benger,M. Benger,0.3,0.0,0.1,4.7,0.1,14,0.2,3.9,2.0
+1212,2. Bundesliga (DE),59985,2,Tim Oberdorf,T. Oberdorf,0.05,0.33,0.0,0.1,0.05,21,1.19,2.19,4.38
+1212,2. Bundesliga (DE),59989,0,Clemens Riedel,C. Riedel,0.0,1.0,0.5,0.5,0.0,3,3.5,6.5,1.0
+1212,2. Bundesliga (DE),59990,30,Konrad Faber,K. Faber,0.35,3.15,0.85,0.15,0.0,110,2.35,4.7,2.7
+1212,2. Bundesliga (DE),59993,4,Jannis Heuer,J. Heuer,0.22,0.39,0.28,0.56,0.0,19,0.39,1.44,2.72
+1212,2. Bundesliga (DE),59995,77,Luca Marseiler,L. Marseiler,2.09,1.41,0.64,0.68,0.59,146,1.64,2.27,0.18
+1212,2. Bundesliga (DE),59996,19,Luca Herrmann,L. Herrmann,1.42,0.16,0.37,3.05,0.74,74,0.79,2.58,0.84
+1212,2. Bundesliga (DE),60001,0,Thomas Keller,T. Keller,0.33,0.0,0.0,0.33,0.17,3,0.17,0.17,3.0
+1212,2. Bundesliga (DE),60002,96,Filip Bilbija,F. Bilbija,4.06,0.39,0.78,2.39,1.06,136,0.94,2.44,0.28
+1212,2. Bundesliga (DE),60004,0,Jan-Hendrik Marx,J. Marx,0.0,1.67,0.0,0.0,0.0,11,1.0,2.67,1.67
+1212,2. Bundesliga (DE),60010,0,Maximilian Rohr,M. Rohr,0.11,0.0,0.11,0.22,0.06,3,0.33,1.33,1.44
+1212,2. Bundesliga (DE),60105,0,Leon Klassen,L. Klassen,0.6,1.2,0.2,0.4,0.0,6,1.2,2.4,1.8
+1212,2. Bundesliga (DE),60217,1,Lukas Pinckert,L. Pinckert,0.11,0.44,0.11,0.11,0.06,15,0.28,0.67,2.56
+1212,2. Bundesliga (DE),60227,0,Kai Klefisch,K. Klefisch,0.16,0.21,0.16,7.95,0.37,45,1.53,7.16,2.21
+1212,2. Bundesliga (DE),60252,0,Leon Schneider,L. Schneider,0.06,0.06,0.0,0.59,0.0,2,0.35,0.53,5.76
+1212,2. Bundesliga (DE),60254,0,Louis Breunig,L. Breunig,0.0,0.0,0.0,0.3,0.0,6,1.2,0.9,1.7
+1212,2. Bundesliga (DE),60287,19,Fynn-Luca Lakenmacher,F. Lakenmacher,0.86,0.0,0.0,0.0,0.0,8,0.14,0.14,0.0
+1212,2. Bundesliga (DE),60289,52,Adriano Grimaldi,A. Grimaldi,2.9,0.19,0.1,0.57,0.76,63,0.24,0.48,0.0
+1212,2. Bundesliga (DE),60354,88,Tom Zimmerschied,T. Zimmerschied,3.95,0.73,1.05,4.82,1.5,262,2.41,4.0,0.45
+1212,2. Bundesliga (DE),60483,8,Robert Wagner,R. Wagner,0.79,0.32,0.26,4.79,0.47,48,1.16,3.84,0.89
+1212,2. Bundesliga (DE),60485,0,Maximilian Dietz,M. Dietz,0.07,0.13,0.0,6.8,0.2,9,1.07,3.67,3.13
+1212,2. Bundesliga (DE),60489,3,Sascha Risch,S. Risch,0.0,2.22,0.78,0.0,0.11,28,2.22,3.22,4.11
+1212,2. Bundesliga (DE),60495,41,Johan Arath Gómez,J. Gómez,2.19,0.76,0.52,1.57,0.71,95,2.48,3.86,0.76
+1212,2. Bundesliga (DE),60499,70,Richmond Tachie,R. Tachie,1.57,0.07,0.07,0.36,0.21,42,0.43,0.64,0.0
+1212,2. Bundesliga (DE),60511,0,Anton-Leander Donkor,A. Donkor,0.0,1.0,0.0,0.0,0.0,0,0.0,1.0,0.5
+1212,2. Bundesliga (DE),60522,20,Amara Condé,A. Condé,0.67,0.24,0.38,4.48,0.81,77,0.62,4.24,0.9
+1212,2. Bundesliga (DE),60523,0,Andreas Müller,A. Müller,0.0,0.0,0.33,6.73,0.47,16,0.2,2.93,1.07
+1212,2. Bundesliga (DE),60524,19,Leon Bell Bell,L. Bell Bell,1.24,1.35,1.12,1.29,0.59,98,2.35,4.0,1.0
+1212,2. Bundesliga (DE),60526,30,Jason Ceka,J. Ceka,0.92,0.58,0.42,0.5,0.08,53,0.92,1.5,0.08
+1212,2. Bundesliga (DE),60568,0,Jesper Daland,J. Daland,0.12,0.0,0.06,0.25,0.06,4,0.19,0.69,2.81
+1212,2. Bundesliga (DE),60885,4,Tan-Kenneth Schmidt,K. Schmidt,0.25,1.15,0.8,0.35,0.15,51,1.5,3.05,2.4
+1212,2. Bundesliga (DE),60919,0,Joel Felix,J. Felix,0.12,0.0,0.18,0.53,0.06,3,0.29,0.47,3.24
+1212,2. Bundesliga (DE),60920,1,Stefán Teitur Thórdarson,S. Thórdarson,0.6,0.4,0.2,0.0,0.0,2,0.0,1.6,0.0
+1212,2. Bundesliga (DE),60936,0,Mladen Cvjetinović,M. Cvjetinović,0.0,0.0,0.0,0.0,0.0,5,4.0,2.0,9.0
+1212,2. Bundesliga (DE),60998,1,Vinko Šapina,V. Šapina,0.14,0.0,0.14,3.43,0.5,22,0.29,2.71,0.5
+1212,2. Bundesliga (DE),61090,2,Lukas Kunze,L. Kunze,0.0,0.0,0.0,0.0,0.5,1,0.0,0.5,0.0
+1212,2. Bundesliga (DE),61093,10,Felix Higl,F. Higl,1.43,0.07,0.14,0.5,0.29,12,0.07,0.21,0.07
+1212,2. Bundesliga (DE),61094,3,Florian Kleinhansl,F. Kleinhansl,0.38,0.5,0.12,0.12,0.0,19,0.75,2.0,0.62
+1212,2. Bundesliga (DE),61127,16,Valgeir Lunddal Fridriksson,V. Lunddal Fridriksson,1.43,2.14,0.29,0.29,0.0,34,1.86,4.86,2.57
+1212,2. Bundesliga (DE),61171,62,Alexander Bernhardsson,A. Bernhardsson,2.36,0.93,0.86,2.14,0.29,88,2.21,2.57,0.36
+1212,2. Bundesliga (DE),61635,69,Anouar El Azzouzi,A. El Azzouzi,2.68,1.05,1.23,4.14,0.77,170,1.95,6.59,1.23
+1212,2. Bundesliga (DE),62069,4,Ben Bobzien,B. Bobzien,1.25,0.25,0.75,2.25,0.25,21,3.0,1.75,0.75
+1212,2. Bundesliga (DE),62104,5,Noah Weißhaupt,N. Weißhaupt,1.2,0.4,0.0,1.0,0.0,12,0.8,0.4,0.2
+1212,2. Bundesliga (DE),62180,211,Isac Lidberg,I. Lidberg,7.45,0.4,0.05,0.65,0.8,109,0.35,0.65,0.0
+1212,2. Bundesliga (DE),63151,0,Brynjar Ingi Bjarnason,B. Bjarnason,0.09,0.0,0.0,0.36,0.0,0,0.27,0.64,4.45
+1212,2. Bundesliga (DE),63331,4,Leandro  Morgalla,L. Morgalla,0.64,1.41,0.41,0.09,0.05,57,1.64,2.64,3.45
+1212,2. Bundesliga (DE),63374,38,Faride Alidou,F. Alidou,1.73,0.33,0.13,0.6,0.2,48,0.73,0.87,0.0
+1212,2. Bundesliga (DE),63429,43,Norman Bassette,N. Bassette,4.8,0.0,0.2,0.6,0.4,26,0.4,0.6,0.0
+1212,2. Bundesliga (DE),67375,30,Levente Szabó,L. Szabó,1.46,0.08,0.0,0.54,0.08,35,0.23,0.31,0.0
+1212,2. Bundesliga (DE),67653,39,Daisuke Yokota,D. Yokota,2.38,0.71,0.76,1.95,0.48,109,2.1,2.48,0.38
+1212,2. Bundesliga (DE),67779,1,Marcel Beifus,M. Beifus,0.23,0.0,0.46,0.31,0.08,5,0.15,1.0,2.62
+1212,2. Bundesliga (DE),67781,6,Lasse Günther,L. Günther,0.4,2.0,0.67,0.27,0.0,85,1.2,3.73,1.73
+1212,2. Bundesliga (DE),67914,3,Linus Gechter,L. Gechter,0.05,0.3,0.15,0.35,0.0,37,1.6,3.25,7.5
+1212,2. Bundesliga (DE),67959,0,Philipp Strompf,P. Strompf,0.0,0.17,0.0,0.17,0.0,3,0.06,0.61,4.5
+1212,2. Bundesliga (DE),68238,6,Look Nicholas Sa Kengkhetid Mickelson,N. Mickelson,0.38,1.5,0.31,0.38,0.0,68,1.81,2.75,0.94
+1212,2. Bundesliga (DE),68577,6,Eldin Dzogovic,E. Dzogovic,1.0,0.75,0.75,0.5,0.0,15,0.75,2.5,0.75
+1212,2. Bundesliga (DE),68643,140,Killian Corredor,K. Corredor,4.79,0.89,0.58,1.84,1.63,189,1.58,3.63,0.42
+1212,2. Bundesliga (DE),68909,70,Francis-Ikechukwu Onyeka,F. Onyeka,5.9,0.1,0.4,3.9,0.85,128,1.3,2.95,0.3
+1212,2. Bundesliga (DE),68916,0,Ken Eghosa Gideon Izekor,K. Izekor,0.0,0.0,0.0,0.0,0.0,1,0.0,0.0,0.0
+1212,2. Bundesliga (DE),68922,0,Daniel Hülsenbusch,D. Hülsenbusch,1.0,0.0,0.0,0.0,0.0,0,0.0,1.0,1.0
+1212,2. Bundesliga (DE),68942,13,Batuhan Zidan Sertdemir,Z. Sertdemir,1.88,0.31,0.62,4.5,0.5,94,1.12,3.81,0.56
+1212,2. Bundesliga (DE),68949,33,Noah Pesch,N. Pesch,2.08,0.08,0.17,0.75,0.17,38,0.83,1.33,0.25
+1212,2. Bundesliga (DE),68955,0,Caspar Jander,C. Jander,2.0,0.0,5.0,13.0,0.0,8,0.0,6.0,3.0
+1212,2. Bundesliga (DE),68956,1,Hamza Anhari,H. Anhari,3.0,0.0,0.0,4.0,2.0,5,1.0,1.0,0.0
+1212,2. Bundesliga (DE),69233,8,Enzo Leopold,E. Leopold,0.35,0.3,0.35,10.87,0.26,53,0.52,5.74,2.35
+1212,2. Bundesliga (DE),69930,0,Janne Berner,J. Berner,0.0,1.0,0.0,0.0,0.0,1,1.0,0.0,0.0
+1212,2. Bundesliga (DE),69931,13,Benjamin Bediako Boakye,B. Boakye,1.0,0.67,0.83,0.72,0.06,60,1.11,3.78,2.06
+1212,2. Bundesliga (DE),69932,18,Luca Raimund,L. Raimund,0.89,0.11,0.33,0.44,0.33,28,1.67,1.11,0.33
+1212,2. Bundesliga (DE),69935,36,Laurin Ulrich,L. Ulrich,2.61,0.78,0.48,3.22,1.57,186,1.83,7.13,0.74
+1212,2. Bundesliga (DE),69949,2,Berkay Yılmaz,B. Yılmaz,0.14,3.77,0.91,0.59,0.27,125,2.05,4.59,1.82
+1212,2. Bundesliga (DE),69962,6,Ruben Müller,R. Müller,1.4,0.9,0.3,1.6,0.1,25,0.9,2.3,1.9
+1212,2. Bundesliga (DE),70304,22,Mika Joel Baur,M. Baur,1.57,0.29,0.29,4.48,0.43,89,1.67,4.05,1.43
+1212,2. Bundesliga (DE),70316,9,Marco Wörner,M. Wörner,1.5,0.0,0.0,0.5,0.5,5,0.75,1.0,0.0
+1212,2. Bundesliga (DE),70339,25,Falko Michel,F. Michel,1.79,0.16,0.68,3.95,0.37,90,0.89,4.63,0.47
+1212,2. Bundesliga (DE),70340,0,Matej Maglica,M. Maglica,0.16,0.0,0.11,0.11,0.0,4,0.21,0.47,3.68
+1212,2. Bundesliga (DE),70562,0,Andi Hoti,A. Hoti,0.0,0.0,0.0,0.2,0.0,1,0.4,0.2,3.6
+1212,2. Bundesliga (DE),70832,1,Claudio Kammerknecht,C. Kammerknecht,0.0,1.0,0.0,0.1,0.0,6,0.4,2.5,3.9
+1212,2. Bundesliga (DE),70849,23,Moritz Broschinski,M. Broschinski,4.0,1.0,0.0,1.0,1.0,13,1.0,0.5,0.0
+1212,2. Bundesliga (DE),72012,11,Magnus Nordengen Knudsen,M. Knudsen,0.71,0.29,0.35,8.06,0.94,138,1.12,5.29,1.29
+1212,2. Bundesliga (DE),73227,0,Antonio Tikvić,A. Tikvić,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),73275,21,Dariusz Stalmach,D. Stalmach,1.27,0.27,0.33,3.73,0.4,57,0.33,4.07,0.73
+1212,2. Bundesliga (DE),76755,2,Luka Hyryläinen,L. Hyryläinen,0.29,0.43,0.43,1.71,0.14,16,0.43,4.71,1.43
+1212,2. Bundesliga (DE),76806,2,Ali Eren Ersungur,A. Ersungur,0.0,0.0,0.0,2.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),76817,3,Florian  Micheler,F. Micheler,1.5,0.0,0.5,1.75,0.75,12,0.25,1.5,0.25
+1212,2. Bundesliga (DE),84586,11,Emil Winther Højlund,E. Højlund,2.67,0.0,0.0,0.0,0.33,12,0.0,0.0,0.0
+1212,2. Bundesliga (DE),90581,7,Tim Rossmann,T. Rossmann,0.75,1.25,0.75,1.0,1.75,22,2.5,3.0,0.5
+1212,2. Bundesliga (DE),90582,37,Stefano Marino,S. Marino,2.14,0.14,0.14,0.36,0.5,33,0.43,0.79,0.14
+1212,2. Bundesliga (DE),92737,34,Sidi Sané,S. Sané,1.44,0.17,0.17,1.11,0.72,63,0.56,1.56,0.06
+1212,2. Bundesliga (DE),92744,8,Mattes Hansen,M. Hansen,0.45,0.4,0.3,1.0,0.1,46,0.8,2.95,3.0
+1212,2. Bundesliga (DE),92749,4,Juan Ignacio Cabrera,J. Cabrera,0.0,0.33,0.33,0.67,0.0,10,0.67,0.67,0.0
+1212,2. Bundesliga (DE),92751,10,Louis Köster,L. Köster,2.33,0.33,0.33,1.33,1.67,9,1.33,1.67,0.0
+1212,2. Bundesliga (DE),98115,0,Max Grüger,M. Grüger,0.0,0.0,0.25,0.75,0.0,1,0.25,1.0,0.0
+1212,2. Bundesliga (DE),98120,1,Taylan  Bulut,T. Bulut,0.0,0.5,0.0,0.0,0.0,3,2.0,1.5,0.0
+1212,2. Bundesliga (DE),98121,15,Vitalie  Becker,V. Becker,0.76,2.29,0.53,0.35,0.0,73,1.12,4.35,2.82
+1212,2. Bundesliga (DE),98134,0,Julian Pauli,J. Pauli,0.23,0.08,0.31,0.46,0.0,12,0.92,2.46,5.08
+1212,2. Bundesliga (DE),99674,53,Lucas Copado Schrobenhauser,Lucas Copado,2.89,0.11,0.22,1.78,1.11,35,0.78,1.0,0.11
+1212,2. Bundesliga (DE),101496,1,Meiko Wäschenbach,M. Wäschenbach,0.67,0.0,0.11,4.33,0.56,14,0.11,2.22,0.44
+1212,2. Bundesliga (DE),103047,0,Niko Koulis,N. Koulis,0.25,0.0,0.0,0.0,0.0,0,0.0,0.0,1.0
+1212,2. Bundesliga (DE),105429,0,Robert Geller,R. Geller,1.5,0.0,0.0,1.0,0.0,5,1.0,0.5,0.0
+1212,2. Bundesliga (DE),105445,5,Julian Eitschberger,J. Eitschberger,0.07,1.27,0.47,0.33,0.0,56,2.0,4.07,3.2
+1212,2. Bundesliga (DE),105599,12,Grant-Leon Ranos,G. Ranos,2.0,0.0,0.67,1.33,1.33,15,1.67,1.0,0.0
+1212,2. Bundesliga (DE),105602,28,David Herold,D. Herold,0.82,4.14,0.86,1.0,0.23,178,2.91,6.09,2.32
+1212,2. Bundesliga (DE),105618,23,Danny Schmidt,D. Schmidt,2.55,0.36,0.73,1.36,1.0,26,0.36,1.73,0.18
+1212,2. Bundesliga (DE),105744,7,Aiman Dardari,A. Dardari,0.8,0.0,0.2,1.2,0.2,14,0.8,1.0,0.2
+1212,2. Bundesliga (DE),105775,13,Maurice Krattenmacher,M. Krattenmacher,1.53,0.24,0.41,1.59,1.12,69,2.06,2.29,0.24
+1212,2. Bundesliga (DE),105821,24,Mika Haas,M. Haas,2.64,3.0,0.55,0.64,0.09,146,1.95,3.5,1.23
+1212,2. Bundesliga (DE),108967,51,Luca Schnellbacher,L. Schnellbacher,2.12,0.06,0.0,0.59,0.12,19,0.06,0.24,0.0
+1212,2. Bundesliga (DE),110451,93,Joel Grodowski,J. Grodowski,3.38,0.48,0.43,2.86,0.9,111,2.57,1.14,0.43
+1212,2. Bundesliga (DE),110460,60,Jannik Rochelt,J. Rochelt,2.47,0.53,0.58,1.42,0.47,95,2.0,2.11,0.58
+1212,2. Bundesliga (DE),110464,0,Marcel Hoffmeier,M. Hoffmeier,0.25,0.25,0.25,0.25,0.25,8,1.25,1.5,2.5
+1212,2. Bundesliga (DE),110518,0,Simon Scherder,S. Scherder,0.0,0.0,0.0,0.43,0.0,0,0.14,0.0,1.14
+1212,2. Bundesliga (DE),111933,1,Hendry  Blank,H. Blank,0.0,0.0,0.0,0.18,0.0,2,0.45,0.64,1.45
+1212,2. Bundesliga (DE),119724,76,Bambasé  Conté,B. Conté,4.68,0.32,1.16,3.84,2.95,186,1.68,3.89,0.26
+1212,2. Bundesliga (DE),120556,0,Tim Hoffmann,T. Hoffmann,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,1.0
+1212,2. Bundesliga (DE),120557,59,Noël Aséko Nkili,N. Aséko,1.13,0.09,0.26,2.52,1.78,174,0.74,3.96,0.3
+1212,2. Bundesliga (DE),120558,43,Rafael  Lubach,R. Lubach,1.7,0.65,0.65,6.4,0.6,124,1.95,4.85,1.55
+1212,2. Bundesliga (DE),144987,0,Mikkel Rakneberg,M. Rakneberg,0.0,0.33,0.0,0.0,0.0,3,0.33,1.33,0.33
+1212,2. Bundesliga (DE),152166,0,Hasan Kuruçay,H. Kuruçay,0.25,0.05,0.2,0.2,0.05,7,0.8,0.55,2.65
+1212,2. Bundesliga (DE),155334,3,Franz Roggow,F. Roggow,0.43,0.0,0.0,3.57,0.14,12,0.0,2.43,0.57
+1212,2. Bundesliga (DE),161509,4,Umut Tohumcu,U. Tohumcu,0.5,0.0,1.0,9.25,1.5,33,1.5,5.5,0.5
+1212,2. Bundesliga (DE),161791,10,Felix Keidel,F. Keidel,0.5,1.35,0.95,0.55,0.05,86,2.3,4.75,1.45
+1212,2. Bundesliga (DE),162566,0,Pascal Klemens,P. Klemens,0.0,0.0,0.2,7.6,0.2,10,1.6,3.6,1.0
+1212,2. Bundesliga (DE),163360,0,Styopa Mkrtchyan,S. Mkrtchyan,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,4.0
+1212,2. Bundesliga (DE),166645,0,Colin Kleine-Bekel,C. Kleine-Bekel,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),167199,0,Florian Le Joncour,F. Le Joncour,0.15,0.31,0.15,0.38,0.0,5,0.77,2.08,4.46
+1212,2. Bundesliga (DE),171152,58,Jonas Torrissen Therkelsen,J. Therkelsen,2.22,0.48,1.13,4.43,0.87,177,2.22,3.96,0.7
+1212,2. Bundesliga (DE),173095,8,Luca Bolay,L. Bolay,0.23,2.38,0.46,1.31,0.23,95,1.46,6.23,2.54
+1212,2. Bundesliga (DE),174321,11,Sayfallah Ltaief,S. Ltaief,3.67,0.33,1.67,4.0,2.0,30,3.67,4.0,0.33
+1212,2. Bundesliga (DE),175190,20,Robin Heußer,R. Heußer,1.55,0.05,0.45,4.15,1.05,121,1.5,4.15,0.55
+1212,2. Bundesliga (DE),180004,0,Sanoussy Ba,S. Ba,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),180012,3,Calvin Brackelmann,C. Brackelmann,0.31,0.85,0.92,0.31,0.08,28,1.15,1.92,3.77
+1212,2. Bundesliga (DE),180750,4,Atanas Chernev,A. Chernev,0.25,0.0,0.0,0.25,0.5,4,1.25,0.75,5.0
+1212,2. Bundesliga (DE),181100,3,Daniel Heber,D. Heber,0.33,0.33,0.33,0.33,0.0,5,1.33,2.0,1.67
+1212,2. Bundesliga (DE),181101,23,Isaiah Ahmad Young,I. Young,2.27,0.2,0.2,1.27,0.47,64,2.53,1.0,0.4
+1212,2. Bundesliga (DE),181124,38,Maurice Neubauer,M. Neubauer,2.81,0.9,1.38,2.05,0.62,106,2.38,5.52,1.57
+1212,2. Bundesliga (DE),181131,33,Semih Şahin,S. Şahin,1.35,0.22,0.91,3.22,0.52,105,1.09,6.35,0.87
+1212,2. Bundesliga (DE),181138,96,Alexander Nollenberger,A. Nollenberger,1.32,2.27,2.27,0.36,0.14,149,1.18,3.09,1.18
+1212,2. Bundesliga (DE),181258,23,Adrian Gantenbein,A. Gantenbein,1.08,1.46,0.77,0.46,0.0,48,1.77,3.77,1.92
+1212,2. Bundesliga (DE),181690,248,Phil Harres,P. Harres,5.35,0.04,0.13,1.26,1.39,103,0.65,0.48,0.0
+1212,2. Bundesliga (DE),184459,19,Jarzinho Ataide Adriano  de Nascimento Malanga,J. Malanga,1.5,0.25,0.44,0.75,0.62,76,0.88,1.19,0.31
+1212,2. Bundesliga (DE),184478,66,Louey Ben Farhat,L. Ben Farhat,5.44,0.22,0.11,1.22,0.78,57,0.89,0.67,0.0
+1212,2. Bundesliga (DE),184488,0,Mateo Kritzer,M. Kritzer,0.0,0.0,0.0,0.67,0.0,0,0.0,0.67,0.0
+1212,2. Bundesliga (DE),186089,6,Torge Paetow,T. Paetow,0.9,0.3,0.4,0.5,0.2,20,0.8,1.6,1.7
+1212,2. Bundesliga (DE),186809,13,Fabio Di Michele Sánchez,F. Di Michele Sánchez,0.55,1.9,0.55,0.55,0.0,93,1.0,3.6,1.3
+1212,2. Bundesliga (DE),205312,0,Satoshi  Tanaka,S. Tanaka,0.17,0.17,0.5,9.17,0.67,14,0.83,8.0,1.67
+1212,2. Bundesliga (DE),209144,23,Frederik Schmahl,F. Schmahl,1.47,0.11,0.68,1.89,1.0,72,0.74,3.11,0.11
+1212,2. Bundesliga (DE),209145,14,Andu Yobel Kelati,A. Kelati,1.75,0.5,1.25,10.25,4.5,41,6.75,6.5,0.5
+1212,2. Bundesliga (DE),216240,0,Ayoub  Chaikhoun,A. Chaikhoun,1.5,0.5,0.5,2.0,1.5,4,1.0,0.0,1.0
+1212,2. Bundesliga (DE),237421,35,Marius Wörl,M. Wörl,2.5,0.2,1.4,3.4,0.6,161,3.35,4.35,1.25
+1212,2. Bundesliga (DE),240251,11,Henri Koudossou,H. Koudossou,0.0,2.75,1.0,0.75,0.0,22,2.25,5.75,5.0
+1212,2. Bundesliga (DE),241507,0,Raul  Marita,R. Marita,0.0,0.6,0.0,0.2,0.0,6,0.0,1.0,0.2
+1212,2. Bundesliga (DE),254575,4,Yosuke Furukawa,Y. Furukawa,0.5,0.5,0.0,0.5,0.5,7,0.25,1.0,0.25
+1212,2. Bundesliga (DE),256111,34,Jonas  Oehmichen,J. Oehmichen,2.6,0.4,0.5,0.9,0.6,45,2.5,0.8,0.6
+1212,2. Bundesliga (DE),269440,1,Marko Ivezić,M. Ivezić,0.29,0.24,0.41,1.12,0.06,32,1.53,1.65,7.82
+1212,2. Bundesliga (DE),277760,41,Laurin Curda,L. Curda,2.19,1.05,0.57,0.76,0.24,109,1.43,2.95,1.24
+1212,2. Bundesliga (DE),324070,6,Jovan  Mijatović,J. Mijatović,2.75,0.25,0.0,0.5,0.25,7,1.0,0.25,0.0
+1212,2. Bundesliga (DE),334514,24,Santiago Castañeda,S. Castañeda,1.15,0.1,0.55,5.8,0.6,91,0.45,5.15,0.8
+1212,2. Bundesliga (DE),375245,12,Pape Demba Diop,P. Diop,4.3,0.6,0.2,2.5,1.0,54,1.3,5.0,1.0
+1212,2. Bundesliga (DE),471012,0,Frederik Roslyng Christiansen,F. Roslyng Christiansen,0.0,0.0,0.0,0.0,0.0,0,0.5,0.0,1.5
+1212,2. Bundesliga (DE),471037,4,Kasper Davidsen,K. Davidsen,0.42,0.16,0.32,8.21,0.95,81,0.32,5.11,1.32
+1212,2. Bundesliga (DE),521833,95,Jakob Lemmer,J. Lemmer,2.57,0.3,0.22,1.91,0.91,140,2.83,1.7,0.48
+1212,2. Bundesliga (DE),526310,66,Semir Telalović,S. Telalović,4.0,0.0,0.08,1.0,0.31,48,0.08,0.23,0.0
+1212,2. Bundesliga (DE),533663,3,Reno Münz,R. Münz,0.12,0.59,0.24,0.35,0.0,26,0.47,2.29,4.24
+1212,2. Bundesliga (DE),533670,2,Justin Kai Von der Hitz,J. Von der Hitz,0.5,0.0,0.0,0.0,0.0,5,2.5,3.0,4.5
+1212,2. Bundesliga (DE),533705,6,Jonah Sticker,J. Sticker,0.44,0.11,0.22,0.56,0.0,18,0.33,2.67,2.44
+1212,2. Bundesliga (DE),534591,2,Felipe Sánchez,F. Sánchez,0.05,0.42,0.0,0.11,0.05,17,0.37,0.89,1.26
+1212,2. Bundesliga (DE),548680,112,Thaddäus-Monju Momuluh,M. Momuluh,1.89,0.63,0.53,0.21,0.32,117,1.95,1.53,1.05
+1212,2. Bundesliga (DE),558748,0,Tim-Justin Dietrich,T. Dietrich,0.0,1.0,1.0,0.0,0.0,5,1.0,0.0,0.0
+1212,2. Bundesliga (DE),564786,1,Sacha Bansé,S. Bansé,0.0,0.0,2.0,3.0,0.0,4,1.0,4.0,0.0
+1212,2. Bundesliga (DE),574481,166,Younes Ebnoutalib,Y. Ebnoutalib,6.5,0.06,0.19,1.38,0.38,76,0.19,0.31,0.0
+1212,2. Bundesliga (DE),593976,85,Rayan Ghrieb,R. Ghrieb,2.24,0.29,0.19,1.24,0.52,133,0.38,2.76,0.14
+1212,2. Bundesliga (DE),606590,9,Shin Yamada,S. Yamada,1.33,0.0,0.0,0.0,0.0,5,0.0,0.0,0.0
+1212,2. Bundesliga (DE),607000,5,Hiroki Akiyama,H. Akiyama,0.24,0.19,0.33,9.19,1.05,64,0.38,6.05,1.67
+1212,2. Bundesliga (DE),608927,23,Kennedy Okpala,K. Okpala,1.75,0.0,0.0,0.5,1.5,12,0.0,0.25,0.0
+1212,2. Bundesliga (DE),611075,31,Lasse Rosenboom,L. Rosenboom,1.2,0.75,0.4,0.2,0.0,82,1.65,1.75,1.65
+1212,2. Bundesliga (DE),612261,5,Tim Drexler,T. Drexler,0.0,0.69,0.77,0.15,0.0,26,2.23,4.54,2.46
+1212,2. Bundesliga (DE),616165,14,Elias Saad,E. Saad,3.33,1.33,0.67,2.5,0.83,50,3.67,2.83,0.33
+1212,2. Bundesliga (DE),629259,0,Fabio Gruber,F. Gruber,0.05,0.09,0.09,0.5,0.05,21,0.59,0.82,5.27
+1212,2. Bundesliga (DE),630699,3,Adam  Markhiyev,A. Markhiyev,0.35,0.18,0.18,7.71,0.35,47,0.41,4.82,2.71
+1212,2. Bundesliga (DE),663383,56,Kjell-Arik Wätjen,K. Wätjen,2.26,0.53,0.63,1.79,1.21,125,2.68,1.63,0.42
+1212,2. Bundesliga (DE),663385,8,Robert Ramsak,R. Ramsak,1.5,0.0,0.0,2.0,0.25,16,0.5,0.75,0.25
+1212,2. Bundesliga (DE),666050,0,Winners Osawe,W. Osawe,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),672879,27,Klaus Sima Suso,S. Suso,2.56,1.25,0.88,2.38,0.69,91,2.25,3.62,2.0
+1212,2. Bundesliga (DE),698114,65,Hayate  Matsuda,H. Matsuda,2.59,1.35,0.94,1.71,0.35,90,3.41,4.53,0.88
+1212,2. Bundesliga (DE),698120,33,Shio Fukuda,S. Fukuda,2.55,0.0,0.18,0.73,0.64,15,0.18,0.18,0.09
+1212,2. Bundesliga (DE),698130,0,Kim  Ji-Soo,Kim Ji-Soo,0.0,0.08,0.33,0.08,0.08,6,0.08,0.92,2.25
+1212,2. Bundesliga (DE),703000,22,Aldin Jakupović,A. Jakupović,1.2,0.2,0.0,0.8,1.0,21,1.6,1.0,0.2
+1212,2. Bundesliga (DE),722034,2,Ivan Nekić,I. Nekić,0.33,0.11,0.33,0.22,0.0,8,0.67,1.56,2.78
+1212,2. Bundesliga (DE),726067,1,Salomon Patrick Amougou Nkoa,P. Nkoa,0.0,0.0,0.0,0.67,0.0,2,0.2,0.27,4.2
+1212,2. Bundesliga (DE),726068,6,Serhat-Semih Güler,S. Güler,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
+1212,2. Bundesliga (DE),726077,0,Hyeok-Kyu Kwon,Kwon Hyeok-Kyu,0.0,0.0,0.5,7.5,1.0,1,1.0,3.0,0.0
+1212,2. Bundesliga (DE),726438,31,Tony Menzel,T. Menzel,3.33,0.22,0.22,2.0,0.33,35,1.67,1.89,0.33
+1212,2. Bundesliga (DE),726449,14,Jano ter Horst,J. ter Horst,0.8,1.65,0.45,0.15,0.0,102,1.4,4.3,3.15
+1212,2. Bundesliga (DE),726450,1,Lukas Frenkert,L. Frenkert,0.0,0.14,0.07,0.43,0.07,10,0.64,1.93,3.93
+1212,2. Bundesliga (DE),726451,26,Yassine Bouchama,Y. Bouchama,2.33,0.53,1.07,5.4,1.0,116,1.0,7.8,1.2
+1212,2. Bundesliga (DE),726454,40,Aaron Keller,A. Keller,1.53,1.68,0.47,1.21,0.05,147,2.32,2.58,0.95
+1212,2. Bundesliga (DE),736373,36,Leon Opitz,L. Opitz,1.33,0.11,0.67,1.0,1.0,33,1.0,0.33,0.0
+1212,2. Bundesliga (DE),736855,20,Kolja Nuno Oudenne,K. Oudenne,1.29,1.41,2.12,1.59,1.06,148,3.24,4.47,1.41
+1212,2. Bundesliga (DE),740082,0,Marvin Benjamins,M. Benjamins,0.0,0.0,1.0,0.0,0.0,3,1.0,0.0,0.0
+1212,2. Bundesliga (DE),740252,0,Ime Okon,I. Okon,0.0,0.07,0.07,0.4,0.0,17,1.93,3.2,6.2
+1212,2. Bundesliga (DE),751790,86,Christian Pierre Louis Gomis,C. Gomis,2.85,0.15,0.08,0.85,1.23,52,0.85,1.08,0.08
+1212,2. Bundesliga (DE),759390,0,Tjark Scheller,T. Scheller,0.1,0.05,0.25,0.5,0.0,15,0.6,1.05,2.75
+1212,2. Bundesliga (DE),763646,39,Julian  Kania,J. Kania,2.08,0.0,0.0,1.17,0.33,26,0.08,0.25,0.0
+1212,2. Bundesliga (DE),799079,17,Otto Emerson Stange,O. Stange,0.5,0.4,0.1,0.1,0.0,23,0.4,0.2,0.3
+1212,2. Bundesliga (DE),799190,73,Marcus Müller,M. Müller,2.41,0.0,0.06,1.0,0.65,32,0.35,0.94,0.06
+1212,2. Bundesliga (DE),800263,30,Niklas Niehoff,N. Niehoff,2.0,0.47,0.21,0.79,0.47,79,1.68,1.53,0.74
+1212,2. Bundesliga (DE),800276,10,Kofi Jeremy Amoako,K. Amoako,0.36,0.45,0.59,2.27,0.5,88,0.68,3.77,0.5
+1212,2. Bundesliga (DE),801590,1,Felix Hagmann,F. Hagmann,0.25,1.38,3.25,0.0,0.25,44,3.62,5.75,5.75
+1212,2. Bundesliga (DE),801591,0,Noah König,N. König,0.33,0.33,0.33,0.67,0.0,6,0.33,0.67,4.67
+1212,2. Bundesliga (DE),801661,1,Niklas Kolbe,N. Kolbe,0.0,0.25,0.08,0.25,0.0,8,0.92,1.5,1.58
+1212,2. Bundesliga (DE),809018,32,Callum Marshall,C. Marshall,6.0,0.33,0.17,3.83,1.33,38,2.0,3.0,0.33
+1212,2. Bundesliga (DE),809850,4,Rabby Nzingoula,R. Nzingoula,0.25,1.25,0.5,2.0,1.0,11,2.0,2.0,0.25
+1212,2. Bundesliga (DE),810534,0,Owono-Darnell Keumo,D. Keumo,0.0,1.0,1.0,0.0,1.0,6,5.0,1.0,0.0
+1212,2. Bundesliga (DE),810535,7,Kacper Koscierski,K. Koscierski,1.71,1.0,0.86,0.29,0.0,18,1.86,1.86,1.0
+1212,2. Bundesliga (DE),810536,0,Boris Chi Mamuzah Lum,B. Lum,0.0,0.0,0.0,0.0,0.0,2,0.0,0.25,0.25
+1212,2. Bundesliga (DE),810680,15,Eymen Laghrissi,E. Laghrissi,0.71,0.0,0.0,0.43,0.14,11,0.43,0.43,0.14
+1212,2. Bundesliga (DE),812678,48,David Mokwa Ntusu,D. Mokwa,8.33,0.0,0.17,2.0,1.33,23,0.33,0.67,0.17
+1212,2. Bundesliga (DE),812689,204,Noel Futkeu,N. Futkeu,6.0,0.19,0.1,2.14,1.1,129,0.62,0.33,0.05
+1212,2. Bundesliga (DE),814601,0,Mauro Zalazar Martinez,M. Zalazar,2.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
+1212,2. Bundesliga (DE),817863,20,Luis Engelns,L. Engelns,1.44,0.25,0.56,3.38,0.38,79,0.56,2.31,0.38
+1212,2. Bundesliga (DE),819149,26,Rafael Pinto Pedrosa,R. Pinto Pedrosa,2.33,1.0,0.33,1.5,0.72,80,1.61,2.89,1.06
+1212,2. Bundesliga (DE),819188,11,Lukas Reich,L. Reich,0.5,2.67,0.58,0.83,0.0,49,3.67,5.92,2.58
+1212,2. Bundesliga (DE),848661,34,Husseyn Chakroun,H. Chakroun,2.5,0.58,0.25,1.58,0.58,59,2.58,2.33,0.42
+1212,2. Bundesliga (DE),849213,5,Leon Robinson,L. Robinson,0.2,0.25,0.05,0.15,0.2,10,0.65,0.9,1.5
+1212,2. Bundesliga (DE),850762,0,Jordi Paulina ,J. Paulina,0.0,0.0,0.0,0.0,1.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),850770,0,Marc Niclas   Dühring,N. Dühring,0.0,1.0,0.0,0.0,0.0,0,0.0,3.0,1.0
+1212,2. Bundesliga (DE),850831,3,Tim Janisch,T. Janisch,0.41,0.71,0.53,0.24,0.0,32,1.94,2.71,2.29
+1212,2. Bundesliga (DE),851060,3,David  Abrangao,D. Abrangao,1.4,1.4,0.8,0.8,0.0,28,1.4,2.2,1.0
+1212,2. Bundesliga (DE),852294,25,Soufian El-Faouzi,S. El-Faouzi,2.17,1.0,1.26,4.04,1.48,197,2.48,7.48,1.17
+1212,2. Bundesliga (DE),852580,0,Paul Scholl ,P. Scholl,0.25,0.0,0.0,0.5,0.0,2,0.25,1.0,3.38
+1212,2. Bundesliga (DE),852877,0,Eryk Grzywacz,E. Grzywacz,0.0,0.0,0.0,2.0,0.0,1,0.0,0.0,0.0
+1212,2. Bundesliga (DE),853403,4,Cajetan Benjamin Lenz,C. Lenz,0.45,0.05,0.09,6.64,0.55,57,0.82,4.82,2.0
+1212,2. Bundesliga (DE),854029,28,Mika Wallentowitz,M. Wallentowitz,1.36,0.82,0.55,0.55,0.64,43,1.09,1.73,0.64
+1212,2. Bundesliga (DE),854034,0,Mertcan Ayhan,M. Ayhan,0.0,0.21,0.05,0.21,0.0,15,0.84,1.11,2.58
+1212,2. Bundesliga (DE),854037,1,Zaid Amoussou  Tchibara,Z. Amoussou-Tchibara,0.0,0.0,0.0,1.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),854041,0,Ayman Emran Gulasi,A. Gulasi,2.0,3.0,1.0,0.0,0.0,2,1.0,2.0,0.0
+1212,2. Bundesliga (DE),857223,0,Mehmet Avlayici,M. Avlayici,0.0,0.0,0.0,1.5,0.0,3,0.0,1.0,0.0
+1212,2. Bundesliga (DE),861126,20,Omar Sillah,O. Sillah,0.5,0.0,0.0,0.5,0.4,11,0.2,0.1,0.0
+1212,2. Bundesliga (DE),861237,16,Vincent Ocansey,V. Ocansey,0.5,0.17,0.0,0.33,0.0,4,0.33,0.17,0.0
+1212,2. Bundesliga (DE),861289,8,Peter Remmert,P. Remmert,3.33,0.0,0.0,0.33,0.33,14,0.0,1.0,0.0
+1212,2. Bundesliga (DE),865705,0,Paul Pöpperl,P. Pöpperl,0.0,0.0,0.0,2.0,0.0,1,0.33,0.0,0.0
+1212,2. Bundesliga (DE),882588,26,Mats Pannewig,M. Pannewig,2.94,0.28,1.0,6.72,1.33,130,0.94,5.83,0.89
+1212,2. Bundesliga (DE),883633,6,Max Marie,M. Marie,0.55,0.14,0.32,6.18,0.36,66,0.73,6.73,1.18
+1212,2. Bundesliga (DE),890646,6,Elias   Egouli,E. Egouli,0.15,0.0,0.0,0.23,0.0,11,0.31,0.62,3.62
+1212,2. Bundesliga (DE),894751,0,Eric Porstner,E. Porstner,0.0,0.5,0.5,0.5,0.0,12,1.0,2.0,3.0
+1212,2. Bundesliga (DE),896658,93,Artem Stepanov,A. Stepanov,5.15,0.23,0.15,1.77,0.77,82,0.92,0.77,0.08
+1212,2. Bundesliga (DE),896662,0,Erik Müller,E. Müller,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1212,2. Bundesliga (DE),896675,1,Owen Lennox Gibs,O. Gibs,0.5,0.5,0.0,0.5,0.0,5,0.5,0.0,0.0
+1212,2. Bundesliga (DE),899452,139,Mohamed Alì Zoma,M. Zoma,3.67,0.67,0.14,1.33,1.24,198,1.52,1.62,0.05
+1212,2. Bundesliga (DE),913555,23,Mathis  Clairicia,M. Clairicia,1.67,0.33,0.11,0.33,0.89,28,0.22,0.11,0.0
+1212,2. Bundesliga (DE),925287,36,Farid Alfa-Ruprecht,F. Alfa-Ruprecht,1.94,1.0,0.31,0.69,0.31,98,1.12,1.31,0.25
+1212,2. Bundesliga (DE),932278,16,Noah Maboulou,N. Maboulou,0.57,0.14,0.0,0.29,0.71,15,0.57,0.29,0.0
+1212,2. Bundesliga (DE),936862,4,Luca Sirch,L. Sirch,0.09,0.52,0.48,0.83,0.13,67,0.35,3.26,1.26
+1212,2. Bundesliga (DE),942290,0,Friedrich Müller,F. Müller,0.14,0.0,0.14,0.71,0.0,1,0.57,2.71,7.29
+1212,2. Bundesliga (DE),958557,2,Keyan Anderson Pereira Varela,Keyan Varela,0.5,0.0,0.0,0.5,1.0,4,0.5,0.0,0.0
+1212,2. Bundesliga (DE),966379,0,Leon Tasov,L. Tasov,0.0,1.0,0.0,0.0,0.0,0,1.0,0.0,0.0
+1212,2. Bundesliga (DE),970453,0,Daniel Richter,D. Richter,0.0,1.0,0.0,3.0,0.0,3,0.0,0.0,0.0
+1212,2. Bundesliga (DE),983764,0,Dion Hofmeister,D. Hofmeister,0.0,0.0,0.0,1.0,0.5,1,0.0,1.5,0.0
+1212,2. Bundesliga (DE),984876,12,Kennet Eichhorn,K. Eichhorn,1.25,0.17,0.25,7.17,1.42,80,1.33,5.83,0.58
+1212,2. Bundesliga (DE),998761,0,Eyyüb Arda Yaşar,E. Yaşar,0.25,0.75,0.0,0.0,0.0,7,0.0,0.75,0.0
+1212,2. Bundesliga (DE),1002033,27,Piet Lasse Scobel,P. Scobel,4.1,0.0,0.2,0.8,0.6,33,0.2,0.5,0.0
+1212,2. Bundesliga (DE),1020583,0,Raif Adam,R. Adam,0.5,0.0,0.0,0.0,0.0,2,1.0,1.0,0.0
+1212,2. Bundesliga (DE),1026139,0,Marko Soldic,M. Soldic,0.0,0.0,0.0,2.0,1.0,2,0.0,0.0,0.0
+1212,2. Bundesliga (DE),1037041,0,Albert Frank Millgramm,A. Millgramm,0.0,0.5,0.0,0.0,0.0,2,1.0,0.5,0.0
+1212,2. Bundesliga (DE),1041529,6,Marvin Schulz,,0.75,0.0,0.0,2.0,0.75,13,0.25,2.0,0.0

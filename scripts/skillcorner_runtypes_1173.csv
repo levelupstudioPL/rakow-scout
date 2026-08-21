@@ -1,0 +1,1496 @@
+competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_cross_receiver_run,runtype_overlap_run,runtype_underlap_run,runtype_coming_short_run,runtype_pulling_half_space_run,runtype_run_ahead_of_the_ball,runtype_pulling_wide_run,runtype_support_run,runtype_dropping_off_run
+1173,Super Liga (RS),222,1,Adem Ljajić,A. Ljajić,3.0,3.0,0.0,8.5,0.0,14,0.5,7.5,3.0
+1173,Super Liga (RS),397,13,Aldo Kalulu Kyatengwa,A. Kalulu,2.0,1.0,1.0,0.0,0.5,8,1.5,0.5,0.5
+1173,Super Liga (RS),6969,101,Marko Arnautović,M. Arnautović,6.6,0.3,0.4,1.8,1.5,54,1.0,1.3,0.2
+1173,Super Liga (RS),6984,1,Marko Poletanović,M. Poletanović,0.17,0.17,0.33,2.0,0.17,10,0.17,2.58,0.0
+1173,Super Liga (RS),7652,0,Miloš Kosanović,M. Kosanović,0.0,0.0,0.0,0.1,0.2,3,0.3,0.0,3.0
+1173,Super Liga (RS),7659,1,Miloš Veljković,M. Veljković,0.22,0.11,0.11,0.89,0.0,1,0.22,1.11,4.89
+1173,Super Liga (RS),7809,1,Muhamed Bešić,M. Bešić,0.13,0.2,0.13,3.8,0.07,35,0.47,1.8,2.4
+1173,Super Liga (RS),7922,0,Nenad Tomović,N. Tomović,0.13,0.13,0.04,0.26,0.0,10,0.13,0.3,2.52
+1173,Super Liga (RS),8772,4,Rade Krunić,R. Krunić,0.53,0.4,0.4,7.4,0.47,33,0.33,5.0,1.4
+1173,Super Liga (RS),9664,23,Sebastian Polter,S. Polter,3.25,0.0,0.0,0.5,1.0,8,0.0,0.25,0.0
+1173,Super Liga (RS),9982,0,Stefan Mitrović,S. Mitrović,0.0,0.0,0.0,0.67,0.0,0,0.0,0.67,4.33
+1173,Super Liga (RS),9990,25,Stefan Šćepović,S. Šćepović,3.4,0.1,0.0,1.6,0.1,23,0.4,0.8,0.1
+1173,Super Liga (RS),10597,1,Uroš Vitas,U. Vitas,0.64,0.09,0.09,0.27,0.09,6,0.09,0.91,2.82
+1173,Super Liga (RS),11186,20,Olivier Thill,O. Thill,3.92,0.0,0.31,9.38,2.54,115,1.38,4.85,0.15
+1173,Super Liga (RS),11815,3,Milan Rodić,M. Rodić,0.5,0.0,0.0,0.5,0.0,4,1.0,3.5,0.0
+1173,Super Liga (RS),11819,17,Nemanja Radonjić,N. Radonjić,1.7,0.3,0.5,0.4,0.1,28,1.1,2.1,0.3
+1173,Super Liga (RS),11893,0,Miloš Degenek,M. Degenek,0.0,0.08,0.0,0.08,0.0,1,0.08,0.15,2.0
+1173,Super Liga (RS),12217,0,Vukašin Jovanović,V. Jovanović,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,2.0
+1173,Super Liga (RS),12347,20,Marko  Gobeljić,M. Gobeljić,0.43,0.71,0.5,0.14,0.0,43,0.93,4.0,1.64
+1173,Super Liga (RS),12349,24,Stefan Hajdin,S. Hajdin,3.33,0.22,1.0,1.33,0.28,87,0.78,2.89,0.33
+1173,Super Liga (RS),12353,1,Slavoljub Srnić,S. Srnić,1.0,0.0,0.0,0.0,0.0,1,1.0,1.0,0.0
+1173,Super Liga (RS),12358,4,Dušan Jovančić,D. Jovančić,0.31,0.44,0.06,2.12,0.5,40,1.12,3.5,1.06
+1173,Super Liga (RS),12363,15,Milan Pavkov,M. Pavkov,0.6,0.07,0.07,0.07,0.0,15,0.0,0.33,0.0
+1173,Super Liga (RS),12833,68,Nair Tiknizyan,N. Tiknizyan,1.07,5.4,3.07,1.2,0.07,148,2.87,4.6,2.8
+1173,Super Liga (RS),12901,14,Bibras Natcho,B. Natcho,1.5,0.14,0.18,2.09,0.59,79,0.05,3.14,0.18
+1173,Super Liga (RS),12945,0,Marko Petković,M. Petković,0.5,1.0,0.5,0.0,0.0,3,2.5,6.0,1.0
+1173,Super Liga (RS),12970,0,Saša Marković,S. Marković,0.8,0.0,0.0,1.6,0.2,7,0.2,1.4,0.2
+1173,Super Liga (RS),13004,4,Farid Boulaya,F. Boulaya,3.5,0.25,0.5,6.5,1.25,26,1.5,5.0,0.75
+1173,Super Liga (RS),13071,9,Nemanja Miletić,N. Miletić,0.23,0.77,0.69,0.0,0.0,19,1.85,2.15,2.85
+1173,Super Liga (RS),13072,2,Branko Jovičić,B. Jovičić,0.05,0.65,0.3,3.5,0.5,50,0.9,4.95,1.55
+1173,Super Liga (RS),13260,90,Mirko Ivanić,M. Ivanić,5.47,1.41,1.24,3.06,1.18,158,1.59,3.76,1.06
+1173,Super Liga (RS),13616,10,Peter Oladeji Olayinka,P. Olayinka,4.33,0.0,0.33,1.0,0.0,6,0.33,0.67,0.0
+1173,Super Liga (RS),13717,54,Mario Jurčevič,M. Jurčevič,1.89,3.89,3.44,0.56,0.67,100,1.22,5.11,1.56
+1173,Super Liga (RS),13813,9,Wanderson de Jesus Martins,Caju,0.33,1.33,0.67,0.33,0.0,17,1.33,3.67,2.0
+1173,Super Liga (RS),14198,3,Lazar Nikolić,L. Nikolić,0.09,2.09,0.39,0.35,0.04,60,3.09,4.78,2.52
+1173,Super Liga (RS),14205,4,Yohan Bilingi,Y. Bilingi,0.29,0.52,0.33,0.33,0.05,20,0.67,2.14,1.67
+1173,Super Liga (RS),14739,23,Cherif Ndiaye,C. Ndiaye,6.0,0.0,0.0,1.67,0.33,4,0.0,0.0,0.33
+1173,Super Liga (RS),15243,14,Radomir Milosavljević,R. Milosavljević,1.78,0.11,0.22,2.67,0.28,29,0.72,2.44,0.94
+1173,Super Liga (RS),15612,191,Bruno Duarte da Silva,Bruno Duarte,7.75,0.38,0.62,4.06,2.12,85,1.12,2.19,0.62
+1173,Super Liga (RS),15720,4,Srdjan Mijailović,S. Mijailović,0.17,0.83,0.92,3.92,1.25,64,1.0,5.25,1.25
+1173,Super Liga (RS),16596,0,Luka Capan,L. Capan,0.18,0.06,0.06,0.18,0.0,12,0.35,2.12,2.41
+1173,Super Liga (RS),16851,14,Vukan Savićević,V. Savićević,0.96,0.78,0.43,5.3,0.83,115,1.04,6.22,1.39
+1173,Super Liga (RS),17042,1,Miloš Cvetković,M. Cvetković,0.25,1.17,0.0,0.0,0.08,29,1.17,4.17,1.58
+1173,Super Liga (RS),17062,1,Yanis Karabelyov,Y. Karabelyov,0.15,0.15,0.5,6.1,0.65,67,0.75,5.25,2.4
+1173,Super Liga (RS),17076,17,Stefan Ashkovski,S. Ashkovski,0.62,2.12,1.25,0.5,0.12,27,1.88,2.12,0.75
+1173,Super Liga (RS),17087,17,Evandro da Silva,Evandro,2.0,0.25,0.0,1.5,1.0,15,1.75,2.0,0.75
+1173,Super Liga (RS),17096,13,Boris Sekulić,B. Sekulić,1.0,0.64,0.07,0.36,0.0,44,0.86,3.29,1.79
+1173,Super Liga (RS),17204,0,Saša Zdjelar,S. Zdjelar,0.0,0.0,0.0,5.33,0.67,2,0.33,3.0,2.33
+1173,Super Liga (RS),17210,8,Nemanja Miletić,N. Miletić,0.0,3.96,1.17,0.35,0.22,83,3.04,5.57,1.0
+1173,Super Liga (RS),17214,7,Danilo Pantić,D. Pantić,1.62,0.75,0.62,3.0,0.62,37,0.88,5.12,0.12
+1173,Super Liga (RS),17329,0,Djordje Crnomarković,D. Crnomarković,0.0,0.0,0.0,0.21,0.0,3,0.05,0.37,2.74
+1173,Super Liga (RS),17344,277,Lazar Randelović,L. Randelović,3.9,1.4,0.95,1.85,0.4,246,3.25,2.55,0.5
+1173,Super Liga (RS),17359,2,Stefan Milošević,S. Milošević,0.36,1.71,0.57,0.36,0.0,41,1.14,3.36,0.79
+1173,Super Liga (RS),17385,20,Luka Bijelović,L. Bijelović,0.68,0.68,0.32,0.53,0.32,74,0.68,1.11,0.11
+1173,Super Liga (RS),17506,6,Filip Holender,F. Holender,3.5,0.0,0.75,0.25,0.0,18,1.0,2.5,0.25
+1173,Super Liga (RS),18576,10,Gboly Ariyibi,G. Ariyibi,2.5,0.0,0.5,1.0,0.0,22,1.25,3.0,0.0
+1173,Super Liga (RS),19170,2,Issah Abass,I. Abass,0.33,0.0,0.0,1.33,0.0,8,1.0,0.67,0.33
+1173,Super Liga (RS),19277,11,Miloš Pantović,M. Pantović,0.69,0.23,0.46,3.38,1.0,42,0.92,2.77,0.54
+1173,Super Liga (RS),19802,1,Elimane Franck Kanouté,F. Kanouté,0.0,0.0,0.0,2.09,0.18,9,0.09,1.64,0.55
+1173,Super Liga (RS),20127,20,Žarko Udovičić,Ž. Udovičić,1.36,3.14,0.32,0.32,0.05,123,2.0,4.73,2.59
+1173,Super Liga (RS),22132,0,Slobodan Simović,S. Simović,0.2,0.0,0.2,0.6,0.05,10,0.1,0.9,3.55
+1173,Super Liga (RS),22904,110,Aleksandar Lutovac,A. Lutovac,2.94,0.71,0.35,0.94,0.53,94,0.94,2.29,0.65
+1173,Super Liga (RS),23086,83,Ugo Bonnet,U. Bonnet,5.18,0.0,0.09,2.09,1.64,63,0.55,1.64,0.0
+1173,Super Liga (RS),23102,90,Sarpreet Singh,S. Singh,4.47,0.53,0.87,4.8,1.67,110,1.47,2.93,0.53
+1173,Super Liga (RS),23175,0,Nemanja Milunović,N. Milunović,0.12,0.0,0.0,0.38,0.0,1,0.0,0.5,1.0
+1173,Super Liga (RS),23176,149,Aleksa Vukanović,A. Vukanović,6.3,0.13,0.3,1.61,1.26,125,0.57,0.7,0.09
+1173,Super Liga (RS),23523,130,Aleksandar Katai,A. Katai,6.58,0.47,0.84,2.0,1.42,138,1.05,2.95,0.21
+1173,Super Liga (RS),23528,30,Irfan Hadžić,I. Hadžić,1.06,0.12,0.18,0.47,0.24,33,0.18,0.35,0.0
+1173,Super Liga (RS),23898,23,Miloš Vulić,M. Vulić,1.6,0.15,0.5,2.5,0.45,65,0.6,4.25,0.5
+1173,Super Liga (RS),23899,19,Njegos Petrovic,N. Petrovic,0.77,0.59,0.73,4.73,0.73,92,1.14,5.5,0.95
+1173,Super Liga (RS),24330,0,Mihai Butean,M. Butean,0.0,0.0,0.0,0.25,0.0,0,0.0,0.0,1.0
+1173,Super Liga (RS),25038,20,Boubacari Doucouré,B. Doucouré,1.09,0.7,0.39,4.91,0.48,136,0.74,6.48,1.09
+1173,Super Liga (RS),25045,1,Ghayas Zahid,G. Zahid,1.0,0.0,0.0,0.75,0.75,6,0.5,1.75,0.0
+1173,Super Liga (RS),25060,0,Moussa Sissako,M. Sissako,0.0,0.12,0.0,1.06,0.06,5,0.31,0.81,0.25
+1173,Super Liga (RS),25619,6,Ismael Casas Casado,Ismael Casas,0.41,1.94,0.65,0.41,0.24,88,2.53,8.06,2.65
+1173,Super Liga (RS),25836,2,Iván Martos Campillo,Iván Martos,0.0,0.33,0.67,0.33,0.0,2,0.33,2.0,2.33
+1173,Super Liga (RS),27272,0,Rodrigo de Souza Prado,Rodrigão,0.4,0.07,0.0,0.93,0.0,20,0.33,1.67,6.13
+1173,Super Liga (RS),28249,4,Lucas Barros da Cunha,Lucas Barros,0.0,1.67,0.42,0.33,0.0,31,0.83,3.0,1.0
+1173,Super Liga (RS),29011,17,Nemanja Milojević,N. Milojević,1.19,0.43,0.19,2.52,0.76,73,0.67,3.95,0.43
+1173,Super Liga (RS),29661,4,Nikola Kuveljić,N. Kuveljić,2.2,0.6,0.2,5.2,1.0,22,0.4,9.0,2.8
+1173,Super Liga (RS),29669,1,Milan Radin,M. Radin,0.29,0.0,0.21,1.57,0.29,23,0.29,3.29,0.43
+1173,Super Liga (RS),29717,0,Alen Stevanović,A. Stevanović,0.0,0.0,1.0,0.0,0.0,2,0.0,0.0,0.0
+1173,Super Liga (RS),29785,197,Saša Jovanović,S. Jovanović,4.35,0.75,0.3,0.75,0.85,93,0.5,1.45,0.05
+1173,Super Liga (RS),29841,42,Sylvester  Jasper,S. Jasper,2.35,0.4,0.65,2.4,0.35,128,1.85,3.0,1.0
+1173,Super Liga (RS),29908,70,Dragoljub Savić,D. Savić,1.77,0.95,0.45,1.14,0.27,154,1.77,2.18,0.05
+1173,Super Liga (RS),30277,65,Felício Mendes João Milson,Milson,4.38,0.46,1.46,1.38,0.54,109,2.38,2.46,0.54
+1173,Super Liga (RS),31089,18,Paul Mbong,P. Mbong,2.2,0.6,0.4,2.8,1.4,27,0.4,3.2,0.2
+1173,Super Liga (RS),31402,104,Loué Bayéré Junior,L. Bayere,4.67,0.05,0.05,0.76,0.76,102,0.38,0.76,0.05
+1173,Super Liga (RS),31553,60,Lincoln Corrêa dos Santos,Lincoln,3.77,0.23,0.23,1.92,1.23,75,0.54,1.92,0.0
+1173,Super Liga (RS),31589,2,Ezequiel Santos da Silva,Ezequiel,0.0,0.5,0.5,0.0,0.0,6,0.0,1.0,0.0
+1173,Super Liga (RS),32162,35,Egor Prutsev,E. Prutsev,4.0,1.0,0.89,1.11,0.56,92,1.22,5.89,0.44
+1173,Super Liga (RS),32169,3,Stefan Milić,S. Milić,0.1,0.2,0.2,0.55,0.05,27,0.9,1.55,5.5
+1173,Super Liga (RS),32444,0,Baptiste Roux,B. Roux,0.25,0.06,0.12,0.0,0.06,3,0.0,0.88,3.25
+1173,Super Liga (RS),32533,0,Strahinja Eraković,S. Eraković,0.0,0.0,0.0,0.5,0.0,0,0.5,1.0,10.5
+1173,Super Liga (RS),33160,53,Yankuba Jarju,Y. Jarju,3.45,0.0,0.09,0.64,0.64,46,0.27,0.36,0.0
+1173,Super Liga (RS),33163,0,Antoine Batisse,A. Batisse,0.12,0.0,0.0,0.44,0.06,4,0.25,1.5,3.19
+1173,Super Liga (RS),33380,122,Demba Seck,D. Seck,2.5,0.79,0.33,1.79,0.12,176,1.38,3.92,0.83
+1173,Super Liga (RS),33503,181,Slobodan Tedić,S. Tedić,6.64,0.18,0.05,1.82,1.0,82,0.18,0.68,0.05
+1173,Super Liga (RS),33855,8,Nikola Boranijašević,N. Boranijašević,1.14,0.57,0.57,0.71,0.14,31,1.0,3.43,1.57
+1173,Super Liga (RS),35066,81,John Mary Honi Uzuegbunam,Honi Uzuegbunam,2.12,0.0,0.06,0.59,0.18,34,0.18,0.29,0.0
+1173,Super Liga (RS),35269,10,Sambou Sissoko,S. Sissoko,0.21,0.0,0.0,4.16,0.63,60,0.05,4.63,0.74
+1173,Super Liga (RS),35848,34,José Daniel Mulato Palacios,J. Mulato,3.67,0.0,0.17,1.67,1.33,32,0.33,1.0,0.0
+1173,Super Liga (RS),35977,2,António Pina Gomes,A. Gomes,2.2,0.0,0.2,1.2,1.2,17,0.0,3.2,0.6
+1173,Super Liga (RS),37003,52,Milan Vukotić,M. Vukotić,2.18,0.91,0.32,6.73,1.0,223,2.68,5.82,0.86
+1173,Super Liga (RS),37099,2,Jovan Nišić,J. Nišić,0.77,0.54,0.38,6.38,0.31,51,0.69,8.23,2.23
+1173,Super Liga (RS),37105,5,Miloš Pantović,M. Pantović,0.67,0.33,0.67,1.33,1.0,8,0.33,2.67,1.0
+1173,Super Liga (RS),37122,0,Miloš Šatara,M. Šatara,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),37125,14,Filip Zunić,F. Zunić,0.8,0.47,0.2,6.0,1.27,62,1.73,4.0,0.53
+1173,Super Liga (RS),37134,40,Bojica Nikčević,B. Nikčević,1.07,0.73,0.0,0.27,0.2,56,0.67,0.93,0.2
+1173,Super Liga (RS),37139,4,Nikola Vukajlović,N. Vukajlović,0.86,1.14,0.93,0.07,0.07,46,1.21,3.79,1.0
+1173,Super Liga (RS),37159,5,Janko Tumbasević,J. Tumbasević,0.52,0.1,0.19,6.62,0.62,66,0.33,5.48,0.95
+1173,Super Liga (RS),37173,16,Borko Duronjić,B. Duronjić,1.45,0.91,0.55,0.82,0.73,52,1.55,2.82,0.27
+1173,Super Liga (RS),37177,65,Lazar Tufegdžić,L. Tufegdžić,2.84,0.05,0.63,1.26,1.21,107,1.21,2.74,0.63
+1173,Super Liga (RS),37198,0,Nemanja Krstić,N. Krstić,0.75,0.0,0.0,0.5,0.0,1,0.75,1.25,0.0
+1173,Super Liga (RS),37468,9,Stefan Vilotić,S. Vilotić,0.2,0.47,0.47,0.07,0.0,19,0.67,2.0,0.87
+1173,Super Liga (RS),37903,2,Kayque Luiz Pereira,Kayque,1.0,0.67,0.67,2.67,0.67,21,2.0,3.33,0.33
+1173,Super Liga (RS),38544,162,Kwaku Bonsu Osei,B. Osei,2.78,0.06,0.28,1.56,0.78,126,0.39,1.67,0.11
+1173,Super Liga (RS),40823,0,Ebenezer Isaac Annan,E. Annan,0.0,3.0,0.0,0.0,0.0,0,0.0,1.0,0.0
+1173,Super Liga (RS),46130,0,Lazar Mijović,L. Mijović,0.5,0.0,0.5,0.5,0.0,4,0.0,0.0,0.0
+1173,Super Liga (RS),46171,4,Aleksandar Pejović,A. Pejović,0.41,0.59,0.23,4.64,0.45,63,0.95,8.5,1.23
+1173,Super Liga (RS),49411,70,Petar Bojić,P. Bojić,2.71,0.14,0.24,0.86,0.57,93,0.38,1.33,0.0
+1173,Super Liga (RS),49412,4,Nikola Andrič,N. Andrič,0.86,2.21,0.36,0.14,0.0,43,1.36,3.21,0.71
+1173,Super Liga (RS),49414,11,Arandjel Stojković,A. Stojković,0.67,0.67,1.0,0.08,0.0,48,0.58,3.33,1.42
+1173,Super Liga (RS),49675,64,Radivoj Bosić,R. Bosić,4.85,0.65,0.7,2.7,1.4,186,1.8,2.2,0.4
+1173,Super Liga (RS),49677,17,Timi Max Elšnik,T. Elšnik,1.32,0.68,0.74,7.21,0.84,77,0.68,6.0,1.42
+1173,Super Liga (RS),49745,44,Issa Bah,I. Bah,2.15,0.69,0.62,1.31,0.31,93,2.31,2.08,0.31
+1173,Super Liga (RS),50067,4,Igor Ivanović,I. Ivanović,1.0,0.0,1.0,2.0,1.0,7,3.0,7.0,0.0
+1173,Super Liga (RS),57215,71,Haris Hajdarević,H. Hajdarević,2.87,0.48,0.43,2.43,1.48,126,0.74,4.43,0.35
+1173,Super Liga (RS),58654,14,Abdul Razak Yusif,A. Yusif,0.36,2.14,1.14,0.86,0.14,46,1.71,6.14,3.64
+1173,Super Liga (RS),60647,0,Edmund Addo,E. Addo,0.0,0.0,0.1,2.9,0.3,14,0.2,2.0,0.4
+1173,Super Liga (RS),61681,23,Tomás Romano Pereira dos Santos Händel,Tomás Händel,2.19,0.25,1.38,4.5,0.88,88,0.94,6.0,1.06
+1173,Super Liga (RS),61721,5,Mohamed Cissé,M. Cissé,2.0,1.0,0.5,1.5,0.0,15,7.0,3.5,0.0
+1173,Super Liga (RS),61740,7,Vieiri Kotzebue,V. Kotzebue,1.0,0.25,0.0,0.0,0.0,4,0.0,0.25,0.0
+1173,Super Liga (RS),61741,31,Ayouba Kosiah,A. Kosiah,7.0,0.0,0.25,0.75,0.0,10,0.75,0.5,0.0
+1173,Super Liga (RS),63428,55,Charly Keita,C. Keita,3.55,0.0,0.09,0.55,0.73,15,0.0,0.73,0.0
+1173,Super Liga (RS),64253,40,Uroš Kabić,U. Kabić,2.18,0.29,0.53,0.76,0.65,90,1.18,3.24,0.59
+1173,Super Liga (RS),64255,0,Igor Jeličić,I. Jeličić,,,,,,0,,,
+1173,Super Liga (RS),64260,47,Vladimir Miletić,V. Miletić,2.33,0.28,0.72,3.22,1.22,103,0.61,2.83,1.06
+1173,Super Liga (RS),64261,23,Nebojša Bastajić,N. Bastajić,2.07,0.64,0.57,1.43,0.57,117,2.14,2.36,0.79
+1173,Super Liga (RS),64297,42,Mehmed Ćosić,M. Ćosić,0.63,2.21,0.63,0.84,0.37,62,1.74,4.05,1.68
+1173,Super Liga (RS),64387,4,Marko Docić,M. Docić,1.0,0.41,0.41,4.53,0.47,44,0.76,6.53,0.94
+1173,Super Liga (RS),64388,0,Stefan Šapić,S. Šapić,0.0,0.0,0.0,0.33,0.0,0,0.0,0.33,0.67
+1173,Super Liga (RS),64710,15,Miljan Ilić,M. Ilić,0.14,2.29,2.05,1.43,0.05,76,3.0,4.86,2.29
+1173,Super Liga (RS),64712,0,Milan Mitrović,M. Mitrović,0.0,0.0,0.1,1.0,0.1,10,0.3,1.0,4.6
+1173,Super Liga (RS),64751,48,Sava Petrov,S. Petrov,2.47,0.18,0.0,1.29,0.18,66,0.06,0.59,0.12
+1173,Super Liga (RS),65367,27,Bamidele Yusuf,D. Yusuf,3.6,0.6,0.2,1.0,0.6,53,1.6,1.4,0.0
+1173,Super Liga (RS),66247,0,Jérémy Manzorro,J. Manzorro,0.0,0.0,0.0,2.0,0.0,1,0.0,2.0,0.0
+1173,Super Liga (RS),67309,0,Stefan Bukorac,S. Bukorac,0.05,0.0,0.0,0.37,0.0,6,0.05,0.68,1.42
+1173,Super Liga (RS),67334,8,Dognimani Yacouba Silue,D. Silue,0.0,0.0,0.0,0.0,0.0,3,0.0,1.0,1.0
+1173,Super Liga (RS),67822,75,Nemanja Belaković,N. Belaković,2.6,0.8,1.1,2.4,1.4,62,1.1,2.0,0.4
+1173,Super Liga (RS),67824,39,Wajdi Sahli,W. Sahli,2.64,0.36,0.57,4.79,1.14,70,1.07,4.36,0.21
+1173,Super Liga (RS),67829,0,Slobodan Medojević,S. Medojević,0.0,0.0,0.0,7.43,0.29,12,0.14,5.43,1.0
+1173,Super Liga (RS),67835,126,Andrija Majdevac,A. Majdevac,5.05,0.2,0.15,1.4,0.7,91,0.55,1.0,0.0
+1173,Super Liga (RS),68373,26,Aleksandr  Shestyuk,A. Shestyuk,6.0,0.0,0.0,2.25,0.5,28,0.25,0.25,0.0
+1173,Super Liga (RS),68558,0,Franklin Tebo Uchenna,F. Tebo,0.0,0.09,0.0,0.36,0.09,3,0.18,0.91,3.64
+1173,Super Liga (RS),69028,29,Alfa Mussá Baldé,Alfa Baldé,2.95,1.05,0.42,1.21,0.11,124,2.47,2.37,1.11
+1173,Super Liga (RS),72947,55,Prestige Mboungou,P. Mboungou,2.21,0.53,0.32,1.37,0.42,73,0.84,1.68,0.37
+1173,Super Liga (RS),73041,1,Mihailo Oreščanin,M. Oreščanin,0.05,0.09,0.14,0.86,0.0,19,0.32,1.95,3.82
+1173,Super Liga (RS),73042,80,Nikola Bogdanovski,N. Bogdanovski,1.4,0.4,0.07,0.87,0.4,97,1.4,1.8,0.2
+1173,Super Liga (RS),73044,0,Ranko Jokić,R. Jokić,0.0,0.0,0.0,0.5,0.0,2,0.0,1.0,4.0
+1173,Super Liga (RS),73049,138,Miloš Spasić,M. Spasić,3.6,0.4,0.35,2.5,0.95,152,0.7,2.45,0.2
+1173,Super Liga (RS),73050,10,Uroš Stojanović,U. Stojanović,0.38,1.08,0.62,0.15,0.15,40,1.38,3.69,1.85
+1173,Super Liga (RS),73053,7,Nemanja Krsmanović,N. Krsmanović,0.36,1.64,0.21,0.07,0.14,49,1.71,4.0,0.57
+1173,Super Liga (RS),73057,1,Abdoulaye Cissé,A. Cissé,0.19,0.12,0.25,4.06,0.62,30,0.12,3.44,1.06
+1173,Super Liga (RS),73059,0,Miloš Mijić,M. Mijić,0.0,0.0,1.0,0.0,0.0,3,0.0,2.0,0.0
+1173,Super Liga (RS),73062,1,Uros Blagojević,U. Blagojević,0.0,1.57,0.43,0.14,0.0,9,0.29,0.57,0.29
+1173,Super Liga (RS),73068,34,Nikola Srećković,N. Srećković,1.83,0.78,0.44,2.22,1.11,108,1.5,2.83,0.28
+1173,Super Liga (RS),73076,19,Stefan Cvetković,S. Cvetković,0.94,0.12,0.06,0.18,0.06,41,0.59,0.65,0.18
+1173,Super Liga (RS),73103,46,Aleksandar  Trajković,A. Trajković,2.33,0.13,0.4,1.13,0.67,81,0.53,2.13,0.0
+1173,Super Liga (RS),73105,13,Mateja Zuvić,M. Zuvić,0.77,0.31,0.08,1.46,0.62,37,0.85,1.31,0.15
+1173,Super Liga (RS),73110,1,Jovan Marinković,J. Marinković,0.22,1.0,0.26,0.3,0.04,26,1.48,2.61,3.57
+1173,Super Liga (RS),73542,49,Young-Woo Seol,Seol Young-Woo,0.65,3.5,1.0,0.85,0.15,170,3.25,7.55,4.8
+1173,Super Liga (RS),90379,0,Numan Kurdić,N. Kurdić,0.5,0.0,0.5,0.5,0.5,2,0.0,1.5,2.5
+1173,Super Liga (RS),113475,14,Luka Stankovski,L. Stankovski,1.25,0.17,0.92,1.0,0.33,41,0.92,1.17,0.42
+1173,Super Liga (RS),117595,4,Vukašin Krstić,V. Krstić,0.06,0.06,0.25,0.38,0.0,18,0.44,1.44,2.19
+1173,Super Liga (RS),117598,3,Marko Mijailović,M. Mijailović,0.18,1.29,0.24,0.76,0.06,41,1.53,2.47,1.12
+1173,Super Liga (RS),128539,219,Jay Ifeanyi-Junior Enem,J. Enem,5.14,0.1,0.05,0.81,0.95,75,0.14,0.43,0.0
+1173,Super Liga (RS),131436,26,Nikola Stanković,N. Stanković,0.78,3.11,1.11,0.89,0.44,80,3.78,5.11,1.0
+1173,Super Liga (RS),141050,0,Vladimir Prijović,V. Prijović,0.5,2.5,0.5,0.5,0.5,22,3.5,6.0,0.0
+1173,Super Liga (RS),153826,0,Benjamin Acquah,B. Acquah,0.33,0.0,0.33,0.33,1.0,3,0.67,1.67,0.0
+1173,Super Liga (RS),154045,5,Kristian Šekularac,K. Šekularac,2.5,1.0,1.5,8.0,2.5,17,3.5,7.0,5.0
+1173,Super Liga (RS),163884,10,Driton Camaj,D. Camaj,2.0,1.75,0.5,1.75,0.5,33,2.0,3.0,0.5
+1173,Super Liga (RS),164785,90,Kilian Bevis,K. Bevis,4.33,1.5,1.94,3.72,1.22,240,4.67,3.61,0.61
+1173,Super Liga (RS),164794,0,Darko Gojković,D. Gojković,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),166641,5,Mateja Milovanović ,M. Milovanović,0.0,1.75,0.75,0.25,0.25,28,0.25,3.5,2.25
+1173,Super Liga (RS),166680,2,Vando Baifas Félix,Vando Félix,1.0,0.5,0.25,0.25,0.25,17,1.75,1.25,0.25
+1173,Super Liga (RS),167204,51,Nikola Knezević,N. Knezević,2.05,0.32,0.74,3.11,0.58,86,0.95,2.89,0.47
+1173,Super Liga (RS),167206,0,Stefan Leković,S. Leković,0.14,0.07,0.14,0.71,0.0,8,0.36,0.86,3.29
+1173,Super Liga (RS),167207,8,Uroš Lazić,U. Lazić,0.18,0.73,0.73,0.27,0.09,40,1.0,2.09,1.64
+1173,Super Liga (RS),167211,34,Dario Grgić,D. Grgić,1.46,0.23,0.69,3.46,1.15,96,3.54,2.69,0.77
+1173,Super Liga (RS),167622,1,Collins Lusaka Sichenje,C. Sichenje,0.29,0.06,0.12,0.53,0.0,4,0.06,1.12,3.88
+1173,Super Liga (RS),170495,41,Matija Malekinusić,M. Malekinusić,3.12,1.24,0.35,0.71,0.24,114,1.29,2.88,0.24
+1173,Super Liga (RS),170709,16,Uroš Ignjatović,U. Ignjatović,0.72,1.44,0.67,0.56,0.17,94,1.78,5.0,1.67
+1173,Super Liga (RS),173057,19,Samson Iyede Onomigho,S. Iyede,7.4,0.0,0.2,1.0,0.4,12,0.0,0.2,0.0
+1173,Super Liga (RS),174798,3,Sandro Trémoulet,S. Trémoulet,0.05,0.16,0.11,0.26,0.05,5,0.26,1.0,3.05
+1173,Super Liga (RS),178346,67,Stefan Tomović,S. Tomović,3.86,1.5,1.68,4.14,0.82,258,1.64,7.27,0.59
+1173,Super Liga (RS),178771,13,Dušan Pantelić,D. Pantelić,0.75,0.06,0.0,1.62,0.31,35,0.31,2.19,0.25
+1173,Super Liga (RS),178777,9,Lazar Zličić,L. Zličić,0.29,0.14,0.21,1.14,0.5,53,0.64,1.71,0.21
+1173,Super Liga (RS),178838,24,Ibrahim Mustapha,I. Mustapha,1.36,0.71,0.14,0.57,0.07,74,1.07,1.21,0.36
+1173,Super Liga (RS),178860,40,Mihajlo Petković,M. Petković,2.1,0.45,0.45,1.0,0.7,140,2.85,2.2,0.45
+1173,Super Liga (RS),179084,41,Vladimir Lučić,V. Lučić,2.5,0.4,0.6,1.9,0.6,57,1.3,3.0,0.5
+1173,Super Liga (RS),180070,0,Jovan Manev,J. Manev,0.25,0.0,0.0,0.25,0.0,3,0.0,0.0,3.75
+1173,Super Liga (RS),180789,9,Shavy Warren Babicka,S. Babicka,3.5,0.0,0.0,0.0,0.5,7,1.0,0.0,0.0
+1173,Super Liga (RS),255701,28,Vicky Kiankaulua,V. Kiankaulua,1.23,0.62,0.23,0.92,0.46,58,0.69,1.92,0.08
+1173,Super Liga (RS),269446,22,Martin Novaković,M. Novaković,3.0,0.15,0.31,4.31,1.31,89,0.69,3.31,0.38
+1173,Super Liga (RS),269447,6,Mbouri Basile Yamkam,M. Yamkam,0.2,0.6,0.27,0.6,0.2,30,0.93,2.73,1.8
+1173,Super Liga (RS),269454,5,Aleksandar Varjačić,A. Varjačić,1.0,1.54,0.08,0.15,0.0,26,0.46,3.0,0.31
+1173,Super Liga (RS),285354,16,Bojan Dimoski,B. Dimoski,2.8,1.0,1.6,1.8,0.4,24,0.8,3.0,0.4
+1173,Super Liga (RS),301883,12,Andreja Stojanović,A. Stojanović,1.0,1.4,1.0,0.3,0.2,56,2.1,3.8,1.0
+1173,Super Liga (RS),301898,0,Milan Joksimović,M. Joksimović,0.0,1.33,0.0,0.0,0.0,2,0.33,2.33,1.33
+1173,Super Liga (RS),301908,61,Andrej Todoroski,A. Todoroski,2.3,0.25,0.5,1.55,0.95,111,1.95,2.7,0.2
+1173,Super Liga (RS),301912,22,Vanja Ilić,V. Ilić,2.17,0.61,0.44,4.78,1.39,127,1.61,3.94,0.83
+1173,Super Liga (RS),301918,1,Filip Bačkulja,F. Bačkulja,0.0,0.44,0.22,0.0,0.0,7,1.0,1.33,0.56
+1173,Super Liga (RS),301921,18,Marko Šarić,M. Šarić,2.18,0.0,0.18,0.55,0.73,24,0.18,0.82,0.0
+1173,Super Liga (RS),301935,65,Djordje Jovanović,D. Jovanović,2.71,0.52,0.29,1.05,0.19,116,0.57,2.19,0.14
+1173,Super Liga (RS),301939,16,Stefan Jovanović,S. Jovanović,0.38,1.48,0.76,0.33,0.1,64,2.14,4.29,1.19
+1173,Super Liga (RS),302139,6,Djordje  Kotlajić,D. Kotlajić,1.33,0.0,0.33,1.0,0.0,13,0.0,0.33,0.33
+1173,Super Liga (RS),302140,0,Luka Laban,L. Laban,0.4,0.0,0.0,1.8,0.0,4,0.2,2.4,0.2
+1173,Super Liga (RS),302141,8,Nikola Marinković,N. Marinković,0.4,0.4,0.0,0.2,0.2,8,0.0,0.6,0.0
+1173,Super Liga (RS),302145,1,Nemanja Mićević,N. Mićević,0.8,0.0,0.4,0.2,0.0,1,0.2,1.0,3.0
+1173,Super Liga (RS),302148,1,Veljko Kijevčanin,V. Kijevčanin,0.0,0.5,0.0,0.5,0.0,0,0.0,0.0,0.5
+1173,Super Liga (RS),302150,0,Nemanja Zunić,N. Zunić,0.0,0.0,0.0,0.0,0.0,3,0.5,0.5,4.0
+1173,Super Liga (RS),331893,91,Sankara William Karamoko,S. Karamoko,2.32,0.45,0.09,0.86,0.68,94,0.95,0.95,0.27
+1173,Super Liga (RS),446249,36,Tyrone Ryan Conraad,T. Conraad,2.25,0.12,0.12,0.62,1.12,18,0.12,0.38,0.0
+1173,Super Liga (RS),507734,2,Danilo Mitrović,D. Mitrović,1.0,0.5,0.5,0.0,0.0,10,0.75,1.75,2.5
+1173,Super Liga (RS),511631,23,Dominic Sadi,D. Sadi,3.12,0.5,0.38,2.75,1.38,40,1.75,1.88,0.62
+1173,Super Liga (RS),556548,25,Janko Jevremović,J. Jevremović,0.76,0.06,0.18,0.71,0.12,57,0.53,1.0,0.24
+1173,Super Liga (RS),568932,24,David Ewemade,D. Ewemade,1.2,0.4,0.4,0.0,1.0,27,2.0,0.4,0.0
+1173,Super Liga (RS),581145,0,Leonardo Antonio,Léo Antônio,0.0,0.06,0.06,3.35,0.18,17,0.06,1.41,0.59
+1173,Super Liga (RS),583405,37,Miljan Momcilović,M. Momcilović,0.95,0.1,0.65,4.3,0.9,60,0.55,3.05,1.45
+1173,Super Liga (RS),583406,0,Ensar Brunčević,E. Brunčević,0.07,0.0,0.07,0.13,0.0,1,0.0,0.47,3.47
+1173,Super Liga (RS),583410,0,Dušan Cvetinović,D. Cvetinović,0.0,0.09,0.0,0.27,0.0,1,0.0,0.27,2.27
+1173,Super Liga (RS),583416,112,Ilija Babić,I. Babić,3.53,0.35,0.53,1.06,1.24,107,0.82,1.53,0.12
+1173,Super Liga (RS),583417,40,Milan Vidakov,M. Vidakov,3.88,0.0,0.25,2.38,1.5,22,0.25,0.25,0.0
+1173,Super Liga (RS),583420,14,Mihajlo Milosavić,M. Milosavić,2.2,0.2,0.4,2.5,1.3,30,0.3,2.2,0.1
+1173,Super Liga (RS),583421,11,Vladimir Vitorović,V. Vitorović,0.25,5.0,1.25,1.0,0.0,24,1.75,7.25,1.5
+1173,Super Liga (RS),583423,26,Miloš Tošeski,M. Tošeski,2.5,0.31,0.12,3.62,1.81,76,1.38,2.88,0.44
+1173,Super Liga (RS),583459,0,Dino Dolmagić,D. Dolmagić,0.0,1.0,0.0,0.0,0.0,0,1.0,0.0,0.0
+1173,Super Liga (RS),583465,25,Ibrahim Tanko,I. Tanko,2.17,0.56,0.11,0.56,0.5,71,1.17,0.94,0.11
+1173,Super Liga (RS),583466,34,Luka Luković,L. Luković,2.48,0.65,0.17,1.87,0.57,134,0.43,5.78,0.65
+1173,Super Liga (RS),583469,6,Matija Gluščević,M. Gluščević,1.8,0.2,0.4,0.6,0.0,26,1.4,2.2,0.2
+1173,Super Liga (RS),583475,0,Luka Zorić,L. Zorić,0.5,0.0,0.0,3.0,0.0,0,0.5,3.5,0.0
+1173,Super Liga (RS),583476,58,Milutin Vidosavljević,M. Vidosavljević,5.14,0.19,0.33,3.1,1.81,171,0.86,3.43,0.24
+1173,Super Liga (RS),583483,23,Nikola Mituljikić,N. Mituljikić,3.33,0.0,0.0,2.33,0.33,19,1.0,3.0,0.0
+1173,Super Liga (RS),584916,6,Uroš Nikolić,U. Nikolić,2.14,0.14,0.86,1.0,1.0,27,0.86,3.14,0.29
+1173,Super Liga (RS),584917,11,Marko Bjeković,M. Bjeković,0.41,1.77,0.27,0.36,0.05,137,1.23,6.5,1.59
+1173,Super Liga (RS),584919,10,Nikola Cirković,N. Cirković,0.4,0.45,0.1,0.2,0.05,21,0.05,0.8,1.15
+1173,Super Liga (RS),584923,20,Marko Velicković,M. Velicković,1.73,0.09,0.64,1.64,2.18,47,0.36,1.09,0.0
+1173,Super Liga (RS),584924,112,Uroš Sremčević,U. Sremčević,3.43,0.0,0.14,0.95,0.48,90,0.24,0.81,0.1
+1173,Super Liga (RS),586614,0,Nemanja Dekovic,N. Dekovic,0.0,0.14,0.14,0.29,0.0,4,0.29,1.57,6.29
+1173,Super Liga (RS),586615,68,Uroš Ljubomirac,U. Ljubomirac,2.29,0.52,0.57,3.29,2.43,192,1.67,5.38,0.24
+1173,Super Liga (RS),586620,3,Mladjan Stevanović,M. Stevanović,0.17,0.56,0.28,1.61,0.56,56,1.11,3.22,1.22
+1173,Super Liga (RS),606796,1,Petar Petrović,P. Petrović,0.0,0.0,0.0,0.5,0.0,0,0.5,0.5,0.0
+1173,Super Liga (RS),635449,9,Bojan Kovačević,B. Kovačević,0.5,5.25,1.0,0.25,0.0,12,3.75,4.75,3.75
+1173,Super Liga (RS),641078,191,Stefan Stanisavljević,S. Stanisavljević,8.12,0.18,0.53,1.24,1.18,100,0.35,1.0,0.0
+1173,Super Liga (RS),641083,0,Sava Pribakovic,S. Pribakovic,1.0,3.0,2.0,0.0,0.0,1,1.0,1.0,1.0
+1173,Super Liga (RS),641084,172,Jovan Milošević,J. Milošević,8.82,0.06,0.59,5.12,1.71,117,0.94,2.35,0.12
+1173,Super Liga (RS),641085,3,Lazar Micic,,6.0,2.0,0.0,0.0,0.0,6,2.0,3.0,0.0
+1173,Super Liga (RS),644278,8,Bob Murphy Omoregbe,B. Omoregbe,0.91,0.0,0.0,0.27,0.0,22,0.45,0.09,0.0
+1173,Super Liga (RS),648880,2,Andrija Lazarević,A. Lazarević,2.0,0.33,0.33,0.33,0.0,8,0.67,0.67,0.0
+1173,Super Liga (RS),648881,13,Nikola Đuričić,N. Đuričić,0.55,4.09,2.09,1.32,0.27,125,1.09,8.14,5.36
+1173,Super Liga (RS),648883,0,Nikola Zecević,N. Zecević,0.12,0.0,0.0,0.0,0.0,1,0.12,0.25,5.0
+1173,Super Liga (RS),649597,0,Lamonth Beres Rochester,L. Rochester,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),662438,42,Jovan  Šljivić,J. Šljivić,3.57,0.36,0.57,3.79,1.93,133,2.71,6.29,0.64
+1173,Super Liga (RS),662441,12,Stefan Bukinac,S. Bukinac,0.15,4.65,2.65,0.2,0.0,113,2.0,7.05,1.3
+1173,Super Liga (RS),662444,53,Mateja  Bubanj,M. Bubanj,1.53,0.07,0.13,0.93,0.6,76,0.8,1.33,0.13
+1173,Super Liga (RS),662446,2,Veljko Mirosavić,V. Mirosavić,0.25,0.75,0.5,0.25,0.12,30,2.88,5.25,2.88
+1173,Super Liga (RS),662450,0,Mateja  Radonjić,M. Radonjić,0.75,0.0,0.0,2.5,2.0,12,0.25,3.5,0.75
+1173,Super Liga (RS),671631,29,Zoran Alilović,Z. Alilović,4.0,0.71,0.43,2.0,1.0,39,1.71,3.0,0.29
+1173,Super Liga (RS),671634,15,Andrej  Petrović,A. Petrović,3.0,0.25,0.25,2.5,1.5,25,1.25,4.75,0.5
+1173,Super Liga (RS),671637,1,Nikola Simic,N. Simic,0.25,0.04,0.04,0.54,0.08,13,0.0,1.5,3.29
+1173,Super Liga (RS),671639,0,Veljko  Milosavljević,V. Milosavljević,0.0,0.0,0.33,0.33,0.0,1,0.0,2.0,4.0
+1173,Super Liga (RS),671641,13,Adem Avdic,A. Avdic,0.23,4.0,1.38,0.08,0.31,81,3.62,3.85,2.15
+1173,Super Liga (RS),671643,13,Veljko Jocić,V. Jocić,1.43,0.29,0.57,2.14,0.29,35,1.0,3.71,0.14
+1173,Super Liga (RS),686453,0,Sadick Abubakar,S. Abubakar,0.0,0.3,0.05,0.35,0.0,16,1.4,1.3,2.0
+1173,Super Liga (RS),686454,81,Vukašin Bogdanović,V. Bogdanović,6.92,0.08,0.08,2.67,1.08,69,0.75,2.0,0.08
+1173,Super Liga (RS),698050,0,Mahmudu Bajo,M. Bajo,0.5,0.12,0.38,5.38,0.5,36,0.75,4.62,0.88
+1173,Super Liga (RS),704814,38,Henry Addo,H. Addo,2.14,0.07,0.5,1.07,0.5,80,1.71,1.86,0.14
+1173,Super Liga (RS),716335,10,Jovan Ilić,J. Ilić,0.24,0.06,0.24,4.59,0.71,38,0.41,2.24,0.29
+1173,Super Liga (RS),719679,0,Siniša Tanjga,S. Tanjga,0.0,0.0,0.0,0.3,0.0,1,0.1,0.4,1.9
+1173,Super Liga (RS),727423,177,Ester Sokler,E. Sokler,6.88,0.19,0.25,2.12,0.69,73,0.19,1.19,0.0
+1173,Super Liga (RS),729180,1,Christ Sarkodje Kouadio,C. Kouadio,1.5,1.5,0.0,0.0,0.0,7,2.5,2.0,0.0
+1173,Super Liga (RS),729987,18,Bogdan Mirčetić,B. Mirčetić,4.4,0.2,2.4,4.6,1.4,57,3.0,8.2,0.2
+1173,Super Liga (RS),729988,53,Nemanja Trifunović,N. Trifunović,3.47,1.41,0.76,1.47,0.18,191,2.35,3.18,0.59
+1173,Super Liga (RS),738200,0,Pedro Carvalhosa Empis,Pedro Empis,0.0,2.33,0.67,0.33,0.0,8,0.0,4.67,0.33
+1173,Super Liga (RS),741994,1,Luka Subotić,L. Subotić,0.0,0.0,0.0,0.11,0.0,1,0.17,0.11,2.11
+1173,Super Liga (RS),748219,10,Kenroy Campbell,K. Campbell,0.75,0.0,0.5,1.75,0.5,22,4.25,2.75,0.5
+1173,Super Liga (RS),749343,0,Eldar Mehmedović,E. Mehmedović,0.22,0.22,0.33,2.56,0.89,16,0.67,4.22,0.22
+1173,Super Liga (RS),760980,95,Vladimir Radočaj,V. Radočaj,2.19,1.88,0.38,0.94,0.5,121,1.81,2.56,0.44
+1173,Super Liga (RS),760984,11,Nikola Glišić,N. Glišić,1.07,0.6,0.67,0.2,0.2,58,1.2,3.53,0.47
+1173,Super Liga (RS),761021,0,Ismael Alves Gaetan Maiga,I. Maiga,0.0,0.0,0.0,0.0,0.0,0,0.4,0.0,2.4
+1173,Super Liga (RS),761024,2,Milan Ilić,M. Ilić,0.1,1.0,0.3,0.1,0.0,20,0.4,1.3,0.6
+1173,Super Liga (RS),761031,64,Aleksa Radonjić,A. Radonjić,3.94,0.25,0.19,1.12,0.75,104,0.75,1.25,0.06
+1173,Super Liga (RS),761032,0,Djordje Skoko,D. Skoko,0.22,0.04,0.26,0.22,0.04,10,0.09,0.39,3.13
+1173,Super Liga (RS),761035,1,Vukasin Djurdjevic,V. Durdevic,0.13,0.27,0.07,0.33,0.0,21,0.6,1.53,4.07
+1173,Super Liga (RS),761913,6,Irfan Zulfic,I. Zulfic,0.67,0.33,0.0,3.0,0.67,18,1.0,1.0,0.0
+1173,Super Liga (RS),761958,1,Mirko Milikić,M. Milikić,0.1,0.0,0.1,0.33,0.0,6,0.05,0.19,5.57
+1173,Super Liga (RS),761960,11,Marko Konatar,M. Konatar,0.36,1.07,0.14,0.5,0.21,36,1.0,4.43,2.79
+1173,Super Liga (RS),761963,34,Branislav Knezević,B. Knezević,2.05,0.15,0.5,9.05,1.3,69,2.25,4.5,0.95
+1173,Super Liga (RS),761976,26,Stepanovich Evgeniy Pavlov Yevgeny,Evgeniy Pavlov,3.43,0.0,0.0,0.29,0.71,9,0.29,0.14,0.0
+1173,Super Liga (RS),762574,3,Miloš Ristić,M. Ristić,0.33,0.25,0.17,4.67,0.83,14,0.5,3.83,1.17
+1173,Super Liga (RS),762581,13,Bojan Adžić,B. Adžić,0.89,1.56,0.89,0.44,0.22,49,1.56,3.44,1.11
+1173,Super Liga (RS),762583,3,Nikola Miličić,N. Miličić,0.43,0.43,0.36,0.21,0.14,20,0.93,1.71,4.14
+1173,Super Liga (RS),762587,15,Dragan Bojat,D. Bojat,0.23,0.85,0.46,0.85,0.15,50,1.08,3.46,1.46
+1173,Super Liga (RS),762590,6,Filip Krstić,F. Krstić,1.26,0.42,0.32,3.11,0.26,39,0.89,3.05,1.05
+1173,Super Liga (RS),763351,11,Mateja Gašić,M. Gašić,0.32,1.59,0.86,0.27,0.09,104,2.18,5.82,0.95
+1173,Super Liga (RS),765517,50,Nikola Krstić,N. Krstić,3.9,0.6,0.65,2.45,0.6,144,0.75,3.75,0.4
+1173,Super Liga (RS),765518,75,Miloš  Jović,M. Jović,2.0,0.0,0.0,0.68,0.26,41,0.11,0.32,0.0
+1173,Super Liga (RS),765522,75,Ognjen Krsmanović,O. Krsmanović,6.21,0.29,0.14,2.71,1.14,92,0.5,3.07,0.14
+1173,Super Liga (RS),768262,52,Aboubacar Cisse,A. Cisse,2.33,1.0,0.33,0.22,0.22,51,0.33,1.89,0.33
+1173,Super Liga (RS),786869,154,Bogdan Petrovic,B. Petrovic,4.7,0.0,0.15,0.95,0.6,57,0.05,0.35,0.0
+1173,Super Liga (RS),790814,0,Yakup Arda Kılıç,A. Kılıç,0.0,0.0,0.0,0.0,0.0,2,0.0,1.0,0.0
+1173,Super Liga (RS),796671,14,Nikola  Bukumira,N. Bukumira,1.17,0.75,0.67,2.42,0.67,64,0.58,3.08,0.75
+1173,Super Liga (RS),797522,69,Jovan Ćirić,J. Ćirić,2.67,0.25,0.0,0.92,1.17,82,0.92,1.25,0.08
+1173,Super Liga (RS),797926,0,Pavle Mihajlović,P. Mihajlović,0.0,0.0,0.0,1.0,0.0,0,0.0,1.0,2.0
+1173,Super Liga (RS),797966,18,Szabolcs Mezei,S. Mezei,0.39,0.28,0.5,2.28,1.33,76,0.72,4.17,0.39
+1173,Super Liga (RS),800140,0,Lazar Stojanovic,L. Stojanovic,0.13,0.27,0.07,0.2,0.0,16,1.0,1.2,1.73
+1173,Super Liga (RS),800307,8,Nikola  Skrobonja,N. Skrobonja,1.9,0.2,0.4,0.7,0.2,53,0.9,1.6,0.2
+1173,Super Liga (RS),800395,38,Louay Ben Hassine,L. Ben Hassine,1.86,0.41,0.5,2.64,1.23,168,2.77,5.45,0.82
+1173,Super Liga (RS),800919,10,Aleksandar Stancic,A. Stancic,0.58,0.05,0.68,3.0,1.11,60,0.53,4.68,0.58
+1173,Super Liga (RS),801265,18,Dušan Jovanović,D. Jovanović,1.43,0.0,0.0,0.43,0.0,12,0.0,0.0,0.0
+1173,Super Liga (RS),801829,65,Ejike  Julius Opara ,E. Julius Opara,3.64,0.29,0.0,0.64,0.0,58,0.36,1.14,0.21
+1173,Super Liga (RS),801853,1,Stefan  Bastaja,S. Bastaja,0.0,0.6,0.2,0.0,0.0,4,0.8,1.8,0.0
+1173,Super Liga (RS),807493,52,Semir Alić,S. Alić,1.68,0.05,0.27,0.64,0.95,84,0.09,1.86,0.0
+1173,Super Liga (RS),808555,0,Hristo Ivanov,H. Ivanov,0.15,0.0,0.31,9.08,0.46,21,0.08,3.54,1.62
+1173,Super Liga (RS),810388,45,Uroš Miladinović,U. Miladinović,3.09,0.65,0.65,3.52,0.91,164,1.26,2.52,0.26
+1173,Super Liga (RS),810435,46,Lazar Micic,L. Micic,1.93,1.47,0.07,1.67,0.13,79,2.0,1.53,0.8
+1173,Super Liga (RS),810461,4,Viktor Radojević,V. Radojević,0.25,0.75,0.25,0.0,0.25,7,1.5,2.0,1.75
+1173,Super Liga (RS),810464,49,Milan Kolarevic,M. Kolarevic,3.2,0.87,0.6,1.2,0.4,141,2.07,2.53,0.4
+1173,Super Liga (RS),810465,21,Stefan Pirgić,S. Pirgić,1.05,0.1,0.24,5.0,0.29,51,0.38,3.29,0.76
+1173,Super Liga (RS),810466,45,Petar Sukacev,P. Sukacev,2.9,0.5,0.6,0.5,0.1,80,0.9,1.6,0.1
+1173,Super Liga (RS),810488,1,Željko Arsić,Ž. Arsić,3.0,2.0,0.5,0.5,0.0,9,1.5,4.5,2.0
+1173,Super Liga (RS),810625,0,Danijel Kolarić,D. Kolarić,0.18,0.29,0.24,0.65,0.06,21,0.59,1.29,3.35
+1173,Super Liga (RS),810627,5,Tomislav Dadić,T. Dadić,0.13,3.2,1.0,0.47,0.0,61,1.47,4.2,1.67
+1173,Super Liga (RS),811442,7,Andreja  Ristić,A. Ristić,0.75,0.0,0.0,0.0,0.75,8,0.5,0.75,0.25
+1173,Super Liga (RS),816989,42,Ognjen Bondzulic,O. Bondzulic,3.57,0.29,0.14,1.29,0.43,54,1.57,0.14,0.14
+1173,Super Liga (RS),817758,0,Luka  Krstovic,L. Krstovic,1.5,0.0,0.0,1.5,0.5,5,1.0,2.0,0.5
+1173,Super Liga (RS),818308,18,Marko Mladenovic,M. Mladenovic,3.29,0.57,0.71,3.0,1.43,37,1.86,2.86,0.29
+1173,Super Liga (RS),818958,0,Lazar Miladinović,L. Miladinović,0.0,0.0,0.0,0.27,0.0,3,0.64,0.82,7.09
+1173,Super Liga (RS),818959,5,Djordje Skocajic,D. Skocajic,1.0,0.0,0.0,0.0,0.5,7,0.5,0.0,0.0
+1173,Super Liga (RS),819370,1,Stefan Mitrović,S. Mitrović,0.67,0.0,0.0,1.33,0.33,4,0.0,0.5,0.0
+1173,Super Liga (RS),820742,0,Aleksa Milošević,A. Milošević,0.0,0.23,0.0,0.15,0.0,3,0.23,0.77,1.46
+1173,Super Liga (RS),820743,4,Ognjen Alempijevic,O. Alempijevic,0.5,0.0,0.0,0.0,0.0,4,0.0,0.0,0.0
+1173,Super Liga (RS),823903,10,Francis Ebuka Nwokeabia,F. Nwokeabia,0.2,0.07,0.13,1.27,1.27,26,0.4,2.53,0.6
+1173,Super Liga (RS),827063,23,Veljko Radosavljevic,V. Radosavljevic,0.3,0.0,0.1,0.1,0.2,20,0.4,0.6,0.0
+1173,Super Liga (RS),827064,30,Luka Djordjevic,L. Djordjevic,1.38,0.25,0.0,0.38,0.38,44,1.12,1.25,0.0
+1173,Super Liga (RS),827066,0,Jagoš Djurkovic,J. Djurkovic,0.33,0.0,0.0,1.33,0.33,3,0.33,0.33,0.0
+1173,Super Liga (RS),827068,113,Ognjen Ugresic,O. Ugresic,4.08,0.29,0.5,2.58,0.79,141,1.33,3.42,0.42
+1173,Super Liga (RS),827069,50,Milan Roganović,M. Roganović,0.33,1.76,1.67,1.29,0.1,134,1.57,6.1,3.9
+1173,Super Liga (RS),827070,0,Vanja  Tomic,V. Tomic,0.0,0.0,0.0,13.0,0.0,2,0.0,2.0,4.0
+1173,Super Liga (RS),828818,0,Wendkuuni Josué Tiendrébéogo,J. Tiendrébéogo,0.0,0.0,0.0,5.0,1.0,0,1.0,0.0,0.0
+1173,Super Liga (RS),839086,3,Dušan Pavlović,D. Pavlović,0.09,0.36,0.05,0.68,0.09,18,0.5,2.14,4.82
+1173,Super Liga (RS),839087,12,Stefan Nikolic,S. Nikolic,2.35,0.59,0.47,3.0,1.35,120,1.41,3.71,0.41
+1173,Super Liga (RS),839088,6,Dragan  Cubra,D. Cubra,0.3,0.8,0.7,0.2,0.3,28,1.7,2.5,1.5
+1173,Super Liga (RS),839090,10,Zubairu Ibrahim,Z. Ibrahim,0.43,0.29,0.0,0.71,0.0,19,0.71,0.57,0.29
+1173,Super Liga (RS),839091,14,Nikola Jovanovic,N. Jovanovic,1.71,0.07,0.07,1.07,0.07,44,1.0,0.86,0.14
+1173,Super Liga (RS),839096,32,Jovan  Milosavljevic,J. Milosavljevic,2.59,0.88,1.76,3.82,1.24,137,3.71,3.82,0.65
+1173,Super Liga (RS),839097,4,Nemanja  Vidojević,N. Vidojević,0.17,0.08,0.0,0.5,0.0,4,0.08,0.83,5.5
+1173,Super Liga (RS),839200,18,Stefan Despotovski,S. Despotovski,0.8,1.73,0.53,0.2,0.07,64,1.07,4.4,2.93
+1173,Super Liga (RS),839762,1,Sinisa  Popovic,S. Popovic,0.25,0.0,0.5,0.25,0.0,1,0.0,0.5,2.75
+1173,Super Liga (RS),839764,0,Marko Jevtić,M. Jevtić,0.11,0.0,0.17,0.56,0.0,2,0.06,0.56,2.78
+1173,Super Liga (RS),840131,1,Luka Drobnjak,L. Drobnjak,0.05,0.05,0.21,0.26,0.0,24,0.47,2.11,2.42
+1173,Super Liga (RS),840413,109,Andrej Kostić,A. Kostić,2.79,0.17,0.0,1.08,0.54,105,0.42,0.54,0.04
+1173,Super Liga (RS),840903,115,Kwaku Karikari,K. Karikari,5.76,0.12,0.18,1.0,0.41,81,0.41,0.71,0.0
+1173,Super Liga (RS),841303,60,Kayode Saliman,K. Saliman,1.15,0.6,0.25,1.45,1.0,160,2.45,2.15,0.35
+1173,Super Liga (RS),841543,10,Godswill Vadze,G. Vadze,0.0,0.8,0.2,0.0,0.0,13,0.2,2.8,0.8
+1173,Super Liga (RS),841662,0,Aleksandar Dermanovic,A. Dermanovic,0.06,0.17,0.0,0.28,0.0,0,0.06,0.56,5.22
+1173,Super Liga (RS),841663,70,Aleksa Cvetković,A. Cvetković,2.76,0.38,0.29,2.38,1.9,122,0.9,3.0,0.62
+1173,Super Liga (RS),842505,2,Aleksej Vukičević,A. Vukičević,0.38,0.12,0.25,0.5,0.12,5,0.0,0.75,3.38
+1173,Super Liga (RS),842511,95, Ivan Davidović,I. Davidović,1.83,0.54,1.08,3.67,1.42,176,0.88,3.71,0.54
+1173,Super Liga (RS),842512,0,Marko Luković,M. Luković,0.07,1.27,0.6,0.4,0.07,27,2.2,3.0,1.0
+1173,Super Liga (RS),842513,0,Nikola Marjanovic,N. Marjanovic,0.46,0.15,0.15,0.54,0.23,3,0.15,1.23,5.38
+1173,Super Liga (RS),842521,54,Stefan Stojanovic,S. Stojanovic,1.4,0.6,0.27,0.73,0.6,75,1.13,1.0,0.4
+1173,Super Liga (RS),849574,14,Miloš Popović,M. Popović,1.31,0.12,0.31,2.69,0.44,31,0.44,3.38,1.38
+1173,Super Liga (RS),849581,13,Stefan Cimbaljevic,S. Cimbaljevic,0.62,2.62,1.88,0.88,0.25,57,1.88,3.25,1.5
+1173,Super Liga (RS),858521,0,Emmanuel Dzigbah,E. Dzigbah,0.0,0.0,0.0,0.0,0.0,1,1.0,1.0,0.0
+1173,Super Liga (RS),885726,1,Keimer Andre Sandoval Rodrigues,K. Sandoval,0.0,0.0,0.0,0.0,0.0,1,0.0,2.0,0.0
+1173,Super Liga (RS),886602,10,Damjan  Djokanovic,D. Djokanovic,1.17,0.17,0.0,0.17,0.17,5,0.0,0.0,0.0
+1173,Super Liga (RS),893756,28,Oriyomi Ahmed Lebi,O. Lebi,3.0,0.0,0.4,1.4,0.4,16,0.0,0.0,0.0
+1173,Super Liga (RS),894697,1,Clément Lhernault,C. Lhernault,0.0,0.0,0.0,5.0,0.0,8,0.5,3.5,1.5
+1173,Super Liga (RS),901772,43,Dario Pavkovic,D. Pavkovic,2.13,0.2,0.27,0.4,0.33,32,0.47,0.53,0.0
+1173,Super Liga (RS),907519,55,Stephen Chinedu,S. Chinedu,6.0,0.31,0.31,0.69,0.62,51,0.15,0.31,0.0
+1173,Super Liga (RS),908352,0,Dusan Ristic,D. Ristic,0.11,0.0,0.0,0.11,0.0,0,0.11,0.22,1.0
+1173,Super Liga (RS),908354,14,Nemanja Djokic,N. Djokic,1.61,0.11,0.28,2.67,0.78,64,0.61,3.17,0.67
+1173,Super Liga (RS),919903,35,Dragan Kokanović,D. Kokanović,2.5,0.11,0.39,2.89,0.89,78,0.89,2.72,0.44
+1173,Super Liga (RS),921645,90,Diogo Bezerra de Oliveira,Diogo Bezerra,1.5,1.55,0.3,1.9,1.0,214,2.95,2.75,0.2
+1173,Super Liga (RS),933085,28,Hugo Alba Silveira,Hugo Alba,1.5,0.0,0.0,0.25,0.08,19,0.33,0.33,0.0
+1173,Super Liga (RS),941777,0,Matej Gashtarov,M. Gashtarov,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),941778,0,Uroš Ilić,U. Ilić,0.17,1.67,0.17,0.17,0.17,21,1.67,1.67,2.17
+1173,Super Liga (RS),941780,82,Vasilije  Kostov,V. Kostov,5.68,0.23,0.41,7.41,1.91,153,0.91,5.0,0.86
+1173,Super Liga (RS),941786,22,Aleksa  Damjanović,A. Damjanović,3.86,0.0,0.0,0.57,1.43,11,0.14,0.57,0.0
+1173,Super Liga (RS),941787,17,Darije Markocević,D. Markocević,3.0,0.11,0.0,0.11,0.11,7,0.0,0.0,0.0
+1173,Super Liga (RS),941790,5,Uroš Tegeltija,U. Tegeltija,2.67,1.33,0.67,2.0,0.0,12,0.67,2.67,1.67
+1173,Super Liga (RS),947946,6,Vasilije  Novicic,V. Novicic,0.41,0.41,0.27,4.5,0.45,56,0.32,4.18,1.09
+1173,Super Liga (RS),949753,5,Andjelko  Pavlovic,A. Pavlovic,0.0,1.0,0.5,0.0,0.5,11,0.0,1.0,0.0
+1173,Super Liga (RS),960352,0,Andrej Milanovic,A. Milanovic,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,3.0
+1173,Super Liga (RS),965469,2,Andrija  Milicevic,A. Milicevic,2.0,1.0,0.5,0.0,0.0,3,0.5,0.5,0.5
+1173,Super Liga (RS),965471,42,Dušan  Zagar,D. Zagar,3.15,1.35,0.1,1.55,0.05,125,1.8,2.55,0.55
+1173,Super Liga (RS),966469,27,Ethan Hoard,E. Hoard,5.5,0.0,0.5,2.5,1.0,13,1.5,1.5,0.0
+1173,Super Liga (RS),967276,3,Djordje  Marinković,D. Marinković,1.25,0.0,0.5,2.75,0.5,12,0.25,2.75,0.25
+1173,Super Liga (RS),968129,0,Stefan Gudelj,S. Gudelj,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,1.0
+1173,Super Liga (RS),968131,55,Luka Zaric,L. Zaric,2.86,0.64,0.21,1.07,0.21,77,1.57,0.86,0.71
+1173,Super Liga (RS),968543,9,Dimitrije Janković,D. Janković,1.71,0.0,0.0,1.43,0.29,31,0.14,1.43,0.57
+1173,Super Liga (RS),970427,0,Mihajlo  Petrovic,M. Petrovic,0.33,0.0,0.0,0.67,0.0,10,0.67,0.0,0.0
+1173,Super Liga (RS),972662,92,Filip Matijasevic,F. Matijasevic,3.59,0.05,0.23,3.32,1.59,192,1.41,3.36,0.5
+1173,Super Liga (RS),972694,0,Issiaka Dembele,I. Dembele,0.0,0.0,0.0,1.29,0.14,2,0.0,0.29,0.43
+1173,Super Liga (RS),977419,10,Emmanuel King Sieh Jr.,E. Sieh Jr.,3.0,0.0,0.0,0.5,0.5,10,0.0,1.0,0.0
+1173,Super Liga (RS),977627,19,Abdulsamed Ahmed Abdullahi,Abdulsamed Abdullahi,3.11,0.44,0.0,0.56,0.11,43,1.0,1.78,0.11
+1173,Super Liga (RS),978616,3,Mamane Moustapha Amadou Sabo,M. Amadou Sabo,0.18,0.36,0.14,4.05,0.45,39,1.0,3.95,0.95
+1173,Super Liga (RS),979091,13,Luka Puzovic,L. Puzovic,0.71,0.29,0.14,1.43,0.14,13,0.29,2.29,0.0
+1173,Super Liga (RS),979661,0,Ivan Šubert,I. Šubert,0.12,0.0,0.0,0.12,0.12,0,0.0,0.25,0.25
+1173,Super Liga (RS),981327,1,Milan  Djokovic,M. Djokovic,0.17,0.11,0.17,0.22,0.06,11,0.06,1.44,4.94
+1173,Super Liga (RS),982556,1,David Stojanovic,D. Stojanovic,0.28,0.0,0.0,0.17,0.06,0,0.61,0.39,3.61
+1173,Super Liga (RS),982558,11,Lazar Stojanovic,L. Stojanovic,3.5,0.5,0.25,0.5,0.25,32,1.5,1.25,0.5
+1173,Super Liga (RS),982560,126,Douglas Owusu,D. Owusu,2.57,0.74,0.17,1.78,0.39,258,2.22,3.65,0.48
+1173,Super Liga (RS),988309,1,Petar Petrovic,P. Petrovic,0.27,0.05,0.05,0.5,0.09,22,0.32,1.0,3.27
+1173,Super Liga (RS),988310,8,Đokovic Petar,Đ. Petar,1.36,0.0,0.09,0.45,0.45,25,0.18,0.36,0.0
+1173,Super Liga (RS),988747,1,Stefan  Petrovic,S. Petrovic,0.0,1.5,1.0,0.75,0.0,18,2.0,1.75,1.75
+1173,Super Liga (RS),990333,9,Kenroy Campbell,,1.33,0.0,0.17,0.67,0.5,12,1.17,1.33,0.33
+1173,Super Liga (RS),994293,0,Mame Moustapha Fall,Moustapha Fall,0.0,0.0,0.0,0.25,0.0,2,0.5,0.5,3.0
+1173,Super Liga (RS),998179,35,Bogdan Kostić,B. Kostić,0.93,0.71,0.21,1.14,0.21,78,0.71,1.21,0.07
+1173,Super Liga (RS),998180,31,Stefan Mladenović,S. Mladenović,0.75,0.19,0.31,0.62,0.5,50,0.81,1.88,0.69
+1173,Super Liga (RS),998315,1,Uros Filimonovic,U. Filimonovic,0.0,0.0,0.0,1.0,0.0,1,0.0,1.0,0.0
+1173,Super Liga (RS),998316,0,Nemanja Ahčin,N. Ahčin,0.0,0.0,0.0,0.0,0.0,3,0.0,0.5,0.0
+1173,Super Liga (RS),998390,0,Andrej Pavlovic,A. Pavlovic,0.0,0.0,0.0,0.43,0.0,0,0.29,0.29,3.64
+1173,Super Liga (RS),998392,7,Stefan Tomovic,S. Tomovic,0.75,0.5,0.75,0.88,1.12,52,2.25,1.88,0.5
+1173,Super Liga (RS),1002202,46,Vanja Dragojevic,V. Dragojevic,2.39,0.17,0.35,7.83,0.78,145,1.3,5.52,2.57
+1173,Super Liga (RS),1004383,10,Luka Izderic,L. Izderic,1.83,0.0,0.42,2.58,0.92,55,1.33,3.5,0.08
+1173,Super Liga (RS),1007512,0,Kufre Eta,K. Eta,0.0,0.29,0.0,0.43,0.0,8,0.14,0.86,1.0
+1173,Super Liga (RS),1007726,19,Skima kobinah Togbe,S. Togbe,0.71,0.43,0.38,3.76,2.05,121,1.19,4.0,0.24
+1173,Super Liga (RS),1018392,11,Tomislav Todorović,T. Todorović,3.0,0.0,0.0,0.33,1.0,18,0.0,1.67,0.0
+1173,Super Liga (RS),1018394,1,Vladan Milosavljev,V. Milosavljev,0.0,0.0,0.0,0.0,0.0,7,0.0,0.0,0.0
+1173,Super Liga (RS),1018395,23,David Djokic,D. Djokic,1.2,0.0,0.0,0.2,0.4,28,0.4,0.4,0.2
+1173,Super Liga (RS),1018398,0,Savo Raskovic,S. Raskovic,0.33,0.0,0.17,1.67,0.33,7,0.5,2.5,0.17
+1173,Super Liga (RS),1018400,2,Stefan Vidaković,S. Vidaković,0.5,0.0,0.0,0.5,0.0,3,0.5,1.0,0.5
+1173,Super Liga (RS),1018401,4,Vladimir Petrović,V. Petrović,2.5,0.0,0.0,0.0,0.5,6,0.5,0.5,0.0
+1173,Super Liga (RS),1018485,22,Lacine Adams Kader Kone,L. Kader Kone,2.4,0.1,0.2,0.2,0.0,11,0.1,0.2,0.0
+1173,Super Liga (RS),1018486,5,Djordje Petrović,D. Petrović,0.23,2.46,0.0,0.08,0.0,26,2.15,3.38,0.85
+1173,Super Liga (RS),1018487,60,Aleksa  Kuljanin,A. Kuljanin,3.68,0.11,0.26,1.42,0.47,102,1.63,2.89,0.32
+1173,Super Liga (RS),1018488,8,Djordje  Glavinic,D. Glavinic,3.5,0.0,0.0,0.0,0.5,3,0.5,0.5,0.0
+1173,Super Liga (RS),1018542,1,Dragan  Tegeltija,D. Tegeltija,0.0,1.0,1.0,2.0,0.0,8,0.5,3.5,0.0
+1173,Super Liga (RS),1018543,39,Uroš Cejic,U. Cejic,1.31,1.19,0.12,1.06,0.12,88,1.81,2.25,0.44
+1173,Super Liga (RS),1018544,1,Strahinja Lukovic,S. Lukovic,0.0,0.0,2.0,0.0,0.0,1,0.5,3.5,0.0
+1173,Super Liga (RS),1019274,6,Mass Modou Sise,M. Modou Sise,1.0,0.25,0.0,0.0,0.0,3,0.25,0.25,0.0
+1173,Super Liga (RS),1020091,136,Babacar Mboup,B. Mboup,5.6,0.0,0.07,1.2,0.93,96,0.13,0.53,0.0
+1173,Super Liga (RS),1020476,2,Tadija  Stanisic,T. Stanisic,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),1020480,1,Ahmed  Hadzimujović,A. Hadzimujović,0.14,0.14,0.0,0.38,0.05,3,0.67,1.05,5.05
+1173,Super Liga (RS),1020945,5,Martin Andjelkovic,M. Andjelkovic,0.8,0.2,0.2,0.6,0.2,22,1.4,1.2,0.2
+1173,Super Liga (RS),1020948,9,Emmanuel Quarshie,E. Quarshie,0.8,1.0,0.2,1.0,0.2,30,0.8,2.4,0.0
+1173,Super Liga (RS),1022387,86,Mihailo Todosijević,M. Todosijević,3.7,0.1,0.1,0.6,1.2,95,0.5,1.9,0.0
+1173,Super Liga (RS),1022389,1,Nikola Stankovic,N. Stankovic,0.0,2.0,1.0,1.0,0.0,6,4.0,8.0,5.0
+1173,Super Liga (RS),1022461,0,Sumaila Wasiu,S. Wasiu,0.0,0.0,0.0,0.0,0.0,1,0.0,0.0,0.0
+1173,Super Liga (RS),1024281,0,Baltic Stefman,B. Stefman,0.0,0.0,0.0,0.5,0.0,1,0.5,0.0,0.0
+1173,Super Liga (RS),1028094,0,Yusuf Omosanya Ibrahim,Y. Omosanya Ibrahim,0.0,0.0,0.0,4.0,0.33,9,0.67,2.17,1.17
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,13,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.57,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,2.0,0.5,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.57,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.29,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.14,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.14,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,37,1.0,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,0.57,4.5,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,5.14,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,5.14,0.0
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,4.5,0.57
+1173,Super Liga (RS),1028155,0,Brian Ramírez,,0.5,0.5,0.0,2.5,1.5,7,1.0,4.5,0.0
+1173,Super Liga (RS),1028944,11, Uros Filipovic,U. Filipovic,0.45,1.0,0.73,0.18,0.09,48,1.45,2.82,0.55
+1173,Super Liga (RS),1029029,2,Nemanja Tosic,N. Tosic,0.89,2.33,0.56,1.11,0.0,63,2.44,4.44,2.56
+1173,Super Liga (RS),1029038,4,Solbodan   Urosevich  ,S. Urosevich,0.07,1.14,0.43,0.21,0.21,50,1.71,2.36,2.5
+1173,Super Liga (RS),1030845,8,Simão Pedro,S. Pedro,0.67,0.0,0.33,0.67,0.0,15,0.67,1.67,0.0
+1173,Super Liga (RS),1031868,1,Abdulmalik Mohammed,A. Mohammed,0.0,2.5,0.5,0.0,0.0,14,0.5,6.0,3.5
+1173,Super Liga (RS),1031914,28,Mitic Aleksa,,5.2,0.2,0.0,0.6,1.8,17,0.2,0.4,0.0
+1173,Super Liga (RS),1032123,0,Bosiako Francis Antwi,B. Francis Antwi,0.67,0.33,0.0,0.0,0.0,3,0.33,0.0,0.0
+1173,Super Liga (RS),1032865,0,Veljko Zuric,V. Zuric,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),1034677,0,Akrofi Daniel,A. Daniel,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
+1173,Super Liga (RS),1036538,0,Abdoul Rahim Sawadogu,A. Rahim Sawadogu,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,4.0
+1173,Super Liga (RS),1036539,0,Dimitrije Nikolic,D. Nikolic,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,1.0
+1173,Super Liga (RS),1037074,0,Dimitrije Saric,D. Saric,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
+1173,Super Liga (RS),1044198,6,Matija Ninic,M. Ninic,3.0,0.0,0.0,0.0,0.0,4,0.0,1.0,1.0
+1173,Super Liga (RS),1044200,5,Marko Lekic,M. Lekic,2.0,0.0,0.0,0.0,0.0,1,0.0,0.0,0.0
+1173,Super Liga (RS),1044214,1,Vasil Tasovski,V. Tasovski,0.0,0.0,0.0,0.0,0.0,1,0.0,1.0,0.0
+1173,Super Liga (RS),1044281,0,Milos Soprenic,M. Soprenic,0.0,0.5,0.0,2.0,0.0,1,0.0,0.5,0.5
+1173,Super Liga (RS),1044913,0,Marko Lekic,M. Lekic,1.0,0.0,0.0,1.0,1.0,6,2.0,0.0,0.0
