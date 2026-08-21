@@ -1,475 +1,475 @@
-competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_cross_receiver_run,runtype_overlap_run,runtype_underlap_run,runtype_coming_short_run,runtype_pulling_half_space_run,runtype_run_ahead_of_the_ball,runtype_pulling_wide_run,runtype_support_run,runtype_dropping_off_run
-1171,Ekstraklasa (PL),988,0,Antonio Milić,A. Milić,0.32,0.0,0.0,0.74,0.0,1,0.05,0.26,4.11
-1171,Ekstraklasa (PL),1001,36,Antonio-Mirko Čolak,A. Čolak,3.1,0.0,0.0,1.7,1.3,26,0.0,0.3,0.0
-1171,Ekstraklasa (PL),1034,2,Arkadiusz Woźniak,A. Woźniak,0.33,0.0,0.33,0.0,0.0,1,0.0,0.0,0.0
-1171,Ekstraklasa (PL),1069,0,Artem Putivtsev,A. Putivtsev,0.0,0.0,0.12,0.12,0.0,0,0.12,0.62,2.0
-1171,Ekstraklasa (PL),1081,0,Artur Jędrzejczyk,A. Jędrzejczyk,0.0,0.0,0.33,0.17,0.17,0,0.0,1.0,3.67
-1171,Ekstraklasa (PL),1208,15,Bartlomiej Pawłowski,B. Pawłowski,1.71,0.36,0.21,1.07,0.64,33,0.93,1.36,0.5
-1171,Ekstraklasa (PL),1214,19,Bartosz Kapustka,B. Kapustka,2.0,0.3,0.6,5.1,1.8,104,0.7,6.0,1.15
-1171,Ekstraklasa (PL),1292,2,Benjamin Mendy,B. Mendy,0.4,1.2,0.4,0.2,0.0,5,0.4,1.2,1.0
-1171,Ekstraklasa (PL),1904,13,Christos Donis,C. Donis,0.5,0.0,0.25,1.5,0.19,30,0.31,2.19,0.5
-1171,Ekstraklasa (PL),2115,2,Damian Dąbrowski,D. Dąbrowski,0.08,0.46,0.31,2.69,0.08,22,0.23,5.62,0.92
-1171,Ekstraklasa (PL),2124,7,Damian Szymański,D. Szymański,0.47,0.67,0.67,5.6,0.47,41,0.6,4.6,3.13
-1171,Ekstraklasa (PL),3439,75,Filip Jagiełło,F. Jagiełło,3.8,0.5,1.05,8.25,2.6,162,2.7,6.4,1.55
-1171,Ekstraklasa (PL),3673,17,Fredrik Ulvestad,F. Ulvestad,2.5,0.55,0.5,5.9,0.6,83,1.15,7.25,1.85
-1171,Ekstraklasa (PL),4569,19,Ivo Tiago dos Santos Rodrigues,Ivo Rodrigues,1.6,0.75,1.4,3.2,1.15,101,3.95,5.15,0.4
-1171,Ekstraklasa (PL),4633,0,Jakub Czerwiński,J. Czerwiński,0.24,0.06,0.06,0.18,0.06,5,0.41,1.12,4.94
-1171,Ekstraklasa (PL),4637,1,Jakub Łukowski,J. Łukowski,0.0,0.5,0.0,1.0,0.0,3,0.75,0.0,0.5
-1171,Ekstraklasa (PL),4755,71,Jarosław Kubicki,J. Kubicki,5.89,0.61,1.0,5.67,2.0,122,1.83,9.39,1.94
-1171,Ekstraklasa (PL),5681,166,Kamil Grosicki,K. Grosicki,4.23,0.73,0.82,1.64,0.64,139,1.59,2.09,0.23
-1171,Ekstraklasa (PL),5682,30,Kamil Jóźwiak,K. Jóźwiak,2.36,0.55,0.73,1.64,0.27,89,1.82,1.82,0.36
-1171,Ekstraklasa (PL),5731,24,Karol Angielski,K. Angielski,4.0,0.0,0.25,1.5,0.25,14,0.25,0.75,0.0
-1171,Ekstraklasa (PL),6727,0,Marcin Cebula,M. Cebula,0.5,0.0,1.0,5.5,1.0,9,1.0,4.5,0.5
-1171,Ekstraklasa (PL),6731,0,Marcin Kamiński,M. Kamiński,0.23,0.05,0.14,0.36,0.0,8,0.09,0.64,1.55
-1171,Ekstraklasa (PL),6925,17,Mariusz Stępiński,M. Stępiński,9.0,0.0,0.0,2.25,0.25,19,0.0,1.25,0.0
-1171,Ekstraklasa (PL),7127,0,Mateusz Cichocki,M. Cichocki,0.33,0.0,0.0,0.67,0.0,0,0.33,0.67,2.67
-1171,Ekstraklasa (PL),7128,26,Mateusz Klich,M. Klich,1.44,0.62,1.44,6.38,1.88,102,0.81,6.5,0.62
-1171,Ekstraklasa (PL),7142,41,Mateusz Wdowiak,M. Wdowiak,2.6,0.33,0.27,1.6,0.67,62,2.0,1.47,0.53
-1171,Ekstraklasa (PL),7194,6,Matías Nahuel Leiva Esquivel,N. Leiva,2.5,1.5,0.25,1.25,0.0,41,1.5,4.0,0.0
-1171,Ekstraklasa (PL),7338,2,Maxime Dominguez,M. Dominguez,0.75,0.5,0.5,4.25,0.5,17,0.5,0.5,0.25
-1171,Ekstraklasa (PL),7481,8,Michał Chrapek,M. Chrapek,1.21,0.74,0.79,3.0,0.84,106,1.47,5.95,0.74
-1171,Ekstraklasa (PL),7493,0,Michał Nalepa,M. Nalepa,0.25,0.0,0.15,0.15,0.05,3,0.15,0.2,2.65
-1171,Ekstraklasa (PL),7595,189,Mikael Ishak,M. Ishak,5.37,0.26,0.42,2.58,1.05,97,1.26,1.53,0.21
-1171,Ekstraklasa (PL),8542,0,Paweł Dawidowicz,P. Dawidowicz,0.0,1.0,4.0,0.0,0.0,2,1.0,2.0,1.0
-1171,Ekstraklasa (PL),8548,4,Paweł Olkowski,P. Olkowski,0.2,1.47,0.33,0.13,0.0,36,1.13,3.2,1.53
-1171,Ekstraklasa (PL),8551,3,Paweł Stolarski,P. Stolarski,0.11,0.95,1.21,0.37,0.05,61,1.0,3.42,3.26
-1171,Ekstraklasa (PL),8554,57,Paweł Wszołek,P. Wszołek,1.78,3.67,1.72,0.39,0.06,149,2.11,4.44,1.17
-1171,Ekstraklasa (PL),8735,11,José Ángel Pozo la Rosa,José Pozo,2.13,0.27,0.87,5.07,1.07,57,0.87,4.6,0.47
-1171,Ekstraklasa (PL),8824,2,Rafał Janicki,R. Janicki,0.42,0.0,0.05,0.32,0.0,8,0.26,0.74,3.95
-1171,Ekstraklasa (PL),8829,47,Rafał Wolski,R. Wolski,1.33,0.33,0.71,4.29,1.19,137,1.29,3.9,0.24
-1171,Ekstraklasa (PL),9651,51,Sebastian Kerk,S. Kerk,2.35,0.85,0.6,7.95,0.95,160,3.8,6.1,0.5
-1171,Ekstraklasa (PL),9863,1,Simon Gustafson,S. Gustafson,0.67,0.0,1.67,1.33,0.67,6,0.0,3.0,1.0
-1171,Ekstraklasa (PL),10212,4,Taras Romanczuk,T. Romanczuk,0.52,0.14,0.1,6.57,0.19,68,0.14,6.33,1.24
-1171,Ekstraklasa (PL),10490,0,Tomasz Mokwa,T. Mokwa,0.0,1.25,0.25,0.0,0.0,6,0.5,3.25,2.25
-1171,Ekstraklasa (PL),11441,2,Adrián Diéguez Grande,Adrián Diéguez,0.31,0.06,0.12,0.44,0.06,10,0.12,1.69,4.62
-1171,Ekstraklasa (PL),11453,15,Leonardo Koutris,L. Koutris,0.64,3.45,0.77,0.23,0.23,55,1.14,3.18,2.05
-1171,Ekstraklasa (PL),11509,8,Lukas Lerager,L. Lerager,1.5,0.5,0.0,4.0,0.25,13,1.25,2.75,1.25
-1171,Ekstraklasa (PL),11853,26,Ali  Gholizadeh,A. Gholizadeh,1.6,0.9,0.9,4.9,0.7,74,1.8,4.9,0.9
-1171,Ekstraklasa (PL),11905,41,Rafał Kurzawa,R. Kurzawa,1.89,0.32,0.89,2.37,1.16,93,1.05,3.05,0.47
-1171,Ekstraklasa (PL),12129,26,Quentin Boisgard,Q. Boisgard,3.31,0.81,0.81,3.62,1.38,107,0.94,3.44,0.5
-1171,Ekstraklasa (PL),12165,12,Rúben Gonçalo Silva Nascimento Vinagre,Rúben Vinagre,0.33,2.08,1.75,1.25,0.17,78,1.58,5.92,2.75
-1171,Ekstraklasa (PL),12410,42,Nazariy Rusyn,N. Rusyn,2.64,0.93,0.57,5.0,0.64,80,1.71,2.21,0.5
-1171,Ekstraklasa (PL),12415,14,Jean-Pierre Nsamé,J. Nsamé,6.33,0.33,0.0,1.0,0.67,7,0.0,1.33,0.0
-1171,Ekstraklasa (PL),12434,9,Petar Stojanović,P. Stojanović,1.21,1.0,0.14,0.93,0.21,43,0.71,3.43,1.14
-1171,Ekstraklasa (PL),12490,0,Bojan  Nastić,B. Nastić,0.33,0.78,0.33,0.11,0.0,27,1.33,2.11,1.11
-1171,Ekstraklasa (PL),12501,15,Arkadiusz Reca,A. Reca,0.62,2.0,1.46,0.31,0.08,57,2.54,3.77,1.77
-1171,Ekstraklasa (PL),12538,21,Efthymios Koulouris,E. Koulouris,7.25,0.25,0.0,2.25,0.75,17,1.5,0.75,0.0
-1171,Ekstraklasa (PL),12625,17,Joaquim Claude   Gonçalves Araújo,Claude Gonçalves,3.0,0.14,0.57,3.0,1.14,37,1.86,4.0,2.14
-1171,Ekstraklasa (PL),12646,0,Sergi Samper Montaña,Sergi Samper,0.16,0.0,0.16,6.95,0.11,24,0.11,5.16,1.21
-1171,Ekstraklasa (PL),12698,0,Stratos Svarnas,S. Svarnas,0.16,0.95,1.05,0.32,0.0,26,0.68,4.16,5.05
-1171,Ekstraklasa (PL),12823,39,Marc Navarro Ceciliano,Marc Navarro,0.7,1.6,0.75,0.4,0.1,90,2.45,5.0,2.85
-1171,Ekstraklasa (PL),12998,0,José Manuel Sánchez Guillén,Josema,0.05,0.1,0.14,0.57,0.0,7,0.29,1.05,5.29
-1171,Ekstraklasa (PL),13046,9,Luka Zahovič,L. Zahovič,3.83,0.17,0.17,1.83,1.5,21,1.0,3.0,0.17
-1171,Ekstraklasa (PL),13096,0,Aurélien Nguiamba,A. Nguiamba,0.17,0.06,0.0,7.11,0.33,18,0.5,2.33,3.0
-1171,Ekstraklasa (PL),13425,0,Carlos Isaac  Muñoz Obejero,Carlos Isaac,0.0,1.25,0.75,0.0,0.25,4,0.75,4.25,2.0
-1171,Ekstraklasa (PL),13703,130,Erik Jirka,E. Jirka,4.79,1.63,0.58,1.21,0.53,178,2.79,3.37,2.21
-1171,Ekstraklasa (PL),13743,131,Afimico Pululu,Afimico Pululu,4.2,0.3,0.3,1.45,0.4,91,0.3,0.9,0.15
-1171,Ekstraklasa (PL),13756,0,Lindon Selahi,L. Selahi,0.07,0.07,0.14,3.0,0.14,18,0.14,1.79,0.43
-1171,Ekstraklasa (PL),13790,1,Märten Kuusk,M. Kuusk,0.17,0.17,0.17,0.25,0.08,8,0.67,2.25,4.0
-1171,Ekstraklasa (PL),13825,5,Andreas Katsantonis,A. Katsantonis,2.5,0.25,0.0,0.5,0.0,5,0.0,0.5,0.0
-1171,Ekstraklasa (PL),13940,14,Iván López Álvarez,Ivi López,2.4,0.2,0.8,3.7,0.7,77,2.4,3.0,0.9
-1171,Ekstraklasa (PL),14081,3,Bruno André Cavaco Jordão,Bruno Jordão,2.0,0.25,0.75,5.0,0.25,21,1.5,4.75,0.5
-1171,Ekstraklasa (PL),14113,41,Musa Juwara,M. Juwara,2.71,1.18,0.35,0.76,0.24,91,1.65,2.53,0.71
-1171,Ekstraklasa (PL),14131,2,Michał Marcjanik,M. Marcjanik,0.43,0.14,0.05,0.43,0.05,7,0.14,0.76,6.62
-1171,Ekstraklasa (PL),14243,55,Mohamed Lamine Diaby-Fadiga,L. Diaby-Fadiga,2.48,0.1,0.19,1.52,0.67,93,0.19,1.9,0.05
-1171,Ekstraklasa (PL),14495,27,Adrián Dalmau Vaquer,Adrián Dalmau,3.38,0.0,0.08,1.23,0.46,17,0.15,0.69,0.0
-1171,Ekstraklasa (PL),14798,2,Jani Atanasov,J. Atanasov,1.5,0.0,0.0,2.5,0.0,4,1.5,0.0,0.0
-1171,Ekstraklasa (PL),16567,17,Fran Tudor,F. Tudor,1.07,1.93,1.07,0.47,0.0,44,0.93,3.93,3.93
-1171,Ekstraklasa (PL),16573,1,Tonio Teklić,T. Teklić,0.25,0.12,0.0,0.88,0.38,10,1.5,0.62,0.75
-1171,Ekstraklasa (PL),16602,0,Danijel Lončar,D. Lončar,0.12,0.06,0.0,0.38,0.0,1,0.0,0.06,4.88
-1171,Ekstraklasa (PL),16623,8,Boško Šutalo,B. Šutalo,0.41,2.0,0.88,0.29,0.06,70,1.65,4.76,3.76
-1171,Ekstraklasa (PL),16624,36,Erik Janža,E. Janža,0.5,4.59,0.55,1.09,0.18,181,2.0,5.86,3.64
-1171,Ekstraklasa (PL),16714,2,Michal Sáček,M. Sáček,0.5,3.0,2.75,0.0,0.0,17,1.75,8.75,4.0
-1171,Ekstraklasa (PL),16717,5,Srdjan Plavšić,S. Plavšić,0.5,1.0,0.5,1.5,0.0,19,2.5,2.5,1.5
-1171,Ekstraklasa (PL),16834,25,Osman Bukari,O. Bukari,2.25,1.0,0.0,1.25,0.5,31,3.5,2.75,0.25
-1171,Ekstraklasa (PL),16958,22,Otar Kakabadze,O. Kakabadze,2.31,0.85,0.54,1.0,0.38,68,1.85,4.08,1.69
-1171,Ekstraklasa (PL),16994,0,Przemysław Wiśniewski,P. Wiśniewski,0.25,0.0,0.0,0.0,0.0,1,0.0,0.5,3.75
-1171,Ekstraklasa (PL),16997,0,Paweł Bochniewicz,P. Bochniewicz,0.0,2.0,0.0,0.0,0.0,1,0.0,0.0,0.0
-1171,Ekstraklasa (PL),17001,74,Jesús Jiménez Núñez,Jesús Jiménez,2.74,0.21,0.26,1.68,0.95,112,1.0,2.05,0.11
-1171,Ekstraklasa (PL),17009,99,Kamil Zapolnik,K. Zapolnik,6.43,0.0,0.14,0.93,1.21,62,0.43,0.71,0.07
-1171,Ekstraklasa (PL),17015,41,Krzysztof Kubica,K. Kubica,2.1,0.05,0.25,2.75,0.55,53,0.2,2.8,0.4
-1171,Ekstraklasa (PL),17016,11,Maciej Ambrosiewicz,M. Ambrosiewicz,0.86,0.43,0.38,3.52,0.48,93,0.43,5.81,0.67
-1171,Ekstraklasa (PL),17020,10,Robert Gumny,R. Gumny,1.23,0.54,0.54,0.15,0.23,47,1.38,1.77,1.31
-1171,Ekstraklasa (PL),17031,62,Marcin Wasielewski,M. Wasielewski,0.85,2.4,0.75,0.75,0.1,129,1.35,3.15,2.45
-1171,Ekstraklasa (PL),17192,5,Konstantinos Sotiriou,K. Sotiriou,0.45,0.0,0.0,0.5,0.0,4,0.0,0.4,2.0
-1171,Ekstraklasa (PL),17218,1,Lukas Klemenz,L. Klemenz,0.33,0.22,0.28,0.22,0.06,5,0.72,1.89,6.17
-1171,Ekstraklasa (PL),17323,1,Radovan Pankov,R. Pankov,0.36,0.27,0.82,0.36,0.0,8,0.18,1.0,5.36
-1171,Ekstraklasa (PL),17408,47,Radu Boboc,R. Boboc,1.0,2.22,1.06,0.33,0.11,67,1.5,2.5,0.78
-1171,Ekstraklasa (PL),17597,9,Vladislavs Gutkovskis,V. Gutkovskis,2.33,0.0,0.33,1.33,0.0,9,0.33,0.67,0.0
-1171,Ekstraklasa (PL),17974,0,Kellyn  Acosta,K. Acosta,0.0,0.5,1.0,14.0,0.5,9,0.5,8.0,3.5
-1171,Ekstraklasa (PL),18350,23,Jason Eyenga-Lokilo,J. Lokilo,2.5,0.3,0.2,1.7,0.4,39,1.7,2.6,0.7
-1171,Ekstraklasa (PL),18444,28,Quentin Lecoeuche,Q. Lecoeuche,2.06,3.18,0.94,0.29,0.06,102,2.0,4.24,1.29
-1171,Ekstraklasa (PL),19022,0,Hervé Matthys,H. Matthys,0.19,0.06,0.19,0.25,0.06,12,0.38,1.44,4.19
-1171,Ekstraklasa (PL),19136,91,Adam Zreľák,A. Zreľák,4.12,0.06,0.44,1.44,0.75,63,0.19,0.44,0.0
-1171,Ekstraklasa (PL),19201,43,Roberto Massimo,R. Massimo,2.14,0.0,0.14,0.43,0.29,44,1.29,0.43,0.29
-1171,Ekstraklasa (PL),19383,48,Linus Wahlqvist,L. Wahlqvist,1.4,1.45,2.05,0.9,0.25,88,2.3,5.2,3.55
-1171,Ekstraklasa (PL),19983,2,Jakub Łabojko,J. Łabojko,0.0,0.05,0.16,5.0,0.47,62,0.32,2.68,0.58
-1171,Ekstraklasa (PL),19990,40,Mathieu Scalet,M. Scalet,1.53,0.24,0.35,1.53,1.24,79,1.59,1.59,0.47
-1171,Ekstraklasa (PL),19995,183,Jesús Imaz Ballesté,Jesús Imaz,6.75,0.35,0.45,5.85,1.95,182,3.65,4.55,0.45
-1171,Ekstraklasa (PL),19996,0,Zoran  Arsenić,Z. Arsenić,0.14,0.0,0.0,0.29,0.14,4,0.14,0.57,5.86
-1171,Ekstraklasa (PL),20009,66,Dawid Błanik,D. Błanik,4.75,0.94,0.81,1.94,0.94,138,1.62,2.5,0.38
-1171,Ekstraklasa (PL),20016,2,Sebastian Kowalczyk,S. Kowalczyk,1.67,0.33,1.0,2.0,0.0,4,2.67,1.33,0.67
-1171,Ekstraklasa (PL),20023,2,Kamil Dawid Piątkowski,K. Piątkowski,0.29,0.43,1.36,0.21,0.0,9,1.07,2.86,5.57
-1171,Ekstraklasa (PL),20024,0,Bartosz Kopacz,B. Kopacz,0.17,0.06,0.06,0.56,0.06,2,0.11,0.33,1.44
-1171,Ekstraklasa (PL),20035,2,Alan Czerwiński,A. Czerwiński,0.29,0.82,0.41,0.0,0.0,29,1.59,2.88,4.24
-1171,Ekstraklasa (PL),20046,0,Damian Rasak,D. Rasak,0.0,0.0,0.0,3.0,0.0,1,0.0,1.0,0.0
-1171,Ekstraklasa (PL),20066,6,Michał Rakoczy,M. Rakoczy,0.5,0.0,1.25,1.25,1.0,10,1.0,1.25,0.0
-1171,Ekstraklasa (PL),20094,62,Wiktor Długosz,W. Długosz,2.69,1.19,0.69,1.12,0.56,105,1.5,2.69,0.75
-1171,Ekstraklasa (PL),20126,3,Arkadiusz  Jędrych,A. Jędrych,0.29,0.0,0.05,0.24,0.0,3,0.14,0.24,5.05
-1171,Ekstraklasa (PL),20132,13,Sebastian Milewski,S. Milewski,1.08,0.0,0.5,3.42,0.17,54,0.25,4.25,0.67
-1171,Ekstraklasa (PL),20145,2,Patryk Dziczek,P. Dziczek,0.75,0.05,0.9,9.6,0.45,66,0.6,5.55,1.75
-1171,Ekstraklasa (PL),20146,29,Jorge Félix Muñoz García,Jorge Félix,4.43,0.24,0.24,4.38,1.48,146,1.33,4.24,0.29
-1171,Ekstraklasa (PL),20168,0,Tomasz Makowski,T. Makowski,0.6,0.3,0.3,2.4,0.1,18,0.2,3.2,0.3
-1171,Ekstraklasa (PL),20173,0,Mateusz Żyro,M. Żyro,0.25,0.06,0.12,0.12,0.06,4,0.06,0.88,2.69
-1171,Ekstraklasa (PL),20176,5,Rafał Augustyniak,R. Augustyniak,0.58,0.17,0.25,2.92,0.25,15,0.42,2.42,1.33
-1171,Ekstraklasa (PL),20193,4,Nemanja Mijušković,N. Mijušković,0.35,0.18,0.18,0.41,0.06,10,0.41,0.82,1.29
-1171,Ekstraklasa (PL),20259,0,Andy Pelmard,A. Pelmard,0.0,0.08,0.0,0.67,0.0,4,0.08,0.67,5.67
-1171,Ekstraklasa (PL),23111,8,Pape Meïssa MeïssBa,P. Meïssa Ba,2.0,0.0,0.25,0.25,0.25,9,0.25,0.0,0.0
-1171,Ekstraklasa (PL),23510,1,Paulius Golubickas,P. Golubickas,0.33,0.0,0.0,0.0,0.33,4,1.0,1.67,0.0
-1171,Ekstraklasa (PL),23561,40,Renat Dadashov,R. Dadashov,3.15,0.08,0.15,0.77,0.46,34,0.08,0.46,0.0
-1171,Ekstraklasa (PL),23836,1,Tomás Franco Tavares,T. Tavares,0.25,0.38,0.25,4.62,0.25,13,0.0,2.12,0.62
-1171,Ekstraklasa (PL),23975,51,Alejandro Pozo Pozo,Alex Pozo,1.76,1.29,0.38,0.62,0.1,126,2.48,3.43,0.95
-1171,Ekstraklasa (PL),24013,22,Romário Manuel Silva Baró,Romário Baró,1.86,0.07,0.5,3.14,1.21,53,0.93,3.14,0.07
-1171,Ekstraklasa (PL),24074,0,Luis Perea Hernández,Luis Perea,0.08,0.08,0.0,1.25,0.08,4,0.08,0.92,0.5
-1171,Ekstraklasa (PL),24244,28,Rifet Kapič,R. Kapič,0.86,0.52,0.43,3.71,1.0,105,1.43,6.43,1.57
-1171,Ekstraklasa (PL),24403,12,Viktor Popov,V. Popov,1.75,0.5,0.88,0.0,0.0,34,0.88,2.0,0.88
-1171,Ekstraklasa (PL),24408,81,Andi Zeqiri,A. Zeqiri,2.13,0.0,0.0,1.0,1.27,67,0.27,1.07,0.07
-1171,Ekstraklasa (PL),24413,200,Filip Stojiljković,F. Stojiljković,7.11,0.0,0.0,0.94,0.56,83,0.28,0.22,0.0
-1171,Ekstraklasa (PL),24417,0,Attila Szalai,A. Szalai,0.0,0.67,0.0,0.67,0.67,0,0.33,1.67,6.67
-1171,Ekstraklasa (PL),24939,83,Antonio Cortes Heredia,Antoñín Cortés,5.42,0.26,0.32,1.11,0.37,97,1.53,0.47,0.21
-1171,Ekstraklasa (PL),25081,0,Mateusz Skrzypczak,M. Skrzypczak,0.07,0.0,0.2,0.6,0.0,3,0.27,1.33,5.27
-1171,Ekstraklasa (PL),25087,19,Jean Carlos Silva Rocha,Jean Carlos,0.33,1.58,0.25,1.0,0.25,65,1.58,3.83,1.58
-1171,Ekstraklasa (PL),25090,1,Serafin Szota,S. Szota,0.0,0.33,0.33,0.33,0.0,0,1.0,0.67,4.67
-1171,Ekstraklasa (PL),25093,13,Lucas Lima Linhares,Luquinhas,1.0,0.33,0.67,2.0,0.67,16,3.0,2.67,1.0
-1171,Ekstraklasa (PL),25095,23,Kacper Kostorz,K. Kostorz,3.1,0.0,0.0,1.0,1.2,16,0.6,0.2,0.0
-1171,Ekstraklasa (PL),25096,12,Mateusz Praszelik,M. Praszelik,1.64,0.07,0.57,3.71,0.86,87,0.64,2.64,0.21
-1171,Ekstraklasa (PL),25097,41,Maciej Rosołek,M. Rosołek,4.0,0.0,0.38,0.88,0.25,24,0.0,0.38,0.12
-1171,Ekstraklasa (PL),25098,22,Patryk Szysz,P. Szysz,1.36,0.0,0.09,2.45,1.09,27,1.18,0.36,0.0
-1171,Ekstraklasa (PL),25106,10,Patryk Kun,P. Kun,1.67,1.33,2.33,0.5,0.17,52,2.17,5.67,1.5
-1171,Ekstraklasa (PL),25110,0,Arkadiusz Kasperkiewicz,A. Kasperkiewicz,0.22,0.17,0.22,0.33,0.0,7,0.06,0.94,1.78
-1171,Ekstraklasa (PL),25119,23,Marcel  Wędrychowski,M. Wędrychowski,1.12,0.18,0.76,1.71,0.41,76,1.0,1.88,0.35
-1171,Ekstraklasa (PL),25122,12,Maciej Wolski,M. Wolski,0.65,1.82,0.53,0.41,0.06,44,2.88,3.53,1.24
-1171,Ekstraklasa (PL),25132,152,Łukasz Sekulski,L. Sekulski,6.5,0.25,0.1,5.05,0.8,130,0.85,1.5,0.15
-1171,Ekstraklasa (PL),25136,61,Jan Grzesik,J. Grzesik,1.76,2.76,2.33,0.33,0.0,155,1.71,4.9,2.0
-1171,Ekstraklasa (PL),25383,0,Marco Burch,M. Burch,0.2,0.2,0.6,3.4,0.8,6,0.4,3.8,3.8
-1171,Ekstraklasa (PL),25576,33,Ibán Salvador Edu,Ibán Salvador,1.4,0.13,0.53,1.67,0.6,40,0.93,1.4,0.13
-1171,Ekstraklasa (PL),25617,0,Juan De Dios de Dios Rivas Margalef,Juande Rivas,0.11,0.0,0.17,0.61,0.0,2,0.0,0.39,4.44
-1171,Ekstraklasa (PL),25698,4,Sergio Lozano Lluch,Sergio Lozano,1.44,0.0,0.44,2.56,0.78,43,1.67,5.44,0.0
-1171,Ekstraklasa (PL),25710,13,Borja Galán González,Borja Galán,1.7,1.15,0.45,2.8,0.0,96,2.4,4.25,4.05
-1171,Ekstraklasa (PL),25810,65,Angel Baena Pérez,Angel Baena,1.45,0.65,0.3,1.0,0.3,86,1.25,1.35,0.3
-1171,Ekstraklasa (PL),25891,26,Hugo Claudio Vallejo Avilés,Hugo Vallejo,2.33,0.53,0.93,1.6,0.4,96,1.27,3.27,0.33
-1171,Ekstraklasa (PL),26059,2,Lukas Podolski,L. Podolski,0.82,0.09,0.45,0.27,0.18,2,0.09,1.45,0.09
-1171,Ekstraklasa (PL),26659,1,Ricardo Visus Contreras,Ricardo Visus,0.11,0.0,0.0,0.67,0.0,4,0.06,1.06,6.0
-1171,Ekstraklasa (PL),26661,21,Jorge Jiménez Rodríguez,Jorge Jiménez,2.62,0.38,0.38,2.38,0.5,56,1.25,5.38,0.38
-1171,Ekstraklasa (PL),26699,56,Paul Mukairu,P. Mukairu,2.36,0.55,0.55,0.77,0.86,118,1.41,1.23,0.09
-1171,Ekstraklasa (PL),26770,8,Jesse Bosch,J. Bosch,0.73,0.09,0.27,4.64,0.55,27,0.09,5.45,1.0
-1171,Ekstraklasa (PL),27178,1,João Gervásio Bragança Moutinho,João Moutinho,0.0,1.6,0.9,0.6,0.0,27,1.4,2.7,3.2
-1171,Ekstraklasa (PL),27296,0,Ibrahima Camará,I. Camará,0.0,0.0,0.0,2.08,0.0,8,0.23,1.92,0.46
-1171,Ekstraklasa (PL),27304,24,Matchoi Bobó Djaló,Matchoi Djaló,1.0,0.15,0.23,1.31,0.54,46,0.62,1.92,0.38
-1171,Ekstraklasa (PL),27405,9,Louka Daniel Prip Andreasen,L. Prip,1.88,0.5,0.0,1.25,0.25,50,2.0,2.88,0.62
-1171,Ekstraklasa (PL),27406,1,Peter Therkildsen,P. Therkildsen,0.12,0.75,0.75,0.5,0.12,33,0.75,2.38,0.62
-1171,Ekstraklasa (PL),27519,5,Daniel Pacheco Lobato,Dani Pacheco,0.19,0.29,0.14,4.76,0.24,46,0.71,3.95,1.0
-1171,Ekstraklasa (PL),27678,87,Leonardo Miramar Rocha,Leonardo Rocha,4.42,0.0,0.0,0.68,0.05,64,0.16,0.47,0.0
-1171,Ekstraklasa (PL),27803,78,Ilya Shkurin,I. Shkurin,3.24,0.0,0.12,1.18,0.59,53,0.18,0.47,0.06
-1171,Ekstraklasa (PL),28144,0,Gustav Henriksson,G. Henriksson,0.11,0.0,0.0,0.37,0.0,1,0.0,0.26,1.95
-1171,Ekstraklasa (PL),28192,2,Hussein Ali Haidar,Hussein Ali,0.25,0.75,0.5,0.0,0.0,13,0.75,2.75,2.12
-1171,Ekstraklasa (PL),29138,3,Matej Rodin,M. Rodin,0.4,0.2,0.07,0.4,0.07,12,0.2,0.87,2.93
-1171,Ekstraklasa (PL),29447,85,Leo Bengtsson,L. Bengtsson,2.73,0.5,0.36,2.09,0.55,148,2.23,1.95,0.59
-1171,Ekstraklasa (PL),29624,122,Sebastian Bergier,S. Bergier,6.61,0.22,0.22,3.11,1.06,124,0.56,1.44,0.06
-1171,Ekstraklasa (PL),29632,13,Karol Struski,K. Struski,1.27,0.4,0.53,3.07,0.6,38,1.87,3.67,2.4
-1171,Ekstraklasa (PL),29633,7,Bartłomiej  Wdowik,B. Wdowik,0.05,2.14,0.9,0.14,0.05,74,1.52,6.52,3.05
-1171,Ekstraklasa (PL),29640,12,Kacper  Smoliński,K. Smoliński,2.2,0.2,1.3,3.9,1.3,34,1.5,1.9,0.3
-1171,Ekstraklasa (PL),29660,9,Piotr Krawczyk,P. Krawczyk,1.33,0.0,0.0,0.0,0.0,4,0.0,0.33,0.0
-1171,Ekstraklasa (PL),29662,14,Aleksander Buksa,А. Buksa,2.0,0.0,0.0,1.25,0.0,5,0.0,0.0,0.0
-1171,Ekstraklasa (PL),29665,1,Damian Michalski,D. Michalski,0.27,0.0,0.0,0.18,0.0,2,0.18,0.18,2.55
-1171,Ekstraklasa (PL),29666,30,Dawid Kocyła,D. Kocyła,1.39,0.78,0.39,1.06,0.39,79,2.06,1.89,0.89
-1171,Ekstraklasa (PL),29690,26,Kacper Chodyna,K. Chodyna,1.25,0.75,0.75,1.12,0.12,49,1.0,0.88,0.38
-1171,Ekstraklasa (PL),29919,21,Aleksandar Ćirković,A. Ćirković,2.46,0.46,0.54,1.0,0.46,78,1.54,1.31,0.23
-1171,Ekstraklasa (PL),29985,30,Emil Kornvig,E. Kornvig,4.0,0.25,1.5,3.5,3.0,53,2.0,3.25,0.25
-1171,Ekstraklasa (PL),30068,1,Apostolos Konstantopoulos,A. Konstantopoulos,0.14,0.0,0.43,0.14,0.0,10,0.71,3.07,2.36
-1171,Ekstraklasa (PL),30269,39,Leandro Mário Baldé Sanca,Leandro Sanca,1.91,1.36,0.64,1.14,0.36,162,1.45,2.55,0.05
-1171,Ekstraklasa (PL),30596,14,Patrik Wålemark,P. Wålemark,2.6,0.0,0.4,1.4,1.2,18,0.2,1.4,0.0
-1171,Ekstraklasa (PL),30623,0,Elias Olsson,E. Olsson,0.12,0.0,0.0,0.25,0.0,1,0.38,0.38,1.75
-1171,Ekstraklasa (PL),30745,50,Maksym Chłań,M. Chłań,3.29,0.93,1.0,2.14,0.93,110,2.79,2.5,0.36
-1171,Ekstraklasa (PL),30782,27,Filip Szymczak,F. Szymczak,1.5,0.0,0.5,0.5,2.5,20,2.25,1.5,0.25
-1171,Ekstraklasa (PL),30786,0,Ariel  Mosór,A. Mosór,0.0,0.0,0.2,0.4,0.0,2,0.2,1.6,5.8
-1171,Ekstraklasa (PL),30788,20,Nikodem Niski,N. Niski,1.22,0.5,0.28,1.11,0.06,56,0.83,1.11,0.22
-1171,Ekstraklasa (PL),30791,3,Kryspin Szcześniak,K. Szcześniak,0.25,0.38,0.69,0.38,0.0,11,0.75,1.25,3.62
-1171,Ekstraklasa (PL),30798,21,Kacper Urbański,K. Urbański,2.43,0.57,1.14,3.21,0.43,94,2.29,3.07,1.0
-1171,Ekstraklasa (PL),30799,26,Kacper Sezonienko,K. Sezonienko,2.21,0.21,0.47,1.63,0.63,99,2.53,2.0,0.47
-1171,Ekstraklasa (PL),30800,31,Kamil  Lukoszek ,K. Lukoszek,2.23,0.69,1.15,0.85,0.77,77,2.08,1.85,0.54
-1171,Ekstraklasa (PL),30801,40,Jakub Sypek,J. Sypek,1.11,0.32,0.32,0.68,0.32,109,1.58,0.84,0.32
-1171,Ekstraklasa (PL),30816,0,Aleksander  Paluszek,A. Paluszek,0.0,0.0,0.0,1.0,0.0,0,0.0,1.0,2.0
-1171,Ekstraklasa (PL),30871,4,Enrique Gómez Hermoso,Kike Hermoso,0.31,0.08,0.08,0.54,0.0,3,0.46,0.69,6.15
-1171,Ekstraklasa (PL),30897,28,David González Plata,Nono,2.58,0.32,0.11,2.26,0.95,79,1.47,2.42,0.58
-1171,Ekstraklasa (PL),30944,2,Bogdan Racovițan,B. Racovițan,0.17,0.06,0.11,0.39,0.0,8,0.33,0.94,6.39
-1171,Ekstraklasa (PL),31043,52,Vahan Bichakhchyan,V. Bichakhchyan,2.38,0.06,0.5,1.69,0.44,84,0.5,3.25,0.31
-1171,Ekstraklasa (PL),31320,1,Pau Resta Tell,P. Resta,0.21,0.21,0.21,0.29,0.0,6,0.43,1.43,1.36
-1171,Ekstraklasa (PL),31962,161,Eduardo David Espiau Hernández,Edu Espiau,5.05,0.16,0.05,2.63,1.0,95,0.58,0.79,0.0
-1171,Ekstraklasa (PL),31996,0,Jérémy Demian Blasco,J. Blasco,0.0,0.0,0.0,0.5,0.0,0,0.12,0.62,5.88
-1171,Ekstraklasa (PL),32021,11,Sergio Guerrero Romero,Sergio Guerrero,0.67,0.0,0.22,2.22,0.33,51,1.33,3.5,0.72
-1171,Ekstraklasa (PL),32026,0,Alvis Jaunzems,A. Jaunzems,0.0,1.11,1.33,0.0,0.11,21,1.0,3.56,1.0
-1171,Ekstraklasa (PL),32029,0,Julien  Célestine,J. Célestine,0.0,0.12,0.38,0.0,0.0,2,0.75,1.12,6.38
-1171,Ekstraklasa (PL),32124,15,Brandon Dominguès,B. Dominguès,3.25,0.75,0.5,1.0,0.25,29,1.75,3.0,0.0
-1171,Ekstraklasa (PL),32281,11,Juergen Farid Elitim Sepúlveda,J. Elitim,1.46,0.15,1.15,3.92,1.0,56,0.46,6.77,1.0
-1171,Ekstraklasa (PL),32464,17,Szymon Czyż,S. Czyż,1.06,0.0,0.56,5.67,0.67,55,1.0,2.44,1.5
-1171,Ekstraklasa (PL),32469,42,Bogdan Viunnyk,B. Viunnyk,4.06,0.29,0.12,1.47,1.12,95,0.65,2.12,0.12
-1171,Ekstraklasa (PL),32552,88,Martin Minchev,M. Minchev,3.0,0.62,0.52,1.71,0.62,118,1.62,2.14,0.1
-1171,Ekstraklasa (PL),32658,29,Imad Rondić,I. Rondić,3.25,0.0,0.08,2.58,0.92,43,0.25,1.0,0.0
-1171,Ekstraklasa (PL),32690,23,Lukáš Sadílek,L. Sadílek,7.25,1.0,3.25,3.75,0.75,33,2.25,8.25,2.25
-1171,Ekstraklasa (PL),32704,51,Žan Rogelj,Ž. Rogelj,1.47,3.07,1.13,1.07,0.0,90,2.8,4.8,0.93
-1171,Ekstraklasa (PL),32782,101,Osvaldo Pedro Capemba,Capita,1.94,0.44,0.94,1.06,0.28,148,1.94,1.17,0.22
-1171,Ekstraklasa (PL),32783,51,Abdoul Fessal Tapsoba,A. Tapsoba,1.7,0.3,0.1,0.65,0.15,87,0.9,0.95,0.1
-1171,Ekstraklasa (PL),32970,2,Leonardo Borges da Silva,Léo Borges,0.0,2.11,0.78,0.44,0.11,14,0.44,2.67,1.0
-1171,Ekstraklasa (PL),33225,21,Leon Flach,L. Flach,1.61,0.06,1.06,6.22,0.78,46,0.56,2.78,1.44
-1171,Ekstraklasa (PL),33237,68,Vladimir Nikolov,V. Nikolov,3.0,0.06,0.0,0.83,0.17,55,0.22,0.89,0.0
-1171,Ekstraklasa (PL),33536,4,Aleks Ławniczak,A. Ławniczak,0.29,0.0,0.29,0.12,0.18,5,0.24,0.88,3.29
-1171,Ekstraklasa (PL),33542,47,Kajetan Szmyt,K. Szmyt,1.63,1.53,0.21,1.53,0.47,125,2.84,1.89,0.74
-1171,Ekstraklasa (PL),33546,34,Bartosz Nowak,B. Nowak,4.81,0.29,0.86,9.0,1.1,190,1.81,6.33,0.52
-1171,Ekstraklasa (PL),33547,21,Norbert Wojtuszek,N. Wojtuszek,0.25,1.85,2.3,0.5,0.05,97,2.1,6.9,4.0
-1171,Ekstraklasa (PL),33556,13,Grzegorz Tomasiewicz,G. Tomasiewicz,0.95,0.6,0.85,4.0,0.45,50,0.7,6.3,1.95
-1171,Ekstraklasa (PL),33567,20,Szymon Sobczak,S. Sobczak,1.5,0.0,0.0,0.62,0.25,8,0.12,0.38,0.0
-1171,Ekstraklasa (PL),33571,3,Dawid Abramowicz,D. Abramowicz,0.4,3.3,0.4,0.2,0.0,26,0.5,2.1,3.5
-1171,Ekstraklasa (PL),33573,4,Konrad Gruszkowski,K. Gruszkowski,0.5,0.5,0.38,0.25,0.0,24,0.88,0.88,0.62
-1171,Ekstraklasa (PL),33575,0,Michał Rzuchowski,M. Rzuchowski,0.0,0.0,1.0,0.0,0.0,0,0.0,0.0,0.0
-1171,Ekstraklasa (PL),33607,62,Mariusz Fornalczyk,M. Fornalczyk,3.29,0.9,0.38,1.48,0.29,155,1.71,1.33,0.43
-1171,Ekstraklasa (PL),33622,10,Zié Mohamed Ouattara,Z. Ouattara,0.25,1.75,0.8,1.05,0.15,72,1.1,4.7,1.45
-1171,Ekstraklasa (PL),33648,9,Joel Vieira Pereira,Joel Pereira,1.05,1.95,0.32,1.05,0.32,87,2.26,6.0,2.32
-1171,Ekstraklasa (PL),33882,3,Erick Ouma Otieno,E. Ouma Otieno,0.25,2.75,0.5,0.0,0.25,10,1.0,3.5,1.0
-1171,Ekstraklasa (PL),33947,24,Ajdin Hasić,A. Hasić,2.87,0.67,0.93,2.07,0.93,103,2.47,4.33,0.47
-1171,Ekstraklasa (PL),34500,5,Josip Čorluka,J. Čorluka,0.54,1.31,0.54,0.77,0.0,37,1.77,4.23,1.85
-1171,Ekstraklasa (PL),34534,19,Ema Twumasi,E. Twumasi,0.95,1.63,1.26,1.16,0.37,94,1.42,6.0,2.58
-1171,Ekstraklasa (PL),34577,98,Pablo Rodríguez Delgado,Pablo Rodríguez,4.29,0.47,1.0,5.18,1.71,164,2.94,4.47,0.53
-1171,Ekstraklasa (PL),35017,2,Filip Borowski,F. Borowski,0.6,2.4,0.6,0.0,0.2,12,0.6,2.4,0.8
-1171,Ekstraklasa (PL),35317,0,Miłosz Matysik,M. Matysik,1.0,0.0,0.0,0.0,0.0,0,0.0,1.0,4.0
-1171,Ekstraklasa (PL),35529,15,Hide Vitalucci,H. Vitalucci,1.17,0.33,0.0,4.33,0.33,14,1.5,2.83,0.5
-1171,Ekstraklasa (PL),35531,0,Gabriel André Joseph Charpentier,G. Charpentier,0.0,0.0,0.0,0.0,0.0,3,0.0,1.0,0.0
-1171,Ekstraklasa (PL),36069,9,Youssuf Sylla,Y. Sylla,2.25,0.0,0.0,0.25,0.0,16,0.0,0.0,0.0
-1171,Ekstraklasa (PL),36946,17,Marko Bulat,M. Bulat,1.37,0.47,1.74,7.63,1.16,80,1.68,6.0,1.89
-1171,Ekstraklasa (PL),36948,77,Deni Jurić,D. Jurić,6.56,0.0,0.0,1.22,1.22,56,0.44,0.33,0.0
-1171,Ekstraklasa (PL),37020,22,Mauro Perković,M. Perković,1.5,1.69,1.94,1.19,0.31,94,1.06,3.88,2.62
-1171,Ekstraklasa (PL),37421,0,Patrik Hellebrand,P. Hellebrand,0.1,0.0,0.29,8.76,0.43,40,0.24,7.19,3.19
-1171,Ekstraklasa (PL),37541,1,Ivan Zhelizko,I. Zhelizko,0.21,0.21,0.16,4.53,0.26,38,0.37,4.05,1.05
-1171,Ekstraklasa (PL),37626,0,Marek Hanousek,M. Hanousek,0.0,0.0,0.0,1.0,0.0,0,0.0,1.0,0.12
-1171,Ekstraklasa (PL),37814,18,Antoni Kozubal,A. Kozubal,1.86,0.1,0.43,7.52,0.95,118,1.14,8.81,1.86
-1171,Ekstraklasa (PL),37815,1,Krystian Palacz,K. Palacz,0.17,3.17,1.17,0.0,0.0,27,0.33,4.33,2.67
-1171,Ekstraklasa (PL),37835,1,Jan Biegański,J. Biegański,0.0,0.0,0.36,5.45,0.82,26,0.18,4.0,0.64
-1171,Ekstraklasa (PL),39772,58,Michalis Kosidis,M. Kosidis,2.68,0.0,0.18,0.77,0.45,81,0.23,0.77,0.0
-1171,Ekstraklasa (PL),42121,1,Steve Kingue,S. Kingue,0.18,0.06,0.0,0.47,0.0,0,0.12,0.53,3.53
-1171,Ekstraklasa (PL),42628,50,Francisco Javier Álvarez Rodríguez,Fran Álvarez,3.74,0.21,0.11,5.05,1.21,91,1.89,4.74,0.63
-1171,Ekstraklasa (PL),42766,0,Brahim Traoré,B. Traoré,0.17,0.17,0.0,0.17,0.0,1,0.67,1.0,3.0
-1171,Ekstraklasa (PL),43113,16,Sam Greenwood,S. Greenwood,2.14,0.86,1.14,4.29,1.64,74,3.36,4.29,0.86
-1171,Ekstraklasa (PL),43248,6,Alejandro Cantero Sánchez,Alejandro Cantero,0.67,0.17,0.17,0.5,0.0,9,0.33,0.33,0.0
-1171,Ekstraklasa (PL),46307,40,Juljan Shehu,J. Shehu,2.57,0.29,0.81,5.57,1.1,120,0.9,5.86,0.81
-1171,Ekstraklasa (PL),49236,14,Matúš Kmet,M. Kmet,0.85,1.69,0.77,0.54,0.15,46,3.0,3.23,1.0
-1171,Ekstraklasa (PL),49242,255,Tomáš Bobček,T. Bobček,8.1,0.2,0.35,1.5,2.4,124,0.8,1.15,0.2
-1171,Ekstraklasa (PL),49256,100,Dawid Kurminowski,D. Kurminowski,3.58,0.11,0.11,0.79,0.47,51,0.16,0.53,0.0
-1171,Ekstraklasa (PL),49305,5,Aziel Jackson,A. Jackson,1.17,0.33,0.17,0.67,0.33,25,0.17,2.0,0.17
-1171,Ekstraklasa (PL),49327,1,Dušan Stojinovič,D. Stojinovič,0.31,0.15,0.31,0.31,0.0,9,0.54,1.15,5.38
-1171,Ekstraklasa (PL),49585,0,Lucas Gabriel Masoero Masi,L. Masoero,0.0,0.0,0.0,0.45,0.0,1,0.64,1.18,0.91
-1171,Ekstraklasa (PL),50064,27,Tornike Gaprindashvili,T. Gaprindashvili,0.75,0.56,0.44,0.56,0.19,59,1.0,2.0,0.5
-1171,Ekstraklasa (PL),58998,1,Mihael Mlinarić,M. Mlinarić,2.0,0.0,1.0,1.0,1.0,6,1.0,1.0,0.0
-1171,Ekstraklasa (PL),59053,72,Kevin Custovic,K. Custovic,1.11,1.11,0.47,0.26,0.21,77,1.21,1.84,0.53
-1171,Ekstraklasa (PL),60026,2,Stelios Andreou,S. Andreou,0.21,0.86,0.29,0.29,0.14,10,1.79,2.14,4.36
-1171,Ekstraklasa (PL),60116,20,Konrad Matuszewski,K. Matuszewski,0.95,3.16,1.53,0.26,0.11,87,1.05,4.11,0.84
-1171,Ekstraklasa (PL),60118,60,Michael Ameyaw,M. Ameyaw,2.21,1.53,0.58,1.58,0.42,113,2.16,3.95,2.42
-1171,Ekstraklasa (PL),60123,45,Andrzej  Trubeha,A. Trubeha,2.46,0.23,0.23,1.38,1.08,59,0.85,1.15,0.15
-1171,Ekstraklasa (PL),60135,11,Karol Knap,K. Knap,0.82,0.55,0.45,1.73,0.73,33,1.36,1.09,0.36
-1171,Ekstraklasa (PL),60137,1,Michal Kaput,M. Kaput,0.12,0.06,0.47,5.76,0.29,28,0.53,3.53,0.59
-1171,Ekstraklasa (PL),60141,0,Leândro Rossi Pereira,Leândro,0.0,0.0,1.0,0.0,0.0,0,0.0,0.0,0.0
-1171,Ekstraklasa (PL),60143,30,Adam Radwański,A. Radwański,1.5,0.45,0.4,1.15,0.45,93,1.3,2.65,0.35
-1171,Ekstraklasa (PL),60145,2,Mateusz Grzybek,M. Grzybek,0.5,1.0,0.0,0.0,0.0,4,0.25,2.0,0.25
-1171,Ekstraklasa (PL),60370,125,Morgan Faßbender,M. Faßbender,2.0,0.33,0.38,1.19,0.86,152,1.62,0.86,0.24
-1171,Ekstraklasa (PL),60565,13,Migouel Alfarela,M. Alfarela,3.0,1.0,0.75,1.75,0.0,33,2.5,1.0,0.75
-1171,Ekstraklasa (PL),60624,0,Marin Karamarko,M. Karamarko,0.0,0.5,0.0,0.0,0.0,3,0.5,0.5,1.0
-1171,Ekstraklasa (PL),60705,3,Aleksandre Kalandadze,A. Kalandadze,0.5,0.5,0.38,0.12,0.0,16,0.25,0.62,0.38
-1171,Ekstraklasa (PL),61158,5,Amir Al Ammari,Amir Al Ammari,0.27,0.18,0.41,5.82,0.77,70,0.73,2.86,2.18
-1171,Ekstraklasa (PL),61338,0,Bernardo Maria Morais Cardoso Vital,Bernardo Vital,0.0,0.0,0.07,0.27,0.0,6,0.13,1.27,7.0
-1171,Ekstraklasa (PL),61813,71,Maurides Roque Junior,Maurides,5.29,0.0,0.0,2.0,0.29,70,0.05,1.0,0.0
-1171,Ekstraklasa (PL),61846,79,Bradly van Hoeven,B. van Hoeven,2.12,0.41,0.59,0.65,0.35,102,1.06,0.76,0.47
-1171,Ekstraklasa (PL),62104,17,Noah Weißhaupt,N. Weißhaupt,1.0,1.0,0.43,1.0,0.71,27,2.57,1.0,1.14
-1171,Ekstraklasa (PL),62368,2,Miguel Villar Alonso,Miki Villar,1.0,0.0,0.0,0.0,0.0,2,1.0,0.0,0.0
-1171,Ekstraklasa (PL),63001,85,Tomasz Pieńko,T. Pieńko,2.16,0.37,0.74,4.0,0.79,133,1.89,1.63,0.74
-1171,Ekstraklasa (PL),64231,7,Samed Baždar,S. Baždar,1.5,1.0,1.0,0.25,1.75,12,0.75,2.5,0.0
-1171,Ekstraklasa (PL),67375,15,Levente Szabó,L. Szabó,1.5,0.0,0.0,1.0,0.25,13,0.0,1.75,0.0
-1171,Ekstraklasa (PL),67578,45,Bryan Solhaug Fiabema,B. Fiabema,1.7,0.2,0.3,1.3,0.3,30,0.6,0.3,0.1
-1171,Ekstraklasa (PL),67652,63,Camilo Andrés Mena Márquez,C. Mena,2.1,1.24,0.71,1.48,0.57,214,4.14,3.67,1.43
-1171,Ekstraklasa (PL),67663,5,Tamar Svetlin,T. Svetlin,1.45,0.59,0.45,6.73,0.32,90,0.91,6.95,2.09
-1171,Ekstraklasa (PL),68501,0,Matúš Vojtko,M. Vojtko,0.16,3.16,1.42,0.16,0.05,54,2.58,4.79,2.42
-1171,Ekstraklasa (PL),68528,13,Bartłomiej Kłudka,B. Kłudka,0.21,1.64,0.86,0.07,0.0,29,2.43,2.93,2.93
-1171,Ekstraklasa (PL),68550,0,Josh Wilson-Esbrand,J. Wilson-Esbrand,0.25,1.25,1.5,1.0,0.25,12,1.25,2.75,1.0
-1171,Ekstraklasa (PL),69027,2,Ivan Correia Posser Lima,Ivan Lima,1.0,0.0,0.0,0.0,0.0,3,1.0,2.0,0.0
-1171,Ekstraklasa (PL),70661,7,Alassane Sidibé,A. Sidibé,1.0,0.13,0.07,6.0,0.67,42,1.13,3.13,1.0
-1171,Ekstraklasa (PL),71453,58,Yannick Agnero,Y. Agnero,2.19,0.0,0.0,0.12,0.31,36,0.06,0.12,0.0
-1171,Ekstraklasa (PL),72020,123,Jonatan Braut Brunes,J. Braut Brunes,6.1,0.3,0.05,1.85,0.3,116,0.0,1.25,0.15
-1171,Ekstraklasa (PL),72127,23,Mikkel Maigaard Jakobsen,M. Maigaard,2.17,0.78,1.33,7.83,0.78,132,2.28,7.33,1.89
-1171,Ekstraklasa (PL),72167,106,Sondre Liseth,S. Liseth,8.78,0.06,0.17,0.94,1.0,58,0.06,0.72,0.0
-1171,Ekstraklasa (PL),73536,19,Young-Jun Goh,Young-Jun Goh,1.67,0.11,0.44,2.67,0.44,28,1.11,2.56,0.22
-1171,Ekstraklasa (PL),73572,3,Ryoya Morishita,R. Morishita,1.75,0.75,1.75,2.25,1.0,28,2.5,3.75,0.75
-1171,Ekstraklasa (PL),79847,0,Igor Drapiński,I. Drapiński,0.18,0.12,0.59,0.24,0.0,12,0.53,1.71,4.88
-1171,Ekstraklasa (PL),81008,123,Michal Król,M. Król,3.32,1.0,0.55,0.73,0.14,176,1.18,1.18,0.36
-1171,Ekstraklasa (PL),84613,3,João Pedro Reginaldo,João Pedro,0.22,0.78,0.78,0.67,0.22,32,1.89,4.22,1.56
-1171,Ekstraklasa (PL),103056,1,Dimitrios  Keramitsis,D. Keramitsis,0.25,0.0,0.0,1.0,0.0,4,0.31,1.19,6.25
-1171,Ekstraklasa (PL),110462,49,Eman Marković,E. Marković,1.29,0.36,0.5,1.64,0.64,55,0.86,1.57,0.57
-1171,Ekstraklasa (PL),111003,2,Davíd Kristján Ólafsson,D. Ólafsson,0.86,2.71,0.71,0.29,0.0,20,1.71,4.29,2.57
-1171,Ekstraklasa (PL),111693,57,Luis Enrique Palma Oseguera,L. Palma,2.74,0.58,0.89,2.58,0.79,147,2.32,1.53,0.53
-1171,Ekstraklasa (PL),116624,20,Laurindo Dilson Maria Aurélio,Depú,1.67,0.0,0.11,0.22,0.22,25,0.0,0.22,0.0
-1171,Ekstraklasa (PL),121240,4,Mohamed Awadalla Hassan Ibrahim,Mohamed Awadalla,0.83,0.5,0.0,0.0,1.0,21,0.67,0.67,0.0
-1171,Ekstraklasa (PL),125509,2,Kacper Łukasiak,K. Łukasiak,0.64,0.0,0.45,5.64,0.55,32,0.27,5.0,1.09
-1171,Ekstraklasa (PL),125800,45,Tomasz Neugebauer,T. Neugebauer,2.38,0.33,0.29,2.9,1.76,89,1.43,3.0,0.43
-1171,Ekstraklasa (PL),130340,0,Yuki Kobayashi,Y. Kobayashi,0.12,0.0,0.0,0.62,0.0,1,0.0,0.5,3.0
-1171,Ekstraklasa (PL),132655,39,Theodoros Tsirigotis,T. Tsirigotis,4.83,0.0,0.33,0.5,0.33,12,0.0,0.67,0.0
-1171,Ekstraklasa (PL),140160,122,Taofeek Ismaheel,T. Ismaheel,2.82,0.45,0.91,1.36,1.23,191,2.05,2.45,0.77
-1171,Ekstraklasa (PL),151341,22,Igor Strzałek,I. Strzałek,1.0,0.39,0.78,2.78,1.83,92,2.0,2.33,0.44
-1171,Ekstraklasa (PL),156787,1,Mor Ndiaye,M. Ndiaye,0.21,0.07,0.0,5.93,0.29,10,0.29,3.64,1.14
-1171,Ekstraklasa (PL),156899,13,Elves Umar Baldé,Elves Baldé,1.19,0.56,0.44,0.81,0.19,79,0.69,1.75,0.19
-1171,Ekstraklasa (PL),158158,50,Fábio Ronaldo  Costa Conceição,Fábio Ronaldo,3.69,0.69,0.56,1.81,0.25,163,1.06,1.69,0.31
-1171,Ekstraklasa (PL),162547,9,Rafał Adamski,R. Adamski,6.0,0.0,0.0,7.0,2.0,8,0.0,6.0,0.0
-1171,Ekstraklasa (PL),163715,2,Peter Baráth,P. Baráth,0.47,0.27,0.13,6.67,0.27,40,0.67,5.33,3.07
-1171,Ekstraklasa (PL),166704,2,Anton Tsarenko,A. Tsarenko,1.0,0.0,1.0,2.0,0.0,7,1.0,2.5,0.0
-1171,Ekstraklasa (PL),166707,1,Maksym Dyachuk,M. Dyachuk,0.06,0.06,0.0,0.0,0.0,1,0.18,0.41,3.47
-1171,Ekstraklasa (PL),166805,5,Jakub Lewicki,J. Lewicki,0.47,2.6,1.67,0.67,0.33,65,1.53,5.93,3.87
-1171,Ekstraklasa (PL),166815,35,Dawid Drachal,D. Drachal,2.5,0.31,0.81,5.0,0.94,96,0.75,6.19,0.5
-1171,Ekstraklasa (PL),170360,0,Maksymilian Pingot,M. Pingot,0.0,0.0,0.0,0.33,0.0,2,0.17,0.67,1.83
-1171,Ekstraklasa (PL),170368,3,Gísli Gottskalk Thórdarson,G. Thórdarson,0.56,0.0,0.33,4.33,0.11,34,0.44,3.0,0.56
-1171,Ekstraklasa (PL),171878,0,Thiago Dombroski Moreira,T. Dombroski,0.0,0.0,0.0,0.0,0.0,1,0.0,0.0,0.0
-1171,Ekstraklasa (PL),172695,4,Fabian Hiszpański,F. Hiszpański,1.0,0.0,0.33,0.0,0.0,5,1.33,1.0,0.0
-1171,Ekstraklasa (PL),173110,34,Dominik Kun,D. Kun,2.59,0.5,0.64,2.41,0.73,209,2.82,4.27,1.59
-1171,Ekstraklasa (PL),173113,2,Steve Kapuadi,S. Kapuadi,0.25,0.12,0.62,0.5,0.06,3,0.75,1.06,3.62
-1171,Ekstraklasa (PL),173115,26,Dominik Piła,D. Piła,1.22,1.44,0.56,0.5,0.06,77,1.61,2.83,2.11
-1171,Ekstraklasa (PL),173117,28,Roberto Emanuel Oliveira Alves,Roberto Alves,0.58,0.32,0.58,3.21,0.42,65,1.63,4.68,0.79
-1171,Ekstraklasa (PL),173425,74,Patryk Makuch,P. Makuch,2.72,0.11,0.5,1.83,0.56,104,0.94,0.61,0.06
-1171,Ekstraklasa (PL),179310,22,Oskar Leśniak,O. Leśniak,2.0,0.38,0.62,2.69,0.38,84,1.62,2.94,1.0
-1171,Ekstraklasa (PL),180844,6,Gabriel Isik,G. Isik,0.19,0.33,0.76,0.43,0.0,39,0.43,4.19,2.24
-1171,Ekstraklasa (PL),184825,0,Bartłomiej Smolarczyk,B. Smolarczyk,0.21,0.0,0.29,0.29,0.07,6,0.64,1.0,2.0
-1171,Ekstraklasa (PL),184946,0,Roman Yakuba,R. Yakuba,0.19,0.48,0.67,0.19,0.05,20,1.05,1.86,3.29
-1171,Ekstraklasa (PL),187412,17,Dijon Kameri,D. Kameri,0.92,0.0,0.46,1.08,0.62,28,1.31,0.92,0.23
-1171,Ekstraklasa (PL),188250,4,Gabriel Barbosa Avelino,Gabriel Barbosa,1.0,0.0,0.0,0.0,0.33,4,0.0,0.0,0.0
-1171,Ekstraklasa (PL),240244,0,Timothy Noor Ouma,T. Ouma,0.07,0.21,0.07,5.29,0.29,15,0.36,2.93,0.64
-1171,Ekstraklasa (PL),247898,5,Christopher Serge Simon,C. Simon,7.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
-1171,Ekstraklasa (PL),257440,49,Ermal Krasniqi,E. Krasniqi,1.47,1.71,0.82,1.24,0.71,113,3.06,2.29,0.65
-1171,Ekstraklasa (PL),285199,52,Ousmane Sow,O. Sow,2.38,0.81,0.5,0.81,0.38,144,3.19,1.75,0.62
-1171,Ekstraklasa (PL),301896,0,Slobodan Rubežić,S. Rubežić,0.67,0.0,0.0,0.0,0.0,5,0.33,2.67,2.33
-1171,Ekstraklasa (PL),310202,38,Lukáš Ambros,L. Ambros,4.06,0.38,1.0,4.25,1.62,75,2.06,5.56,0.38
-1171,Ekstraklasa (PL),326209,1,Miłosz Strzeboński,M. Strzeboński,0.0,0.14,0.0,0.29,0.14,1,0.14,2.0,0.43
-1171,Ekstraklasa (PL),330208,10,Filip Kocaba,F. Kocaba,1.1,0.19,0.24,5.0,0.19,52,1.71,3.62,2.1
-1171,Ekstraklasa (PL),395538,0,Salifou Soumah,S. Soumah,1.0,0.0,0.0,0.0,0.0,1,0.0,0.0,0.0
-1171,Ekstraklasa (PL),458603,0,Dominick Zator,D. Zator,0.0,0.8,0.4,0.0,0.1,16,0.5,3.3,4.5
-1171,Ekstraklasa (PL),471019,2,Mathias Dahl Sauer,M. Sauer,1.0,0.0,2.0,0.0,0.0,2,1.0,2.0,1.0
-1171,Ekstraklasa (PL),514492,0,Guilherme Manuel Serrão Montóia,Guilherme Montóia,0.0,0.33,0.0,0.33,0.0,1,0.0,2.67,2.67
-1171,Ekstraklasa (PL),516908,23,Ivan Durdov,I. Durdov,3.0,0.0,0.0,0.25,0.0,11,0.0,0.0,0.0
-1171,Ekstraklasa (PL),526175,186,Mileta Rajović,M. Rajović,8.05,0.0,0.1,1.48,1.14,87,0.05,0.38,0.0
-1171,Ekstraklasa (PL),530304,31,Adrian Przyborek,A. Przyborek,2.18,0.41,0.76,4.24,1.18,75,2.18,3.18,0.71
-1171,Ekstraklasa (PL),530713,13,Szczepan Mucha,S. Mucha,1.0,0.17,0.83,0.33,0.17,8,0.0,0.33,0.0
-1171,Ekstraklasa (PL),531601,14,Diego Pertejo Canseco,Diego Percan,2.22,0.11,0.11,2.33,0.67,23,0.11,0.44,0.22
-1171,Ekstraklasa (PL),549335,12,Pau  Sans López,Pau Sans,2.75,0.5,0.75,2.25,0.0,31,1.0,2.0,0.25
-1171,Ekstraklasa (PL),574480,1,Mitja Ilenič,M. Ilenič,0.0,0.33,0.0,0.0,0.0,9,0.33,0.0,0.0
-1171,Ekstraklasa (PL),578959,0,Filip Rejczyk,F. Rejczyk,0.0,0.0,0.0,1.0,0.0,0,0.0,0.5,0.0
-1171,Ekstraklasa (PL),590460,3,Michał Gurgul,M. Gurgul,0.16,2.47,2.11,0.16,0.0,100,1.47,5.84,4.89
-1171,Ekstraklasa (PL),671394,0,Dominik Szala,D. Szala,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
-1171,Ekstraklasa (PL),671397,5,Igor Orlikowski,I. Orlikowski,1.1,0.6,0.2,0.1,0.0,20,1.7,2.9,2.2
-1171,Ekstraklasa (PL),672253,6,Wiktor Bogacz,W. Bogacz,1.0,0.0,0.0,1.0,1.0,0,0.0,1.0,0.0
-1171,Ekstraklasa (PL),687053,8,Jakub Kolan,J. Kolan,0.5,0.1,0.2,4.2,0.7,29,1.5,3.4,1.2
-1171,Ekstraklasa (PL),687055,13,Mateusz  Kowalczyk,M. Kowalczyk,1.21,0.21,0.32,6.53,0.37,77,0.47,3.11,2.05
-1171,Ekstraklasa (PL),687634,1,Beno Selan,B. Selan,0.0,0.33,0.0,1.0,0.0,4,1.0,1.33,0.67
-1171,Ekstraklasa (PL),698179,7,Ibrahima Seck,I. Seck,0.67,0.33,0.33,2.67,0.17,33,1.33,2.83,1.33
-1171,Ekstraklasa (PL),715436,0,Marek Mróz,M. Mróz,1.0,0.5,0.0,1.0,0.0,6,2.0,1.5,0.5
-1171,Ekstraklasa (PL),715441,4,Tomasz  Wójtowicz,T. Wójtowicz,0.45,1.27,0.64,0.64,0.18,70,2.09,4.27,1.45
-1171,Ekstraklasa (PL),716758,20,Martin Remacle,M. Remacle,1.67,0.52,0.33,4.24,0.57,102,0.48,7.19,1.14
-1171,Ekstraklasa (PL),717011,7,Marcel Pięczek,M. Pięczek,0.6,1.15,0.55,0.25,0.05,32,0.5,1.65,1.6
-1171,Ekstraklasa (PL),719453,25,João Pedro Abreu De Oliveira,J. Oliveira,1.17,0.25,0.5,2.83,0.17,54,1.33,0.83,0.33
-1171,Ekstraklasa (PL),729987,6,Bogdan Mirčetić,B. Mirčetić,0.5,0.0,0.5,1.0,0.25,11,0.75,1.75,0.25
-1171,Ekstraklasa (PL),733198,36,Giannis Niarchos,G. Niarchos,2.83,0.08,0.08,0.5,0.17,48,0.33,0.33,0.0
-1171,Ekstraklasa (PL),733205,1,Marek Kristián Bartoš,M. Bartoš,0.06,0.06,0.0,0.31,0.06,20,0.38,0.62,3.5
-1171,Ekstraklasa (PL),735670,31,Adriano Luís Amorim Santos,Adriano,0.83,1.72,0.78,0.94,0.0,102,2.39,3.0,1.39
-1171,Ekstraklasa (PL),735693,26,Vasco Rafael Fortes Lopes,Vasco Lopes,1.32,0.63,0.58,1.11,0.47,86,1.68,2.42,0.89
-1171,Ekstraklasa (PL),763217,6,Florian Haxha,F. Haxha,0.8,0.2,0.2,0.0,0.0,7,1.0,0.4,0.4
-1171,Ekstraklasa (PL),764294,3,Milan Aleksić,M. Aleksić,0.5,0.67,0.0,1.5,0.33,16,0.5,0.33,0.0
-1171,Ekstraklasa (PL),764330,21,Kahveh Zahiroleslam,K. Zahiroleslam,0.67,0.2,0.13,0.4,0.07,22,0.13,0.2,0.07
-1171,Ekstraklasa (PL),774043,4,Marian Huja,Marian Huja,0.33,0.2,0.0,0.27,0.0,4,0.4,1.27,7.13
-1171,Ekstraklasa (PL),774288,2,Yvan Ikia Dimi,Y. Ikia Dimi,2.0,2.0,0.0,1.0,1.0,0,1.0,3.0,0.0
-1171,Ekstraklasa (PL),777059,3,Samuel Kozlovský,S. Kozlovský,0.3,0.7,0.8,0.2,0.0,21,1.6,4.4,1.7
-1171,Ekstraklasa (PL),793226,0,Dominik Biniek,D. Biniek,0.8,0.0,0.0,0.2,0.6,10,1.6,0.8,0.4
-1171,Ekstraklasa (PL),798001,67,Rajmund Molnár,R. Molnár,5.4,0.0,0.0,1.3,0.9,50,0.6,1.7,0.0
-1171,Ekstraklasa (PL),799077,1,Bujar  Pllana,B. Pllana,0.0,0.0,0.0,0.11,0.0,3,0.22,0.33,3.0
-1171,Ekstraklasa (PL),799496,7,Antoni Klukowski,A. Klukowski,1.29,0.0,0.14,0.0,0.29,6,0.43,0.43,0.14
-1171,Ekstraklasa (PL),801759,9,Patryk Paryzek,P. Paryzek,2.75,0.0,0.5,0.0,0.0,10,0.25,0.25,0.0
-1171,Ekstraklasa (PL),807804,0,Elton Fikaj,E. Fikaj,0.0,0.0,0.0,0.0,0.0,1,0.0,1.0,1.0
-1171,Ekstraklasa (PL),808538,45,Samuel Akere,S. Akere,2.73,0.33,0.2,1.07,0.4,71,1.13,1.67,0.27
-1171,Ekstraklasa (PL),809578,3,Andrias Edmundsson,A. Edmundsson,0.22,0.33,0.28,0.44,0.0,27,1.0,3.39,4.83
-1171,Ekstraklasa (PL),810425,1,Fabian Bzdyl,F. Bzdyl,0.0,0.0,0.5,1.5,2.0,4,2.5,2.5,0.0
-1171,Ekstraklasa (PL),810445,6,Kornel  Lisman,K. Lisman,1.46,0.46,0.15,0.69,0.0,53,0.62,1.08,0.23
-1171,Ekstraklasa (PL),810501,2,Kamil  Cybulski,K. Cybulski,1.0,0.0,0.0,0.0,0.0,3,0.5,0.0,0.0
-1171,Ekstraklasa (PL),812841,0,Jan Ziółkowski,J. Ziółkowski,0.0,0.0,1.0,0.0,0.0,1,0.5,0.5,1.5
-1171,Ekstraklasa (PL),813313,27,Wojciech Urbanski,W. Urbanski,1.71,0.29,0.86,3.36,1.14,59,2.79,2.29,0.14
-1171,Ekstraklasa (PL),817292,5,Christopher Cheng,C. Cheng,0.25,2.0,1.25,1.25,0.0,13,4.0,6.5,4.25
-1171,Ekstraklasa (PL),817446,0,Alex Douglas,A. Douglas,0.0,0.0,0.43,1.0,0.0,3,0.71,2.43,3.14
-1171,Ekstraklasa (PL),819362,0,Wojciech Mońka,W. Mońka,0.25,0.25,0.12,0.12,0.0,6,0.5,2.12,9.75
-1171,Ekstraklasa (PL),828800,123,German Barkovskiy,G. Barkovskiy,4.76,0.43,0.29,1.29,0.81,100,0.38,1.0,0.05
-1171,Ekstraklasa (PL),829559,0,Bartosz Biedrzycki,B. Biedrzycki,0.5,0.25,0.0,0.75,0.5,7,0.75,0.75,1.0
-1171,Ekstraklasa (PL),838635,3,Marcel Krajewski,M. Krajewski,0.06,1.88,0.38,0.44,0.0,56,2.06,6.12,2.62
-1171,Ekstraklasa (PL),838638,1,Milosz Kalahur,M. Kałahur,0.0,3.0,1.75,0.25,0.5,15,3.0,2.0,2.25
-1171,Ekstraklasa (PL),839496,11,Filip  Luberecki,F. Luberecki,0.21,3.53,2.74,0.37,0.0,141,1.47,7.58,3.74
-1171,Ekstraklasa (PL),839497,11,Bartosz Wolski,B. Wolski,2.18,0.55,0.73,4.14,1.73,161,2.82,6.23,1.14
-1171,Ekstraklasa (PL),839498,6,Filip Wójcik,F. Wójcik,0.29,1.06,1.24,0.06,0.06,29,0.65,3.18,1.71
-1171,Ekstraklasa (PL),839503,99,Mbaye Jacques Ndiaye,M. Ndiaye,3.42,0.83,0.75,0.58,0.25,93,0.92,1.08,0.0
-1171,Ekstraklasa (PL),839506,26,Adrian Błąd,A. Błąd,1.06,0.12,0.19,1.12,0.44,29,0.56,1.56,0.69
-1171,Ekstraklasa (PL),839507,2,Oskar Repka,O. Repka,0.3,0.0,0.0,4.25,0.2,31,0.1,4.45,1.5
-1171,Ekstraklasa (PL),839508,0,Grzegorz Rogala,G. Rogala,0.17,2.67,0.67,0.0,0.17,16,1.0,2.17,2.67
-1171,Ekstraklasa (PL),839509,0,Alan  Bród,A. Bród,0.0,0.0,0.0,0.0,0.0,0,0.0,2.0,1.0
-1171,Ekstraklasa (PL),839914,30,Wojciech Jakubik,W. Jakubik,0.67,0.07,0.13,0.4,0.47,38,1.0,0.8,0.13
-1171,Ekstraklasa (PL),839918,30,Damian  Hilbrycht,D. Hilbrycht,0.86,2.41,0.09,0.82,0.05,108,1.27,3.73,1.09
-1171,Ekstraklasa (PL),839920,4,Kacper Karasek,K. Karasek,1.0,0.22,0.11,0.11,0.22,11,0.56,1.56,0.11
-1171,Ekstraklasa (PL),841518,9,Hubert Zwoźny,H. Zwoźny,1.5,1.1,0.4,0.4,0.0,54,1.1,3.4,1.1
-1171,Ekstraklasa (PL),841520,0,Wojciech Kamiński,W. Kamiński,0.3,0.0,0.0,1.8,0.0,5,0.1,2.5,0.6
-1171,Ekstraklasa (PL),842069,50,Stjepan Davidović,S. Davidović,3.35,0.24,0.12,1.47,1.0,109,1.71,2.0,0.59
-1171,Ekstraklasa (PL),842169,3,Jakub Budnicki,J. Budnicki,0.17,0.17,1.0,0.0,0.0,6,0.33,2.17,2.17
-1171,Ekstraklasa (PL),842172,8,Natan  Dzięgielewski,N. Dzięgielewski,1.0,0.29,0.14,0.14,0.0,22,1.43,0.43,0.14
-1171,Ekstraklasa (PL),842547,13,Marcel Predenkiewicz,M. Predenkiewicz,0.8,1.1,0.1,0.2,0.0,31,1.3,1.1,0.1
-1171,Ekstraklasa (PL),842556,83,Wiktor Nowak,W. Nowak,3.3,0.6,0.75,2.9,1.1,171,2.9,3.4,0.35
-1171,Ekstraklasa (PL),842693,22,Borislav Rupanov,B. Rupanov,4.25,0.0,0.25,1.0,1.25,10,0.5,0.75,0.0
-1171,Ekstraklasa (PL),845091,0,Dawid Gojny,D. Gojny,0.1,1.7,0.4,0.1,0.0,23,0.9,2.8,3.7
-1171,Ekstraklasa (PL),845093,184,Karol Czubak,K. Czubak,6.9,0.05,0.05,0.8,0.35,82,0.15,0.9,0.0
-1171,Ekstraklasa (PL),845117,9,Krystian Pomorski,K. Pomorski,0.83,0.0,0.25,0.42,0.33,22,0.33,0.92,0.17
-1171,Ekstraklasa (PL),845118,9,Marcus Haglind-Sangré,M. Haglind-Sangré,0.23,1.23,1.23,0.32,0.14,91,1.77,7.82,3.0
-1171,Ekstraklasa (PL),847654,4,Jakub Lis,J. Lis,0.33,0.33,0.0,0.33,0.33,9,2.0,2.67,1.67
-1171,Ekstraklasa (PL),847655,107,Marcel Reguła,M. Reguła,2.63,0.16,0.26,0.84,0.79,87,0.79,1.0,0.16
-1171,Ekstraklasa (PL),848327,0,Jan Leszczyński,J. Leszczyński,0.0,0.5,1.5,0.0,0.5,2,1.0,0.5,0.5
-1171,Ekstraklasa (PL),848328,4,Jakub Zewlakow,J. Zewlakow,0.88,0.12,0.5,0.88,0.75,26,0.75,0.5,0.5
-1171,Ekstraklasa (PL),848977,15,Kamil Jakubczyk,K. Jakubczyk,0.58,0.26,0.84,7.63,0.68,81,0.47,6.21,1.84
-1171,Ekstraklasa (PL),849146,1,Arkadiusz Najemski,A. Najemski,0.2,0.1,0.0,1.4,0.1,11,0.3,0.3,3.5
-1171,Ekstraklasa (PL),850870,45,Dimitris  Rallis,D. Rallis,2.0,0.0,0.08,1.31,0.54,49,0.08,0.46,0.08
-1171,Ekstraklasa (PL),851230,0,Maciej Wojciechowski,M. Wojciechowski,0.0,0.0,0.0,0.67,0.0,3,0.33,0.67,0.0
-1171,Ekstraklasa (PL),856254,5,Luka Lučić,L. Lučić,0.93,2.07,0.4,0.87,0.0,48,1.73,2.8,2.87
-1171,Ekstraklasa (PL),861003,0,Bastien Donio,B. Donio,0.0,0.0,0.0,4.8,0.6,7,0.0,1.6,0.8
-1171,Ekstraklasa (PL),870416,4,Henrique Miguel Sousa Arreiol,Henrique Arreiol,1.5,0.5,0.25,4.0,1.75,37,1.25,6.0,1.25
-1171,Ekstraklasa (PL),874132,1,Paskal Meyer,P. Meyer,0.0,0.67,0.67,0.33,0.0,3,0.33,2.33,6.0
-1171,Ekstraklasa (PL),877517,24,Oskar Pietuszewski,O. Pietuszewski,1.47,0.59,0.0,1.47,0.06,110,1.47,2.18,0.35
-1171,Ekstraklasa (PL),887975,2,Cezary Polak,C. Polak,0.0,0.67,0.0,0.33,0.0,5,1.67,1.0,1.0
-1171,Ekstraklasa (PL),887985,10,Jesus Antonio Diaz Gomez,J. Diaz,1.2,0.1,0.2,1.0,0.2,35,1.4,1.8,0.2
-1171,Ekstraklasa (PL),888962,1,Bartosz Borowski,B. Borowski,1.0,0.0,0.0,0.0,0.0,4,0.0,0.0,0.0
-1171,Ekstraklasa (PL),919700,7,Mateusz Dziewiatowski,M. Dziewiatowski,1.43,0.14,0.57,3.57,0.29,34,2.43,2.57,0.43
-1171,Ekstraklasa (PL),927041,7,Dominik Sarapata,D. Sarapata,0.67,0.33,0.0,0.0,1.0,16,2.33,1.33,1.0
-1171,Ekstraklasa (PL),957491,1,Oskar Wójcik,O. Wójcik,0.1,0.29,0.48,0.33,0.0,21,0.43,1.9,3.9
-1171,Ekstraklasa (PL),962336,1,Levis Pitan,L. Pitan,0.0,1.0,0.0,0.0,0.0,0,1.0,0.0,0.0
-1171,Ekstraklasa (PL),963311,3,Diego Deisadze,D. Deisadze,1.5,0.0,0.0,0.5,0.0,4,0.0,0.0,0.5
-1171,Ekstraklasa (PL),971232,1,Samuel Kováčik,S. Kováčik,1.0,2.0,1.0,0.0,0.0,3,2.0,1.0,2.0
-1171,Ekstraklasa (PL),975477,0,Cyprian Popielec,C. Popielec,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
-1171,Ekstraklasa (PL),976839,2,Dion Gallapeni,D. Gallapeni,0.3,3.4,1.2,0.4,0.1,38,2.1,4.2,2.1
-1171,Ekstraklasa (PL),998242,0,Kamil Jakóbczyk,K. Jakóbczyk,1.0,0.0,0.0,1.0,1.0,2,0.0,0.0,0.0
-1171,Ekstraklasa (PL),998244,12,Bartosz Mazurek,B. Mazurek,1.91,0.91,1.18,3.82,0.55,84,1.64,5.09,0.45
-1171,Ekstraklasa (PL),998264,1,Bright Ede,B. Ede,0.0,0.0,0.0,1.0,0.0,5,0.0,0.67,2.83
-1171,Ekstraklasa (PL),998265,13,Michal Glogowski,M. Glogowski,1.0,0.0,0.67,0.0,0.33,7,0.33,0.83,0.0
-1171,Ekstraklasa (PL),998303,7,Abbati Abdullahi,A. Abdullahi,1.0,0.25,0.5,0.0,0.5,10,0.25,0.75,0.25
-1171,Ekstraklasa (PL),999009,1,Konrad Ciszek,K. Ciszek,0.0,1.0,1.25,0.5,0.0,16,1.25,6.5,2.0
-1171,Ekstraklasa (PL),1004450,1,Mohamed Awad Alla Hassan Ibrahim,,0.0,0.0,0.0,0.5,0.5,8,1.5,0.5,0.0
-1171,Ekstraklasa (PL),1008953,5,Kamil Nowogonski,K. Nowogonski,1.0,0.33,0.0,0.33,0.33,4,0.67,0.67,0.0
-1171,Ekstraklasa (PL),1018431,0,Franciszek Lewandowski,F. Lewandowski,0.0,0.0,0.0,0.0,0.0,3,0.0,0.5,0.5
-1171,Ekstraklasa (PL),1018432,3,Mateusz  Glowinski ,M. Glowinski,1.0,0.0,0.0,0.0,0.5,1,0.0,0.0,0.0
-1171,Ekstraklasa (PL),1020469,0,Kacper  Minuczyc ,K. Minuczyc,0.0,0.0,0.0,1.0,0.0,0,0.0,0.5,0.0
-1171,Ekstraklasa (PL),1028033,0,Bartosz Szczepankiewicz,B. Szczepankiewicz,,,,,,0,,,
-1171,Ekstraklasa (PL),1029787,0,Natan Waligora,N. Waligora,0.0,0.0,0.0,1.0,0.0,3,4.0,2.0,4.0
-1171,Ekstraklasa (PL),1030855,1,Sebastian  Church,,3.0,2.0,0.0,17.0,0.0,6,3.0,3.0,0.0
-1171,Ekstraklasa (PL),1043952,0,Jakub Ligocki,J. Ligocki,1.0,0.0,0.0,0.0,0.0,0,1.0,1.0,1.0
-1171,Ekstraklasa (PL),1044361,0,Mateusz Tabisz,M. Tabisz,0.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
-1171,Ekstraklasa (PL),1058968,2,Oskar Kubiak,O. Kubiak,0.5,1.0,0.0,0.5,0.0,7,1.5,1.0,0.0
+competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_run_ahead_of_the_ball
+1171,Ekstraklasa (PL),988,0.0,Antonio Milić,A. Milić,0.05
+1171,Ekstraklasa (PL),1001,3.6,Antonio-Mirko Čolak,A. Čolak,2.6
+1171,Ekstraklasa (PL),1034,0.67,Arkadiusz Woźniak,A. Woźniak,0.33
+1171,Ekstraklasa (PL),1069,0.0,Artem Putivtsev,A. Putivtsev,0.0
+1171,Ekstraklasa (PL),1081,0.0,Artur Jędrzejczyk,A. Jędrzejczyk,0.0
+1171,Ekstraklasa (PL),1208,1.07,Bartlomiej Pawłowski,B. Pawłowski,2.36
+1171,Ekstraklasa (PL),1214,0.95,Bartosz Kapustka,B. Kapustka,5.2
+1171,Ekstraklasa (PL),1292,0.4,Benjamin Mendy,B. Mendy,1.0
+1171,Ekstraklasa (PL),1904,0.81,Christos Donis,C. Donis,1.88
+1171,Ekstraklasa (PL),2115,0.15,Damian Dąbrowski,D. Dąbrowski,1.69
+1171,Ekstraklasa (PL),2124,0.47,Damian Szymański,D. Szymański,2.73
+1171,Ekstraklasa (PL),3439,3.75,Filip Jagiełło,F. Jagiełło,8.1
+1171,Ekstraklasa (PL),3673,0.85,Fredrik Ulvestad,F. Ulvestad,4.15
+1171,Ekstraklasa (PL),4569,0.95,Ivo Tiago dos Santos Rodrigues,Ivo Rodrigues,5.05
+1171,Ekstraklasa (PL),4633,0.0,Jakub Czerwiński,J. Czerwiński,0.29
+1171,Ekstraklasa (PL),4637,0.25,Jakub Łukowski,J. Łukowski,0.75
+1171,Ekstraklasa (PL),4755,3.94,Jarosław Kubicki,J. Kubicki,6.78
+1171,Ekstraklasa (PL),5681,7.55,Kamil Grosicki,K. Grosicki,6.32
+1171,Ekstraklasa (PL),5682,2.73,Kamil Jóźwiak,K. Jóźwiak,8.09
+1171,Ekstraklasa (PL),5731,6.0,Karol Angielski,K. Angielski,3.5
+1171,Ekstraklasa (PL),6727,0.0,Marcin Cebula,M. Cebula,4.5
+1171,Ekstraklasa (PL),6731,0.0,Marcin Kamiński,M. Kamiński,0.36
+1171,Ekstraklasa (PL),6925,4.25,Mariusz Stępiński,M. Stępiński,4.75
+1171,Ekstraklasa (PL),7127,0.0,Mateusz Cichocki,M. Cichocki,0.0
+1171,Ekstraklasa (PL),7128,1.62,Mateusz Klich,M. Klich,6.38
+1171,Ekstraklasa (PL),7142,2.73,Mateusz Wdowiak,M. Wdowiak,4.13
+1171,Ekstraklasa (PL),7194,1.5,Matías Nahuel Leiva Esquivel,N. Leiva,10.25
+1171,Ekstraklasa (PL),7338,0.5,Maxime Dominguez,M. Dominguez,4.25
+1171,Ekstraklasa (PL),7481,0.42,Michał Chrapek,M. Chrapek,5.58
+1171,Ekstraklasa (PL),7493,0.0,Michał Nalepa,M. Nalepa,0.15
+1171,Ekstraklasa (PL),7595,9.95,Mikael Ishak,M. Ishak,5.11
+1171,Ekstraklasa (PL),8542,0.0,Paweł Dawidowicz,P. Dawidowicz,2.0
+1171,Ekstraklasa (PL),8548,0.27,Paweł Olkowski,P. Olkowski,2.4
+1171,Ekstraklasa (PL),8551,0.16,Paweł Stolarski,P. Stolarski,3.21
+1171,Ekstraklasa (PL),8554,3.17,Paweł Wszołek,P. Wszołek,8.28
+1171,Ekstraklasa (PL),8735,0.73,José Ángel Pozo la Rosa,José Pozo,3.8
+1171,Ekstraklasa (PL),8824,0.11,Rafał Janicki,R. Janicki,0.42
+1171,Ekstraklasa (PL),8829,2.24,Rafał Wolski,R. Wolski,6.52
+1171,Ekstraklasa (PL),9651,2.55,Sebastian Kerk,S. Kerk,8.0
+1171,Ekstraklasa (PL),9863,0.33,Simon Gustafson,S. Gustafson,2.0
+1171,Ekstraklasa (PL),10212,0.19,Taras Romanczuk,T. Romanczuk,3.24
+1171,Ekstraklasa (PL),10490,0.0,Tomasz Mokwa,T. Mokwa,1.5
+1171,Ekstraklasa (PL),11441,0.12,Adrián Diéguez Grande,Adrián Diéguez,0.62
+1171,Ekstraklasa (PL),11453,0.68,Leonardo Koutris,L. Koutris,2.5
+1171,Ekstraklasa (PL),11509,2.0,Lukas Lerager,L. Lerager,3.25
+1171,Ekstraklasa (PL),11853,2.6,Ali  Gholizadeh,A. Gholizadeh,7.4
+1171,Ekstraklasa (PL),11905,2.16,Rafał Kurzawa,R. Kurzawa,4.89
+1171,Ekstraklasa (PL),12129,1.62,Quentin Boisgard,Q. Boisgard,6.69
+1171,Ekstraklasa (PL),12165,1.0,Rúben Gonçalo Silva Nascimento Vinagre,Rúben Vinagre,6.5
+1171,Ekstraklasa (PL),12410,3.0,Nazariy Rusyn,N. Rusyn,5.71
+1171,Ekstraklasa (PL),12415,4.67,Jean-Pierre Nsamé,J. Nsamé,2.33
+1171,Ekstraklasa (PL),12434,0.64,Petar Stojanović,P. Stojanović,3.07
+1171,Ekstraklasa (PL),12490,0.0,Bojan  Nastić,B. Nastić,3.0
+1171,Ekstraklasa (PL),12501,1.15,Arkadiusz Reca,A. Reca,4.38
+1171,Ekstraklasa (PL),12538,5.25,Efthymios Koulouris,E. Koulouris,4.25
+1171,Ekstraklasa (PL),12625,2.43,Joaquim Claude   Gonçalves Araújo,Claude Gonçalves,5.29
+1171,Ekstraklasa (PL),12646,0.0,Sergi Samper Montaña,Sergi Samper,1.26
+1171,Ekstraklasa (PL),12698,0.0,Stratos Svarnas,S. Svarnas,1.37
+1171,Ekstraklasa (PL),12823,1.95,Marc Navarro Ceciliano,Marc Navarro,4.5
+1171,Ekstraklasa (PL),12998,0.0,José Manuel Sánchez Guillén,Josema,0.33
+1171,Ekstraklasa (PL),13046,1.5,Luka Zahovič,L. Zahovič,3.5
+1171,Ekstraklasa (PL),13096,0.0,Aurélien Nguiamba,A. Nguiamba,1.0
+1171,Ekstraklasa (PL),13425,0.0,Carlos Isaac  Muñoz Obejero,Carlos Isaac,1.0
+1171,Ekstraklasa (PL),13703,6.84,Erik Jirka,E. Jirka,9.37
+1171,Ekstraklasa (PL),13743,6.55,Afimico Pululu,Afimico Pululu,4.55
+1171,Ekstraklasa (PL),13756,0.0,Lindon Selahi,L. Selahi,1.29
+1171,Ekstraklasa (PL),13790,0.08,Märten Kuusk,M. Kuusk,0.67
+1171,Ekstraklasa (PL),13825,1.25,Andreas Katsantonis,A. Katsantonis,1.25
+1171,Ekstraklasa (PL),13940,1.4,Iván López Álvarez,Ivi López,7.7
+1171,Ekstraklasa (PL),14081,0.75,Bruno André Cavaco Jordão,Bruno Jordão,5.25
+1171,Ekstraklasa (PL),14113,2.41,Musa Juwara,M. Juwara,5.35
+1171,Ekstraklasa (PL),14131,0.1,Michał Marcjanik,M. Marcjanik,0.33
+1171,Ekstraklasa (PL),14243,2.62,Mohamed Lamine Diaby-Fadiga,L. Diaby-Fadiga,4.43
+1171,Ekstraklasa (PL),14495,2.08,Adrián Dalmau Vaquer,Adrián Dalmau,1.31
+1171,Ekstraklasa (PL),14798,1.0,Jani Atanasov,J. Atanasov,2.0
+1171,Ekstraklasa (PL),16567,1.13,Fran Tudor,F. Tudor,2.93
+1171,Ekstraklasa (PL),16573,0.12,Tonio Teklić,T. Teklić,1.25
+1171,Ekstraklasa (PL),16602,0.0,Danijel Lončar,D. Lončar,0.06
+1171,Ekstraklasa (PL),16623,0.47,Boško Šutalo,B. Šutalo,4.12
+1171,Ekstraklasa (PL),16624,1.64,Erik Janža,E. Janža,8.23
+1171,Ekstraklasa (PL),16714,0.5,Michal Sáček,M. Sáček,4.25
+1171,Ekstraklasa (PL),16717,2.5,Srdjan Plavšić,S. Plavšić,9.5
+1171,Ekstraklasa (PL),16834,6.25,Osman Bukari,O. Bukari,7.75
+1171,Ekstraklasa (PL),16958,1.69,Otar Kakabadze,O. Kakabadze,5.23
+1171,Ekstraklasa (PL),16994,0.0,Przemysław Wiśniewski,P. Wiśniewski,0.25
+1171,Ekstraklasa (PL),16997,0.0,Paweł Bochniewicz,P. Bochniewicz,1.0
+1171,Ekstraklasa (PL),17001,3.89,Jesús Jiménez Núñez,Jesús Jiménez,5.89
+1171,Ekstraklasa (PL),17009,7.07,Kamil Zapolnik,K. Zapolnik,4.43
+1171,Ekstraklasa (PL),17015,2.05,Krzysztof Kubica,K. Kubica,2.65
+1171,Ekstraklasa (PL),17016,0.52,Maciej Ambrosiewicz,M. Ambrosiewicz,4.43
+1171,Ekstraklasa (PL),17020,0.77,Robert Gumny,R. Gumny,3.62
+1171,Ekstraklasa (PL),17031,3.1,Marcin Wasielewski,M. Wasielewski,6.45
+1171,Ekstraklasa (PL),17192,0.25,Konstantinos Sotiriou,K. Sotiriou,0.2
+1171,Ekstraklasa (PL),17218,0.06,Lukas Klemenz,L. Klemenz,0.28
+1171,Ekstraklasa (PL),17323,0.09,Radovan Pankov,R. Pankov,0.73
+1171,Ekstraklasa (PL),17408,2.61,Radu Boboc,R. Boboc,3.72
+1171,Ekstraklasa (PL),17597,3.0,Vladislavs Gutkovskis,V. Gutkovskis,3.0
+1171,Ekstraklasa (PL),17974,0.0,Kellyn  Acosta,K. Acosta,4.5
+1171,Ekstraklasa (PL),18350,2.3,Jason Eyenga-Lokilo,J. Lokilo,3.9
+1171,Ekstraklasa (PL),18444,1.65,Quentin Lecoeuche,Q. Lecoeuche,6.0
+1171,Ekstraklasa (PL),19022,0.0,Hervé Matthys,H. Matthys,0.75
+1171,Ekstraklasa (PL),19136,5.69,Adam Zreľák,A. Zreľák,3.94
+1171,Ekstraklasa (PL),19201,6.14,Roberto Massimo,R. Massimo,6.29
+1171,Ekstraklasa (PL),19383,2.4,Linus Wahlqvist,L. Wahlqvist,4.4
+1171,Ekstraklasa (PL),19983,0.11,Jakub Łabojko,J. Łabojko,3.26
+1171,Ekstraklasa (PL),19990,2.35,Mathieu Scalet,M. Scalet,4.65
+1171,Ekstraklasa (PL),19995,9.15,Jesús Imaz Ballesté,Jesús Imaz,9.1
+1171,Ekstraklasa (PL),19996,0.0,Zoran  Arsenić,Z. Arsenić,0.57
+1171,Ekstraklasa (PL),20009,4.12,Dawid Błanik,D. Błanik,8.62
+1171,Ekstraklasa (PL),20016,0.67,Sebastian Kowalczyk,S. Kowalczyk,1.33
+1171,Ekstraklasa (PL),20023,0.14,Kamil Dawid Piątkowski,K. Piątkowski,0.64
+1171,Ekstraklasa (PL),20024,0.0,Bartosz Kopacz,B. Kopacz,0.11
+1171,Ekstraklasa (PL),20035,0.12,Alan Czerwiński,A. Czerwiński,1.71
+1171,Ekstraklasa (PL),20046,0.0,Damian Rasak,D. Rasak,1.0
+1171,Ekstraklasa (PL),20066,1.5,Michał Rakoczy,M. Rakoczy,2.5
+1171,Ekstraklasa (PL),20094,3.88,Wiktor Długosz,W. Długosz,6.56
+1171,Ekstraklasa (PL),20126,0.14,Arkadiusz  Jędrych,A. Jędrych,0.14
+1171,Ekstraklasa (PL),20132,1.08,Sebastian Milewski,S. Milewski,4.5
+1171,Ekstraklasa (PL),20145,0.1,Patryk Dziczek,P. Dziczek,3.3
+1171,Ekstraklasa (PL),20146,1.38,Jorge Félix Muñoz García,Jorge Félix,6.95
+1171,Ekstraklasa (PL),20168,0.0,Tomasz Makowski,T. Makowski,1.8
+1171,Ekstraklasa (PL),20173,0.0,Mateusz Żyro,M. Żyro,0.25
+1171,Ekstraklasa (PL),20176,0.42,Rafał Augustyniak,R. Augustyniak,1.25
+1171,Ekstraklasa (PL),20193,0.24,Nemanja Mijušković,N. Mijušković,0.59
+1171,Ekstraklasa (PL),20259,0.0,Andy Pelmard,A. Pelmard,0.33
+1171,Ekstraklasa (PL),23111,2.0,Pape Meïssa MeïssBa,P. Meïssa Ba,2.25
+1171,Ekstraklasa (PL),23510,0.33,Paulius Golubickas,P. Golubickas,1.33
+1171,Ekstraklasa (PL),23561,3.08,Renat Dadashov,R. Dadashov,2.62
+1171,Ekstraklasa (PL),23836,0.12,Tomás Franco Tavares,T. Tavares,1.62
+1171,Ekstraklasa (PL),23975,2.43,Alejandro Pozo Pozo,Alex Pozo,6.0
+1171,Ekstraklasa (PL),24013,1.57,Romário Manuel Silva Baró,Romário Baró,3.79
+1171,Ekstraklasa (PL),24074,0.0,Luis Perea Hernández,Luis Perea,0.33
+1171,Ekstraklasa (PL),24244,1.33,Rifet Kapič,R. Kapič,5.0
+1171,Ekstraklasa (PL),24403,1.5,Viktor Popov,V. Popov,4.25
+1171,Ekstraklasa (PL),24408,5.4,Andi Zeqiri,A. Zeqiri,4.47
+1171,Ekstraklasa (PL),24413,11.11,Filip Stojiljković,F. Stojiljković,4.61
+1171,Ekstraklasa (PL),24417,0.0,Attila Szalai,A. Szalai,0.0
+1171,Ekstraklasa (PL),24939,4.37,Antonio Cortes Heredia,Antoñín Cortés,5.11
+1171,Ekstraklasa (PL),25081,0.0,Mateusz Skrzypczak,M. Skrzypczak,0.2
+1171,Ekstraklasa (PL),25087,1.58,Jean Carlos Silva Rocha,Jean Carlos,5.42
+1171,Ekstraklasa (PL),25090,0.33,Serafin Szota,S. Szota,0.0
+1171,Ekstraklasa (PL),25093,4.33,Lucas Lima Linhares,Luquinhas,5.33
+1171,Ekstraklasa (PL),25095,2.3,Kacper Kostorz,K. Kostorz,1.6
+1171,Ekstraklasa (PL),25096,0.86,Mateusz Praszelik,M. Praszelik,6.21
+1171,Ekstraklasa (PL),25097,5.12,Maciej Rosołek,M. Rosołek,3.0
+1171,Ekstraklasa (PL),25098,2.0,Patryk Szysz,P. Szysz,2.45
+1171,Ekstraklasa (PL),25106,1.67,Patryk Kun,P. Kun,8.67
+1171,Ekstraklasa (PL),25110,0.0,Arkadiusz Kasperkiewicz,A. Kasperkiewicz,0.39
+1171,Ekstraklasa (PL),25119,1.35,Marcel  Wędrychowski,M. Wędrychowski,4.47
+1171,Ekstraklasa (PL),25122,0.71,Maciej Wolski,M. Wolski,2.59
+1171,Ekstraklasa (PL),25132,7.6,Łukasz Sekulski,L. Sekulski,6.5
+1171,Ekstraklasa (PL),25136,2.9,Jan Grzesik,J. Grzesik,7.38
+1171,Ekstraklasa (PL),25383,0.0,Marco Burch,M. Burch,1.2
+1171,Ekstraklasa (PL),25576,2.2,Ibán Salvador Edu,Ibán Salvador,2.67
+1171,Ekstraklasa (PL),25617,0.0,Juan De Dios de Dios Rivas Margalef,Juande Rivas,0.11
+1171,Ekstraklasa (PL),25698,0.44,Sergio Lozano Lluch,Sergio Lozano,4.78
+1171,Ekstraklasa (PL),25710,0.65,Borja Galán González,Borja Galán,4.8
+1171,Ekstraklasa (PL),25810,3.25,Angel Baena Pérez,Angel Baena,4.3
+1171,Ekstraklasa (PL),25891,1.73,Hugo Claudio Vallejo Avilés,Hugo Vallejo,6.4
+1171,Ekstraklasa (PL),26059,0.18,Lukas Podolski,L. Podolski,0.18
+1171,Ekstraklasa (PL),26659,0.06,Ricardo Visus Contreras,Ricardo Visus,0.22
+1171,Ekstraklasa (PL),26661,2.62,Jorge Jiménez Rodríguez,Jorge Jiménez,7.0
+1171,Ekstraklasa (PL),26699,2.55,Paul Mukairu,P. Mukairu,5.36
+1171,Ekstraklasa (PL),26770,0.73,Jesse Bosch,J. Bosch,2.45
+1171,Ekstraklasa (PL),27178,0.1,João Gervásio Bragança Moutinho,João Moutinho,2.7
+1171,Ekstraklasa (PL),27296,0.0,Ibrahima Camará,I. Camará,0.62
+1171,Ekstraklasa (PL),27304,1.85,Matchoi Bobó Djaló,Matchoi Djaló,3.54
+1171,Ekstraklasa (PL),27405,1.12,Louka Daniel Prip Andreasen,L. Prip,6.25
+1171,Ekstraklasa (PL),27406,0.12,Peter Therkildsen,P. Therkildsen,4.12
+1171,Ekstraklasa (PL),27519,0.24,Daniel Pacheco Lobato,Dani Pacheco,2.19
+1171,Ekstraklasa (PL),27678,4.58,Leonardo Miramar Rocha,Leonardo Rocha,3.37
+1171,Ekstraklasa (PL),27803,4.59,Ilya Shkurin,I. Shkurin,3.12
+1171,Ekstraklasa (PL),28144,0.0,Gustav Henriksson,G. Henriksson,0.05
+1171,Ekstraklasa (PL),28192,0.25,Hussein Ali Haidar,Hussein Ali,1.62
+1171,Ekstraklasa (PL),29138,0.2,Matej Rodin,M. Rodin,0.8
+1171,Ekstraklasa (PL),29447,3.86,Leo Bengtsson,L. Bengtsson,6.73
+1171,Ekstraklasa (PL),29624,6.78,Sebastian Bergier,S. Bergier,6.89
+1171,Ekstraklasa (PL),29632,0.87,Karol Struski,K. Struski,2.53
+1171,Ekstraklasa (PL),29633,0.33,Bartłomiej  Wdowik,B. Wdowik,3.52
+1171,Ekstraklasa (PL),29640,1.2,Kacper  Smoliński,K. Smoliński,3.4
+1171,Ekstraklasa (PL),29660,3.0,Piotr Krawczyk,P. Krawczyk,1.33
+1171,Ekstraklasa (PL),29662,3.5,Aleksander Buksa,А. Buksa,1.25
+1171,Ekstraklasa (PL),29665,0.09,Damian Michalski,D. Michalski,0.18
+1171,Ekstraklasa (PL),29666,1.67,Dawid Kocyła,D. Kocyła,4.39
+1171,Ekstraklasa (PL),29690,3.25,Kacper Chodyna,K. Chodyna,6.12
+1171,Ekstraklasa (PL),29919,1.62,Aleksandar Ćirković,A. Ćirković,6.0
+1171,Ekstraklasa (PL),29985,7.5,Emil Kornvig,E. Kornvig,13.25
+1171,Ekstraklasa (PL),30068,0.07,Apostolos Konstantopoulos,A. Konstantopoulos,0.71
+1171,Ekstraklasa (PL),30269,1.77,Leandro Mário Baldé Sanca,Leandro Sanca,7.36
+1171,Ekstraklasa (PL),30596,2.8,Patrik Wålemark,P. Wålemark,3.6
+1171,Ekstraklasa (PL),30623,0.0,Elias Olsson,E. Olsson,0.12
+1171,Ekstraklasa (PL),30745,3.57,Maksym Chłań,M. Chłań,7.86
+1171,Ekstraklasa (PL),30782,6.75,Filip Szymczak,F. Szymczak,5.0
+1171,Ekstraklasa (PL),30786,0.0,Ariel  Mosór,A. Mosór,0.4
+1171,Ekstraklasa (PL),30788,1.11,Nikodem Niski,N. Niski,3.11
+1171,Ekstraklasa (PL),30791,0.19,Kryspin Szcześniak,K. Szcześniak,0.69
+1171,Ekstraklasa (PL),30798,1.5,Kacper Urbański,K. Urbański,6.71
+1171,Ekstraklasa (PL),30799,1.37,Kacper Sezonienko,K. Sezonienko,5.21
+1171,Ekstraklasa (PL),30800,2.38,Kamil  Lukoszek ,K. Lukoszek,5.92
+1171,Ekstraklasa (PL),30801,2.11,Jakub Sypek,J. Sypek,5.74
+1171,Ekstraklasa (PL),30816,0.0,Aleksander  Paluszek,A. Paluszek,0.0
+1171,Ekstraklasa (PL),30871,0.31,Enrique Gómez Hermoso,Kike Hermoso,0.23
+1171,Ekstraklasa (PL),30897,1.47,David González Plata,Nono,4.16
+1171,Ekstraklasa (PL),30944,0.11,Bogdan Racovițan,B. Racovițan,0.44
+1171,Ekstraklasa (PL),31043,3.25,Vahan Bichakhchyan,V. Bichakhchyan,5.25
+1171,Ekstraklasa (PL),31320,0.07,Pau Resta Tell,P. Resta,0.43
+1171,Ekstraklasa (PL),31962,8.47,Eduardo David Espiau Hernández,Edu Espiau,5.0
+1171,Ekstraklasa (PL),31996,0.0,Jérémy Demian Blasco,J. Blasco,0.0
+1171,Ekstraklasa (PL),32021,0.61,Sergio Guerrero Romero,Sergio Guerrero,2.83
+1171,Ekstraklasa (PL),32026,0.0,Alvis Jaunzems,A. Jaunzems,2.33
+1171,Ekstraklasa (PL),32029,0.0,Julien  Célestine,J. Célestine,0.25
+1171,Ekstraklasa (PL),32124,3.75,Brandon Dominguès,B. Dominguès,7.25
+1171,Ekstraklasa (PL),32281,0.85,Juergen Farid Elitim Sepúlveda,J. Elitim,4.31
+1171,Ekstraklasa (PL),32464,0.94,Szymon Czyż,S. Czyż,3.06
+1171,Ekstraklasa (PL),32469,2.47,Bogdan Viunnyk,B. Viunnyk,5.59
+1171,Ekstraklasa (PL),32552,4.19,Martin Minchev,M. Minchev,5.62
+1171,Ekstraklasa (PL),32658,2.42,Imad Rondić,I. Rondić,3.58
+1171,Ekstraklasa (PL),32690,5.75,Lukáš Sadílek,L. Sadílek,8.25
+1171,Ekstraklasa (PL),32704,3.4,Žan Rogelj,Ž. Rogelj,6.0
+1171,Ekstraklasa (PL),32782,5.61,Osvaldo Pedro Capemba,Capita,8.22
+1171,Ekstraklasa (PL),32783,2.55,Abdoul Fessal Tapsoba,A. Tapsoba,4.35
+1171,Ekstraklasa (PL),32970,0.22,Leonardo Borges da Silva,Léo Borges,1.56
+1171,Ekstraklasa (PL),33225,1.17,Leon Flach,L. Flach,2.56
+1171,Ekstraklasa (PL),33237,3.78,Vladimir Nikolov,V. Nikolov,3.06
+1171,Ekstraklasa (PL),33536,0.24,Aleks Ławniczak,A. Ławniczak,0.29
+1171,Ekstraklasa (PL),33542,2.47,Kajetan Szmyt,K. Szmyt,6.58
+1171,Ekstraklasa (PL),33546,1.62,Bartosz Nowak,B. Nowak,9.05
+1171,Ekstraklasa (PL),33547,1.05,Norbert Wojtuszek,N. Wojtuszek,4.85
+1171,Ekstraklasa (PL),33556,0.65,Grzegorz Tomasiewicz,G. Tomasiewicz,2.5
+1171,Ekstraklasa (PL),33567,2.5,Szymon Sobczak,S. Sobczak,1.0
+1171,Ekstraklasa (PL),33571,0.3,Dawid Abramowicz,D. Abramowicz,2.6
+1171,Ekstraklasa (PL),33573,0.5,Konrad Gruszkowski,K. Gruszkowski,3.0
+1171,Ekstraklasa (PL),33575,0.0,Michał Rzuchowski,M. Rzuchowski,0.0
+1171,Ekstraklasa (PL),33607,2.95,Mariusz Fornalczyk,M. Fornalczyk,7.38
+1171,Ekstraklasa (PL),33622,0.5,Zié Mohamed Ouattara,Z. Ouattara,3.6
+1171,Ekstraklasa (PL),33648,0.47,Joel Vieira Pereira,Joel Pereira,4.58
+1171,Ekstraklasa (PL),33882,0.75,Erick Ouma Otieno,E. Ouma Otieno,2.5
+1171,Ekstraklasa (PL),33947,1.6,Ajdin Hasić,A. Hasić,6.87
+1171,Ekstraklasa (PL),34500,0.38,Josip Čorluka,J. Čorluka,2.85
+1171,Ekstraklasa (PL),34534,1.0,Ema Twumasi,E. Twumasi,4.95
+1171,Ekstraklasa (PL),34577,5.76,Pablo Rodríguez Delgado,Pablo Rodríguez,9.65
+1171,Ekstraklasa (PL),35017,0.4,Filip Borowski,F. Borowski,2.4
+1171,Ekstraklasa (PL),35317,0.0,Miłosz Matysik,M. Matysik,0.0
+1171,Ekstraklasa (PL),35529,2.5,Hide Vitalucci,H. Vitalucci,2.33
+1171,Ekstraklasa (PL),35531,0.0,Gabriel André Joseph Charpentier,G. Charpentier,3.0
+1171,Ekstraklasa (PL),36069,2.25,Youssuf Sylla,Y. Sylla,4.0
+1171,Ekstraklasa (PL),36946,0.89,Marko Bulat,M. Bulat,4.21
+1171,Ekstraklasa (PL),36948,8.56,Deni Jurić,D. Jurić,6.22
+1171,Ekstraklasa (PL),37020,1.38,Mauro Perković,M. Perković,5.88
+1171,Ekstraklasa (PL),37421,0.0,Patrik Hellebrand,P. Hellebrand,1.9
+1171,Ekstraklasa (PL),37541,0.05,Ivan Zhelizko,I. Zhelizko,2.0
+1171,Ekstraklasa (PL),37626,0.0,Marek Hanousek,M. Hanousek,0.0
+1171,Ekstraklasa (PL),37814,0.86,Antoni Kozubal,A. Kozubal,5.62
+1171,Ekstraklasa (PL),37815,0.17,Krystian Palacz,K. Palacz,4.5
+1171,Ekstraklasa (PL),37835,0.09,Jan Biegański,J. Biegański,2.36
+1171,Ekstraklasa (PL),39772,2.64,Michalis Kosidis,M. Kosidis,3.68
+1171,Ekstraklasa (PL),42121,0.06,Steve Kingue,S. Kingue,0.0
+1171,Ekstraklasa (PL),42628,2.63,Francisco Javier Álvarez Rodríguez,Fran Álvarez,4.79
+1171,Ekstraklasa (PL),42766,0.0,Brahim Traoré,B. Traoré,0.17
+1171,Ekstraklasa (PL),43113,1.14,Sam Greenwood,S. Greenwood,5.29
+1171,Ekstraklasa (PL),43248,1.0,Alejandro Cantero Sánchez,Alejandro Cantero,1.5
+1171,Ekstraklasa (PL),46307,1.9,Juljan Shehu,J. Shehu,5.71
+1171,Ekstraklasa (PL),49236,1.08,Matúš Kmet,M. Kmet,3.54
+1171,Ekstraklasa (PL),49242,12.75,Tomáš Bobček,T. Bobček,6.2
+1171,Ekstraklasa (PL),49256,5.26,Dawid Kurminowski,D. Kurminowski,2.68
+1171,Ekstraklasa (PL),49305,0.83,Aziel Jackson,A. Jackson,4.17
+1171,Ekstraklasa (PL),49327,0.08,Dušan Stojinovič,D. Stojinovič,0.69
+1171,Ekstraklasa (PL),49585,0.0,Lucas Gabriel Masoero Masi,L. Masoero,0.09
+1171,Ekstraklasa (PL),50064,1.69,Tornike Gaprindashvili,T. Gaprindashvili,3.69
+1171,Ekstraklasa (PL),58998,1.0,Mihael Mlinarić,M. Mlinarić,6.0
+1171,Ekstraklasa (PL),59053,3.79,Kevin Custovic,K. Custovic,4.05
+1171,Ekstraklasa (PL),60026,0.14,Stelios Andreou,S. Andreou,0.71
+1171,Ekstraklasa (PL),60116,1.05,Konrad Matuszewski,K. Matuszewski,4.58
+1171,Ekstraklasa (PL),60118,3.16,Michael Ameyaw,M. Ameyaw,5.95
+1171,Ekstraklasa (PL),60123,3.46,Andrzej  Trubeha,A. Trubeha,4.54
+1171,Ekstraklasa (PL),60135,1.0,Karol Knap,K. Knap,3.0
+1171,Ekstraklasa (PL),60137,0.06,Michal Kaput,M. Kaput,1.65
+1171,Ekstraklasa (PL),60141,0.0,Leândro Rossi Pereira,Leândro,0.0
+1171,Ekstraklasa (PL),60143,1.5,Adam Radwański,A. Radwański,4.65
+1171,Ekstraklasa (PL),60145,0.5,Mateusz Grzybek,M. Grzybek,1.0
+1171,Ekstraklasa (PL),60370,5.95,Morgan Faßbender,M. Faßbender,7.24
+1171,Ekstraklasa (PL),60565,3.25,Migouel Alfarela,M. Alfarela,8.25
+1171,Ekstraklasa (PL),60624,0.0,Marin Karamarko,M. Karamarko,1.5
+1171,Ekstraklasa (PL),60705,0.38,Aleksandre Kalandadze,A. Kalandadze,2.0
+1171,Ekstraklasa (PL),61158,0.23,Amir Al Ammari,Amir Al Ammari,3.18
+1171,Ekstraklasa (PL),61338,0.0,Bernardo Maria Morais Cardoso Vital,Bernardo Vital,0.4
+1171,Ekstraklasa (PL),61813,3.38,Maurides Roque Junior,Maurides,3.33
+1171,Ekstraklasa (PL),61846,4.65,Bradly van Hoeven,B. van Hoeven,6.0
+1171,Ekstraklasa (PL),62104,2.43,Noah Weißhaupt,N. Weißhaupt,3.86
+1171,Ekstraklasa (PL),62368,2.0,Miguel Villar Alonso,Miki Villar,2.0
+1171,Ekstraklasa (PL),63001,4.47,Tomasz Pieńko,T. Pieńko,7.0
+1171,Ekstraklasa (PL),64231,1.75,Samed Baždar,S. Baždar,3.0
+1171,Ekstraklasa (PL),67375,3.75,Levente Szabó,L. Szabó,3.25
+1171,Ekstraklasa (PL),67578,4.5,Bryan Solhaug Fiabema,B. Fiabema,3.0
+1171,Ekstraklasa (PL),67652,3.0,Camilo Andrés Mena Márquez,C. Mena,10.19
+1171,Ekstraklasa (PL),67663,0.23,Tamar Svetlin,T. Svetlin,4.09
+1171,Ekstraklasa (PL),68501,0.0,Matúš Vojtko,M. Vojtko,2.84
+1171,Ekstraklasa (PL),68528,0.93,Bartłomiej Kłudka,B. Kłudka,2.07
+1171,Ekstraklasa (PL),68550,0.0,Josh Wilson-Esbrand,J. Wilson-Esbrand,3.0
+1171,Ekstraklasa (PL),69027,2.0,Ivan Correia Posser Lima,Ivan Lima,3.0
+1171,Ekstraklasa (PL),70661,0.47,Alassane Sidibé,A. Sidibé,2.8
+1171,Ekstraklasa (PL),71453,3.62,Yannick Agnero,Y. Agnero,2.25
+1171,Ekstraklasa (PL),72020,6.15,Jonatan Braut Brunes,J. Braut Brunes,5.8
+1171,Ekstraklasa (PL),72127,1.28,Mikkel Maigaard Jakobsen,M. Maigaard,7.33
+1171,Ekstraklasa (PL),72167,5.89,Sondre Liseth,S. Liseth,3.22
+1171,Ekstraklasa (PL),73536,2.11,Young-Jun Goh,Young-Jun Goh,3.11
+1171,Ekstraklasa (PL),73572,0.75,Ryoya Morishita,R. Morishita,7.0
+1171,Ekstraklasa (PL),79847,0.0,Igor Drapiński,I. Drapiński,0.71
+1171,Ekstraklasa (PL),81008,5.59,Michal Król,M. Król,8.0
+1171,Ekstraklasa (PL),84613,0.33,João Pedro Reginaldo,João Pedro,3.56
+1171,Ekstraklasa (PL),103056,0.06,Dimitrios  Keramitsis,D. Keramitsis,0.25
+1171,Ekstraklasa (PL),110462,3.5,Eman Marković,E. Marković,3.93
+1171,Ekstraklasa (PL),111003,0.29,Davíd Kristján Ólafsson,D. Ólafsson,2.86
+1171,Ekstraklasa (PL),111693,3.0,Luis Enrique Palma Oseguera,L. Palma,7.74
+1171,Ekstraklasa (PL),116624,2.22,Laurindo Dilson Maria Aurélio,Depú,2.78
+1171,Ekstraklasa (PL),121240,0.67,Mohamed Awadalla Hassan Ibrahim,Mohamed Awadalla,3.5
+1171,Ekstraklasa (PL),125509,0.18,Kacper Łukasiak,K. Łukasiak,2.91
+1171,Ekstraklasa (PL),125800,2.14,Tomasz Neugebauer,T. Neugebauer,4.24
+1171,Ekstraklasa (PL),130340,0.0,Yuki Kobayashi,Y. Kobayashi,0.12
+1171,Ekstraklasa (PL),132655,6.5,Theodoros Tsirigotis,T. Tsirigotis,2.0
+1171,Ekstraklasa (PL),140160,5.55,Taofeek Ismaheel,T. Ismaheel,8.68
+1171,Ekstraklasa (PL),151341,1.22,Igor Strzałek,I. Strzałek,5.11
+1171,Ekstraklasa (PL),156787,0.07,Mor Ndiaye,M. Ndiaye,0.71
+1171,Ekstraklasa (PL),156899,0.81,Elves Umar Baldé,Elves Baldé,4.94
+1171,Ekstraklasa (PL),158158,3.12,Fábio Ronaldo  Costa Conceição,Fábio Ronaldo,10.19
+1171,Ekstraklasa (PL),162547,9.0,Rafał Adamski,R. Adamski,8.0
+1171,Ekstraklasa (PL),163715,0.13,Peter Baráth,P. Baráth,2.67
+1171,Ekstraklasa (PL),166704,1.0,Anton Tsarenko,A. Tsarenko,3.5
+1171,Ekstraklasa (PL),166707,0.06,Maksym Dyachuk,M. Dyachuk,0.06
+1171,Ekstraklasa (PL),166805,0.33,Jakub Lewicki,J. Lewicki,4.33
+1171,Ekstraklasa (PL),166815,2.19,Dawid Drachal,D. Drachal,6.0
+1171,Ekstraklasa (PL),170360,0.0,Maksymilian Pingot,M. Pingot,0.33
+1171,Ekstraklasa (PL),170368,0.33,Gísli Gottskalk Thórdarson,G. Thórdarson,3.78
+1171,Ekstraklasa (PL),171878,0.0,Thiago Dombroski Moreira,T. Dombroski,1.0
+1171,Ekstraklasa (PL),172695,1.33,Fabian Hiszpański,F. Hiszpański,1.67
+1171,Ekstraklasa (PL),173110,1.55,Dominik Kun,D. Kun,9.5
+1171,Ekstraklasa (PL),173113,0.12,Steve Kapuadi,S. Kapuadi,0.19
+1171,Ekstraklasa (PL),173115,1.44,Dominik Piła,D. Piła,4.28
+1171,Ekstraklasa (PL),173117,1.47,Roberto Emanuel Oliveira Alves,Roberto Alves,3.42
+1171,Ekstraklasa (PL),173425,4.11,Patryk Makuch,P. Makuch,5.78
+1171,Ekstraklasa (PL),179310,1.38,Oskar Leśniak,O. Leśniak,5.25
+1171,Ekstraklasa (PL),180844,0.29,Gabriel Isik,G. Isik,1.86
+1171,Ekstraklasa (PL),184825,0.0,Bartłomiej Smolarczyk,B. Smolarczyk,0.43
+1171,Ekstraklasa (PL),184946,0.0,Roman Yakuba,R. Yakuba,0.95
+1171,Ekstraklasa (PL),187412,1.31,Dijon Kameri,D. Kameri,2.15
+1171,Ekstraklasa (PL),188250,1.33,Gabriel Barbosa Avelino,Gabriel Barbosa,1.33
+1171,Ekstraklasa (PL),240244,0.0,Timothy Noor Ouma,T. Ouma,1.07
+1171,Ekstraklasa (PL),247898,5.0,Christopher Serge Simon,C. Simon,2.0
+1171,Ekstraklasa (PL),257440,2.88,Ermal Krasniqi,E. Krasniqi,6.65
+1171,Ekstraklasa (PL),285199,3.25,Ousmane Sow,O. Sow,9.0
+1171,Ekstraklasa (PL),301896,0.0,Slobodan Rubežić,S. Rubežić,1.67
+1171,Ekstraklasa (PL),310202,2.38,Lukáš Ambros,L. Ambros,4.69
+1171,Ekstraklasa (PL),326209,0.14,Miłosz Strzeboński,M. Strzeboński,0.14
+1171,Ekstraklasa (PL),330208,0.48,Filip Kocaba,F. Kocaba,2.48
+1171,Ekstraklasa (PL),395538,0.0,Salifou Soumah,S. Soumah,1.0
+1171,Ekstraklasa (PL),458603,0.0,Dominick Zator,D. Zator,1.6
+1171,Ekstraklasa (PL),471019,2.0,Mathias Dahl Sauer,M. Sauer,2.0
+1171,Ekstraklasa (PL),514492,0.0,Guilherme Manuel Serrão Montóia,Guilherme Montóia,0.33
+1171,Ekstraklasa (PL),516908,5.75,Ivan Durdov,I. Durdov,2.75
+1171,Ekstraklasa (PL),526175,8.86,Mileta Rajović,M. Rajović,4.14
+1171,Ekstraklasa (PL),530304,1.82,Adrian Przyborek,A. Przyborek,4.41
+1171,Ekstraklasa (PL),530713,2.17,Szczepan Mucha,S. Mucha,1.33
+1171,Ekstraklasa (PL),531601,1.56,Diego Pertejo Canseco,Diego Percan,2.56
+1171,Ekstraklasa (PL),549335,3.0,Pau  Sans López,Pau Sans,7.75
+1171,Ekstraklasa (PL),574480,0.33,Mitja Ilenič,M. Ilenič,3.0
+1171,Ekstraklasa (PL),578959,0.0,Filip Rejczyk,F. Rejczyk,0.0
+1171,Ekstraklasa (PL),590460,0.16,Michał Gurgul,M. Gurgul,5.26
+1171,Ekstraklasa (PL),671394,0.0,Dominik Szala,D. Szala,0.0
+1171,Ekstraklasa (PL),671397,0.5,Igor Orlikowski,I. Orlikowski,2.0
+1171,Ekstraklasa (PL),672253,6.0,Wiktor Bogacz,W. Bogacz,0.0
+1171,Ekstraklasa (PL),687053,0.8,Jakub Kolan,J. Kolan,2.9
+1171,Ekstraklasa (PL),687055,0.68,Mateusz  Kowalczyk,M. Kowalczyk,4.05
+1171,Ekstraklasa (PL),687634,0.33,Beno Selan,B. Selan,1.33
+1171,Ekstraklasa (PL),698179,1.17,Ibrahima Seck,I. Seck,5.5
+1171,Ekstraklasa (PL),715436,0.0,Marek Mróz,M. Mróz,3.0
+1171,Ekstraklasa (PL),715441,0.36,Tomasz  Wójtowicz,T. Wójtowicz,6.36
+1171,Ekstraklasa (PL),716758,0.95,Martin Remacle,M. Remacle,4.86
+1171,Ekstraklasa (PL),717011,0.35,Marcel Pięczek,M. Pięczek,1.6
+1171,Ekstraklasa (PL),719453,2.08,João Pedro Abreu De Oliveira,J. Oliveira,4.5
+1171,Ekstraklasa (PL),729987,1.5,Bogdan Mirčetić,B. Mirčetić,2.75
+1171,Ekstraklasa (PL),733198,3.0,Giannis Niarchos,G. Niarchos,4.0
+1171,Ekstraklasa (PL),733205,0.06,Marek Kristián Bartoš,M. Bartoš,1.25
+1171,Ekstraklasa (PL),735670,1.72,Adriano Luís Amorim Santos,Adriano,5.67
+1171,Ekstraklasa (PL),735693,1.37,Vasco Rafael Fortes Lopes,Vasco Lopes,4.53
+1171,Ekstraklasa (PL),763217,1.2,Florian Haxha,F. Haxha,1.4
+1171,Ekstraklasa (PL),764294,0.5,Milan Aleksić,M. Aleksić,2.67
+1171,Ekstraklasa (PL),764330,1.4,Kahveh Zahiroleslam,K. Zahiroleslam,1.47
+1171,Ekstraklasa (PL),774043,0.27,Marian Huja,Marian Huja,0.27
+1171,Ekstraklasa (PL),774288,2.0,Yvan Ikia Dimi,Y. Ikia Dimi,0.0
+1171,Ekstraklasa (PL),777059,0.3,Samuel Kozlovský,S. Kozlovský,2.1
+1171,Ekstraklasa (PL),793226,0.0,Dominik Biniek,D. Biniek,2.0
+1171,Ekstraklasa (PL),798001,6.7,Rajmund Molnár,R. Molnár,5.0
+1171,Ekstraklasa (PL),799077,0.11,Bujar  Pllana,B. Pllana,0.33
+1171,Ekstraklasa (PL),799496,1.0,Antoni Klukowski,A. Klukowski,0.86
+1171,Ekstraklasa (PL),801759,2.25,Patryk Paryzek,P. Paryzek,2.5
+1171,Ekstraklasa (PL),807804,0.0,Elton Fikaj,E. Fikaj,1.0
+1171,Ekstraklasa (PL),808538,3.0,Samuel Akere,S. Akere,4.73
+1171,Ekstraklasa (PL),809578,0.17,Andrias Edmundsson,A. Edmundsson,1.5
+1171,Ekstraklasa (PL),810425,0.5,Fabian Bzdyl,F. Bzdyl,2.0
+1171,Ekstraklasa (PL),810445,0.46,Kornel  Lisman,K. Lisman,4.08
+1171,Ekstraklasa (PL),810501,1.0,Kamil  Cybulski,K. Cybulski,1.5
+1171,Ekstraklasa (PL),812841,0.0,Jan Ziółkowski,J. Ziółkowski,0.5
+1171,Ekstraklasa (PL),813313,1.93,Wojciech Urbanski,W. Urbanski,4.21
+1171,Ekstraklasa (PL),817292,1.25,Christopher Cheng,C. Cheng,3.25
+1171,Ekstraklasa (PL),817446,0.0,Alex Douglas,A. Douglas,0.43
+1171,Ekstraklasa (PL),819362,0.0,Wojciech Mońka,W. Mońka,0.75
+1171,Ekstraklasa (PL),828800,5.86,German Barkovskiy,G. Barkovskiy,4.76
+1171,Ekstraklasa (PL),829559,0.0,Bartosz Biedrzycki,B. Biedrzycki,1.75
+1171,Ekstraklasa (PL),838635,0.19,Marcel Krajewski,M. Krajewski,3.5
+1171,Ekstraklasa (PL),838638,0.25,Milosz Kalahur,M. Kałahur,3.75
+1171,Ekstraklasa (PL),839496,0.58,Filip  Luberecki,F. Luberecki,7.42
+1171,Ekstraklasa (PL),839497,0.5,Bartosz Wolski,B. Wolski,7.32
+1171,Ekstraklasa (PL),839498,0.35,Filip Wójcik,F. Wójcik,1.71
+1171,Ekstraklasa (PL),839503,8.25,Mbaye Jacques Ndiaye,M. Ndiaye,7.75
+1171,Ekstraklasa (PL),839506,1.62,Adrian Błąd,A. Błąd,1.81
+1171,Ekstraklasa (PL),839507,0.1,Oskar Repka,O. Repka,1.55
+1171,Ekstraklasa (PL),839508,0.0,Grzegorz Rogala,G. Rogala,2.67
+1171,Ekstraklasa (PL),839509,0.0,Alan  Bród,A. Bród,0.0
+1171,Ekstraklasa (PL),839914,2.0,Wojciech Jakubik,W. Jakubik,2.53
+1171,Ekstraklasa (PL),839918,1.36,Damian  Hilbrycht,D. Hilbrycht,4.91
+1171,Ekstraklasa (PL),839920,0.44,Kacper Karasek,K. Karasek,1.22
+1171,Ekstraklasa (PL),841518,0.9,Hubert Zwoźny,H. Zwoźny,5.4
+1171,Ekstraklasa (PL),841520,0.0,Wojciech Kamiński,W. Kamiński,0.5
+1171,Ekstraklasa (PL),842069,2.94,Stjepan Davidović,S. Davidović,6.41
+1171,Ekstraklasa (PL),842169,0.5,Jakub Budnicki,J. Budnicki,1.0
+1171,Ekstraklasa (PL),842172,1.14,Natan  Dzięgielewski,N. Dzięgielewski,3.14
+1171,Ekstraklasa (PL),842547,1.3,Marcel Predenkiewicz,M. Predenkiewicz,3.1
+1171,Ekstraklasa (PL),842556,4.15,Wiktor Nowak,W. Nowak,8.55
+1171,Ekstraklasa (PL),842693,5.5,Borislav Rupanov,B. Rupanov,2.5
+1171,Ekstraklasa (PL),845091,0.0,Dawid Gojny,D. Gojny,2.3
+1171,Ekstraklasa (PL),845093,9.2,Karol Czubak,K. Czubak,4.1
+1171,Ekstraklasa (PL),845117,0.75,Krystian Pomorski,K. Pomorski,1.83
+1171,Ekstraklasa (PL),845118,0.41,Marcus Haglind-Sangré,M. Haglind-Sangré,4.14
+1171,Ekstraklasa (PL),847654,1.33,Jakub Lis,J. Lis,3.0
+1171,Ekstraklasa (PL),847655,5.63,Marcel Reguła,M. Reguła,4.58
+1171,Ekstraklasa (PL),848327,0.0,Jan Leszczyński,J. Leszczyński,1.0
+1171,Ekstraklasa (PL),848328,0.5,Jakub Zewlakow,J. Zewlakow,3.25
+1171,Ekstraklasa (PL),848977,0.79,Kamil Jakubczyk,K. Jakubczyk,4.26
+1171,Ekstraklasa (PL),849146,0.1,Arkadiusz Najemski,A. Najemski,1.1
+1171,Ekstraklasa (PL),850870,3.46,Dimitris  Rallis,D. Rallis,3.77
+1171,Ekstraklasa (PL),851230,0.0,Maciej Wojciechowski,M. Wojciechowski,1.0
+1171,Ekstraklasa (PL),856254,0.33,Luka Lučić,L. Lučić,3.2
+1171,Ekstraklasa (PL),861003,0.0,Bastien Donio,B. Donio,1.4
+1171,Ekstraklasa (PL),870416,1.0,Henrique Miguel Sousa Arreiol,Henrique Arreiol,9.25
+1171,Ekstraklasa (PL),874132,0.33,Paskal Meyer,P. Meyer,1.0
+1171,Ekstraklasa (PL),877517,1.41,Oskar Pietuszewski,O. Pietuszewski,6.47
+1171,Ekstraklasa (PL),887975,0.67,Cezary Polak,C. Polak,1.67
+1171,Ekstraklasa (PL),887985,1.0,Jesus Antonio Diaz Gomez,J. Diaz,3.5
+1171,Ekstraklasa (PL),888962,1.0,Bartosz Borowski,B. Borowski,4.0
+1171,Ekstraklasa (PL),919700,1.0,Mateusz Dziewiatowski,M. Dziewiatowski,4.86
+1171,Ekstraklasa (PL),927041,2.33,Dominik Sarapata,D. Sarapata,5.33
+1171,Ekstraklasa (PL),957491,0.05,Oskar Wójcik,O. Wójcik,1.0
+1171,Ekstraklasa (PL),962336,1.0,Levis Pitan,L. Pitan,0.0
+1171,Ekstraklasa (PL),963311,1.5,Diego Deisadze,D. Deisadze,2.0
+1171,Ekstraklasa (PL),971232,1.0,Samuel Kováčik,S. Kováčik,3.0
+1171,Ekstraklasa (PL),975477,0.0,Cyprian Popielec,C. Popielec,0.0
+1171,Ekstraklasa (PL),976839,0.2,Dion Gallapeni,D. Gallapeni,3.8
+1171,Ekstraklasa (PL),998242,0.0,Kamil Jakóbczyk,K. Jakóbczyk,2.0
+1171,Ekstraklasa (PL),998244,1.09,Bartosz Mazurek,B. Mazurek,7.64
+1171,Ekstraklasa (PL),998264,0.17,Bright Ede,B. Ede,0.83
+1171,Ekstraklasa (PL),998265,2.17,Michal Glogowski,M. Glogowski,1.17
+1171,Ekstraklasa (PL),998303,1.75,Abbati Abdullahi,A. Abdullahi,2.5
+1171,Ekstraklasa (PL),999009,0.25,Konrad Ciszek,K. Ciszek,4.0
+1171,Ekstraklasa (PL),1004450,0.5,Mohamed Awad Alla Hassan Ibrahim,,4.0
+1171,Ekstraklasa (PL),1008953,1.67,Kamil Nowogonski,K. Nowogonski,1.33
+1171,Ekstraklasa (PL),1018431,0.0,Franciszek Lewandowski,F. Lewandowski,1.5
+1171,Ekstraklasa (PL),1018432,1.5,Mateusz  Glowinski ,M. Glowinski,0.5
+1171,Ekstraklasa (PL),1020469,0.0,Kacper  Minuczyc ,K. Minuczyc,0.0
+1171,Ekstraklasa (PL),1028033,,Bartosz Szczepankiewicz,B. Szczepankiewicz,
+1171,Ekstraklasa (PL),1029787,0.0,Natan Waligora,N. Waligora,3.0
+1171,Ekstraklasa (PL),1030855,1.0,Sebastian  Church,,6.0
+1171,Ekstraklasa (PL),1043952,0.0,Jakub Ligocki,J. Ligocki,0.0
+1171,Ekstraklasa (PL),1044361,0.0,Mateusz Tabisz,M. Tabisz,1.0
+1171,Ekstraklasa (PL),1058968,1.0,Oskar Kubiak,O. Kubiak,3.5

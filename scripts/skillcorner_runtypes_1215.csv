@@ -1,281 +1,281 @@
-competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_cross_receiver_run,runtype_overlap_run,runtype_underlap_run,runtype_coming_short_run,runtype_pulling_half_space_run,runtype_run_ahead_of_the_ball,runtype_pulling_wide_run,runtype_support_run,runtype_dropping_off_run
-1215,1. HNL (HR),433,28,Aleksandar Trajkovski,A. Trajkovski,3.6,0.0,0.6,4.2,1.8,41,1.4,1.6,0.6
-1215,1. HNL (HR),903,87,Ante Rebić,A. Rebić,4.76,0.82,0.47,2.71,1.71,142,1.71,1.41,0.24
-1215,1. HNL (HR),2343,17,Dario Melnjak,D. Melnjak,0.9,1.7,0.8,0.2,0.1,49,1.9,3.5,2.2
-1215,1. HNL (HR),2882,73,Duje Čop,D. Čop,3.67,0.06,0.44,0.5,0.44,45,0.44,1.22,0.06
-1215,1. HNL (HR),3442,36,Filip Krovinović,F. Krovinović,3.14,0.64,0.82,5.5,0.41,105,2.23,5.0,0.82
-1215,1. HNL (HR),5484,8,Josip Radošević,J. Radošević,0.23,0.18,0.32,4.55,0.82,48,0.45,3.68,1.18
-1215,1. HNL (HR),6908,19,Mario Tičinović,M. Tičinović,0.59,2.18,0.29,0.24,0.12,63,2.29,2.82,1.59
-1215,1. HNL (HR),6975,64,Marko Livaja,M. Livaja,5.87,0.0,0.2,0.87,0.2,42,0.4,1.13,0.2
-1215,1. HNL (HR),9610,0,Scott McKenna,S. McKenna,0.1,0.0,0.1,0.43,0.05,12,0.14,0.38,5.0
-1215,1. HNL (HR),10498,1,Tomislav Božić,T. Božić,0.35,0.2,0.0,0.2,0.1,10,0.25,0.6,0.85
-1215,1. HNL (HR),12171,23,Rafael Euclides Soares Camacho,Rafael Camacho,1.62,0.62,0.38,1.0,0.0,30,0.5,1.38,0.12
-1215,1. HNL (HR),12194,0,Ronaël Pierre-Gabriel,R. Pierre-Gabriel,0.0,3.0,0.0,0.0,0.0,4,2.0,2.0,1.0
-1215,1. HNL (HR),12221,11,Yassine Benrahou,Y. Benrahou,4.5,0.25,0.0,4.25,2.25,33,3.75,2.5,0.75
-1215,1. HNL (HR),12372,126,Smail Prevljak,S. Prevljak,4.89,0.26,0.32,0.37,0.53,72,0.0,0.95,0.0
-1215,1. HNL (HR),12418,46,Amer Gojak,A. Gojak,2.33,0.44,0.39,1.83,0.89,83,1.11,2.06,0.39
-1215,1. HNL (HR),12428,0,Kévin Theophile-Catherine,K. Theophile-Catherine,0.0,0.0,0.0,0.33,0.0,2,0.33,0.67,3.67
-1215,1. HNL (HR),12429,10,Marin Leovac,M. Leovac,0.17,1.83,0.67,0.0,0.0,11,1.83,1.5,2.17
-1215,1. HNL (HR),12592,0,Borna  Barišić,B. Barišić,0.0,3.0,0.67,0.0,0.0,14,1.33,3.67,2.67
-1215,1. HNL (HR),13013,47,Miha Zajc,M. Zajc,3.64,0.5,0.93,7.64,2.0,115,3.0,6.29,1.64
-1215,1. HNL (HR),13301,0,Mateo Barać,M. Barać,0.2,0.0,0.0,0.4,0.0,0,0.0,0.4,2.0
-1215,1. HNL (HR),13308,58,Dejan Ljubičić,D. Ljubičić,4.2,0.13,0.87,5.53,2.13,127,1.13,4.4,0.87
-1215,1. HNL (HR),13582,1,Mario Šitum,M. Šitum,0.8,0.9,0.4,0.6,0.0,19,0.4,2.1,1.3
-1215,1. HNL (HR),13583,66,Luka Menalo,L. Menalo,3.07,0.67,0.27,1.6,0.47,96,1.27,2.13,0.47
-1215,1. HNL (HR),13609,3,Dario Maresić,D. Maresić,0.05,0.0,0.1,0.55,0.05,21,0.3,1.05,2.9
-1215,1. HNL (HR),13775,4,Domagoj Antolić,D. Antolić,0.27,0.36,1.0,5.45,0.55,26,0.91,3.27,1.27
-1215,1. HNL (HR),13779,29,Marko Vešović,M. Vešović,2.87,2.8,0.93,1.6,0.13,109,3.33,4.33,3.93
-1215,1. HNL (HR),13785,43,Sandro Kulenović,S. Kulenović,3.47,0.33,0.07,0.6,0.47,36,0.13,0.47,0.0
-1215,1. HNL (HR),14125,7,Ismael Bennacer,I. Bennacer,0.27,0.18,0.64,4.09,1.18,33,0.91,3.36,1.18
-1215,1. HNL (HR),14128,100,Arnel Jakupović,A. Jakupović,6.5,0.11,0.06,1.83,0.44,78,0.39,1.83,0.11
-1215,1. HNL (HR),14144,11,Marko Pajač,M. Pajač,1.29,3.47,1.0,1.88,0.0,120,2.35,4.06,1.65
-1215,1. HNL (HR),14566,33,Ivan Fiolić,I. Fiolić,1.75,0.2,0.1,1.55,0.3,67,1.05,2.0,0.3
-1215,1. HNL (HR),14593,0,Jakov Filipović,J. Filipović,0.09,0.0,0.09,0.35,0.0,4,0.17,0.39,3.61
-1215,1. HNL (HR),16063,5,Josip Mišić,J. Mišić,0.0,0.1,0.1,3.1,0.38,27,0.19,2.14,1.29
-1215,1. HNL (HR),16455,43,Ante Erceg,A. Erceg,2.88,0.25,0.0,1.75,1.0,34,0.62,0.88,0.5
-1215,1. HNL (HR),16555,94,Michele Šego,M. Šego,6.05,0.4,0.1,1.3,0.4,124,1.15,0.85,0.35
-1215,1. HNL (HR),16558,128,Jurica Pršir,J. Pršir,4.24,0.52,0.43,4.86,1.0,180,2.1,4.33,0.52
-1215,1. HNL (HR),16573,1,Tonio Teklić,T. Teklić,0.5,0.0,0.0,2.25,0.25,10,1.5,1.75,1.0
-1215,1. HNL (HR),16577,0,Roberto Punčec,R. Punčec,0.11,0.0,0.0,0.78,0.0,0,0.33,0.67,2.0
-1215,1. HNL (HR),16580,7,Leonard Zuta,L. Zuta,0.0,1.07,0.27,0.13,0.0,33,1.07,3.47,1.93
-1215,1. HNL (HR),16586,12,Adrian Liber,A. Liber,1.4,0.07,0.13,2.4,1.0,51,0.87,1.73,0.13
-1215,1. HNL (HR),16589,110,Jakov Puljić,J. Puljić,7.12,0.0,0.06,1.44,0.81,73,0.38,1.62,0.12
-1215,1. HNL (HR),16591,61,Josip Mitrović,J. Mitrović,2.86,1.1,0.24,1.1,0.43,148,2.57,2.29,0.9
-1215,1. HNL (HR),16592,35,Domagoj Pavičić,D. Pavičić,3.1,0.3,0.8,2.5,0.9,95,1.1,3.45,0.4
-1215,1. HNL (HR),16599,66,Stjepan Lončar,S. Lončar,2.95,0.9,0.86,1.9,1.76,217,1.33,3.67,0.24
-1215,1. HNL (HR),16603,1,Stjepan Radeljić,S. Radeljić,0.12,0.24,0.12,0.35,0.18,7,0.53,1.47,4.71
-1215,1. HNL (HR),16616,6,Robert Mudražija,R. Mudražija,0.6,0.0,0.0,0.4,0.4,13,0.6,0.8,0.0
-1215,1. HNL (HR),16620,1,Marin Pilj,M. Pilj,0.5,0.12,0.38,1.88,0.12,16,0.25,2.75,0.25
-1215,1. HNL (HR),16628,16,Mihail Caimacov,M. Caimacov,1.13,0.4,0.53,4.67,0.87,108,1.27,4.73,0.93
-1215,1. HNL (HR),16902,2,Gregor Sikošek,G. Sikošek,0.0,1.0,0.0,0.0,0.5,5,1.0,3.0,2.0
-1215,1. HNL (HR),17024,9,Hubert Sobol,H. Sobol,0.57,0.14,0.14,0.0,0.14,8,0.0,0.0,0.0
-1215,1. HNL (HR),17221,17,Justas Lasickas,J. Lasickas,0.53,0.65,0.71,1.41,0.29,70,1.29,1.59,1.82
-1215,1. HNL (HR),17868,50,Ilija Nestorovski,I. Nestorovski,4.41,0.12,0.12,3.76,0.47,68,0.47,2.82,0.12
-1215,1. HNL (HR),19139,26,Törles Knöll,T. Knöll,2.6,0.0,0.2,1.4,0.0,10,0.0,0.2,0.0
-1215,1. HNL (HR),19154,0,Joszip Elez,J. Elez,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,1.0
-1215,1. HNL (HR),22120,0,Ismaël Chester Diallo,I. Diallo,0.0,1.0,0.0,1.0,0.0,2,1.0,1.0,2.0
-1215,1. HNL (HR),22910,3,Marijan Čabraja,M. Čabraja,0.19,1.57,0.71,0.48,0.14,67,0.76,3.86,3.1
-1215,1. HNL (HR),24023,10,Marcel Heister,M. Heister,0.16,2.11,0.26,0.16,0.05,58,0.79,2.74,0.84
-1215,1. HNL (HR),24098,0,Zvonimir Šarlija ,Z. Šarlija,0.16,0.16,0.05,0.47,0.0,11,0.26,1.05,5.79
-1215,1. HNL (HR),24132,0,Mario Mladenovski,M. Mladenovski,0.0,0.0,0.0,0.38,0.0,0,0.38,0.77,4.62
-1215,1. HNL (HR),24321,0,Édgar González Estrada,Édgar González,0.17,0.33,0.33,0.67,0.0,7,0.17,1.67,3.67
-1215,1. HNL (HR),24336,0,Stefan Perić,S. Perić,0.0,0.29,0.12,0.18,0.0,12,0.18,1.06,2.88
-1215,1. HNL (HR),24774,2,Gonzalo Villar del Fraile,Gonzalo Villar,0.67,0.22,0.33,1.44,1.11,10,0.22,3.44,0.56
-1215,1. HNL (HR),24928,0,Hugo Guillamón Sanmartín,Hugo Guillamón,0.08,0.0,0.0,5.15,0.85,34,0.15,2.77,1.62
-1215,1. HNL (HR),27202,1,Damir Kreilach,D. Kreilach,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0
-1215,1. HNL (HR),27764,17,Dejan Petrovič,D. Petrovič,1.0,0.29,0.24,8.94,1.18,43,0.59,2.59,1.71
-1215,1. HNL (HR),28866,82,Emil Frederiksen,E. Frederiksen,2.45,0.8,0.9,2.05,1.15,158,2.35,4.3,0.5
-1215,1. HNL (HR),29541,1,David Puclin,D. Puclin,0.25,0.0,0.0,1.0,0.08,3,0.25,1.0,0.08
-1215,1. HNL (HR),31094,24,Rüfat Abdullazada,R. Abdullazada,0.78,0.89,0.22,1.89,1.0,68,0.89,1.67,0.11
-1215,1. HNL (HR),32131,2,Tyrone Tormin,T. Tormin,0.67,1.0,0.0,0.67,1.0,15,0.33,2.67,0.0
-1215,1. HNL (HR),32172,19,Merveille Valthy Streeker Ndockyt,M. Ndockyt,0.64,0.43,0.14,1.79,0.36,51,1.86,1.21,0.29
-1215,1. HNL (HR),32174,0,Mihael Žaper,M. Žaper,0.5,0.0,0.0,0.5,0.0,1,0.0,0.5,0.0
-1215,1. HNL (HR),32175,1,Vedran Jugović,V. Jugović,2.0,0.12,0.25,3.62,0.25,22,0.25,3.25,0.25
-1215,1. HNL (HR),32176,0,Ante Majstorović,A. Majstorović,0.11,0.0,0.06,0.5,0.0,2,0.28,0.67,6.83
-1215,1. HNL (HR),32178,182,Dion Drena Beljo,D. Beljo,7.5,0.14,0.18,2.0,0.73,87,0.23,1.18,0.14
-1215,1. HNL (HR),32180,1,Josip Spoljaric,J. Spoljaric,3.0,0.0,0.0,0.0,0.0,3,0.0,1.0,0.0
-1215,1. HNL (HR),32181,7,Petar Bočkaj,P. Bočkaj,1.2,0.8,0.0,1.0,0.6,32,1.0,1.8,0.4
-1215,1. HNL (HR),32186,4,Tomislav Duvnjak,T. Duvnjak,0.37,0.16,0.11,5.84,0.42,104,0.89,6.11,1.0
-1215,1. HNL (HR),32207,44,David Čolina,D. Čolina,1.85,0.9,1.65,1.4,1.1,139,2.15,3.8,0.8
-1215,1. HNL (HR),32222,35,Bruno Bogojević,B. Bogojević,1.54,0.85,0.46,0.62,0.0,68,1.69,2.08,0.85
-1215,1. HNL (HR),32224,3,Bruno Goda,B. Goda,0.13,1.53,0.4,0.07,0.0,40,1.73,2.73,1.8
-1215,1. HNL (HR),32228,0,Vinko Medimorec,V. Medimorec,0.0,0.0,0.0,0.0,0.0,0,0.0,0.33,0.5
-1215,1. HNL (HR),32238,0,Denis Kolinger,D. Kolinger,0.21,0.0,0.11,0.42,0.0,3,0.26,0.68,3.58
-1215,1. HNL (HR),32239,0,Jon Mersinaj,J. Mersinaj,0.0,0.0,0.0,0.43,0.0,2,0.0,0.0,2.14
-1215,1. HNL (HR),32259,0,Mateo Leš,M. Leš,0.33,0.0,0.0,0.72,0.0,7,0.0,1.28,3.94
-1215,1. HNL (HR),32370,17,Advan Kadušić,A. Kadušić,0.31,1.19,0.75,0.19,0.06,68,1.5,3.06,1.31
-1215,1. HNL (HR),32761,29,Abdoulie Bamba Sanyang,A. Sanyang,1.56,0.67,0.22,0.94,0.17,77,1.61,1.28,0.33
-1215,1. HNL (HR),34128,15,Roko Jurišić,R. Jurišić,0.64,2.0,1.45,0.27,0.09,76,1.45,3.82,2.36
-1215,1. HNL (HR),34129,1,Luka Jelenić,L. Jelenić,0.12,0.0,0.06,0.62,0.0,5,0.06,0.62,5.25
-1215,1. HNL (HR),34640,34,Stanislav Shopov,S. Shopov,2.67,1.0,0.5,4.75,0.67,65,1.58,3.83,0.58
-1215,1. HNL (HR),34848,8,Kerim Çalhanoğlu,K. Çalhanoğlu,0.27,2.07,0.47,0.07,0.0,60,1.53,4.73,0.93
-1215,1. HNL (HR),35502,19,Tiago Filipe Oliveira Dantas,Tiago Dantas,1.35,0.8,0.35,4.35,0.65,45,1.45,3.65,1.45
-1215,1. HNL (HR),36907,1,Niko Galešić,N. Galešić,0.12,0.88,0.38,0.38,0.0,8,0.62,2.38,3.25
-1215,1. HNL (HR),36912,50,Matej Vuk,M. Vuk,1.62,0.5,0.12,0.94,0.31,70,0.5,1.88,0.19
-1215,1. HNL (HR),36915,65,Mateo Lisica,M. Lisica,2.92,1.0,0.33,1.75,0.42,94,2.42,2.67,1.0
-1215,1. HNL (HR),36923,22,Anthony Kalik,A. Kalik,2.5,0.25,0.08,0.92,0.25,27,0.5,0.67,0.08
-1215,1. HNL (HR),36925,4,Hrvoje Babec,H. Babec,0.47,0.0,0.0,7.47,0.27,31,0.4,4.27,1.73
-1215,1. HNL (HR),36932,20,Niko Janković,N. Janković,2.62,0.54,0.54,2.0,1.08,74,1.69,2.92,0.38
-1215,1. HNL (HR),36936,21,Leon Belcar,L. Belcar,1.5,0.19,0.31,3.25,0.81,85,0.69,3.69,0.5
-1215,1. HNL (HR),36963,35,Fran Karačić ,F. Karačić,0.79,3.64,0.93,0.14,0.07,62,2.36,3.14,1.71
-1215,1. HNL (HR),36964,2,Dominik Kovačić,D. Kovačić,0.23,0.05,0.05,0.55,0.0,8,0.23,0.64,1.95
-1215,1. HNL (HR),36981,8,Frane Maglica,F. Maglica,0.09,1.82,0.55,0.27,0.0,41,2.36,5.82,1.27
-1215,1. HNL (HR),37030,28,Ante Orec,A. Orec,0.67,2.52,0.48,0.24,0.0,114,3.1,4.71,3.14
-1215,1. HNL (HR),37236,0,Ljuban Crepulja,L. Crepulja,0.4,0.07,0.07,3.93,0.67,25,0.33,4.0,0.87
-1215,1. HNL (HR),37248,106,Ivan Mamut,I. Mamut,5.4,0.05,0.0,1.25,0.7,101,0.3,1.2,0.0
-1215,1. HNL (HR),39795,25,Andrija Filipović,A. Filipović,1.43,0.0,0.0,0.57,0.57,15,0.14,0.14,0.0
-1215,1. HNL (HR),41096,1,Luka Škaričić,L. Škaričić,0.0,0.62,0.44,0.31,0.0,8,0.94,1.5,2.56
-1215,1. HNL (HR),41099,40,Luka Stojković,L. Stojković,3.24,0.53,0.88,3.71,1.88,178,2.12,3.29,0.76
-1215,1. HNL (HR),41125,1,Oleksandr Petrusenko,O. Petrusenko,0.15,0.08,0.15,3.08,0.23,9,0.0,2.54,1.0
-1215,1. HNL (HR),43340,40,Samuele Vignato,S. Vignato,3.45,0.55,0.82,2.73,1.0,95,2.82,3.82,0.64
-1215,1. HNL (HR),43395,17,Renan Guedes Borges,Renan Guedes,0.67,3.06,1.33,0.0,0.0,93,3.22,5.17,3.94
-1215,1. HNL (HR),45049,3,Keyendrah Simmonds,K. Simmonds,1.67,0.0,0.0,0.67,1.0,12,1.0,1.67,0.0
-1215,1. HNL (HR),48315,1,Anel Husić,A. Husić,0.14,0.14,0.14,1.57,0.0,9,0.43,1.14,3.71
-1215,1. HNL (HR),48486,15,Šimun Mikolčić,Š. Mikolčić,1.05,0.26,0.47,2.21,0.47,45,0.63,2.79,0.68
-1215,1. HNL (HR),48597,49,Jakov-Anton Vasilj,J. Vasilj,2.54,0.15,0.62,3.54,2.69,93,2.23,2.85,0.08
-1215,1. HNL (HR),49310,9,David Mateo Mejía Moscoso,D. Mejía,0.47,0.53,0.35,2.06,0.35,88,0.71,2.35,0.35
-1215,1. HNL (HR),49320,29,Ivan Božić,I. Božić,2.25,0.25,0.0,0.5,1.0,23,1.75,0.5,0.25
-1215,1. HNL (HR),49416,11,Mladen Devetak,M. Devetak,0.43,2.0,1.86,0.14,0.1,74,1.9,3.1,3.57
-1215,1. HNL (HR),49746,1,Lamine Ba,L. Ba,0.07,0.0,0.0,0.21,0.0,2,0.14,0.21,2.5
-1215,1. HNL (HR),58691,6,Vladan Bubanja,V. Bubanja,0.5,0.25,0.75,6.75,1.0,12,0.5,3.0,1.25
-1215,1. HNL (HR),58986,86,Toni Fruk,T. Fruk,3.5,0.14,0.36,2.5,1.82,171,1.82,3.0,0.09
-1215,1. HNL (HR),58987,47,Marko Dabro,M. Dabro,2.7,0.0,0.1,0.3,0.3,20,0.3,0.6,0.0
-1215,1. HNL (HR),58990,3,Luka Dajcer,L. Dajcer,0.25,1.58,0.42,0.25,0.17,26,1.33,2.67,3.08
-1215,1. HNL (HR),58993,23,Ivan Ćubelić,I. Ćubelić,0.9,0.15,0.3,3.55,0.55,59,1.0,2.85,1.0
-1215,1. HNL (HR),59000,7,Mario Marina,M. Marina,0.67,0.11,0.11,3.83,0.11,29,0.28,2.5,0.89
-1215,1. HNL (HR),60709,8,Tornike Morchiladze,T. Morchiladze,1.4,0.2,0.2,1.4,0.8,12,1.2,1.2,0.2
-1215,1. HNL (HR),62005,69,Arbër Hoxha,A. Hoxha,2.1,0.62,0.71,0.81,0.29,155,1.9,1.48,0.33
-1215,1. HNL (HR),63308,9,Adrion Pajaziti,A. Pajaziti,0.9,0.15,0.35,5.35,0.25,65,1.0,5.1,1.1
-1215,1. HNL (HR),63416,6,Silvio Goričan,S. Goričan,1.71,0.43,0.57,0.14,0.29,22,0.43,0.71,0.0
-1215,1. HNL (HR),64565,97,Dušan Vuković,D. Vuković,4.76,0.59,0.24,1.82,1.0,158,3.41,1.82,0.18
-1215,1. HNL (HR),64638,4,Logi Hrafn Róbertsson,L. Róbertsson,0.0,0.25,0.0,1.0,0.0,12,0.25,1.0,1.12
-1215,1. HNL (HR),64753,1,Ville Koski,V. Koski,0.0,0.17,0.11,0.28,0.06,16,0.17,1.06,6.33
-1215,1. HNL (HR),64928,82,Alen Jurilj ,A. Jurilj,2.73,0.64,0.09,0.82,0.09,111,2.27,2.0,0.27
-1215,1. HNL (HR),65156,22,David Virgili Fernandez,David Virgili,6.5,0.25,0.5,2.0,1.0,26,1.75,2.25,0.5
-1215,1. HNL (HR),69740,0,Alfonso Daniel Barco Del Solar,A. Barco,0.0,0.25,0.25,5.75,1.0,8,0.0,4.25,1.25
-1215,1. HNL (HR),71488,45,Fode Yannick Touré,Y. Touré,3.18,0.0,0.0,0.36,0.55,36,0.18,0.55,0.0
-1215,1. HNL (HR),74696,68,Monsef Bakrar,M. Bakrar,3.41,0.24,0.35,0.71,1.0,93,0.82,1.18,0.12
-1215,1. HNL (HR),76782,0,Jakov Šuver,J. Šuver,0.29,0.57,0.14,0.14,0.0,8,0.71,2.0,1.86
-1215,1. HNL (HR),95607,38,Iuri António Teixeira Tavares,Iuri Tavares,2.94,0.59,0.41,1.76,0.24,116,1.29,2.88,0.18
-1215,1. HNL (HR),103063,0,Emin Hasić,E. Hasić,0.17,0.0,0.33,0.58,0.08,5,0.25,2.33,6.92
-1215,1. HNL (HR),105557,33,Mamadou Saydou Bangura,M. Bangura,2.25,0.0,0.17,0.17,0.5,23,0.25,0.08,0.0
-1215,1. HNL (HR),109875,70,Rokas Pukštas,R. Pukštas,8.53,0.06,1.35,4.59,1.24,170,4.65,3.71,0.53
-1215,1. HNL (HR),109876,0,Ivan Cvijanović,I. Cvijanović,0.1,0.4,0.1,0.2,0.0,3,0.6,1.5,2.2
-1215,1. HNL (HR),110099,28,Antonio Maurić,A. Maurić,1.47,0.12,0.47,2.76,0.59,65,1.18,3.18,0.82
-1215,1. HNL (HR),116317,1,Dimitrije Kamenović,D. Kamenović,0.8,0.6,0.2,0.2,0.0,5,0.6,0.4,2.2
-1215,1. HNL (HR),116938,0,Novak Tepšić,N. Tepšić,0.42,0.33,0.17,0.25,0.0,7,0.83,1.42,2.0
-1215,1. HNL (HR),118634,33,Gabriel Vidović,G. Vidović,3.0,0.14,0.29,1.86,0.86,74,0.86,3.14,0.5
-1215,1. HNL (HR),120538,0,Sergi Domínguez Viloria,Sergi Domínguez,0.16,0.11,0.0,0.84,0.0,5,0.32,1.0,7.37
-1215,1. HNL (HR),130787,10,Eniss Shabani,E. Shabani,1.12,0.59,0.76,3.94,0.82,72,1.12,4.71,0.82
-1215,1. HNL (HR),140237,0,Noel Bodetić,N. Bodetić,0.0,1.33,0.33,0.0,0.0,5,1.0,2.0,2.0
-1215,1. HNL (HR),141054,76,Fabijan Krivak,F. Krivak,4.25,0.62,0.25,6.56,1.0,149,1.38,2.5,0.81
-1215,1. HNL (HR),153584,16,Roko Brajković,R. Brajković,4.29,0.71,0.29,0.29,0.43,50,1.86,1.29,0.14
-1215,1. HNL (HR),154090,9,Danijel Dejan Djuric,D. Djuric,1.67,0.11,0.22,2.22,1.22,30,1.33,1.78,0.22
-1215,1. HNL (HR),155701,24,Šimun Hrgović,Š. Hrgović,0.76,3.53,1.65,0.41,0.18,123,2.47,5.65,3.35
-1215,1. HNL (HR),156492,7,Samuel Koeberlé,S. Koeberlé,0.75,0.0,0.25,1.75,1.0,27,0.75,1.75,0.0
-1215,1. HNL (HR),162182,0,Marin Žgomba,M. Žgomba,0.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
-1215,1. HNL (HR),163360,4,Styopa Mkrtchyan,S. Mkrtchyan,0.18,0.0,0.12,0.47,0.12,4,0.12,0.82,4.18
-1215,1. HNL (HR),170788,4,Christian Dimitri Legbo Ouguehi,D. Legbo,0.0,0.0,0.33,0.0,0.0,4,0.67,0.33,0.67
-1215,1. HNL (HR),170856,0,Samuli Miettinen,S. Miettinen,0.0,0.0,0.33,0.33,0.0,2,0.67,0.67,1.67
-1215,1. HNL (HR),171977,5,Silvio Ilinković,S. Ilinković,0.4,0.0,0.2,3.4,0.2,9,0.6,2.8,1.6
-1215,1. HNL (HR),172655,3,Gabriel Rukavina,G. Rukavina,0.67,0.0,0.0,1.0,0.0,18,1.67,0.67,0.33
-1215,1. HNL (HR),172656,28,Blaž Bošković,B. Bošković,2.05,0.24,0.24,4.62,1.14,95,1.1,2.71,0.57
-1215,1. HNL (HR),173049,71,Ante Matej Jurič,A. Jurič,3.29,0.0,0.0,0.41,0.35,21,0.0,0.29,0.06
-1215,1. HNL (HR),175176,27,Ognjen Bakić,O. Bakić,1.71,0.35,0.12,2.06,0.47,78,1.82,2.47,0.53
-1215,1. HNL (HR),175469,0,Marcel Lorber,M. Lorber,0.5,0.0,0.0,0.0,0.0,0,2.5,1.0,0.5
-1215,1. HNL (HR),179270,105,Lovro Banovec,L. Banovec,5.0,0.76,0.53,1.94,0.94,167,1.71,2.18,0.12
-1215,1. HNL (HR),330752,7,Kristijan Čabrajić,K. Čabrajić,0.83,1.33,0.67,3.0,0.83,33,0.83,6.17,1.67
-1215,1. HNL (HR),511630,130,Daniel William Adu-Adjei,D. Adu-Adjei,5.07,0.0,0.07,0.71,1.29,36,0.14,0.21,0.0
-1215,1. HNL (HR),514705,4,Vito Čaić,V. Čaić,0.46,0.15,0.08,2.15,0.31,22,0.31,3.31,2.0
-1215,1. HNL (HR),514707,48,Fran Topić,F. Topić,2.78,0.22,0.22,1.22,0.22,39,1.89,2.11,0.44
-1215,1. HNL (HR),514714,0,Moreno Živković,M. Živković,0.0,0.0,0.0,0.33,0.0,0,0.33,2.33,4.67
-1215,1. HNL (HR),514716,1,Zvonimir Katalinić,Z. Katalinić,0.0,0.75,0.62,0.12,0.0,7,1.0,1.88,0.38
-1215,1. HNL (HR),514718,15,Luka Vrbančić,L. Vrbančić,1.27,0.36,0.64,2.82,0.36,43,0.45,3.82,0.82
-1215,1. HNL (HR),518519,0,Jakov Gurlica,J. Gurlica,0.4,0.2,0.0,2.6,0.0,8,0.2,3.0,0.6
-1215,1. HNL (HR),519747,0,Erik Riđan,E. Riđan,0.0,0.0,0.0,0.0,0.0,4,0.0,1.0,0.0
-1215,1. HNL (HR),520575,40,Domagoj Bukvić,D. Bukvić,1.1,1.05,0.9,0.6,0.15,129,1.75,2.45,0.45
-1215,1. HNL (HR),520576,79,Nail Omerović,N. Omerović,2.71,1.0,0.76,2.76,0.95,205,2.71,3.05,0.33
-1215,1. HNL (HR),520577,23,Filip Živković,F. Živković,2.4,0.3,0.1,0.9,0.3,37,1.1,0.9,0.1
-1215,1. HNL (HR),531037,22,Mate Antunović,M. Antunović,1.62,0.0,0.0,0.12,0.12,8,0.12,0.12,0.0
-1215,1. HNL (HR),544551,4,Marko Soldo,M. Soldo,1.11,0.11,0.0,2.22,0.44,17,0.44,1.44,0.33
-1215,1. HNL (HR),550444,0,Zvonimir Josić,Z. Josić,0.0,0.0,0.0,0.0,0.0,0,1.0,0.0,0.0
-1215,1. HNL (HR),567119,8,Iker Pozo La Rosa,Iker Pozo,0.95,0.24,0.48,4.71,0.24,101,0.57,7.29,0.95
-1215,1. HNL (HR),615245,9,Filip Krušelj,F. Krušelj,0.0,2.85,0.23,0.15,0.0,60,2.31,5.77,2.31
-1215,1. HNL (HR),637186,5,Matteo Pérez Vinlöf,M. Pérez Vinlof,0.13,2.27,0.93,0.27,0.4,45,0.93,4.2,1.2
-1215,1. HNL (HR),637189,34,Luka Klanac,L. Klanac,4.0,0.0,0.0,0.6,0.0,23,0.2,0.8,0.0
-1215,1. HNL (HR),638329,6,Filip Mažar,F. Mažar,1.67,0.33,0.33,5.67,1.0,17,2.0,4.67,1.33
-1215,1. HNL (HR),639284,1,Niko Kristian Sigur,N. Sigur,0.65,0.55,0.45,3.75,0.4,45,0.95,5.2,1.95
-1215,1. HNL (HR),642226,0,Leon Bosnjak,L. Bosnjak,0.0,0.0,0.0,0.0,0.0,2,0.0,1.33,0.0
-1215,1. HNL (HR),642786,0,Jovan Ivanisevic,J. Ivanisevic,0.0,0.0,0.0,0.33,0.0,0,0.0,0.0,3.0
-1215,1. HNL (HR),669464,80,Anton Matković,A. Matković,4.4,0.4,0.3,0.8,0.5,56,0.3,1.0,0.0
-1215,1. HNL (HR),669465,8,Noa Skoko,N. Skoko,2.2,0.0,0.6,2.4,0.8,18,1.0,1.4,0.6
-1215,1. HNL (HR),669471,2,Marino Skelin,M. Skelin,0.0,0.0,0.0,1.0,0.0,0,1.0,1.0,13.0
-1215,1. HNL (HR),669476,3,Noa Mikić,N. Mikić,0.2,1.2,1.0,0.2,0.0,12,1.4,2.8,3.6
-1215,1. HNL (HR),687641,83,Žan Trontelj,Ž. Trontelj,1.57,2.86,0.48,0.86,0.14,165,3.1,6.24,1.57
-1215,1. HNL (HR),698157,139,Salim Fago Lawal,S. Lawal,4.59,0.35,0.18,1.0,0.88,171,1.35,1.53,0.29
-1215,1. HNL (HR),705120,24,Elvir  Duraković,E. Duraković,1.33,1.67,1.17,0.92,0.33,91,1.58,3.92,1.0
-1215,1. HNL (HR),713212,202,Filip Čuić,F. Čuić,6.32,0.05,0.0,4.27,1.77,104,0.41,1.32,0.0
-1215,1. HNL (HR),714770,2,Michael Agbekpornu,M. Agbekpornu,0.12,0.0,0.0,1.47,0.12,11,0.29,1.24,0.41
-1215,1. HNL (HR),714771,36,Adriano Jagušić,A. Jagušić,3.0,1.0,0.15,3.55,1.15,189,3.8,5.3,0.8
-1215,1. HNL (HR),715782,9,Ivan Canjuga,I. Canjuga,1.14,0.0,0.57,1.14,0.14,26,0.86,1.0,0.14
-1215,1. HNL (HR),715783,5,Moris Valinčić,M. Valinčić,0.29,3.43,0.5,0.29,0.0,69,3.36,7.71,3.29
-1215,1. HNL (HR),716284,94,Aleksa Latković,A. Latković,3.24,0.24,0.38,1.48,0.71,203,0.62,3.48,0.33
-1215,1. HNL (HR),720294,3,Stipe Jurić,S. Jurić,0.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
-1215,1. HNL (HR),721817,5,Antonio Boršić,A. Boršić,0.83,0.78,0.39,0.56,0.06,64,1.5,3.17,1.28
-1215,1. HNL (HR),730245,33,Ante Kavelj,A. Kavelj,1.87,0.26,0.3,4.74,0.43,95,1.13,4.61,0.87
-1215,1. HNL (HR),731084,0,Ricardo Henning,R. Henning,0.0,0.0,0.0,0.14,0.14,3,0.0,1.43,4.0
-1215,1. HNL (HR),731272,45,Iker Almena Horcajo,Iker Almena,2.85,0.54,0.15,1.69,0.38,98,1.15,3.38,0.85
-1215,1. HNL (HR),760673,1,Teo Barisic,T. Barisic,0.2,0.0,0.6,1.2,0.2,7,0.4,3.6,2.2
-1215,1. HNL (HR),799146,1,Fran Peček,F. Peček,0.0,0.0,0.0,0.0,0.0,3,0.0,0.0,0.0
-1215,1. HNL (HR),799314,2,Gustavo Hidalgo Albarracín,G. Albarracín,0.0,0.0,1.0,1.0,0.0,1,1.0,4.0,0.0
-1215,1. HNL (HR),808538,11,Samuel Akere,S. Akere,4.75,0.0,0.0,1.25,0.0,23,0.25,1.75,1.0
-1215,1. HNL (HR),809056,2,Anes Huskić ,A. Huskić,1.33,0.67,0.33,0.0,0.33,12,1.0,0.33,0.0
-1215,1. HNL (HR),809259,0,Lovro Kitin,L. Kitin,0.0,0.5,0.0,0.0,0.0,0,0.0,0.0,2.5
-1215,1. HNL (HR),809785,153,Ante Šuto,A. Šuto,2.56,0.5,0.17,0.67,0.89,126,1.39,1.22,0.11
-1215,1. HNL (HR),809852,12,Dukan Ahmeti,D. Ahmeti,2.5,0.0,0.0,6.5,3.0,18,2.5,0.5,0.5
-1215,1. HNL (HR),810385,0,Sven Lesjak,S. Lesjak,0.0,0.0,0.0,0.67,0.0,0,0.0,0.0,0.67
-1215,1. HNL (HR),810936,17,Cardoso Pinto Mandume Varela,Cardoso Varela,0.91,0.0,0.09,0.45,0.18,41,1.64,0.91,0.09
-1215,1. HNL (HR),813390,1,Raí de Oliveira Alves,Raí,0.67,0.67,0.0,0.0,0.0,2,1.0,1.0,0.0
-1215,1. HNL (HR),816840,40,Šimun Butić,Š. Butić,2.22,1.0,0.11,0.33,0.11,53,2.0,1.22,0.44
-1215,1. HNL (HR),818351,37,Luka Vrzić,L. Vrzić,1.65,0.4,0.2,1.25,0.05,124,1.2,1.8,0.45
-1215,1. HNL (HR),818668,0,Raul Kumar,R. Kumar,0.0,0.0,0.11,0.11,0.0,3,0.56,0.67,2.44
-1215,1. HNL (HR),819516,37,Bruno Durdov,B. Durdov,1.9,0.4,0.2,0.5,0.1,42,0.6,0.8,0.3
-1215,1. HNL (HR),822717,0,Ivano Kolarik,I. Kolarik,0.0,0.0,0.0,0.0,0.0,0,1.0,0.0,0.0
-1215,1. HNL (HR),823136,3,Luka Hodak,L. Hodak,0.1,0.2,0.5,1.1,0.2,29,1.2,4.8,1.4
-1215,1. HNL (HR),839410,6,Karlo Išasegi,K. Išasegi,0.8,2.0,0.0,0.2,0.4,17,1.2,1.6,0.4
-1215,1. HNL (HR),847732,18,Niko Farkaš,N. Farkaš,1.0,0.0,0.2,0.4,0.2,14,0.6,0.8,0.2
-1215,1. HNL (HR),848825,8,Vane Jovanov,V. Jovanov,0.18,1.55,0.18,0.18,0.0,30,1.55,3.82,1.18
-1215,1. HNL (HR),849620,48,Lovre Kulušić,L. Kulušić,6.33,0.0,0.0,0.33,0.0,8,0.0,0.33,0.0
-1215,1. HNL (HR),849623,45,Mirko Sušak,M. Sušak,4.23,0.08,0.77,1.62,1.0,53,1.23,0.77,0.15
-1215,1. HNL (HR),850939,5,Ivan Barić,I. Barić,1.75,0.0,0.0,0.5,0.0,4,0.0,0.75,0.0
-1215,1. HNL (HR),855806,39,Igor Lepinjica,I. Lepinjica,2.53,0.27,0.2,1.6,0.67,58,0.87,1.27,0.0
-1215,1. HNL (HR),857055,2,Mody Boune,M. Boune,0.29,0.57,0.71,0.14,0.14,27,1.57,1.71,0.29
-1215,1. HNL (HR),866695,10,Israel Isaac Ayuma,I. Ayuma,1.0,0.0,0.08,2.83,0.42,21,0.42,2.08,0.5
-1215,1. HNL (HR),866696,49,Luka Mamić,L. Mamić,3.44,0.25,0.25,2.31,1.38,114,1.31,3.56,0.06
-1215,1. HNL (HR),867628,1,Filip Taraba,F. Taraba,0.09,0.55,0.27,0.09,0.0,14,0.55,1.73,1.09
-1215,1. HNL (HR),879568,3,Luka Posinković,L. Posinković,0.5,2.0,0.0,0.0,0.0,8,2.5,3.5,2.0
-1215,1. HNL (HR),894700,21,Sule Wisdom Aondowase,S. Aondowase,6.67,0.0,0.0,0.33,0.33,8,0.0,0.0,0.0
-1215,1. HNL (HR),901773,68,Vinko Rozic,V. Rozic,2.87,0.67,0.27,0.73,0.2,100,1.53,1.27,0.07
-1215,1. HNL (HR),902316,1,Theo Epailly,T. Epailly,0.0,1.0,1.0,0.0,0.0,5,0.0,1.0,0.0
-1215,1. HNL (HR),920773,41,Medin Gashi,M. Gashi,1.91,0.0,0.27,0.73,0.55,14,0.09,0.36,0.0
-1215,1. HNL (HR),925321,4,Niko Šepić,N. Šepić,0.33,1.67,1.33,0.67,0.33,28,1.67,4.0,1.0
-1215,1. HNL (HR),933118,5,Franjo Posavac,F. Posavac,1.0,0.0,0.33,0.67,0.33,6,1.67,1.67,1.0
-1215,1. HNL (HR),946277,1,Sven Šunta,S. Šunta,0.0,0.0,0.0,1.0,1.0,4,1.0,0.0,0.0
-1215,1. HNL (HR),950279,13,Ibrahim Mohammad Abdallah Sabra,I. Sabra,3.0,0.0,0.0,2.0,1.0,5,0.0,2.0,0.0
-1215,1. HNL (HR),956498,12,Alejandro Fidel Jay Agustín,A. Jay,1.2,0.9,0.4,0.1,0.0,31,0.7,3.0,0.8
-1215,1. HNL (HR),968381,4,Marko Aščić,M. Aščić,5.0,0.0,0.0,0.0,0.0,3,0.0,0.0,0.0
-1215,1. HNL (HR),970273,1,Matija Subotić,M. Subotić,0.17,0.22,0.33,3.56,0.44,32,0.61,4.28,1.17
-1215,1. HNL (HR),970280,4,Noa Godec,N. Godec,0.75,1.25,0.25,0.25,0.25,10,2.25,2.5,0.25
-1215,1. HNL (HR),972684,8,Dominik Thaqi,D. Thaqi,2.6,0.2,0.4,1.0,0.2,41,2.0,1.8,0.6
-1215,1. HNL (HR),976886,6,Paul Bismarck Tabinas,P. Tabinas,0.12,1.5,0.25,0.12,0.0,21,1.38,2.62,1.5
-1215,1. HNL (HR),998306,0,Branimir Mlačić,B. Mlačić,0.21,0.0,0.14,0.43,0.14,9,0.0,1.29,4.79
-1215,1. HNL (HR),998393,3,Miloš Jovičić,M. Jovičić,1.25,1.25,0.25,0.75,0.5,11,1.25,1.25,0.25
-1215,1. HNL (HR),999265,6,Antonio Jakir,A. Jakir,0.21,1.21,0.43,0.21,0.07,71,1.64,2.64,2.21
-1215,1. HNL (HR),999530,5,Ivan Katić,I. Katić,0.83,0.5,0.72,3.22,0.94,84,1.5,5.61,0.61
-1215,1. HNL (HR),1008204,0,Cheikh Mbacke Diop ,C. Mbacke Diop,0.15,0.0,0.05,2.35,0.2,23,0.5,1.15,4.4
-1215,1. HNL (HR),1013757,4,Mohamed Nasraoui,M.  Nasraoui,0.17,0.58,0.42,0.25,0.0,18,0.83,2.33,1.5
-1215,1. HNL (HR),1018008,1,Ron Raçi,R. Raçi,0.15,0.15,0.0,0.23,0.0,4,0.15,1.46,3.85
-1215,1. HNL (HR),1021185,10,Kristijan Pavičić,K. Pavičić,0.32,0.58,0.26,0.11,0.16,43,0.63,1.95,1.89
-1215,1. HNL (HR),1021186,84,Robin De Jesus Gonzales Ruiz,R. Gonzales,2.65,0.25,0.2,2.05,0.45,157,0.75,3.95,0.3
-1215,1. HNL (HR),1021187,243,Aleks Stojakovic,A. Stojakovic,8.29,0.81,0.43,2.71,3.48,201,2.62,2.19,0.1
-1215,1. HNL (HR),1021188,0,Mario Tadić ,M. Tadić,0.08,0.0,0.0,0.5,0.0,3,0.08,0.83,3.17
-1215,1. HNL (HR),1021189,4,Tino Jukić,T. Jukić,0.16,0.11,0.05,0.68,0.05,21,0.89,1.63,4.05
-1215,1. HNL (HR),1021192,8,Leoni Schmidt Pereira Gastaldelo,Leoni,1.0,0.0,0.0,0.25,0.0,14,1.25,1.5,0.0
-1215,1. HNL (HR),1021193,12,Jakov Biljan,J. Biljan,1.9,0.1,0.6,1.8,0.4,39,0.8,2.8,1.2
-1215,1. HNL (HR),1021332,1,Dominik Celija,D. Celija,0.5,0.0,0.0,1.0,0.0,5,0.0,0.5,0.0
-1215,1. HNL (HR),1021333,8,Mateo Barać,M. Barać,0.0,1.5,0.25,0.25,0.0,20,2.5,2.5,0.75
-1215,1. HNL (HR),1021951,1,Stjepan Kučiš,S. Kučiš,0.17,0.17,0.0,0.33,0.0,2,0.33,0.17,0.0
-1215,1. HNL (HR),1021952,24,Vanja Pelko,V. Pelko,2.0,0.29,0.0,0.14,0.43,20,0.29,0.14,0.14
-1215,1. HNL (HR),1022514,29,Ernis  Qestaj,E. Qestaj,2.5,0.25,0.25,0.25,1.0,18,0.75,0.75,0.0
-1215,1. HNL (HR),1023620,0,Domagoj Begonja,D. Begonja,0.0,0.67,0.33,0.0,0.0,4,0.33,1.67,0.33
-1215,1. HNL (HR),1023622,27,Charles Adah Agada,C. Agada,0.75,0.0,0.0,0.12,0.38,13,0.25,0.25,0.0
-1215,1. HNL (HR),1024076,0,Luiz Felipe Rodrigues Farias Santos,Luiz Filipe,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,4.5
-1215,1. HNL (HR),1025144,4,Gabrijel Šivalec,G. Šivalec,0.6,0.3,0.1,0.3,0.2,29,1.1,0.5,0.6
-1215,1. HNL (HR),1029132,2,Dominik Mulac,D. Mulac,0.43,0.0,0.0,1.43,0.71,14,0.14,3.43,1.0
-1215,1. HNL (HR),1030970,0,Silvio Ivanišević Dvornik,S. Ivanišević,2.0,0.0,0.0,1.0,0.0,1,0.0,1.0,0.0
-1215,1. HNL (HR),1036179,0,Jakov Dedic,J. Dedic,5.0,0.0,0.0,0.0,0.0,5,1.0,0.0,0.0
-1215,1. HNL (HR),1036180,0,Miran Horvat,M. Horvat,1.0,0.0,0.0,0.0,0.0,0,0.0,1.0,0.0
-1215,1. HNL (HR),1036680,2,Jona Ježić,J. Ježić,1.0,0.0,0.0,0.0,0.0,2,0.0,0.0,0.0
-1215,1. HNL (HR),1041484,3,Daniel Vinković,D. Vinković,1.0,0.0,0.0,2.0,0.0,2,0.0,0.0,1.0
-1215,1. HNL (HR),1041545,2,Nik Skafar Zuzic,N. Skafar Zuzic,0.5,0.0,0.5,0.0,0.0,4,2.0,0.5,0.0
-1215,1. HNL (HR),1044362,3,Niko Pajvančić,N. Pajvančić,0.0,0.0,0.0,0.0,1.0,2,0.0,0.0,0.0
+competition_edition,league,player_id,runtype_run_in_behind,player_name,player_short_name,runtype_run_ahead_of_the_ball
+1215,1. HNL (HR),433,5.6,Aleksandar Trajkovski,A. Trajkovski,8.2
+1215,1. HNL (HR),903,5.12,Ante Rebić,A. Rebić,8.35
+1215,1. HNL (HR),2343,1.7,Dario Melnjak,D. Melnjak,4.9
+1215,1. HNL (HR),2882,4.06,Duje Čop,D. Čop,2.5
+1215,1. HNL (HR),3442,1.64,Filip Krovinović,F. Krovinović,4.77
+1215,1. HNL (HR),5484,0.36,Josip Radošević,J. Radošević,2.18
+1215,1. HNL (HR),6908,1.12,Mario Tičinović,M. Tičinović,3.71
+1215,1. HNL (HR),6975,4.27,Marko Livaja,M. Livaja,2.8
+1215,1. HNL (HR),9610,0.0,Scott McKenna,S. McKenna,0.57
+1215,1. HNL (HR),10498,0.05,Tomislav Božić,T. Božić,0.5
+1215,1. HNL (HR),12171,2.88,Rafael Euclides Soares Camacho,Rafael Camacho,3.75
+1215,1. HNL (HR),12194,0.0,Ronaël Pierre-Gabriel,R. Pierre-Gabriel,4.0
+1215,1. HNL (HR),12221,2.75,Yassine Benrahou,Y. Benrahou,8.25
+1215,1. HNL (HR),12372,6.63,Smail Prevljak,S. Prevljak,3.79
+1215,1. HNL (HR),12418,2.56,Amer Gojak,A. Gojak,4.61
+1215,1. HNL (HR),12428,0.0,Kévin Theophile-Catherine,K. Theophile-Catherine,0.67
+1215,1. HNL (HR),12429,1.67,Marin Leovac,M. Leovac,1.83
+1215,1. HNL (HR),12592,0.0,Borna  Barišić,B. Barišić,4.67
+1215,1. HNL (HR),13013,3.36,Miha Zajc,M. Zajc,8.21
+1215,1. HNL (HR),13301,0.0,Mateo Barać,M. Barać,0.0
+1215,1. HNL (HR),13308,3.87,Dejan Ljubičić,D. Ljubičić,8.47
+1215,1. HNL (HR),13582,0.1,Mario Šitum,M. Šitum,1.9
+1215,1. HNL (HR),13583,4.4,Luka Menalo,L. Menalo,6.4
+1215,1. HNL (HR),13609,0.15,Dario Maresić,D. Maresić,1.05
+1215,1. HNL (HR),13775,0.36,Domagoj Antolić,D. Antolić,2.36
+1215,1. HNL (HR),13779,1.93,Marko Vešović,M. Vešović,7.27
+1215,1. HNL (HR),13785,2.87,Sandro Kulenović,S. Kulenović,2.4
+1215,1. HNL (HR),14125,0.64,Ismael Bennacer,I. Bennacer,3.0
+1215,1. HNL (HR),14128,5.56,Arnel Jakupović,A. Jakupović,4.33
+1215,1. HNL (HR),14144,0.65,Marko Pajač,M. Pajač,7.06
+1215,1. HNL (HR),14566,1.65,Ivan Fiolić,I. Fiolić,3.35
+1215,1. HNL (HR),14593,0.0,Jakov Filipović,J. Filipović,0.17
+1215,1. HNL (HR),16063,0.24,Josip Mišić,J. Mišić,1.29
+1215,1. HNL (HR),16455,5.38,Ante Erceg,A. Erceg,4.25
+1215,1. HNL (HR),16555,4.7,Michele Šego,M. Šego,6.2
+1215,1. HNL (HR),16558,6.1,Jurica Pršir,J. Pršir,8.57
+1215,1. HNL (HR),16573,0.25,Tonio Teklić,T. Teklić,2.5
+1215,1. HNL (HR),16577,0.0,Roberto Punčec,R. Punčec,0.0
+1215,1. HNL (HR),16580,0.47,Leonard Zuta,L. Zuta,2.2
+1215,1. HNL (HR),16586,0.8,Adrian Liber,A. Liber,3.4
+1215,1. HNL (HR),16589,6.88,Jakov Puljić,J. Puljić,4.56
+1215,1. HNL (HR),16591,2.9,Josip Mitrović,J. Mitrović,7.05
+1215,1. HNL (HR),16592,1.75,Domagoj Pavičić,D. Pavičić,4.75
+1215,1. HNL (HR),16599,3.14,Stjepan Lončar,S. Lončar,10.33
+1215,1. HNL (HR),16603,0.06,Stjepan Radeljić,S. Radeljić,0.41
+1215,1. HNL (HR),16616,1.2,Robert Mudražija,R. Mudražija,2.6
+1215,1. HNL (HR),16620,0.12,Marin Pilj,M. Pilj,2.0
+1215,1. HNL (HR),16628,1.07,Mihail Caimacov,M. Caimacov,7.2
+1215,1. HNL (HR),16902,1.0,Gregor Sikošek,G. Sikošek,2.5
+1215,1. HNL (HR),17024,1.29,Hubert Sobol,H. Sobol,1.14
+1215,1. HNL (HR),17221,1.0,Justas Lasickas,J. Lasickas,4.12
+1215,1. HNL (HR),17868,2.94,Ilija Nestorovski,I. Nestorovski,4.0
+1215,1. HNL (HR),19139,5.2,Törles Knöll,T. Knöll,2.0
+1215,1. HNL (HR),19154,0.0,Joszip Elez,J. Elez,0.0
+1215,1. HNL (HR),22120,0.0,Ismaël Chester Diallo,I. Diallo,2.0
+1215,1. HNL (HR),22910,0.14,Marijan Čabraja,M. Čabraja,3.19
+1215,1. HNL (HR),24023,0.53,Marcel Heister,M. Heister,3.05
+1215,1. HNL (HR),24098,0.0,Zvonimir Šarlija ,Z. Šarlija,0.58
+1215,1. HNL (HR),24132,0.0,Mario Mladenovski,M. Mladenovski,0.0
+1215,1. HNL (HR),24321,0.0,Édgar González Estrada,Édgar González,1.17
+1215,1. HNL (HR),24336,0.0,Stefan Perić,S. Perić,0.71
+1215,1. HNL (HR),24774,0.22,Gonzalo Villar del Fraile,Gonzalo Villar,1.11
+1215,1. HNL (HR),24928,0.0,Hugo Guillamón Sanmartín,Hugo Guillamón,2.62
+1215,1. HNL (HR),27202,1.0,Damir Kreilach,D. Kreilach,0.0
+1215,1. HNL (HR),27764,1.0,Dejan Petrovič,D. Petrovič,2.53
+1215,1. HNL (HR),28866,4.1,Emil Frederiksen,E. Frederiksen,7.9
+1215,1. HNL (HR),29541,0.08,David Puclin,D. Puclin,0.25
+1215,1. HNL (HR),31094,2.67,Rüfat Abdullazada,R. Abdullazada,7.56
+1215,1. HNL (HR),32131,0.67,Tyrone Tormin,T. Tormin,5.0
+1215,1. HNL (HR),32172,1.36,Merveille Valthy Streeker Ndockyt,M. Ndockyt,3.64
+1215,1. HNL (HR),32174,0.0,Mihael Žaper,M. Žaper,0.25
+1215,1. HNL (HR),32175,0.12,Vedran Jugović,V. Jugović,2.75
+1215,1. HNL (HR),32176,0.0,Ante Majstorović,A. Majstorović,0.11
+1215,1. HNL (HR),32178,8.27,Dion Drena Beljo,D. Beljo,3.95
+1215,1. HNL (HR),32180,1.0,Josip Spoljaric,J. Spoljaric,3.0
+1215,1. HNL (HR),32181,1.4,Petar Bočkaj,P. Bočkaj,6.4
+1215,1. HNL (HR),32186,0.21,Tomislav Duvnjak,T. Duvnjak,5.47
+1215,1. HNL (HR),32207,2.2,David Čolina,D. Čolina,6.95
+1215,1. HNL (HR),32222,2.69,Bruno Bogojević,B. Bogojević,5.23
+1215,1. HNL (HR),32224,0.2,Bruno Goda,B. Goda,2.67
+1215,1. HNL (HR),32228,0.0,Vinko Medimorec,V. Medimorec,0.0
+1215,1. HNL (HR),32238,0.0,Denis Kolinger,D. Kolinger,0.16
+1215,1. HNL (HR),32239,0.0,Jon Mersinaj,J. Mersinaj,0.29
+1215,1. HNL (HR),32259,0.0,Mateo Leš,M. Leš,0.39
+1215,1. HNL (HR),32370,1.06,Advan Kadušić,A. Kadušić,4.25
+1215,1. HNL (HR),32761,1.61,Abdoulie Bamba Sanyang,A. Sanyang,4.28
+1215,1. HNL (HR),34128,1.36,Roko Jurišić,R. Jurišić,6.91
+1215,1. HNL (HR),34129,0.06,Luka Jelenić,L. Jelenić,0.31
+1215,1. HNL (HR),34640,2.83,Stanislav Shopov,S. Shopov,5.42
+1215,1. HNL (HR),34848,0.53,Kerim Çalhanoğlu,K. Çalhanoğlu,4.0
+1215,1. HNL (HR),35502,0.95,Tiago Filipe Oliveira Dantas,Tiago Dantas,2.25
+1215,1. HNL (HR),36907,0.12,Niko Galešić,N. Galešić,1.0
+1215,1. HNL (HR),36912,3.12,Matej Vuk,M. Vuk,4.38
+1215,1. HNL (HR),36915,5.42,Mateo Lisica,M. Lisica,7.83
+1215,1. HNL (HR),36923,1.83,Anthony Kalik,A. Kalik,2.25
+1215,1. HNL (HR),36925,0.27,Hrvoje Babec,H. Babec,2.07
+1215,1. HNL (HR),36932,1.54,Niko Janković,N. Janković,5.69
+1215,1. HNL (HR),36936,1.31,Leon Belcar,L. Belcar,5.31
+1215,1. HNL (HR),36963,2.5,Fran Karačić ,F. Karačić,4.43
+1215,1. HNL (HR),36964,0.09,Dominik Kovačić,D. Kovačić,0.36
+1215,1. HNL (HR),36981,0.73,Frane Maglica,F. Maglica,3.73
+1215,1. HNL (HR),37030,1.33,Ante Orec,A. Orec,5.43
+1215,1. HNL (HR),37236,0.0,Ljuban Crepulja,L. Crepulja,1.67
+1215,1. HNL (HR),37248,5.3,Ivan Mamut,I. Mamut,5.05
+1215,1. HNL (HR),39795,3.57,Andrija Filipović,A. Filipović,2.14
+1215,1. HNL (HR),41096,0.06,Luka Škaričić,L. Škaričić,0.5
+1215,1. HNL (HR),41099,2.35,Luka Stojković,L. Stojković,10.47
+1215,1. HNL (HR),41125,0.08,Oleksandr Petrusenko,O. Petrusenko,0.69
+1215,1. HNL (HR),43340,3.64,Samuele Vignato,S. Vignato,8.64
+1215,1. HNL (HR),43395,0.94,Renan Guedes Borges,Renan Guedes,5.17
+1215,1. HNL (HR),45049,1.0,Keyendrah Simmonds,K. Simmonds,4.0
+1215,1. HNL (HR),48315,0.07,Anel Husić,A. Husić,0.64
+1215,1. HNL (HR),48486,0.79,Šimun Mikolčić,Š. Mikolčić,2.37
+1215,1. HNL (HR),48597,3.77,Jakov-Anton Vasilj,J. Vasilj,7.15
+1215,1. HNL (HR),49310,0.53,David Mateo Mejía Moscoso,D. Mejía,5.18
+1215,1. HNL (HR),49320,7.25,Ivan Božić,I. Božić,5.75
+1215,1. HNL (HR),49416,0.52,Mladen Devetak,M. Devetak,3.52
+1215,1. HNL (HR),49746,0.07,Lamine Ba,L. Ba,0.14
+1215,1. HNL (HR),58691,1.5,Vladan Bubanja,V. Bubanja,3.0
+1215,1. HNL (HR),58986,3.91,Toni Fruk,T. Fruk,7.77
+1215,1. HNL (HR),58987,4.7,Marko Dabro,M. Dabro,2.0
+1215,1. HNL (HR),58990,0.25,Luka Dajcer,L. Dajcer,2.17
+1215,1. HNL (HR),58993,1.15,Ivan Ćubelić,I. Ćubelić,2.95
+1215,1. HNL (HR),59000,0.39,Mario Marina,M. Marina,1.61
+1215,1. HNL (HR),60709,1.6,Tornike Morchiladze,T. Morchiladze,2.4
+1215,1. HNL (HR),62005,3.29,Arbër Hoxha,A. Hoxha,7.38
+1215,1. HNL (HR),63308,0.45,Adrion Pajaziti,A. Pajaziti,3.25
+1215,1. HNL (HR),63416,0.86,Silvio Goričan,S. Goričan,3.14
+1215,1. HNL (HR),64565,5.71,Dušan Vuković,D. Vuković,9.29
+1215,1. HNL (HR),64638,0.5,Logi Hrafn Róbertsson,L. Róbertsson,1.5
+1215,1. HNL (HR),64753,0.06,Ville Koski,V. Koski,0.89
+1215,1. HNL (HR),64928,7.45,Alen Jurilj ,A. Jurilj,10.09
+1215,1. HNL (HR),65156,5.5,David Virgili Fernandez,David Virgili,6.5
+1215,1. HNL (HR),69740,0.0,Alfonso Daniel Barco Del Solar,A. Barco,2.0
+1215,1. HNL (HR),71488,4.09,Fode Yannick Touré,Y. Touré,3.27
+1215,1. HNL (HR),74696,4.0,Monsef Bakrar,M. Bakrar,5.47
+1215,1. HNL (HR),76782,0.0,Jakov Šuver,J. Šuver,1.14
+1215,1. HNL (HR),95607,2.24,Iuri António Teixeira Tavares,Iuri Tavares,6.82
+1215,1. HNL (HR),103063,0.0,Emin Hasić,E. Hasić,0.42
+1215,1. HNL (HR),105557,2.75,Mamadou Saydou Bangura,M. Bangura,1.92
+1215,1. HNL (HR),109875,4.12,Rokas Pukštas,R. Pukštas,10.0
+1215,1. HNL (HR),109876,0.0,Ivan Cvijanović,I. Cvijanović,0.3
+1215,1. HNL (HR),110099,1.65,Antonio Maurić,A. Maurić,3.82
+1215,1. HNL (HR),116317,0.2,Dimitrije Kamenović,D. Kamenović,1.0
+1215,1. HNL (HR),116938,0.0,Novak Tepšić,N. Tepšić,0.58
+1215,1. HNL (HR),118634,2.36,Gabriel Vidović,G. Vidović,5.29
+1215,1. HNL (HR),120538,0.0,Sergi Domínguez Viloria,Sergi Domínguez,0.26
+1215,1. HNL (HR),130787,0.59,Eniss Shabani,E. Shabani,4.24
+1215,1. HNL (HR),140237,0.0,Noel Bodetić,N. Bodetić,1.67
+1215,1. HNL (HR),141054,4.75,Fabijan Krivak,F. Krivak,9.31
+1215,1. HNL (HR),153584,2.29,Roko Brajković,R. Brajković,7.14
+1215,1. HNL (HR),154090,1.0,Danijel Dejan Djuric,D. Djuric,3.33
+1215,1. HNL (HR),155701,1.41,Šimun Hrgović,Š. Hrgović,7.24
+1215,1. HNL (HR),156492,1.75,Samuel Koeberlé,S. Koeberlé,6.75
+1215,1. HNL (HR),162182,0.0,Marin Žgomba,M. Žgomba,2.0
+1215,1. HNL (HR),163360,0.24,Styopa Mkrtchyan,S. Mkrtchyan,0.24
+1215,1. HNL (HR),170788,1.33,Christian Dimitri Legbo Ouguehi,D. Legbo,1.33
+1215,1. HNL (HR),170856,0.0,Samuli Miettinen,S. Miettinen,0.67
+1215,1. HNL (HR),171977,1.0,Silvio Ilinković,S. Ilinković,1.8
+1215,1. HNL (HR),172655,0.5,Gabriel Rukavina,G. Rukavina,3.0
+1215,1. HNL (HR),172656,1.33,Blaž Bošković,B. Bošković,4.52
+1215,1. HNL (HR),173049,4.18,Ante Matej Jurič,A. Jurič,1.24
+1215,1. HNL (HR),175176,1.59,Ognjen Bakić,O. Bakić,4.59
+1215,1. HNL (HR),175469,0.0,Marcel Lorber,M. Lorber,0.0
+1215,1. HNL (HR),179270,6.18,Lovro Banovec,L. Banovec,9.82
+1215,1. HNL (HR),330752,1.17,Kristijan Čabrajić,K. Čabrajić,5.5
+1215,1. HNL (HR),511630,9.29,Daniel William Adu-Adjei,D. Adu-Adjei,2.57
+1215,1. HNL (HR),514705,0.31,Vito Čaić,V. Čaić,1.69
+1215,1. HNL (HR),514707,5.33,Fran Topić,F. Topić,4.33
+1215,1. HNL (HR),514714,0.0,Moreno Živković,M. Živković,0.0
+1215,1. HNL (HR),514716,0.12,Zvonimir Katalinić,Z. Katalinić,0.88
+1215,1. HNL (HR),514718,1.36,Luka Vrbančić,L. Vrbančić,3.91
+1215,1. HNL (HR),518519,0.0,Jakov Gurlica,J. Gurlica,1.6
+1215,1. HNL (HR),519747,0.0,Erik Riđan,E. Riđan,2.0
+1215,1. HNL (HR),520575,2.0,Domagoj Bukvić,D. Bukvić,6.45
+1215,1. HNL (HR),520576,3.76,Nail Omerović,N. Omerović,9.76
+1215,1. HNL (HR),520577,2.3,Filip Živković,F. Živković,3.7
+1215,1. HNL (HR),531037,2.75,Mate Antunović,M. Antunović,1.0
+1215,1. HNL (HR),544551,0.44,Marko Soldo,M. Soldo,1.89
+1215,1. HNL (HR),550444,0.0,Zvonimir Josić,Z. Josić,0.0
+1215,1. HNL (HR),567119,0.38,Iker Pozo La Rosa,Iker Pozo,4.81
+1215,1. HNL (HR),615245,0.69,Filip Krušelj,F. Krušelj,4.62
+1215,1. HNL (HR),637186,0.33,Matteo Pérez Vinlöf,M. Pérez Vinlof,3.0
+1215,1. HNL (HR),637189,6.8,Luka Klanac,L. Klanac,4.6
+1215,1. HNL (HR),638329,2.0,Filip Mažar,F. Mažar,5.67
+1215,1. HNL (HR),639284,0.05,Niko Kristian Sigur,N. Sigur,2.25
+1215,1. HNL (HR),642226,0.0,Leon Bosnjak,L. Bosnjak,0.67
+1215,1. HNL (HR),642786,0.0,Jovan Ivanisevic,J. Ivanisevic,0.0
+1215,1. HNL (HR),669464,8.0,Anton Matković,A. Matković,5.6
+1215,1. HNL (HR),669465,1.6,Noa Skoko,N. Skoko,3.6
+1215,1. HNL (HR),669471,2.0,Marino Skelin,M. Skelin,0.0
+1215,1. HNL (HR),669476,0.6,Noa Mikić,N. Mikić,2.4
+1215,1. HNL (HR),687641,3.95,Žan Trontelj,Ž. Trontelj,7.86
+1215,1. HNL (HR),698157,8.18,Salim Fago Lawal,S. Lawal,10.06
+1215,1. HNL (HR),705120,2.0,Elvir  Duraković,E. Duraković,7.58
+1215,1. HNL (HR),713212,9.18,Filip Čuić,F. Čuić,4.73
+1215,1. HNL (HR),714770,0.12,Michael Agbekpornu,M. Agbekpornu,0.65
+1215,1. HNL (HR),714771,1.8,Adriano Jagušić,A. Jagušić,9.45
+1215,1. HNL (HR),715782,1.29,Ivan Canjuga,I. Canjuga,3.71
+1215,1. HNL (HR),715783,0.36,Moris Valinčić,M. Valinčić,4.93
+1215,1. HNL (HR),716284,4.48,Aleksa Latković,A. Latković,9.67
+1215,1. HNL (HR),720294,3.0,Stipe Jurić,S. Jurić,0.0
+1215,1. HNL (HR),721817,0.28,Antonio Boršić,A. Boršić,3.56
+1215,1. HNL (HR),730245,1.43,Ante Kavelj,A. Kavelj,4.13
+1215,1. HNL (HR),731084,0.0,Ricardo Henning,R. Henning,0.43
+1215,1. HNL (HR),731272,3.46,Iker Almena Horcajo,Iker Almena,7.54
+1215,1. HNL (HR),760673,0.2,Teo Barisic,T. Barisic,1.4
+1215,1. HNL (HR),799146,1.0,Fran Peček,F. Peček,3.0
+1215,1. HNL (HR),799314,2.0,Gustavo Hidalgo Albarracín,G. Albarracín,1.0
+1215,1. HNL (HR),808538,2.75,Samuel Akere,S. Akere,5.75
+1215,1. HNL (HR),809056,0.67,Anes Huskić ,A. Huskić,4.0
+1215,1. HNL (HR),809259,0.0,Lovro Kitin,L. Kitin,0.0
+1215,1. HNL (HR),809785,8.5,Ante Šuto,A. Šuto,7.0
+1215,1. HNL (HR),809852,6.0,Dukan Ahmeti,D. Ahmeti,9.0
+1215,1. HNL (HR),810385,0.0,Sven Lesjak,S. Lesjak,0.0
+1215,1. HNL (HR),810936,1.55,Cardoso Pinto Mandume Varela,Cardoso Varela,3.73
+1215,1. HNL (HR),813390,0.33,Raí de Oliveira Alves,Raí,0.67
+1215,1. HNL (HR),816840,4.44,Šimun Butić,Š. Butić,5.89
+1215,1. HNL (HR),818351,1.85,Luka Vrzić,L. Vrzić,6.2
+1215,1. HNL (HR),818668,0.0,Raul Kumar,R. Kumar,0.33
+1215,1. HNL (HR),819516,3.7,Bruno Durdov,B. Durdov,4.2
+1215,1. HNL (HR),822717,0.0,Ivano Kolarik,I. Kolarik,0.0
+1215,1. HNL (HR),823136,0.3,Luka Hodak,L. Hodak,2.9
+1215,1. HNL (HR),839410,1.2,Karlo Išasegi,K. Išasegi,3.4
+1215,1. HNL (HR),847732,3.6,Niko Farkaš,N. Farkaš,2.8
+1215,1. HNL (HR),848825,0.73,Vane Jovanov,V. Jovanov,2.73
+1215,1. HNL (HR),849620,16.0,Lovre Kulušić,L. Kulušić,2.67
+1215,1. HNL (HR),849623,3.46,Mirko Sušak,M. Sušak,4.08
+1215,1. HNL (HR),850939,1.25,Ivan Barić,I. Barić,1.0
+1215,1. HNL (HR),855806,2.6,Igor Lepinjica,I. Lepinjica,3.87
+1215,1. HNL (HR),857055,0.29,Mody Boune,M. Boune,3.86
+1215,1. HNL (HR),866695,0.83,Israel Isaac Ayuma,I. Ayuma,1.75
+1215,1. HNL (HR),866696,3.06,Luka Mamić,L. Mamić,7.12
+1215,1. HNL (HR),867628,0.09,Filip Taraba,F. Taraba,1.27
+1215,1. HNL (HR),879568,1.5,Luka Posinković,L. Posinković,4.0
+1215,1. HNL (HR),894700,7.0,Sule Wisdom Aondowase,S. Aondowase,2.67
+1215,1. HNL (HR),901773,4.53,Vinko Rozic,V. Rozic,6.67
+1215,1. HNL (HR),902316,1.0,Theo Epailly,T. Epailly,5.0
+1215,1. HNL (HR),920773,3.73,Medin Gashi,M. Gashi,1.27
+1215,1. HNL (HR),925321,1.33,Niko Šepić,N. Šepić,9.33
+1215,1. HNL (HR),933118,1.67,Franjo Posavac,F. Posavac,2.0
+1215,1. HNL (HR),946277,1.0,Sven Šunta,S. Šunta,4.0
+1215,1. HNL (HR),950279,13.0,Ibrahim Mohammad Abdallah Sabra,I. Sabra,5.0
+1215,1. HNL (HR),956498,1.2,Alejandro Fidel Jay Agustín,A. Jay,3.1
+1215,1. HNL (HR),968381,4.0,Marko Aščić,M. Aščić,3.0
+1215,1. HNL (HR),970273,0.06,Matija Subotić,M. Subotić,1.78
+1215,1. HNL (HR),970280,1.0,Noa Godec,N. Godec,2.5
+1215,1. HNL (HR),972684,1.6,Dominik Thaqi,D. Thaqi,8.2
+1215,1. HNL (HR),976886,0.75,Paul Bismarck Tabinas,P. Tabinas,2.62
+1215,1. HNL (HR),998306,0.0,Branimir Mlačić,B. Mlačić,0.64
+1215,1. HNL (HR),998393,0.75,Miloš Jovičić,M. Jovičić,2.75
+1215,1. HNL (HR),999265,0.43,Antonio Jakir,A. Jakir,5.07
+1215,1. HNL (HR),999530,0.28,Ivan Katić,I. Katić,4.67
+1215,1. HNL (HR),1008204,0.0,Cheikh Mbacke Diop ,C. Mbacke Diop,1.15
+1215,1. HNL (HR),1013757,0.33,Mohamed Nasraoui,M.  Nasraoui,1.5
+1215,1. HNL (HR),1018008,0.08,Ron Raçi,R. Raçi,0.31
+1215,1. HNL (HR),1021185,0.53,Kristijan Pavičić,K. Pavičić,2.26
+1215,1. HNL (HR),1021186,4.2,Robin De Jesus Gonzales Ruiz,R. Gonzales,7.85
+1215,1. HNL (HR),1021187,11.57,Aleks Stojakovic,A. Stojakovic,9.57
+1215,1. HNL (HR),1021188,0.0,Mario Tadić ,M. Tadić,0.25
+1215,1. HNL (HR),1021189,0.21,Tino Jukić,T. Jukić,1.11
+1215,1. HNL (HR),1021192,2.0,Leoni Schmidt Pereira Gastaldelo,Leoni,3.5
+1215,1. HNL (HR),1021193,1.2,Jakov Biljan,J. Biljan,3.9
+1215,1. HNL (HR),1021332,0.5,Dominik Celija,D. Celija,2.5
+1215,1. HNL (HR),1021333,2.0,Mateo Barać,M. Barać,5.0
+1215,1. HNL (HR),1021951,0.17,Stjepan Kučiš,S. Kučiš,0.33
+1215,1. HNL (HR),1021952,3.43,Vanja Pelko,V. Pelko,2.86
+1215,1. HNL (HR),1022514,7.25,Ernis  Qestaj,E. Qestaj,4.5
+1215,1. HNL (HR),1023620,0.0,Domagoj Begonja,D. Begonja,1.33
+1215,1. HNL (HR),1023622,3.38,Charles Adah Agada,C. Agada,1.62
+1215,1. HNL (HR),1024076,0.0,Luiz Felipe Rodrigues Farias Santos,Luiz Filipe,0.0
+1215,1. HNL (HR),1025144,0.4,Gabrijel Šivalec,G. Šivalec,2.9
+1215,1. HNL (HR),1029132,0.29,Dominik Mulac,D. Mulac,2.0
+1215,1. HNL (HR),1030970,0.0,Silvio Ivanišević Dvornik,S. Ivanišević,1.0
+1215,1. HNL (HR),1036179,0.0,Jakov Dedic,J. Dedic,5.0
+1215,1. HNL (HR),1036180,0.0,Miran Horvat,M. Horvat,0.0
+1215,1. HNL (HR),1036680,2.0,Jona Ježić,J. Ježić,2.0
+1215,1. HNL (HR),1041484,3.0,Daniel Vinković,D. Vinković,2.0
+1215,1. HNL (HR),1041545,1.0,Nik Skafar Zuzic,N. Skafar Zuzic,2.0
+1215,1. HNL (HR),1044362,3.0,Niko Pajvančić,N. Pajvančić,2.0
