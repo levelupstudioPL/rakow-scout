@@ -377,9 +377,23 @@ def _pull_runtypes(client, eid, group="player"):
                   f"kolumny: {list(df.columns)}", file=sys.stderr)
         if len(df) == 0:
             continue
+        # ANTY-MULTIPLIKACJA: część edycji zwraca rozbicie na third/channel (nie 'all'),
+        # co przy merge po player_id przez 10 typów robi iloczyn kartezjański i zawyża
+        # liczbę wierszy. Bierzemy tylko wiersz zbiorczy 'all/all', jeśli istnieje.
+        if "third" in df.columns and "channel" in df.columns:
+            allmask = (df["third"].astype(str).str.lower() == "all") & \
+                      (df["channel"].astype(str).str.lower() == "all")
+            if allmask.any():
+                df = df[allmask]
         pid_col = _pick(df.columns, "player_id", "player.id", "id")
-        met_col = _pick(df.columns, "count_runs_per_match", "count_runs", "runs_per_match",
-                        "count_runs_in_sample")
+        # Metryka: przy filtrze run_type kolumna nazywa się per typ, np.
+        # count_runs_in_behind_per_match. Chcemy ZWYKŁY wolumen na mecz danego typu
+        # (nie dangerous/leading/targeted/received/threat, nie *_in_sample).
+        met_cands = [c for c in df.columns
+                     if c.startswith("count_runs_") and c.endswith("_per_match")
+                     and not any(x in c for x in
+                                 ("dangerous", "leading", "targeted", "received", "threat"))]
+        met_col = met_cands[0] if met_cands else _pick(df.columns, "count_runs_per_match")
         if pid_col is None or met_col is None:
             print(f"[uwaga] runtype {rt} edycja {eid}: brak player_id/metryki w kolumnach "
                   f"{list(df.columns)[:12]} — pomijam.", file=sys.stderr)
@@ -393,6 +407,8 @@ def _pull_runtypes(client, eid, group="player"):
         if short_col:
             keep[short_col] = "player_short_name"
         sub = df[list(keep)].rename(columns=keep)
+        # SAFETY: nigdy nie dopuszczamy duplikatów player_id (chroni merge przed eksplozją).
+        sub = sub.drop_duplicates(subset="player_id", keep="first")
         if base is None:
             base = sub
         else:
@@ -480,5 +496,4 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
  
