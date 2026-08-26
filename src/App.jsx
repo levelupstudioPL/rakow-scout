@@ -3099,11 +3099,12 @@ function RecentView({ data, setSel, setView }) {
         <Kpi l="Bilans bramek" v={`${t.gf ?? 0}:${t.ga ?? 0}`} c={(t.gf ?? 0) >= (t.ga ?? 0) ? C.good : C.bad} />
       </div>
 
-      {/* Pasek meczów */}
-      <div className="hscroll" style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+      {/* Mecze — zawijane w rzędy (bez poziomego scrolla) */}
+      <div style={{ display: "grid", gap: 8, marginBottom: 6,
+        gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}>
         {V.matches.map((m, i) => (
-          <div key={i} style={{ flex: "0 0 auto", background: C.panel, border: `1px solid ${C.line}`,
-            borderLeft: `3px solid ${RES_COLOR[m.result] || C.line}`, borderRadius: 9, padding: "8px 12px", minWidth: 120 }}>
+          <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`,
+            borderLeft: `3px solid ${RES_COLOR[m.result] || C.line}`, borderRadius: 9, padding: "8px 12px" }}>
             <div className="mono" style={{ fontSize: 10, color: C.steel, display: "flex", alignItems: "center", gap: 5 }}>
               <span>{m.home ? "dom" : "wyjazd"} · {m.date || ""}</span>
               {m.cup && (
@@ -3112,9 +3113,10 @@ function RecentView({ data, setSel, setView }) {
                   {m.comp || "PUCHAR"}</span>
               )}
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0", minWidth: 0 }}>
               <Crest id={m.opp_id} size={18} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: C.bone, whiteSpace: "nowrap" }}>{m.opponent || "—"}</span>
+              <span title={m.opponent || ""} style={{ fontSize: 13, fontWeight: 600, color: C.bone,
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{m.opponent || "—"}</span>
             </div>
             <div className="mono" style={{ fontSize: 12, color: RES_COLOR[m.result] || C.steel, fontWeight: 700 }}>
               {m.result || "?"} {m.gf != null ? `${m.gf}:${m.ga}` : ""}
