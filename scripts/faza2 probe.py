@@ -321,29 +321,78 @@ def probe_cups():
         seasons = sorted({r.get("season_name") for r in rows})
         _p(f"[CUP]   {name} (competition_id={rows[0].get('competition_id')}): sezony {seasons}")
  
-    # Czy Raków pojawia się w meczach najnowszego sezonu któregoś pucharu?
+    # Czy Raków pojawia się w meczach? Sprawdzamy KAŻDY sezon (nie tylko najnowszy),
+    # bo 26/27 może być nierozegrane; 25/26 to test, czy dopasowanie nazwy w ogóle działa.
     def _is_rakow(m):
         return "rakow" in _norm(m.get("home_team")) or "rakow" in _norm(m.get("away_team"))
  
     found_any = False
+    sample_names = set()
     for name, rows in by_comp.items():
-        newest = max(rows, key=lambda r: r.get("season_id", 0))
-        cid, sid = newest.get("competition_id"), newest.get("season_id")
+        for r in sorted(rows, key=lambda x: x.get("season_id", 0), reverse=True):
+            cid, sid, sname = r.get("competition_id"), r.get("season_id"), r.get("season_name")
+            try:
+                ms = sb.matches(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+            except Exception as e:  # noqa: BLE001
+                _p(f"[CUP]   {name} {sname}: nie pobrano meczów ({type(e).__name__}: {e}) "
+                   f"— zwykle = sezon jeszcze nierozegrany/niezebrany.")
+                continue
+            rk = [m for m in ms if _is_rakow(m)]
+            avail = sum(1 for m in ms if str(m.get("match_status") or "").lower() == "available")
+            _p(f"[CUP]   {name} {sname}: meczów={len(ms)} (available={avail}), meczów Rakowa={len(rk)}.")
+            for m in rk[:6]:
+                _p(f"[CUP]      Raków: {m.get('home_team')} {m.get('home_score')}-{m.get('away_score')} "
+                   f"{m.get('away_team')} ({m.get('match_date')})")
+            if rk:
+                found_any = True
+            # zbierz próbkę nazw drużyn (do wykluczenia problemu z dopasowaniem)
+            for m in ms[:40]:
+                for k in ("home_team", "away_team"):
+                    if m.get(k):
+                        sample_names.add(str(m.get(k)))
+    if not found_any:
+        # test dopasowania: czy jest cokolwiek „rak…" w nazwach; + próbka nazw
+        rakish = sorted(n for n in sample_names if "rak" in _norm(n))
+        _p(f"[CUP] Raków nie znaleziony w żadnym sezonie licencjonowanych pucharów. "
+           f"Nazwy zawierające 'rak': {rakish or '(brak)'}")
+        _p(f"[CUP] Próbka nazw drużyn (weryfikacja, czy to nie problem dopasowania): "
+           f"{sorted(sample_names)[:16]}")
+    _p(f"[CUP] >>> Raków w pucharach StatsBomb: "
+       f"{'JEST' if found_any else 'BRAK w licencjonowanych rozgrywkach (tylko Liga Konferencji + kwalifikacje)'}.")
+ 
+    # --- SCOUTASTIC: czy Transfermarkt/Scoutastic ma mecze pucharowe Rakowa? ---
+    # To realne źródło „Ostatnich meczów" (obsługuje WSZYSTKIE rozgrywki, nie tylko te
+    # licencjonowane przez StatsBomb). Szukamy właściwego competitionId, próbując kilku
+    # kodów Transfermarkt dla europejskich pucharów.
+    _p("[CUP] --- Scoutastic: szukam meczów pucharowych Rakowa ---")
+    tok = os.getenv("SCOUTASTIC_TOKEN")
+    if not tok:
+        _p("[CUP] BRAK SCOUTASTIC_TOKEN — pomijam sondę Scoutastica (dodaj sekret do workflow).")
+    else:
         try:
-            ms = sb.matches(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+            import scoutastic as sco
+            client = sco.Client(tok)
         except Exception as e:  # noqa: BLE001
-            _p(f"[CUP]   {name} {newest.get('season_name')}: nie pobrano meczów: {type(e).__name__}: {e}")
-            continue
-        rk = [m for m in ms if _is_rakow(m)]
-        avail = sum(1 for m in ms if str(m.get("match_status") or "").lower() == "available")
-        _p(f"[CUP]   {name} {newest.get('season_name')}: meczów={len(ms)} (available={avail}), "
-           f"meczów Rakowa={len(rk)}.")
-        for m in rk[:6]:
-            _p(f"[CUP]      Raków: {m.get('home_team')} {m.get('home_score')}-{m.get('away_score')} "
-               f"{m.get('away_team')} ({m.get('match_date')}, status={m.get('match_status')})")
-        if rk:
-            found_any = True
-    _p(f"[CUP] >>> Raków w pucharach StatsBomb: {'JEST — da się zrobić RC i ostatnie mecze' if found_any else 'BRAK meczów Rakowa (albo sezon jeszcze nierozegrany)'}.")
+            _p(f"[CUP] Scoutastic klient nie wstał: {type(e).__name__}: {e}")
+            client = None
+        if client:
+            team_ext = str(os.getenv("RAKOW_SCOUTASTIC_TEAM", "9644"))
+            # kody Transfermarkt: UCOL=Liga Konferencji, EL=Liga Europy, CL=LM; +kwalifikacje
+            cand = ["UCOL", "UCOQ", "EL", "ELQ", "CL", "CLQ"]
+            for season in ("2026", "2025"):
+                for cc in cand:
+                    try:
+                        ms = client.league_matches(cc, season)
+                    except Exception as e:  # noqa: BLE001
+                        _p(f"[CUP]   Scoutastic {cc}/{season}: błąd {type(e).__name__}: {e}")
+                        continue
+                    if not ms:
+                        continue
+                    rk = [m for m in ms if team_ext in (str(m.get("homeTeamId")), str(m.get("awayTeamId")))]
+                    _p(f"[CUP]   Scoutastic {cc}/{season}: meczów={len(ms)}, meczów Rakowa={len(rk)}.")
+                    for m in rk[:6]:
+                        _p(f"[CUP]      Raków: {m.get('homeTeamName')} {m.get('scoreHome')}-{m.get('scoreAway')} "
+                           f"{m.get('awayTeamName')} ({str(m.get('date'))[:10]})")
     _p("[CUP] === koniec sondy pucharów ===")
  
  
@@ -374,3 +423,4 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
