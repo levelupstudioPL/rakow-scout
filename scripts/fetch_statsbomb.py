@@ -1450,9 +1450,9 @@ def build_dataset(sb, creds):
     # którego już mamy.
     _squad_ids, _squad_names = set(), set()
     for s in squad:
-        sb = s.get("_sb")
-        if sb and sb.get("player_id") is not None:
-            _squad_ids.add(sb.get("player_id"))
+        sb_row = s.get("_sb")   # NIE nadpisuj parametru `sb` (moduł StatsBomb) — patrz recent/stability niżej
+        if sb_row and sb_row.get("player_id") is not None:
+            _squad_ids.add(sb_row.get("player_id"))
         _squad_names.add(_norm(s.get("name", "")))
  
     pool = []
