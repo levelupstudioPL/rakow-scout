@@ -52,4 +52,5 @@ jobs:
           SB_PASSWORD: ${{ secrets.SB_PASSWORD }}
           SKILLCORNER_USERNAME: ${{ secrets.SKILLCORNER_USERNAME }}
           SKILLCORNER_PASSWORD: ${{ secrets.SKILLCORNER_PASSWORD }}
+          SCOUTASTIC_TOKEN: ${{ secrets.SCOUTASTIC_TOKEN }}
         run: python scripts/faza2_probe.py ${{ github.event.inputs.source }}
