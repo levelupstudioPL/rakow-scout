@@ -505,7 +505,9 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
     # Puchary do doliczenia (kody Transfermarkt: UCOL=Liga Konferencji, UCOQ=jej kwalif.).
     # Konfigurowalne przez RECENT_SCOUTASTIC_CUPS. Mecze pucharowe wpadną do „Ostatnich
     # meczów" i do statystyk zawodników automatycznie, gdy tylko źródło je wystawi.
-    cup_codes = [c.strip() for c in os.getenv("RECENT_SCOUTASTIC_CUPS", "UCOL,UCOQ").split(",") if c.strip()]
+    # Domyślnie puchary bierze StatsBomb (bogatsze dane + tegoroczne eliminacje), więc
+    # tu domyślnie pusto. RECENT_SCOUTASTIC_CUPS="UCOL,UCOQ" włącza puchary też z Scoutastica.
+    cup_codes = [c.strip() for c in os.getenv("RECENT_SCOUTASTIC_CUPS", "").split(",") if c.strip()]
     season = _rakow_scoutastic_season()                         # np. "2026" = 2026/27
     team_ext = str(os.getenv("RAKOW_SCOUTASTIC_TEAM", "9644"))  # Raków (externalId, potw.)
     try:
@@ -513,21 +515,32 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
     except Exception as e:  # noqa: BLE001
         print(f"[mecze] Scoutastic klient błąd: {e}", file=sys.stderr)
         return {"available": False, "reason": f"scoutastic: {e}"}
+    # Puchary ciągniemy z BIEŻĄCEGO i POPRZEDNIEGO sezonu — nowa edycja bywa jeszcze
+    # niewciągnięta w źródle (np. UCOL/2026 puste), więc europejskie mecze i tak się
+    # pokażą (kampania z poprzedniego sezonu), a tegoroczne dojdą, gdy tylko się pojawią.
+    prev = str(int(season) - 1) if str(season).isdigit() else None
     # Liga + puchary w jednej puli meczów (liga = sygnał podstawowy; brak pucharu = OK).
-    matches, comps_hit = [], []
-    for code in [comp] + cup_codes:
+    matches, comps_hit, _seen = [], [], set()
+    plan = [(comp, season)] + [(c, s) for c in cup_codes for s in ([season, prev] if prev else [season])]
+    for code, sea in plan:
         try:
-            ms = client.league_matches(code, season) or []
+            ms = client.league_matches(code, sea) or []
         except Exception as e:  # noqa: BLE001
-            print(f"[mecze] Scoutastic {code}/{season} błąd: {e}", file=sys.stderr)
+            print(f"[mecze] Scoutastic {code}/{sea} błąd: {e}", file=sys.stderr)
             continue
+        added = 0
         for m in ms:
+            mid = m.get("internalId") or m.get("transfermarktId") or id(m)
+            if mid in _seen:
+                continue
+            _seen.add(mid)
             m["_comp"] = code
-        if ms:
-            comps_hit.append(f"{code}({len(ms)})")
-        matches.extend(ms)
+            matches.append(m)
+            added += 1
+        if added:
+            comps_hit.append(f"{code}/{sea}({added})")
     if not matches:
-        print(f"[mecze] Scoutastic: brak danych meczowych ({comp}+{cup_codes}/{season}).", file=sys.stderr)
+        print(f"[mecze] Scoutastic: brak danych meczowych ({comp}+{cup_codes}).", file=sys.stderr)
         return {"available": False, "reason": "no_matches"}
  
     def _sco_played(m):
@@ -642,21 +655,164 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
     }
  
  
+def _statsbomb_cup_recent(sb, creds, squad):
+    """Mecze PUCHAROWE Rakowa ze STATSBOMB (Liga Konferencji 353 + jej kwalifikacje 1896),
+    2 najnowsze sezony. To źródło ma TEGOROCZNE eliminacje (Scoutastic wciąga nową edycję
+    z opóźnieniem) + bogatsze dane (xG/xA/strzały). Zwraca (matches, players_dict) albo None.
+    Nazwa drużyny dopasowywana ascii-owo (Raków != rakow przez akcent — patrz _norm_ascii)."""
+    if os.getenv("RECENT_CUPS_SB", "1") in ("0", "false", "False"):
+        return None
+    cup_ids = [int(x) for x in os.getenv("RECENT_CUP_COMP_IDS", "353,1896").split(",") if x.strip().isdigit()]
+    try:
+        comps = sb.competitions(creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[mecze] StatsBomb puchary: brak listy rozgrywek: {e}", file=sys.stderr)
+        return None
+    rk_id = str(os.getenv("RAKOW_SCOUTASTIC_TEAM", "9644"))
+    matches_out, players = [], {}
+    for cid in cup_ids:
+        rows = [c for c in comps if c.get("competition_id") == cid]
+        if not rows:
+            continue
+        cname = str(rows[0].get("competition_name") or cid)
+        short = ("LK-elim" if "qual" in cname.lower()
+                 else "LK" if "conference" in cname.lower() else cname[:10])
+        for r in sorted(rows, key=lambda x: x.get("season_id", 0), reverse=True)[:2]:
+            sid = r.get("season_id")
+            try:
+                ms = sb.matches(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+            except Exception as e:  # noqa: BLE001
+                print(f"[mecze] StatsBomb {cname} {r.get('season_name')}: brak meczów ({e}).", file=sys.stderr)
+                continue
+            for m in ms:
+                home = str(m.get("home_team") or ""); away = str(m.get("away_team") or "")
+                rk_home = "rakow" in _norm_ascii(home)
+                if not (rk_home or "rakow" in _norm_ascii(away)):
+                    continue
+                hs, as_ = m.get("home_score"), m.get("away_score")
+                if not (isinstance(hs, (int, float)) and isinstance(as_, (int, float))):
+                    continue  # nierozegrany
+                gf, ga = (int(hs), int(as_)) if rk_home else (int(as_), int(hs))
+                res = "W" if gf > ga else ("D" if gf == ga else "L")
+                matches_out.append({
+                    "match_id": m.get("match_id"), "date": str(m.get("match_date") or "")[:10],
+                    "opponent": away if rk_home else home, "home": rk_home,
+                    "gf": gf, "ga": ga, "result": res, "week": m.get("match_week"),
+                    "comp": short, "cup": True, "opp_id": "", "rk_id": rk_id,
+                })
+                try:
+                    pms = sb.player_match_stats(m.get("match_id"), creds=creds).to_dict("records")
+                except Exception:  # noqa: BLE001
+                    pms = []
+                for pr in pms:
+                    if "rakow" not in _norm_ascii(str(pr.get("team_name") or pr.get("team") or "")):
+                        continue
+                    pname = pr.get("player_name")
+                    if not _is_valid_name(pname):
+                        continue
+                    key = _norm_ascii(pname)
+                    a = players.setdefault(key, {"name": pname, "minutes": 0.0,
+                                                 "matches_played": 0, "starts": 0, "goals": 0.0, "assists": 0.0})
+                    mins = _first_col(pr, RECENT_STAT_COLS["minutes"]) or 0.0
+                    if mins > 0:
+                        a["matches_played"] += 1; a["minutes"] += mins
+                        if mins >= 60:
+                            a["starts"] += 1
+                    a["goals"] += _first_col(pr, RECENT_STAT_COLS["goals"]) or 0.0
+                    a["assists"] += _first_col(pr, RECENT_STAT_COLS["assists"]) or 0.0
+    if not matches_out:
+        print("[mecze] StatsBomb puchary: brak rozegranych meczów Rakowa w LK/kwalifikacjach.", file=sys.stderr)
+        return None
+    print(f"[mecze] StatsBomb puchary: {len(matches_out)} meczów Rakowa "
+          f"({sorted({m['comp'] for m in matches_out})}).", file=sys.stderr)
+    return matches_out, players
+
+
+def _merge_cup_into_recent(base, cup, squad, cap=12):
+    """Wmerguj mecze pucharowe (StatsBomb) w wynik recent (Scoutastic-liga). In-place."""
+    if not cup:
+        return base
+    cup_matches, cup_players = cup
+    squad_by_norm = {_norm_ascii(s.get("name", "")): s for s in squad}
+    # 1) mecze: liga + puchary, dedupe po (data, przeciwnik), sort po dacie, cap
+    seen, combined = set(), []
+    for m in (base.get("matches", []) + cup_matches):
+        k = (m.get("date"), _norm_ascii(str(m.get("opponent") or "")))
+        if k in seen:
+            continue
+        seen.add(k); combined.append(m)
+    combined.sort(key=lambda m: m.get("date") or "")
+    combined = combined[-cap:]
+    base["matches"] = combined
+    base["n_matches"] = len(combined)
+    # 2) bilans drużyny z wyświetlanych meczów
+    gf = ga = pts = 0; form = []
+    for m in combined:
+        r = m.get("result")
+        if r in ("W", "D", "L") and isinstance(m.get("gf"), int) and isinstance(m.get("ga"), int):
+            gf += m["gf"]; ga += m["ga"]; pts += 3 if r == "W" else (1 if r == "D" else 0); form.append(r)
+    mins_avail = float(len(combined) * 90) or 90.0
+    base["team"] = {"gf": gf, "ga": ga, "points": pts, "form": "".join(form), "minutes_available": mins_avail}
+    # 3) zawodnicy: dolicz puchar do istniejących / dopisz nowych
+    pindex = {_norm_ascii(p.get("name", "")): p for p in base.get("players", [])}
+    for key, cp in cup_players.items():
+        tgt = pindex.get(key)
+        if tgt is None:
+            s = squad_by_norm.get(key)
+            tgt = {"name": cp["name"], "id": s.get("id") if s else None,
+                   "pos": s.get("pos") if s else None, "line": s.get("line") if s else None,
+                   "role": s.get("role") if s else None, "rc": s.get("rc") if s else None,
+                   "rc_estimated": s.get("rc_estimated") if s else None, "in_squad": s is not None,
+                   "minutes": 0.0, "matches_played": 0, "starts": 0, "share": 0.0,
+                   "stats": {"goals": 0.0, "assists": 0.0}}
+            base.setdefault("players", []).append(tgt); pindex[key] = tgt
+        tgt["minutes"] = round((tgt.get("minutes") or 0) + cp["minutes"], 1)
+        tgt["matches_played"] = (tgt.get("matches_played") or 0) + cp["matches_played"]
+        tgt["starts"] = (tgt.get("starts") or 0) + cp["starts"]
+        st = tgt.setdefault("stats", {})
+        st["goals"] = (st.get("goals") or 0) + cp["goals"]
+        st["assists"] = (st.get("assists") or 0) + cp["assists"]
+    for p in base.get("players", []):
+        p["share"] = round((p.get("minutes") or 0) / mins_avail, 3)
+    base["players"].sort(key=lambda p: p.get("minutes", 0), reverse=True)
+    if combined:
+        base["newest_date"] = combined[-1].get("date")
+    base["available"] = bool(base.get("matches")) and bool(base.get("players"))
+    base["note"] = (base.get("note", "") + " Doliczono mecze pucharowe (Liga Konferencji + eliminacje, StatsBomb).").strip()
+    return base
+
+
 def _fetch_recent_matches(sb, creds, squad, n_matches=5):
     """Dyspozytor źródła meczowego walidatora. RECENT_SOURCE: 'scoutastic' (domyślnie —
     Transfermarkt, realne wyniki bieżącego sezonu) albo 'statsbomb' (stary feed, bywa
-    dziurawy). Wyłączalne: RECENT_MATCHES=0."""
+    dziurawy). Puchary (Liga Konferencji + eliminacje) dokłada StatsBomb. Wyłączalne: RECENT_MATCHES=0."""
     if os.getenv("RECENT_MATCHES", "1") in ("0", "false", "False"):
         print("[mecze] Ostatnie mecze: WYŁĄCZONE (RECENT_MATCHES=0).", file=sys.stderr)
         return {"available": False, "reason": "disabled"}
+    # Puchary Rakowa ze StatsBomb (Liga Konferencji + eliminacje — także tegoroczne).
+    cup = None
+    try:
+        cup = _statsbomb_cup_recent(sb, creds, squad)
+    except Exception as e:  # noqa: BLE001
+        print(f"[mecze] StatsBomb puchary: pominięto ({type(e).__name__}: {e}).", file=sys.stderr)
+
     source = os.getenv("RECENT_SOURCE", "scoutastic").lower()
     if source == "scoutastic":
         out = _fetch_recent_scoutastic(squad, n_matches=n_matches)
         if out.get("available"):
-            return out
+            return _merge_cup_into_recent(out, cup, squad) if cup else out
         print(f"[mecze] Scoutastic niedostępne ({out.get('reason')}) — "
               f"fallback do StatsBomb.", file=sys.stderr)
-    return _fetch_recent_statsbomb(sb, creds, squad, n_matches=n_matches)
+    sb_out = _fetch_recent_statsbomb(sb, creds, squad, n_matches=n_matches)
+    if cup and sb_out.get("available"):
+        return _merge_cup_into_recent(sb_out, cup, squad)
+    if cup and not sb_out.get("available"):
+        # sama liga niedostępna, ale puchar jest — złóż wynik z pucharu
+        base = {"available": True, "source": "statsbomb-cup",
+                "generated": __import__("datetime").date.today().isoformat(),
+                "matches": [], "players": [], "team": {}, "note": ""}
+        return _merge_cup_into_recent(base, cup, squad)
+    return sb_out
  
  
 def _fetch_recent_statsbomb(sb, creds, squad, n_matches=5):
@@ -2087,4 +2243,3 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
