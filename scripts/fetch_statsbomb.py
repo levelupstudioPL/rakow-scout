@@ -690,7 +690,11 @@ def _statsbomb_cup_recent(sb, creds, squad):
                 if not (rk_home or "rakow" in _norm_ascii(away)):
                     continue
                 hs, as_ = m.get("home_score"), m.get("away_score")
-                if not (isinstance(hs, (int, float)) and isinstance(as_, (int, float))):
+                # StatsBomb bywa NaN (float) dla nierozegranych — NaN przechodzi isinstance,
+                # ale int(NaN) rzuca. Odrzucamy NaN/None jawnie.
+                def _score_ok(v):
+                    return isinstance(v, (int, float)) and not (isinstance(v, float) and math.isnan(v))
+                if not (_score_ok(hs) and _score_ok(as_)):
                     continue  # nierozegrany
                 gf, ga = (int(hs), int(as_)) if rk_home else (int(as_), int(hs))
                 res = "W" if gf > ga else ("D" if gf == ga else "L")
@@ -713,13 +717,19 @@ def _statsbomb_cup_recent(sb, creds, squad):
                     key = _norm_ascii(pname)
                     a = players.setdefault(key, {"name": pname, "minutes": 0.0,
                                                  "matches_played": 0, "starts": 0, "goals": 0.0, "assists": 0.0})
-                    mins = _first_col(pr, RECENT_STAT_COLS["minutes"]) or 0.0
+                    def _num(v):  # NaN/None -> 0.0 (NaN jest „truthy", więc `or` nie wystarcza)
+                        try:
+                            v = float(v)
+                            return 0.0 if math.isnan(v) else v
+                        except (TypeError, ValueError):
+                            return 0.0
+                    mins = _num(_first_col(pr, RECENT_STAT_COLS["minutes"]))
                     if mins > 0:
                         a["matches_played"] += 1; a["minutes"] += mins
                         if mins >= 60:
                             a["starts"] += 1
-                    a["goals"] += _first_col(pr, RECENT_STAT_COLS["goals"]) or 0.0
-                    a["assists"] += _first_col(pr, RECENT_STAT_COLS["assists"]) or 0.0
+                    a["goals"] += _num(_first_col(pr, RECENT_STAT_COLS["goals"]))
+                    a["assists"] += _num(_first_col(pr, RECENT_STAT_COLS["assists"]))
     if not matches_out:
         print("[mecze] StatsBomb puchary: brak rozegranych meczów Rakowa w LK/kwalifikacjach.", file=sys.stderr)
         return None
