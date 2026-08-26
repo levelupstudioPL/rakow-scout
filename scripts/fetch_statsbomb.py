@@ -792,6 +792,40 @@ def _merge_cup_into_recent(base, cup, squad, cap=12):
     return base
 
 
+def _scoutastic_cup_crest_map():
+    """Mapa {data_meczu -> id rywala w Transfermarkcie} dla meczów pucharowych Rakowa
+    ze Scoutastica — do dorobienia HERBÓW przy meczach pucharowych ze StatsBomb (StatsBomb
+    nie zna id Transfermarktu). Dopasowanie po dacie jest pewne (to te same mecze)."""
+    tok = os.getenv("SCOUTASTIC_TOKEN")
+    if not tok:
+        return {}
+    try:
+        import scoutastic as sco
+        client = sco.Client(tok)
+    except Exception:  # noqa: BLE001
+        return {}
+    team_ext = str(os.getenv("RAKOW_SCOUTASTIC_TEAM", "9644"))
+    season = _rakow_scoutastic_season()
+    prev = str(int(season) - 1) if str(season).isdigit() else None
+    codes = [c.strip() for c in os.getenv("RECENT_CUP_CREST_CODES", "UCOL,UCOQ,ELQ,CLQ").split(",") if c.strip()]
+    out = {}
+    for code in codes:
+        for sea in [season] + ([prev] if prev else []):
+            try:
+                ms = client.league_matches(code, sea) or []
+            except Exception:  # noqa: BLE001
+                continue
+            for m in ms:
+                if team_ext not in (str(m.get("homeTeamId")), str(m.get("awayTeamId"))):
+                    continue
+                rk_home = str(m.get("homeTeamId")) == team_ext
+                opp_id = str(m.get("awayTeamId") if rk_home else m.get("homeTeamId") or "")
+                d = str(m.get("date") or "")[:10]
+                if d and opp_id:
+                    out[d] = opp_id
+    return out
+
+
 def _fetch_recent_matches(sb, creds, squad, n_matches=5):
     """Dyspozytor źródła meczowego walidatora. RECENT_SOURCE: 'scoutastic' (domyślnie —
     Transfermarkt, realne wyniki bieżącego sezonu) albo 'statsbomb' (stary feed, bywa
@@ -805,6 +839,20 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
         cup = _statsbomb_cup_recent(sb, creds, squad)
     except Exception as e:  # noqa: BLE001
         print(f"[mecze] StatsBomb puchary: pominięto ({type(e).__name__}: {e}).", file=sys.stderr)
+    # Dorób herby rywali pucharowych (id Transfermarktu po dacie ze Scoutastica).
+    if cup:
+        try:
+            crest = _scoutastic_cup_crest_map()
+            n_crest = 0
+            for m in cup[0]:
+                if not m.get("opp_id"):
+                    cid = crest.get(m.get("date"), "")
+                    if cid:
+                        m["opp_id"] = cid; n_crest += 1
+            if n_crest:
+                print(f"[mecze] Herby pucharowe: dopasowano {n_crest} po dacie (Scoutastic).", file=sys.stderr)
+        except Exception as e:  # noqa: BLE001
+            print(f"[mecze] Herby pucharowe: pominięto ({type(e).__name__}: {e}).", file=sys.stderr)
 
     source = os.getenv("RECENT_SOURCE", "scoutastic").lower()
     if source == "scoutastic":
