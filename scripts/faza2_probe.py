@@ -26,7 +26,10 @@ def _p(msg):
  
  
 def _norm(s):
-    return "".join(c for c in str(s).lower() if c.isalnum())
+    # ZDEJMIJ akcenty (ó→o, ę→e...) zanim porównasz — inaczej "raków" != "rakow".
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode()
+    return "".join(c for c in s.lower() if c.isalnum())
  
  
 # ---------------------------------------------------------------------
@@ -386,13 +389,12 @@ def probe_cups():
                     except Exception as e:  # noqa: BLE001
                         _p(f"[CUP]   Scoutastic {cc}/{season}: błąd {type(e).__name__}: {e}")
                         continue
-                    if not ms:
-                        continue
-                    rk = [m for m in ms if team_ext in (str(m.get("homeTeamId")), str(m.get("awayTeamId")))]
-                    _p(f"[CUP]   Scoutastic {cc}/{season}: meczów={len(ms)}, meczów Rakowa={len(rk)}.")
-                    for m in rk[:6]:
+                    rk = [m for m in (ms or []) if team_ext in (str(m.get("homeTeamId")), str(m.get("awayTeamId")))]
+                    # loguj ZAWSZE (też 0/puste) — żeby zobaczyć, gdzie są dane dla 2026
+                    _p(f"[CUP]   Scoutastic {cc}/{season}: meczów={len(ms or [])}, meczów Rakowa={len(rk)}.")
+                    for m in rk[:8]:
                         _p(f"[CUP]      Raków: {m.get('homeTeamName')} {m.get('scoreHome')}-{m.get('scoreAway')} "
-                           f"{m.get('awayTeamName')} ({str(m.get('date'))[:10]})")
+                           f"{m.get('awayTeamName')} ({str(m.get('date'))[:10]}, comp={cc})")
     _p("[CUP] === koniec sondy pucharów ===")
  
  
