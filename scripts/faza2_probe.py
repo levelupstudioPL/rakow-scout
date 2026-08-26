@@ -285,8 +285,75 @@ def probe_skillcorner():
     _p("[SC] === koniec sondy SkillCorner ===")
  
  
+# ---------------------------------------------------------------------
+#  C. PUCHARY EUROPEJSKIE — czy StatsBomb je licencjonuje i czy jest Raków.
+#     Jedno źródło (StatsBomb) obsłuży i RC (dane sezonowe), i „Ostatnie mecze".
+# ---------------------------------------------------------------------
+def probe_cups():
+    _p("=== Puchary europejskie: sonda dostępności w StatsBomb ===")
+    user, pw = os.getenv("SB_USERNAME"), os.getenv("SB_PASSWORD")
+    if not user or not pw:
+        _p("[CUP] BRAK SB_USERNAME/SB_PASSWORD — pomijam.")
+        return
+    creds = {"user": user, "passwd": pw}
+    try:
+        from statsbombpy import sb
+    except ImportError:
+        _p("[CUP] Brak statsbombpy — pomijam.")
+        return
+    try:
+        comps = sb.competitions(creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        _p(f"[CUP] Nie pobrano listy rozgrywek: {type(e).__name__}: {e}")
+        return
+ 
+    KEYS = ("champions", "europa", "conference", "uefa", "european")
+    cups = [c for c in comps if any(k in str(c.get("competition_name", "")).lower() for k in KEYS)]
+    if not cups:
+        _p("[CUP] Brak rozgrywek UEFA w licencji StatsBomb — RC/mecze z pucharów NIE są możliwe z tego źródła.")
+        return
+    # unikalne rozgrywki + dostępne sezony
+    by_comp = {}
+    for c in cups:
+        by_comp.setdefault(c.get("competition_name"), []).append(c)
+    _p(f"[CUP] Rozgrywki UEFA w licencji ({len(by_comp)}):")
+    for name, rows in by_comp.items():
+        seasons = sorted({r.get("season_name") for r in rows})
+        _p(f"[CUP]   {name} (competition_id={rows[0].get('competition_id')}): sezony {seasons}")
+ 
+    # Czy Raków pojawia się w meczach najnowszego sezonu któregoś pucharu?
+    def _is_rakow(m):
+        return "rakow" in _norm(m.get("home_team")) or "rakow" in _norm(m.get("away_team"))
+ 
+    found_any = False
+    for name, rows in by_comp.items():
+        newest = max(rows, key=lambda r: r.get("season_id", 0))
+        cid, sid = newest.get("competition_id"), newest.get("season_id")
+        try:
+            ms = sb.matches(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+        except Exception as e:  # noqa: BLE001
+            _p(f"[CUP]   {name} {newest.get('season_name')}: nie pobrano meczów: {type(e).__name__}: {e}")
+            continue
+        rk = [m for m in ms if _is_rakow(m)]
+        avail = sum(1 for m in ms if str(m.get("match_status") or "").lower() == "available")
+        _p(f"[CUP]   {name} {newest.get('season_name')}: meczów={len(ms)} (available={avail}), "
+           f"meczów Rakowa={len(rk)}.")
+        for m in rk[:6]:
+            _p(f"[CUP]      Raków: {m.get('home_team')} {m.get('home_score')}-{m.get('away_score')} "
+               f"{m.get('away_team')} ({m.get('match_date')}, status={m.get('match_status')})")
+        if rk:
+            found_any = True
+    _p(f"[CUP] >>> Raków w pucharach StatsBomb: {'JEST — da się zrobić RC i ostatnie mecze' if found_any else 'BRAK meczów Rakowa (albo sezon jeszcze nierozegrany)'}.")
+    _p("[CUP] === koniec sondy pucharów ===")
+ 
+ 
 def main():
     mode = sys.argv[1].lower() if len(sys.argv) > 1 else "both"
+    KNOWN = {"both", "statsbomb", "sb", "skillcorner", "sc", "cups", "puchary", "cup"}
+    if mode not in KNOWN:
+        _p(f"NIEZNANY tryb '{mode}'. Dostępne: both | statsbomb | skillcorner | cups. "
+           f"(Jeśli wybrałeś 'cups' a to widzisz — na repo jest starsza wersja skryptu bez trybu cups.)")
+        return
     if mode in ("both", "statsbomb", "sb"):
         try:
             probe_statsbomb()
@@ -297,9 +364,13 @@ def main():
             probe_skillcorner()
         except Exception as e:  # noqa: BLE001
             _p(f"[SC] Sonda przerwana wyjątkiem: {type(e).__name__}: {e}")
+    if mode in ("cups", "puchary", "cup"):
+        try:
+            probe_cups()
+        except Exception as e:  # noqa: BLE001
+            _p(f"[CUP] Sonda przerwana wyjątkiem: {type(e).__name__}: {e}")
     _p("Gotowe. Skopiuj wszystkie linie [sonda2] i wklej do rozmowy.")
  
  
 if __name__ == "__main__":
     main()
- 
