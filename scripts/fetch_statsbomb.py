@@ -1341,6 +1341,7 @@ def build_dataset(sb, creds):
                 "id": f"pl-{row.get('player_id')}",
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
                 "lg": lg["name"], "pos": pos, "line": line, "role": role,
+                "team": _row_team_name(row),   # do modułu analizy przeciwnika (grupowanie po drużynie)
                 "raw": level,
                 "level_estimated": level_estimated,
                 "coherence": best_coh,
@@ -2062,4 +2063,3 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
