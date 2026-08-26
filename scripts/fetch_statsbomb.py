@@ -502,14 +502,33 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
         return {"available": False, "reason": f"no_module: {e}"}
  
     comp = os.getenv("RECENT_SCOUTASTIC_COMP", "PL1")           # Ekstraklasa (potw. sondą)
+    # Puchary do doliczenia (kody Transfermarkt: UCOL=Liga Konferencji, UCOQ=jej kwalif.).
+    # Konfigurowalne przez RECENT_SCOUTASTIC_CUPS. Mecze pucharowe wpadną do „Ostatnich
+    # meczów" i do statystyk zawodników automatycznie, gdy tylko źródło je wystawi.
+    cup_codes = [c.strip() for c in os.getenv("RECENT_SCOUTASTIC_CUPS", "UCOL,UCOQ").split(",") if c.strip()]
     season = _rakow_scoutastic_season()                         # np. "2026" = 2026/27
     team_ext = str(os.getenv("RAKOW_SCOUTASTIC_TEAM", "9644"))  # Raków (externalId, potw.)
     try:
         client = sco.Client(token)
-        matches = client.league_matches(comp, season)
     except Exception as e:  # noqa: BLE001
-        print(f"[mecze] Scoutastic /matches błąd: {e}", file=sys.stderr)
+        print(f"[mecze] Scoutastic klient błąd: {e}", file=sys.stderr)
         return {"available": False, "reason": f"scoutastic: {e}"}
+    # Liga + puchary w jednej puli meczów (liga = sygnał podstawowy; brak pucharu = OK).
+    matches, comps_hit = [], []
+    for code in [comp] + cup_codes:
+        try:
+            ms = client.league_matches(code, season) or []
+        except Exception as e:  # noqa: BLE001
+            print(f"[mecze] Scoutastic {code}/{season} błąd: {e}", file=sys.stderr)
+            continue
+        for m in ms:
+            m["_comp"] = code
+        if ms:
+            comps_hit.append(f"{code}({len(ms)})")
+        matches.extend(ms)
+    if not matches:
+        print(f"[mecze] Scoutastic: brak danych meczowych ({comp}+{cup_codes}/{season}).", file=sys.stderr)
+        return {"available": False, "reason": "no_matches"}
  
     def _sco_played(m):
         sh, sa = str(m.get("scoreHome")), str(m.get("scoreAway"))
@@ -521,8 +540,11 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
     rk = [m for m in matches
           if team_ext in (str(m.get("homeTeamId")), str(m.get("awayTeamId"))) and _sco_played(m)]
     if not rk:
-        print(f"[mecze] Scoutastic: brak rozegranych meczów Rakowa w {comp}/{season}.", file=sys.stderr)
+        print(f"[mecze] Scoutastic: brak rozegranych meczów Rakowa w {comp}+{cup_codes}/{season}.", file=sys.stderr)
         return {"available": False, "reason": "no_played_matches"}
+    n_cup_total = sum(1 for m in rk if m.get("_comp") != comp)
+    if n_cup_total:
+        print(f"[mecze] Scoutastic: w puli {n_cup_total} rozegranych meczów pucharowych Rakowa.", file=sys.stderr)
     rk.sort(key=_dk)
     recent = rk[-n_matches:]
  
@@ -542,10 +564,12 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
             form.append(res)
         except Exception:  # noqa: BLE001
             gf = ga = None; res = None
+        _comp = m.get("_comp") or comp
         matches_out.append({
             "match_id": m.get("internalId") or m.get("transfermarktId"),
             "date": _dk(m)[:10], "opponent": opp, "home": rk_home,
             "gf": gf, "ga": ga, "result": res, "week": m.get("matchday"),
+            "comp": _comp, "cup": _comp != comp,   # puchar vs liga (do etykiety na froncie)
             # id klubów (Transfermarkt) do herbów na froncie; przeciwnik + Raków.
             "opp_id": str(m.get("awayTeamId") if rk_home else m.get("homeTeamId") or ""),
             "rk_id": team_ext,
@@ -2063,3 +2087,4 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 
