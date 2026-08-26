@@ -336,7 +336,7 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"]] },
     { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
@@ -452,6 +452,7 @@ export default function App() {
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
             {view === "mecze" && "Ostatnie mecze — walidator"}
+            {view === "roster" && "Aktualność składu"}
             {view === "match" && "Odpowiednicy z Europy"}
             {view === "priorities" && "Priorytety transferowe"}
             {view === "okazje" && "Okazje — jakość za euro"}
@@ -486,6 +487,7 @@ export default function App() {
         <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
           {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
+          {view === "roster" && <RosterView data={data} />}
           {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
@@ -1692,6 +1694,103 @@ function CorrView({ data }) {
         </div>
       </div>
       <Note>Podobieństwo stylu ról = kosinus między średnimi profilami stylu pozycji (z-score względem Ekstraklasy, 17 wymiarów: podania, odbiory, gra w powietrzu, drybling, xG/xA, fizyka…), liczony z całej puli lig. To mapa <b>stylistycznego pokrewieństwa ról</b>, nie sieć podań — „kto z kim realnie gra" wymaga danych zdarzeniowych (pas po pasie) i jest naturalnym kolejnym krokiem, skoro dostęp do eventów StatsBomb jest.</Note>
+    </div>
+  );
+}
+
+// ============================ AKTUALNOŚĆ SKŁADU ============================
+// Wykrywa rozjazd między squad.json a rzeczywistością: nowi zawodnicy, którzy już
+// grają a nie ma ich w składzie; zawodnicy składu bez danych (b.d. — nowy transfer /
+// pisownia); zawodnicy składu bez minut w ostatnich meczach (rotacja/kontuzja/odejście).
+// Wszystko z data.json (recent.players + squad) — bez zmian w pipeline.
+const _rn = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+
+function RosterView({ data }) {
+  const recent = data.recent || {};
+  const rp = Array.isArray(recent.players) ? recent.players : [];
+  const squad = Array.isArray(data.squad) ? data.squad : [];
+
+  const newcomers = rp.filter((p) => !p.in_squad && (p.minutes || 0) > 0)
+    .sort((a, b) => (b.minutes || 0) - (a.minutes || 0));
+  const noData = squad.filter((p) => p.rc_estimated && p.rc_source !== "historical");
+  const playedNames = new Set(rp.filter((p) => (p.minutes || 0) > 0).map((p) => _rn(p.name)));
+  const noApp = squad.filter((p) => !playedNames.has(_rn(p.name)));
+  const nWin = recent.n_matches || 0;
+  const withRC = squad.filter((p) => !p.rc_estimated).length;
+
+  const hasRecent = recent.available !== false && rp.length > 0;
+
+  return (
+    <div>
+      <Lead>Kontrola rozjazdu między składem w aplikacji (<span className="mono">squad.json</span>) a rzeczywistością na boisku. Nowi zawodnicy, którzy już grają, ale nie ma ich w składzie, wymagają dopisania — dopiero wtedy model policzy im RC.</Lead>
+
+      {!hasRecent && (
+        <InfoBanner>Brak danych z ostatnich meczów — panel wypełni się po najbliższym odświeżeniu (i gdy Scoutastic zwróci rozegrane mecze Rakowa).</InfoBanner>
+      )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 6px" }}>
+        <Tile label="Skład w aplikacji" val={squad.length} sub={`RC z modelu: ${withRC}/${squad.length}`} />
+        <Tile label="Nowi na boisku, poza składem" val={newcomers.length}
+          color={newcomers.length ? C.warn : C.good} hint="Grali w ostatnich meczach, ale nie ma ich w squad.json." />
+        <Tile label="W składzie bez danych (b.d.)" val={noData.length}
+          color={noData.length ? C.warn : C.good} hint="Są w składzie, ale model nie ma dla nich danych — nowy transfer albo błąd pisowni." />
+        <Tile label="Okno" val={`${nWin} mecz.`} sub="ostatnie mecze" />
+      </div>
+
+      <SectionLabel>Nowi zawodnicy — grają, brak w składzie</SectionLabel>
+      {newcomers.length ? (
+        <div style={{ display: "grid", gap: 7, maxWidth: 720 }}>
+          {newcomers.map((p, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
+              background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.warn}`, borderRadius: 9, padding: "10px 13px" }}>
+              <div>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: C.bone }}>{p.name}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>
+                  {p.matches_played} mecz. · {Math.round(p.minutes)} min · {p.starts} w wyj.
+                  {p.stats && (p.stats.goals || p.stats.assists) ? ` · ${p.stats.goals || 0}G ${p.stats.assists || 0}A` : ""}
+                </div>
+              </div>
+              <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+                style={{ fontSize: 11, color: C.steelHi, textDecoration: "none", border: `1px solid ${C.line}`, borderRadius: 6, padding: "4px 8px" }}>
+                Transfermarkt ↗</a>
+            </div>
+          ))}
+        </div>
+      ) : <Empty>Wszyscy grający są w składzie — brak nowych do dopisania.</Empty>}
+
+      <SectionLabel>W składzie, brak danych (b.d.)</SectionLabel>
+      {noData.length ? (
+        <div style={{ display: "grid", gap: 7, maxWidth: 720 }}>
+          {noData.map((p) => (
+            <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
+              background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.steel}`, borderRadius: 9, padding: "10px 13px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span className="cond" style={{ fontSize: 10.5, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 6px" }}>{p.pos}</span>
+                <span style={{ fontSize: 13.5, color: C.bone }}>{p.name}</span>
+              </div>
+              <span style={{ fontSize: 11, color: C.steel }}>nowy transfer / pisownia — sprawdź w squad.json</span>
+            </div>
+          ))}
+        </div>
+      ) : <Empty>Każdy zawodnik składu ma policzone RC — brak „b.d.".</Empty>}
+
+      {noApp.length ? (
+        <>
+          <SectionLabel>Bez minut w ostatnich {nWin} meczach</SectionLabel>
+          <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 8, maxWidth: 720 }}>
+            Rotacja, kontuzja albo odejście z klubu. Przy krótkim oknie to często norma — sygnał, nie alarm.
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {noApp.map((p) => (
+              <span key={p.id} style={{ fontSize: 12, background: C.panel2, border: `1px solid ${C.line}`, borderRadius: 7, padding: "4px 9px", color: C.steelHi }}>
+                {p.name}<span style={{ color: C.steel }}> · {p.pos}</span>
+              </span>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      <Note>Nowi wykrywani z realnych występów (Scoutastic): jeśli ktoś zagrał, a nie ma go w squad.json, pokazuje się tu. Zawodnik, który dopiero podpisał i jeszcze nie zagrał, pojawi się dopiero po pierwszych minutach — pełną listę transferów można by dociągnąć z osobnego źródła kadrowego (do dołożenia). Po dopisaniu do squad.json i odświeżeniu model policzy RC z jego danych (bieżąca liga lub sezon historyczny).</Note>
     </div>
   );
 }
@@ -3005,7 +3104,14 @@ function RecentView({ data, setSel, setView }) {
         {V.matches.map((m, i) => (
           <div key={i} style={{ flex: "0 0 auto", background: C.panel, border: `1px solid ${C.line}`,
             borderLeft: `3px solid ${RES_COLOR[m.result] || C.line}`, borderRadius: 9, padding: "8px 12px", minWidth: 120 }}>
-            <div className="mono" style={{ fontSize: 10, color: C.steel }}>{m.home ? "dom" : "wyjazd"} · {m.date || ""}</div>
+            <div className="mono" style={{ fontSize: 10, color: C.steel, display: "flex", alignItems: "center", gap: 5 }}>
+              <span>{m.home ? "dom" : "wyjazd"} · {m.date || ""}</span>
+              {m.cup && (
+                <span title={`Mecz pucharowy (${m.comp || "puchar"})`} style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: 0.5,
+                  color: C.blueHi, border: `1px solid ${C.blueHi}66`, borderRadius: 3, padding: "0px 3px" }}>
+                  {m.comp || "PUCHAR"}</span>
+              )}
+            </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0" }}>
               <Crest id={m.opp_id} size={18} />
               <span style={{ fontSize: 13, fontWeight: 600, color: C.bone, whiteSpace: "nowrap" }}>{m.opponent || "—"}</span>
