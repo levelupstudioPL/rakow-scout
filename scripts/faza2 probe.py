@@ -349,6 +349,11 @@ def probe_cups():
  
 def main():
     mode = sys.argv[1].lower() if len(sys.argv) > 1 else "both"
+    KNOWN = {"both", "statsbomb", "sb", "skillcorner", "sc", "cups", "puchary", "cup"}
+    if mode not in KNOWN:
+        _p(f"NIEZNANY tryb '{mode}'. Dostępne: both | statsbomb | skillcorner | cups. "
+           f"(Jeśli wybrałeś 'cups' a to widzisz — na repo jest starsza wersja skryptu bez trybu cups.)")
+        return
     if mode in ("both", "statsbomb", "sb"):
         try:
             probe_statsbomb()
@@ -369,4 +374,3 @@ def main():
  
 if __name__ == "__main__":
     main()
- 
