@@ -336,9 +336,9 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
-    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"]] },
+    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"]] },
     { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
@@ -452,6 +452,7 @@ export default function App() {
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
             {view === "mecze" && "Ostatnie mecze — walidator"}
+            {view === "roster" && "Aktualność składu"}
             {view === "match" && "Odpowiednicy z Europy"}
             {view === "priorities" && "Priorytety transferowe"}
             {view === "okazje" && "Okazje — jakość za euro"}
@@ -460,6 +461,7 @@ export default function App() {
             {view === "metrics" && "Multikolinearność metryk stylu"}
             {view === "stability" && "Stabilność metryk (test-retest)"}
             {view === "corr" && "Zależności formacji"}
+            {view === "opponent" && "Analiza przeciwnika"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
             {view === "watch" && "Watchlista skauta"}
@@ -485,6 +487,7 @@ export default function App() {
         <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
           {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
+          {view === "roster" && <RosterView data={data} />}
           {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
@@ -500,6 +503,7 @@ export default function App() {
           {view === "metrics" && <MetricsView data={data} />}
           {view === "stability" && <StabilityView data={data} />}
           {view === "corr" && <CorrView data={data} />}
+          {view === "opponent" && <OpponentView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
         </div>
       </main>
@@ -1690,6 +1694,291 @@ function CorrView({ data }) {
         </div>
       </div>
       <Note>Podobieństwo stylu ról = kosinus między średnimi profilami stylu pozycji (z-score względem Ekstraklasy, 17 wymiarów: podania, odbiory, gra w powietrzu, drybling, xG/xA, fizyka…), liczony z całej puli lig. To mapa <b>stylistycznego pokrewieństwa ról</b>, nie sieć podań — „kto z kim realnie gra" wymaga danych zdarzeniowych (pas po pasie) i jest naturalnym kolejnym krokiem, skoro dostęp do eventów StatsBomb jest.</Note>
+    </div>
+  );
+}
+
+// ============================ AKTUALNOŚĆ SKŁADU ============================
+// Wykrywa rozjazd między squad.json a rzeczywistością: nowi zawodnicy, którzy już
+// grają a nie ma ich w składzie; zawodnicy składu bez danych (b.d. — nowy transfer /
+// pisownia); zawodnicy składu bez minut w ostatnich meczach (rotacja/kontuzja/odejście).
+// Wszystko z data.json (recent.players + squad) — bez zmian w pipeline.
+const _rn = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+
+function RosterView({ data }) {
+  const recent = data.recent || {};
+  const rp = Array.isArray(recent.players) ? recent.players : [];
+  const squad = Array.isArray(data.squad) ? data.squad : [];
+
+  const newcomers = rp.filter((p) => !p.in_squad && (p.minutes || 0) > 0)
+    .sort((a, b) => (b.minutes || 0) - (a.minutes || 0));
+  const noData = squad.filter((p) => p.rc_estimated && p.rc_source !== "historical");
+  const playedNames = new Set(rp.filter((p) => (p.minutes || 0) > 0).map((p) => _rn(p.name)));
+  const noApp = squad.filter((p) => !playedNames.has(_rn(p.name)));
+  const nWin = recent.n_matches || 0;
+  const withRC = squad.filter((p) => !p.rc_estimated).length;
+
+  const hasRecent = recent.available !== false && rp.length > 0;
+
+  return (
+    <div>
+      <Lead>Kontrola rozjazdu między składem w aplikacji (<span className="mono">squad.json</span>) a rzeczywistością na boisku. Nowi zawodnicy, którzy już grają, ale nie ma ich w składzie, wymagają dopisania — dopiero wtedy model policzy im RC.</Lead>
+
+      {!hasRecent && (
+        <InfoBanner>Brak danych z ostatnich meczów — panel wypełni się po najbliższym odświeżeniu (i gdy Scoutastic zwróci rozegrane mecze Rakowa).</InfoBanner>
+      )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 6px" }}>
+        <Tile label="Skład w aplikacji" val={squad.length} sub={`RC z modelu: ${withRC}/${squad.length}`} />
+        <Tile label="Nowi na boisku, poza składem" val={newcomers.length}
+          color={newcomers.length ? C.warn : C.good} hint="Grali w ostatnich meczach, ale nie ma ich w squad.json." />
+        <Tile label="W składzie bez danych (b.d.)" val={noData.length}
+          color={noData.length ? C.warn : C.good} hint="Są w składzie, ale model nie ma dla nich danych — nowy transfer albo błąd pisowni." />
+        <Tile label="Okno" val={`${nWin} mecz.`} sub="ostatnie mecze" />
+      </div>
+
+      <SectionLabel>Nowi zawodnicy — grają, brak w składzie</SectionLabel>
+      {newcomers.length ? (
+        <div style={{ display: "grid", gap: 7, maxWidth: 720 }}>
+          {newcomers.map((p, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
+              background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.warn}`, borderRadius: 9, padding: "10px 13px" }}>
+              <div>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: C.bone }}>{p.name}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>
+                  {p.matches_played} mecz. · {Math.round(p.minutes)} min · {p.starts} w wyj.
+                  {p.stats && (p.stats.goals || p.stats.assists) ? ` · ${p.stats.goals || 0}G ${p.stats.assists || 0}A` : ""}
+                </div>
+              </div>
+              <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+                style={{ fontSize: 11, color: C.steelHi, textDecoration: "none", border: `1px solid ${C.line}`, borderRadius: 6, padding: "4px 8px" }}>
+                Transfermarkt ↗</a>
+            </div>
+          ))}
+        </div>
+      ) : <Empty>Wszyscy grający są w składzie — brak nowych do dopisania.</Empty>}
+
+      <SectionLabel>W składzie, brak danych (b.d.)</SectionLabel>
+      {noData.length ? (
+        <div style={{ display: "grid", gap: 7, maxWidth: 720 }}>
+          {noData.map((p) => (
+            <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
+              background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.steel}`, borderRadius: 9, padding: "10px 13px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span className="cond" style={{ fontSize: 10.5, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 6px" }}>{p.pos}</span>
+                <span style={{ fontSize: 13.5, color: C.bone }}>{p.name}</span>
+              </div>
+              <span style={{ fontSize: 11, color: C.steel }}>nowy transfer / pisownia — sprawdź w squad.json</span>
+            </div>
+          ))}
+        </div>
+      ) : <Empty>Każdy zawodnik składu ma policzone RC — brak „b.d.".</Empty>}
+
+      {noApp.length ? (
+        <>
+          <SectionLabel>Bez minut w ostatnich {nWin} meczach</SectionLabel>
+          <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 8, maxWidth: 720 }}>
+            Rotacja, kontuzja albo odejście z klubu. Przy krótkim oknie to często norma — sygnał, nie alarm.
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {noApp.map((p) => (
+              <span key={p.id} style={{ fontSize: 12, background: C.panel2, border: `1px solid ${C.line}`, borderRadius: 7, padding: "4px 9px", color: C.steelHi }}>
+                {p.name}<span style={{ color: C.steel }}> · {p.pos}</span>
+              </span>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      <Note>Nowi wykrywani z realnych występów (Scoutastic): jeśli ktoś zagrał, a nie ma go w squad.json, pokazuje się tu. Zawodnik, który dopiero podpisał i jeszcze nie zagrał, pojawi się dopiero po pierwszych minutach — pełną listę transferów można by dociągnąć z osobnego źródła kadrowego (do dołożenia). Po dopisaniu do squad.json i odświeżeniu model policzy RC z jego danych (bieżąca liga lub sezon historyczny).</Note>
+    </div>
+  );
+}
+
+// ============================ ANALIZA PRZECIWNIKA ============================
+// Profil stylu drużyny rywala per linia/rola + przewidywalność + mapa jakości/luk
+// + wskazówki matchup, liczone NA ŻYWO z puli (Ekstraklasa). Wszystko z danych,
+// które już są w data.json: profile_pos (styl vs Ekstraklasa), raw (RC), team.
+// UCZCIWOŚĆ: to wsparcie analityczne, nie automatyczne ustawienie — trener decyduje.
+const _mean = (a) => (a.length ? a.reduce((s, x) => s + (Number(x) || 0), 0) / a.length : 0);
+const _cos = (a, b) => {
+  let d = 0, na = 0, nb = 0;
+  const n = Math.min(a.length, b.length);
+  for (let i = 0; i < n; i++) { const x = Number(a[i]) || 0, y = Number(b[i]) || 0; d += x * y; na += x * x; nb += y * y; }
+  return (na && nb) ? d / Math.sqrt(na * nb) : 0;
+};
+const OPP_ROLE_ORDER = ["Bramka", "ŚO", "Boczny", "Skrzydłowy", "6-8", "10-9"];
+
+function OpponentView({ data }) {
+  const BASE = "Ekstraklasa (PL)";
+  const pool = Array.isArray(data.pool) ? data.pool : [];
+  const labelsFor = (line) => (data.meta && data.meta.style_labels ? data.meta.style_labels[line] : null);
+
+  const teams = useMemo(() => {
+    const s = new Set();
+    pool.forEach((p) => { if (p.lg === BASE && p.team && !/rak[oó]w/i.test(p.team)) s.add(p.team); });
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [pool]);
+
+  const [teamSel, setTeamSel] = useState("");
+  const team = teams.includes(teamSel) ? teamSel : (teams[0] || "");
+  const players = useMemo(() => pool.filter((p) => p.lg === BASE && p.team === team), [pool, team]);
+
+  const an = useMemo(() => {
+    if (!players.length) return null;
+    const byLine = {}, byRole = {};
+    players.forEach((p) => {
+      (byLine[p.line] = byLine[p.line] || []).push(p);
+      const r = p.role || p.line; (byRole[r] = byRole[r] || []).push(p);
+    });
+    // Jakość per rola (RC = raw; Ekstraklasa ma handicap 0, więc raw = RC)
+    const roleRC = Object.entries(byRole).map(([role, ps]) => ({
+      role, n: ps.length, rc: Math.round(_mean(ps.map((x) => x.raw))),
+    })).sort((a, b) => (OPP_ROLE_ORDER.indexOf(a.role) - OPP_ROLE_ORDER.indexOf(b.role)));
+    const rankByRC = [...roleRC].filter((r) => r.n >= 1).sort((a, b) => a.rc - b.rc);
+    const weakest = rankByRC[0] || null;
+    const strongest = rankByRC[rankByRC.length - 1] || null;
+    const overallRC = Math.round(_mean(players.map((p) => p.raw)));
+
+    // Styl (DNA) per linia: średni profile_pos, dominujące tendencje (nad/pod średnią Ekstraklasy)
+    const lineStyle = Object.entries(byLine).map(([line, ps]) => {
+      const labs = labelsFor(line);
+      const vecs = ps.map((x) => x.profile_pos).filter((v) => Array.isArray(v) && labs && v.length === labs.length);
+      if (!labs || !vecs.length) return { line, n: ps.length, hi: [], lo: [], predict: null };
+      const avg = labs.map((_, i) => _mean(vecs.map((v) => v[i])));
+      const ranked = labs.map((l, i) => ({ l, z: avg[i] })).sort((a, b) => b.z - a.z);
+      const hi = ranked.filter((x) => x.z > 0.3).slice(0, 3);
+      const lo = ranked.filter((x) => x.z < -0.3).slice(-3).reverse();
+      // przewidywalność linii = średnie podobieństwo par profili (wysokie = jednorodni)
+      let sim = null;
+      if (vecs.length >= 2) {
+        const ps2 = [];
+        for (let i = 0; i < vecs.length; i++) for (let j = i + 1; j < vecs.length; j++) ps2.push(_cos(vecs[i], vecs[j]));
+        sim = _mean(ps2);
+      }
+      return { line, n: ps.length, hi, lo, predict: sim };
+    }).sort((a, b) => (["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(a.line) - ["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(b.line)));
+
+    const predVals = lineStyle.map((l) => l.predict).filter((v) => v != null);
+    const predictability = predVals.length ? _mean(predVals) : null;
+
+    // Wskazówki (matchup) — generowane z danych, nie z powietrza.
+    const tips = [];
+    if (weakest) tips.push({ k: "luka", t: `Najsłabsze ogniwo: rola ${roleName({ role: weakest.role }) || weakest.role} (śr. RC ${weakest.rc}, ${weakest.n} zaw.). Naturalny kierunek gry.` });
+    if (strongest && strongest.rc - (weakest ? weakest.rc : 0) >= 6) tips.push({ k: "uwaga", t: `Najmocniejsza rola: ${roleName({ role: strongest.role }) || strongest.role} (RC ${strongest.rc}) — tu unikać strat i pojedynków 1v1.` });
+    lineStyle.forEach((ls) => {
+      if (ls.hi.length && ls.lo.length) {
+        tips.push({ k: "tendencja", t: `${ls.line}: dużo „${ls.hi.map((h) => h.l).join(", ")}", mało „${ls.lo.map((h) => h.l).join(", ")}" — przestrzeń tam, gdzie robią mało.` });
+      }
+      if (ls.predict != null && ls.predict > 0.6 && ls.n >= 2) {
+        tips.push({ k: "przewidywalnosc", t: `${ls.line} bardzo jednorodna (podobieństwo ${Math.round(ls.predict * 100)}%) — styl przewidywalny, łatwiejszy do rozpracowania.` });
+      }
+    });
+
+    return { roleRC, weakest, strongest, overallRC, lineStyle, predictability, tips };
+  }, [players]);
+
+  const tipColor = (k) => (k === "luka" ? C.good : k === "uwaga" ? C.warn : k === "przewidywalnosc" ? C.blueHi : C.steelHi);
+  const barRC = (rc) => `${Math.max(4, Math.min(100, rc))}%`;
+
+  return (
+    <div>
+      <Lead>Profil stylu rywala liczony na żywo z danych Ekstraklasy: jak grają per linia, gdzie mają jakość, gdzie lukę i jak przewidywalny jest ich styl. Wskazówki są <b>obserwacjami z danych</b> — ustawienie zostaje po stronie sztabu.</Lead>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0 6px", flexWrap: "wrap" }}>
+        <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: C.steel }}>PRZECIWNIK</span>
+        <select value={team} onChange={(e) => setTeamSel(e.target.value)}
+          style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9, padding: "9px 13px", fontSize: 13.5, minWidth: 240 }}>
+          {teams.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
+        <span style={{ fontSize: 12, color: C.steel }}>{players.length} zawodników w danych</span>
+      </div>
+
+      {!an ? (
+        <div style={{ marginTop: 16 }}>
+          <Empty>Brak danych dla tej drużyny w bieżącej puli (za mało zawodników z wystarczającą próbką minut).</Empty>
+        </div>
+      ) : (
+        <>
+          {/* Kafle podsumowania */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 6px" }}>
+            <Tile label="Średnie RC drużyny" val={an.overallRC} color={tierColor(an.overallRC)} />
+            <Tile label="Przewidywalność stylu" val={an.predictability != null ? `${Math.round(an.predictability * 100)}%` : "—"}
+              color={an.predictability != null && an.predictability > 0.6 ? C.blueHi : C.steelHi}
+              hint="Podobieństwo stylu w liniach — wysokie = jednorodni, przewidywalni." />
+            <Tile label="Najsłabsza rola" val={an.weakest ? (roleName({ role: an.weakest.role }) || an.weakest.role) : "—"}
+              sub={an.weakest ? `RC ${an.weakest.rc}` : ""} color={C.good} />
+            <Tile label="Najmocniejsza rola" val={an.strongest ? (roleName({ role: an.strongest.role }) || an.strongest.role) : "—"}
+              sub={an.strongest ? `RC ${an.strongest.rc}` : ""} color={C.warn} />
+          </div>
+
+          <SectionLabel>Jakość per rola (RC)</SectionLabel>
+          <div style={{ display: "grid", gap: 7, maxWidth: 620 }}>
+            {an.roleRC.map((r) => (
+              <div key={r.role} style={{ display: "grid", gridTemplateColumns: "130px 1fr 64px", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 12.5, color: C.bone }}>{roleName({ role: r.role }) || r.role}
+                  <span style={{ color: C.steel, fontSize: 11 }}> · {r.n}</span></span>
+                <div style={{ height: 10, background: C.panel2, borderRadius: 5, overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: barRC(r.rc), background: tierColor(r.rc) }} />
+                </div>
+                <span className="disp" style={{ fontSize: 15, color: tierColor(r.rc) }}>{r.rc}</span>
+              </div>
+            ))}
+          </div>
+
+          <SectionLabel>Styl gry per linia (vs średnia Ekstraklasy)</SectionLabel>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 12 }}>
+            {an.lineStyle.map((ls) => (
+              <div key={ls.line} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "13px 15px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+                  <b style={{ fontSize: 13.5, color: C.bone }}>{ls.line}</b>
+                  {ls.predict != null && (
+                    <span className="mono" style={{ fontSize: 10.5, color: ls.predict > 0.6 ? C.blueHi : C.steel }}>
+                      przewid. {Math.round(ls.predict * 100)}%</span>
+                  )}
+                </div>
+                {ls.hi.length ? (
+                  <div style={{ fontSize: 12, color: C.steelHi, marginBottom: 4 }}>
+                    <span style={{ color: C.good, fontWeight: 700 }}>dużo:</span> {ls.hi.map((h) => h.l).join(", ")}
+                  </div>
+                ) : null}
+                {ls.lo.length ? (
+                  <div style={{ fontSize: 12, color: C.steelHi }}>
+                    <span style={{ color: C.bad, fontWeight: 700 }}>mało:</span> {ls.lo.map((h) => h.l).join(", ")}
+                  </div>
+                ) : null}
+                {!ls.hi.length && !ls.lo.length ? (
+                  <div style={{ fontSize: 12, color: C.steel }}>Profil zbliżony do średniej ligi.</div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+
+          <SectionLabel>Wskazówki (z danych — sztab decyduje)</SectionLabel>
+          <div style={{ display: "grid", gap: 8, maxWidth: 820 }}>
+            {an.tips.length ? an.tips.map((tp, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: C.panel,
+                border: `1px solid ${C.line}`, borderLeft: `3px solid ${tipColor(tp.k)}`, borderRadius: 9, padding: "10px 13px" }}>
+                <span style={{ color: tipColor(tp.k), fontSize: 14, flexShrink: 0 }}>▸</span>
+                <span style={{ fontSize: 13, color: C.bone, lineHeight: 1.5 }}>{tp.t}</span>
+              </div>
+            )) : <Empty>Za mało sygnału, by wygenerować wskazówki dla tej drużyny.</Empty>}
+          </div>
+
+          <Note>RC = jakość względem Ekstraklasy (percentyl metryk per rola). „Dużo/mało" = odchylenie stylu (z-score) danej linii od średniej ligi — nazwy atrybutów z modelu. „Przewidywalność" = podobieństwo stylu zawodników w linii; wysokie oznacza jednorodność, nie słabość. To analiza opisowa rywala i punkty zaczepienia — wybór formacji i składu zostaje przy trenerze.</Note>
+        </>
+      )}
+    </div>
+  );
+}
+
+// Kafel statystyki (podsumowanie przeciwnika)
+function Tile({ label, val, sub, color = C.bone, hint }) {
+  return (
+    <div title={hint || ""} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "12px 14px" }}>
+      <div className="mono" style={{ fontSize: 10, letterSpacing: 1, color: C.steel, textTransform: "uppercase" }}>{label}</div>
+      <div className="disp" style={{ fontSize: 22, color, marginTop: 4, lineHeight: 1.1 }}>{val}</div>
+      {sub ? <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{sub}</div> : null}
     </div>
   );
 }
