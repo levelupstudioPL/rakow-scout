@@ -1892,6 +1892,8 @@ function OpponentView({ data }) {
 
       <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0 6px", flexWrap: "wrap" }}>
         <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: C.steel }}>PRZECIWNIK</span>
+        {(() => { const cid = data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[team] : null;
+          return cid ? <Crest id={cid} size={26} /> : null; })()}
         <select value={team} onChange={(e) => setTeamSel(e.target.value)}
           style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9, padding: "9px 13px", fontSize: 13.5, minWidth: 240 }}>
           {teams.map((t) => <option key={t} value={t}>{t}</option>)}
