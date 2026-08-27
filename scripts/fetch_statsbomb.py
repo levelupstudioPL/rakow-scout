@@ -812,12 +812,16 @@ def _current_ekstraklasa_rosters():
     except Exception as e:  # noqa: BLE001
         print(f"[przeciwnik] Aktualne składy Ekstraklasy: pominięto ({e}).", file=sys.stderr)
         return {}
-    roster = {}
+    roster, crests = {}, {}
     for m in ms:
-        for side, tname_key in (("homeTeamPlayers", "homeTeamName"), ("awayTeamPlayers", "awayTeamName")):
+        for side, tname_key, tid_key in (("homeTeamPlayers", "homeTeamName", "homeTeamId"),
+                                         ("awayTeamPlayers", "awayTeamName", "awayTeamId")):
             team = m.get(tname_key)
             if not team:
                 continue
+            tid = m.get(tid_key)
+            if tid:
+                crests[team] = str(tid)   # id Transfermarkt -> herb w module „Przeciwnik"
             for p in (m.get(side) or []):
                 nm = f"{p.get('firstName', '')} {p.get('lastName', '')}".strip()
                 if not _is_valid_name(nm):
@@ -825,8 +829,8 @@ def _current_ekstraklasa_rosters():
                 roster[_norm_ascii(nm)] = team
     if roster:
         print(f"[przeciwnik] Aktualne składy Ekstraklasy (PL1/{_rakow_scoutastic_season()}): "
-              f"{len(set(roster.values()))} drużyn, {len(roster)} zawodników.", file=sys.stderr)
-    return roster
+              f"{len(set(roster.values()))} drużyn, {len(roster)} zawodników, {len(crests)} herbów.", file=sys.stderr)
+    return roster, crests
 
 
 def _scoutastic_cup_crest_map():
@@ -1551,8 +1555,8 @@ def build_dataset(sb, creds):
         _squad_names.add(_norm(s.get("name", "")))
  
     # Aktualne składy Ekstraklasy (bieżący sezon, Scoutastic) — do modułu „Przeciwnik",
-    # żeby przynależność klubowa była aktualna mimo metryk z sezonu bazowego.
-    _rostermap = _current_ekstraklasa_rosters()
+    # żeby przynależność klubowa była aktualna mimo metryk z sezonu bazowego. + herby klubów.
+    _rostermap, _ekstra_crests = _current_ekstraklasa_rosters()
 
     pool = []
     _padj_diag = {}   # pozycja -> [n, suma_adj, suma_raw] do logu wpływu na RC
@@ -1748,6 +1752,8 @@ def build_dataset(sb, creds):
             # je stąd, żeby nie powielać listy. Kolejność == wektor profile_pos.
             "style_labels": {ln: coh.pos_style_labels(ln) for ln in ("Bramka", "Obrona", "Pomoc", "Atak")},
             "price_calibration": price_calibration,
+            # Herby klubów Ekstraklasy (nazwa aktualnego klubu -> id Transfermarkt) do modułu „Przeciwnik".
+            "ekstra_crests": _ekstra_crests,
         },
         "squad": squad,
         "leagues": leagues,
