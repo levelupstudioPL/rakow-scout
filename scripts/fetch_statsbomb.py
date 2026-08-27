@@ -792,6 +792,43 @@ def _merge_cup_into_recent(base, cup, squad, cap=12):
     return base
 
 
+def _current_ekstraklasa_rosters():
+    """{znormalizowane nazwisko -> aktualny klub} z BIEŻĄCEGO sezonu PL1 (Scoutastic).
+    Metryki liczymy z sezonu bazowego StatsBomb (zeszły sezon), więc przynależność
+    klubowa w puli jest nieaktualna po letnich transferach. Ta mapa naprawia to w
+    module „Przeciwnik": zawodnik pokazywany pod klubem, w którym gra TERAZ. Puste,
+    gdy brak tokenu/danych — wtedy moduł spada do przynależności z danych bazowych."""
+    if os.getenv("OPP_CURRENT_ROSTERS", "1") in ("0", "false", "False"):
+        return {}
+    tok = os.getenv("SCOUTASTIC_TOKEN")
+    if not tok:
+        return {}
+    try:
+        import scoutastic as sco
+        client = sco.Client(tok)
+        comp = os.getenv("RECENT_SCOUTASTIC_COMP", "PL1")
+        season = _rakow_scoutastic_season()
+        ms = client.league_matches(comp, season) or []
+    except Exception as e:  # noqa: BLE001
+        print(f"[przeciwnik] Aktualne składy Ekstraklasy: pominięto ({e}).", file=sys.stderr)
+        return {}
+    roster = {}
+    for m in ms:
+        for side, tname_key in (("homeTeamPlayers", "homeTeamName"), ("awayTeamPlayers", "awayTeamName")):
+            team = m.get(tname_key)
+            if not team:
+                continue
+            for p in (m.get(side) or []):
+                nm = f"{p.get('firstName', '')} {p.get('lastName', '')}".strip()
+                if not _is_valid_name(nm):
+                    continue
+                roster[_norm_ascii(nm)] = team
+    if roster:
+        print(f"[przeciwnik] Aktualne składy Ekstraklasy (PL1/{_rakow_scoutastic_season()}): "
+              f"{len(set(roster.values()))} drużyn, {len(roster)} zawodników.", file=sys.stderr)
+    return roster
+
+
 def _scoutastic_cup_crest_map():
     """Mapa {data_meczu -> id rywala w Transfermarkcie} dla meczów pucharowych Rakowa
     ze Scoutastica — do dorobienia HERBÓW przy meczach pucharowych ze StatsBomb (StatsBomb
@@ -1513,6 +1550,10 @@ def build_dataset(sb, creds):
             _squad_ids.add(sb_row.get("player_id"))
         _squad_names.add(_norm(s.get("name", "")))
  
+    # Aktualne składy Ekstraklasy (bieżący sezon, Scoutastic) — do modułu „Przeciwnik",
+    # żeby przynależność klubowa była aktualna mimo metryk z sezonu bazowego.
+    _rostermap = _current_ekstraklasa_rosters()
+
     pool = []
     _padj_diag = {}   # pozycja -> [n, suma_adj, suma_raw] do logu wpływu na RC
     _shr_diag = [0, 0.0]   # [ilu ściągniętych, suma delt] — log wpływu shrinkage
@@ -1579,7 +1620,9 @@ def build_dataset(sb, creds):
                 "id": f"pl-{row.get('player_id')}",
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
                 "lg": lg["name"], "pos": pos, "line": line, "role": role,
-                "team": _row_team_name(row),   # do modułu analizy przeciwnika (grupowanie po drużynie)
+                "team": _row_team_name(row),   # klub z danych bazowych (StatsBomb, zeszły sezon)
+                # aktualny klub (bieżący sezon PL1) — moduł „Przeciwnik" grupuje po nim
+                "team_now": (_rostermap.get(_norm_ascii(row.get("player_name", "") or "")) if is_base else None),
                 "raw": level,
                 "level_estimated": level_estimated,
                 "coherence": best_coh,
