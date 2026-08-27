@@ -1814,15 +1814,20 @@ function OpponentView({ data }) {
   const pool = Array.isArray(data.pool) ? data.pool : [];
   const labelsFor = (line) => (data.meta && data.meta.style_labels ? data.meta.style_labels[line] : null);
 
+  // Aktualny klub (team_now, z bieżącego sezonu) ma pierwszeństwo nad klubem z danych
+  // bazowych (team, zeszły sezon) — żeby składy uwzględniały letnie transfery. Gdy mapy
+  // aktualnych składów nie ma (np. brak tokenu), spadamy do danych bazowych.
+  const useNow = useMemo(() => pool.some((p) => p.lg === BASE && p.team_now), [pool]);
+  const teamOf = (p) => (useNow ? p.team_now : p.team);
   const teams = useMemo(() => {
     const s = new Set();
-    pool.forEach((p) => { if (p.lg === BASE && p.team && !/rak[oó]w/i.test(p.team)) s.add(p.team); });
+    pool.forEach((p) => { const t = teamOf(p); if (p.lg === BASE && t && !/rak[oó]w/i.test(t)) s.add(t); });
     return Array.from(s).sort((a, b) => a.localeCompare(b));
-  }, [pool]);
+  }, [pool, useNow]);
 
   const [teamSel, setTeamSel] = useState("");
   const team = teams.includes(teamSel) ? teamSel : (teams[0] || "");
-  const players = useMemo(() => pool.filter((p) => p.lg === BASE && p.team === team), [pool, team]);
+  const players = useMemo(() => pool.filter((p) => p.lg === BASE && teamOf(p) === team), [pool, team, useNow]);
 
   const an = useMemo(() => {
     if (!players.length) return null;
@@ -1965,7 +1970,7 @@ function OpponentView({ data }) {
             )) : <Empty>Za mało sygnału, by wygenerować wskazówki dla tej drużyny.</Empty>}
           </div>
 
-          <Note>RC = jakość względem Ekstraklasy (percentyl metryk per rola). „Dużo/mało" = odchylenie stylu (z-score) danej linii od średniej ligi — nazwy atrybutów z modelu. „Przewidywalność" = podobieństwo stylu zawodników w linii; wysokie oznacza jednorodność, nie słabość. To analiza opisowa rywala i punkty zaczepienia — wybór formacji i składu zostaje przy trenerze.</Note>
+          <Note>RC = jakość względem Ekstraklasy (percentyl metryk per rola). „Dużo/mało" = odchylenie stylu (z-score) danej linii od średniej ligi — nazwy atrybutów z modelu. „Przewidywalność" = podobieństwo stylu zawodników w linii; wysokie oznacza jednorodność, nie słabość. To analiza opisowa rywala i punkty zaczepienia — wybór formacji i składu zostaje przy trenerze. Skład = zawodnicy grający w klubie w BIEŻĄCYM sezonie (z meczów PL1); metryki liczone z sezonu poprzedniego, bo bieżący ma jeszcze za mało danych. Uwaga: zawodnik, który latem przyszedł spoza Ekstraklasy, pojawi się dopiero, gdy uzbiera dość minut w tym sezonie.</Note>
         </>
       )}
     </div>
