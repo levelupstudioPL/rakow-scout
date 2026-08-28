@@ -257,6 +257,28 @@ def age_from_dob(player):
     return a if 14 < a < 50 else None
  
  
+def preferred_foot(player):
+    """Noga (Transfermarkt/Scoutastic) → 'lewa' | 'prawa' | 'obunożny' | None.
+    Pole bywa pod różnymi kluczami i w PL/EN — czytamy defensywnie."""
+    if not isinstance(player, dict):
+        return None
+    raw = None
+    for k in ("foot", "preferredFoot", "strongFoot", "mainFoot", "preferred_foot"):
+        v = player.get(k)
+        if isinstance(v, str) and v.strip():
+            raw = v.strip().lower()
+            break
+    if not raw:
+        return None
+    if "both" in raw or "obu" in raw or "obie" in raw or raw in ("b", "lr", "rl"):
+        return "obunożny"
+    if raw.startswith("l") or "lew" in raw:
+        return "lewa"
+    if raw.startswith("r") or "praw" in raw:
+        return "prawa"
+    return None
+
+
 def extract(player):
     """Z surowego obiektu Scoutastic wyciąga to, czego używa model."""
     if not isinstance(player, dict):
@@ -266,5 +288,5 @@ def extract(player):
         "peak": peak_from_history(player.get("marketValueHistory")),
         "contract": contract_year(player),
         "age": age_from_dob(player),
+        "foot": preferred_foot(player),
     }
- 
