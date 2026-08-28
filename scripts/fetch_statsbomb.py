@@ -1978,9 +1978,15 @@ def build_dataset(sb, creds):
     # które już zostały wpisane wyżej. Pokrycie cenami rośnie z każdym uruchomieniem
     # (Scoutastic dobiera kolejnych kandydatów z limitem na turę).
     if PRICES_TM_ONLY:
-        # Źródła uznane za „z Transfermarktu": live Scoutastic/TM API ZAWSZE; dokładne
-        # trafienie Kaggle (zrzut TM) — jako fallback, o ile nie włączono trybu strict.
-        _KEEP = ("transfermarkt", "tm") + (() if PRICES_STRICT_TM else ("kaggle_exact",))
+        # Źródła uznane za „z Transfermarktu": live Scoutastic/TM API ZAWSZE. Zrzut Kaggle
+        # to też dane z Transfermarktu, więc w trybie domyślnym trzymamy JEGO WSZYSTKIE
+        # trafienia jako fallback (dokładne + po tokenach nazwiska) — bo StatsBomb często
+        # ma drugie imię (np. „Nico Alexander Mantl"), którego TM/Kaggle nie ma, więc tylko
+        # dopasowanie po tokenach je łączy. Matcher po tokenach ma zabezpieczenia
+        # (≥2 wspólne tokeny lub wspólny + to samo imię, jednoznaczny wynik), więc jest
+        # wiarygodny. Scoutastic live i tak nadpisuje. PRICES_STRICT_TM=1 = tylko live.
+        _KEEP = ("transfermarkt", "tm") if PRICES_STRICT_TM \
+            else ("transfermarkt", "tm", "kaggle_exact", "kaggle_fuzzy")
         # Zdejmujemy też szczyt wyceny (peak) spoza TM — żeby ŻADNA wartość pieniężna na
         # froncie (cena bieżąca ORAZ szczyt w odznace „OKAZJA"/Czerwone flagi) nie
         # pochodziła z niepewnego źródła (rozmyte trafienie Kaggle).
@@ -2000,9 +2006,11 @@ def build_dataset(sb, creds):
                     s["peak"] = 0.0
         kept = sum(1 for c in pool if float(c.get("mv") or 0) > 0)
         live = sum(1 for c in pool if c.get("mv_src") in ("transfermarkt", "tm") and float(c.get("mv") or 0) > 0)
-        mode = "tylko live (strict)" if PRICES_STRICT_TM else "live Scoutastic + dokładne trafienia Kaggle (zrzut TM)"
-        print(f"[ceny] Tryb Transfermarkt: {mode}. Zdjęto {dropped} niepewnych (rozmyte Kaggle); "
-              f"na froncie {kept}/{len(pool)} wycen (w tym {live} pobranych live).")
+        mode = "tylko live Scoutastic/TM (strict)" if PRICES_STRICT_TM \
+            else "live Scoutastic + fallback z Transfermarktu (zrzut Kaggle)"
+        extra = f"Zdjęto {dropped} wycen spoza TM. " if dropped else ""
+        print(f"[ceny] Tryb Transfermarkt: {mode}. {extra}"
+              f"Na froncie {kept}/{len(pool)} wycen (w tym {live} pobranych live przez Scoutastic).")
  
  
     # Kalibracja cen: mnożniki fee/mv wg wieku (z transfers.csv na Kaggle).
