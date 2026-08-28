@@ -1919,8 +1919,13 @@ function OpponentView({ data }) {
   const teams = useMemo(() => {
     const s = new Set();
     pool.forEach((p) => { const t = teamOf(p); if (p.lg === BASE && t && !/rak[oó]w/i.test(t)) s.add(t); });
+    // Dołóż WSZYSTKIE aktualne drużyny Ekstraklasy z rostera (herby) — także te bez
+    // danych StatsBomb (Cracovia, Wisła Kraków: brak w bazie i w bieżącym feedzie).
+    // Będą wybieralne, a przy braku danych pokażemy wyjaśnienie zamiast je chować.
+    const crests = (data.meta && data.meta.ekstra_crests) || {};
+    Object.keys(crests).forEach((t) => { if (t && !/rak[oó]w/i.test(t)) s.add(t); });
     return Array.from(s).sort((a, b) => a.localeCompare(b));
-  }, [pool, useNow]);
+  }, [pool, useNow, data]);
 
   const [teamSel, setTeamSel] = useState("");
   const team = teams.includes(teamSel) ? teamSel : (teams[0] || "");
@@ -2020,8 +2025,11 @@ function OpponentView({ data }) {
       )}
 
       {!an ? (
-        <div style={{ marginTop: 16 }}>
-          <Empty>Brak danych dla tej drużyny w bieżącej puli (za mało zawodników z wystarczającą próbką minut).</Empty>
+        <div style={{ marginTop: 16, display: "flex", alignItems: "flex-start", gap: 10,
+          background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "14px 16px",
+          fontSize: 13, color: C.steelHi, lineHeight: 1.55, maxWidth: 780 }}>
+          <span style={{ color: C.steel, fontSize: 15, flexShrink: 0 }}>ℹ</span>
+          <span><b style={{ color: C.bone }}>Brak danych StatsBomb dla tej drużyny.</b> To beniaminek lub drużyna, której StatsBomb nie ma w danych zeszłego sezonu, a bieżącego jeszcze nie zebrał w całości (feed napełnia się kolejka po kolejce). Profil policzymy automatycznie, gdy pojawią się mecze tej drużyny — dołączy jako „dane wstępne". Drużyny z zebranym bieżącym sezonem (np. świeżo wprowadzone) już się liczą.</span>
         </div>
       ) : (
         <>
