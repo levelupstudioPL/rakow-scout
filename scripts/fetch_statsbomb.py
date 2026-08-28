@@ -96,9 +96,11 @@ MIN_MINUTES = 540
 # Dolny próg „danych cząstkowych": zawodnik składu poniżej MIN_MINUTES, ale z co
 # najmniej tyloma minutami (liga + puchary) i realnymi metrykami, dostaje policzone
 # RC (mocno ściągnięte shrinkage'em) z adnotacją „dane cząstkowe" — zamiast placeholdera
-# „b.d.". ~1 pełny mecz — świadomie nisko, żeby rezerwowi z choćby jednym występem mieli
-# jakieś RC (shrinkage i tak ściąga to mocno w stronę średniej). Poniżej — zostaje „b.d.".
-PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "90"))
+# „b.d.". Świadomie bardzo nisko (nawet krótki wjazd z ławki), żeby rezerwowi z choćby
+# kilkoma minutami mieli JAKIEŚ RC. UWAGA: przy tak małej próbie liczba jest zdominowana
+# przez prior (~średnia) — to sygnalizuje właśnie znacznik „dane cząstkowe". Zawodnik z
+# ZEROWĄ liczbą minut (w lidze i pucharach) nadal zostaje „b.d." — nie ma czego liczyć.
+PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "10"))
 # CENY NA FRONCIE — wyłącznie z Transfermarktu (Scoutastic / publiczne TM API).
 # Gdy włączone (domyślnie): wartości z Kaggle (player_values.csv) NIE trafiają na
 # front jako cena — służą tylko do uzupełnień pomocniczych (wiek/kontrakt/output),
@@ -106,6 +108,11 @@ PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "90"))
 # wtedy o WSZYSTKICH kandydatów (nie tylko bez ceny), żeby pokrycie rosło z każdym
 # uruchomieniem. PRICES_TM_ONLY=0 przywraca dawne zachowanie (Kaggle + uzupełnienia).
 PRICES_TM_ONLY = os.getenv("PRICES_TM_ONLY", "1") not in ("0", "false", "False")
+# STRICT: pokazuj TYLKO wartości pobrane na żywo ze Scoutastic/TM API (bez zrzutu Kaggle,
+# nawet dokładnych trafień). Domyślnie WYŁĄCZONE — bo Scoutastic pobiera z limitem na turę
+# i zanim pokryje całą pulę, dokładne trafienia z Kaggle (też dane z Transfermarktu) trzymają
+# wyceny na froncie zamiast masy „brak wyceny". PRICES_STRICT_TM=1 = tylko live.
+PRICES_STRICT_TM = os.getenv("PRICES_STRICT_TM", "0") in ("1", "true", "True")
  
  
 def die(msg: str, code: int = 1):
@@ -1908,13 +1915,18 @@ def build_dataset(sb, creds):
     matched = matched_tok = 0
     for c in pool:
         v = values_by_name.get(_norm_ascii(c["name"]))
+        _exact = v is not None
         if not v:
             v = _match_by_tokens(c["name"], values_sur, lambda x: round(x["mv"], 1))
             if v:
                 matched_tok += 1
         if v:
             c["mv"] = v["mv"]           # wartość w mln EUR
-            c["mv_src"] = "kaggle"      # źródło ceny (patrz PRICES_TM_ONLY)
+            # Rozróżniamy trafienie DOKŁADNE (po pełnym nazwisku) od ROZMYTEGO (tokeny).
+            # Dokładne = wiarygodna wartość z Transfermarktu (Kaggle to zrzut TM) i zostaje
+            # jako fallback, gdy Scoutastic jeszcze nie pobrał live. Rozmyte bywało źródłem
+            # „cen z dupy" (złe dopasowanie) — te zdejmujemy w trybie TM-only.
+            c["mv_src"] = "kaggle_exact" if _exact else "kaggle_fuzzy"
             if v.get("age"):
                 c["age"] = v["age"]
             if v.get("contract"):
@@ -1966,27 +1978,31 @@ def build_dataset(sb, creds):
     # które już zostały wpisane wyżej. Pokrycie cenami rośnie z każdym uruchomieniem
     # (Scoutastic dobiera kolejnych kandydatów z limitem na turę).
     if PRICES_TM_ONLY:
-        _TM_SRC = ("transfermarkt", "tm")
+        # Źródła uznane za „z Transfermarktu": live Scoutastic/TM API ZAWSZE; dokładne
+        # trafienie Kaggle (zrzut TM) — jako fallback, o ile nie włączono trybu strict.
+        _KEEP = ("transfermarkt", "tm") + (() if PRICES_STRICT_TM else ("kaggle_exact",))
+        # Zdejmujemy też szczyt wyceny (peak) spoza TM — żeby ŻADNA wartość pieniężna na
+        # froncie (cena bieżąca ORAZ szczyt w odznace „OKAZJA"/Czerwone flagi) nie
+        # pochodziła z niepewnego źródła (rozmyte trafienie Kaggle).
         dropped = 0
-        # Zdejmujemy też szczyt wyceny (peak) spoza TM — żeby ŻADNA wartość pieniężna
-        # pokazywana na froncie (cena bieżąca ORAZ szczyt w odznace „OKAZJA"/Czerwone
-        # flagi) nie pochodziła z innego źródła niż Transfermarkt.
         for c in pool:
-            if c.get("mv_src") not in _TM_SRC:
+            if c.get("mv_src") not in _KEEP:
                 if float(c.get("mv") or 0) > 0:
                     c["mv"] = 0.0
                     dropped += 1
                 if c.get("peak"):
                     c["peak"] = 0.0
         for s in squad:
-            if s.get("mv_src") not in _TM_SRC:
+            if s.get("mv_src") not in _KEEP:
                 if float(s.get("mv") or 0) > 0:
                     s["mv"] = 0.0
                 if s.get("peak"):
                     s["peak"] = 0.0
         kept = sum(1 for c in pool if float(c.get("mv") or 0) > 0)
-        print(f"[ceny] Tryb: wyłącznie Transfermarkt. Zdjęto {dropped} cen spoza TM "
-              f"(Kaggle); na froncie zostaje {kept}/{len(pool)} wycen z Transfermarktu.")
+        live = sum(1 for c in pool if c.get("mv_src") in ("transfermarkt", "tm") and float(c.get("mv") or 0) > 0)
+        mode = "tylko live (strict)" if PRICES_STRICT_TM else "live Scoutastic + dokładne trafienia Kaggle (zrzut TM)"
+        print(f"[ceny] Tryb Transfermarkt: {mode}. Zdjęto {dropped} niepewnych (rozmyte Kaggle); "
+              f"na froncie {kept}/{len(pool)} wycen (w tym {live} pobranych live).")
  
  
     # Kalibracja cen: mnożniki fee/mv wg wieku (z transfers.csv na Kaggle).
@@ -2295,12 +2311,13 @@ def _enrich_squad(squad, values_by_name, values_sur):
     km = 0
     for s in squad:
         v = values_by_name.get(_norm_ascii(s["name"]))
+        _exact = v is not None
         if not v:
             v = _match_by_tokens(s["name"], values_sur, lambda x: round(x["mv"], 1))
         if v:
             if v.get("mv"):
                 s["mv"] = v["mv"]
-                s["mv_src"] = "kaggle"
+                s["mv_src"] = "kaggle_exact" if _exact else "kaggle_fuzzy"
             if v.get("age") and not s.get("age"):
                 s["age"] = v["age"]
             if v.get("contract"):
