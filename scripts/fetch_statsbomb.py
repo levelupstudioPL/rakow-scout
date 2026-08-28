@@ -2437,8 +2437,12 @@ def _enrich_values_scoutastic(pool):
         if only_unpriced and float(c.get("mv") or 0) > 0:
             continue
         targets.append(c)
+    # PRIORYTET: najpierw najbardziej istotni kandydaci — o najwyższej koherencji z kimś
+    # ze składu (to oni pokazują się na górze „Odpowiedników"). Dzięki temu w ramach limitu
+    # tury najpierw dostają cenę ci, których realnie oglądasz, a nie losowi wg kolejności lig.
+    targets.sort(key=lambda c: -(float(c.get("coherence") or 0)))
  
-    cap = int(os.getenv("SCOUTASTIC_MAX", "1200"))
+    cap = int(os.getenv("SCOUTASTIC_MAX", "2000"))
     tol = int(os.getenv("SCOUTASTIC_DOB_TOL_DAYS", "4")) * 86400
     print(f"[scoutastic] Szukam wartości dla {len(targets)} kandydatów "
           f"(limit tej tury: {cap}, w cache: {len(cache)}). Tryb: "
