@@ -254,6 +254,18 @@ def _player_minutes(r):
     return m if isinstance(m, (int, float)) else 0
 
 
+def _side_of(pos_name):
+    """Strona boiska z nazwy pozycji StatsBomb: 'L'=lewa, 'P'=prawa, ''=środek/nieokreślona.
+    Do filtra LCB/RCB (i skrzydeł) na froncie — kod pozycji (pos) zostaje w jednej grupie
+    (CB), a stronę trzymamy osobno, żeby dało się filtrować lewych/prawych stoperów."""
+    s = (pos_name or "").strip().lower()
+    if s.startswith("left ") or s.startswith("left-") or " left " in f" {s} ":
+        return "L"
+    if s.startswith("right ") or s.startswith("right-") or " right " in f" {s} ":
+        return "P"
+    return ""
+
+
 def _height_cm(row):
     """Wzrost w cm ze StatsBomb jako int, albo 0. NaN-safe: player_height bywa float('nan'),
     które przechodzi isinstance i jest „truthy", ale round(NaN) rzuca ValueError."""
@@ -298,6 +310,7 @@ def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_st
     return {
         "id": f"rk-{_slug(name)}", "name": name, "pos": pos, "line": line,
         "role": coh.role_of(pos, line),   # oś modelu (KPI Igora); line zostaje dla UI
+        "side": _side_of(sb_row.get("primary_position") or sb_row.get("position")) if sb_row else "",
         "alt_pos": _alt_positions(sb_row, manual_alt, pos),
         "rc": rc, "real": True, "rc_estimated": est,
         # wiek/wartość/kontrakt — zasilają moduły Priorytety i Czerwone flagi.
@@ -1050,6 +1063,103 @@ def _current_ekstraklasa_rosters():
         print(f"[przeciwnik] Aktualne składy Ekstraklasy (PL1/{_rakow_scoutastic_season()}): "
               f"{len(set(roster.values()))} drużyn, {len(roster)} zawodników, {len(crests)} herbów.", file=sys.stderr)
     return roster, crests
+
+
+def _ekstraklasa_current_season_id(sb, creds, base_sid=318):
+    """Najnowszy sezon Ekstraklasy (comp 38) NOWSZY niż bazowy — do wstępnych metryk
+    beniaminków (bieżący sezon). Env OPP_CURRENT_SEASON_ID nadpisuje ręcznie."""
+    env = os.getenv("OPP_CURRENT_SEASON_ID")
+    if env and env.strip().isdigit():
+        return int(env)
+    try:
+        comps = sb.competitions(creds=creds).to_dict("records")
+    except Exception:  # noqa: BLE001
+        return None
+    sids = [c.get("season_id") for c in comps
+            if c.get("competition_id") == 38 and isinstance(c.get("season_id"), int)
+            and c.get("season_id") > base_sid]
+    return max(sids) if sids else None
+
+
+def _supplement_provisional_teams(sb, creds, pool, rostermap, crests,
+                                  base_stats_by_role, universal_stats, pos_style_stats,
+                                  squad_ids, squad_names):
+    """Dla drużyn Ekstraklasy BEZ (albo prawie bez) zawodników w puli — beniaminki
+    (Wisła, Wieczysta) oraz drużyny, które wypadły przez zmiany składu — dolicza
+    WSTĘPNE metryki z BIEŻĄCEGO sezonu StatsBomb (mała próba, mocno ściągnięta),
+    żeby w ogóle pojawiły się w module „Przeciwnik". Zawodnicy oznaczeni
+    provisional=True + level_estimated=True, więc NIE zaśmiecają Odpowiedników/Okazji
+    (front ich tam odfiltrowuje), a w module przeciwnika są opisani jako „wstępne".
+    Działa in-place na pool; zwraca liczbę dodanych zawodników."""
+    if os.getenv("OPP_PROVISIONAL", "1") in ("0", "false", "False"):
+        return 0
+    if not crests:
+        return 0
+    BASE = "Ekstraklasa (PL)"
+    from collections import Counter as _Counter
+    have = _Counter(p.get("team_now") for p in pool
+                    if p.get("lg") == BASE and p.get("team_now"))
+    need_min = int(os.getenv("OPP_PROVISIONAL_MIN_SQUAD", "6"))
+    need_teams = {t for t in crests.keys() if have.get(t, 0) < need_min}
+    if not need_teams:
+        return 0
+    sid = _ekstraklasa_current_season_id(sb, creds)
+    if not sid:
+        print("[przeciwnik] Wstępne metryki: nie znaleziono bieżącego sezonu Ekstraklasy "
+              "w StatsBomb (ustaw OPP_CURRENT_SEASON_ID).", file=sys.stderr)
+        return 0
+    try:
+        rows = sb.player_season_stats(competition_id=38, season_id=sid, creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[przeciwnik] Wstępne metryki: brak danych sezonu {sid} ({e}).", file=sys.stderr)
+        return 0
+    floor = float(os.getenv("OPP_PROVISIONAL_MIN", "90"))
+    existing = {p.get("id") for p in pool}
+    added = _Counter()
+    for r in rows:
+        nm = r.get("player_name")
+        if not _is_valid_name(nm):
+            continue
+        tn = rostermap.get(_norm_ascii(nm))
+        if tn not in need_teams:
+            continue
+        if _is_rakow_row(r):
+            continue
+        pid = r.get("player_id")
+        if pid in squad_ids or _norm(nm) in squad_names or f"pl-{pid}" in existing:
+            continue
+        mapped = POS_TO_LINE.get(r.get("primary_position") or r.get("position"))
+        if not mapped:
+            continue
+        pos, line = mapped
+        role = coh.role_of(pos, line)
+        mins = _player_minutes(r)
+        if mins < floor:
+            continue
+        qm = coh.QUALITY_METRICS.get(role, [])
+        if not any(isinstance(r.get(m), (int, float)) for m in qm):
+            continue
+        raw = coh.quality_level(r, role, base_stats_by_role[role], minutes=mins)
+        pool.append({
+            "id": f"pl-{pid}", "name": nm, "lg": BASE, "pos": pos, "line": line, "role": role,
+            "side": _side_of(r.get("primary_position") or r.get("position")),
+            "team": tn, "team_now": tn,
+            "raw": raw, "level_estimated": True, "provisional": True,
+            "coherence": 0, "coherence_ref": None,
+            "age": _age(r.get("birth_date")), "mv": 0.0, "contract": 0,
+            "height": _height_cm(r), "foot": None,
+            "profile": coh.style_profile(r, universal_stats),
+            "profile_pos": coh.pos_style_profile(r, line, pos_style_stats[line]),
+        })
+        added[tn] += 1
+        existing.add(f"pl-{pid}")
+    if added:
+        print(f"[przeciwnik] Wstępne metryki (bieżący sezon {sid}, mała próba) dla drużyn "
+              f"bez danych bazowych: {', '.join(f'{t}:{n}' for t, n in added.items())}.")
+    else:
+        print(f"[przeciwnik] Wstępne metryki: brak pasujących zawodników dla drużyn "
+              f"{sorted(need_teams)} w sezonie {sid} (za mało minut / brak w rosterze).", file=sys.stderr)
+    return sum(added.values())
 
 
 def _scoutastic_cup_crest_map():
@@ -1858,6 +1968,7 @@ def build_dataset(sb, creds):
                 "id": f"pl-{row.get('player_id')}",
                 "name": row.get("player_name") if _is_valid_name(row.get("player_name")) else "?",
                 "lg": lg["name"], "pos": pos, "line": line, "role": role,
+                "side": _side_of(raw_pos),   # L/P/'' — filtr lewych/prawych (np. LCB/RCB)
                 "team": _row_team_name(row),   # klub z danych bazowych (StatsBomb, zeszły sezon)
                 # aktualny klub (bieżący sezon PL1) — moduł „Przeciwnik" grupuje po nim
                 "team_now": (_rostermap.get(_norm_ascii(row.get("player_name", "") or "")) if is_base else None),
@@ -2022,7 +2133,39 @@ def build_dataset(sb, creds):
             print(f"Kalibracja cen wczytana: {price_calibration}")
     except Exception as e:  # noqa: BLE001
         print(f"[uwaga] Nie wczytano price_calibration.json: {e}", file=sys.stderr)
- 
+
+    # WSTĘPNE METRYKI dla drużyn bez danych bazowych (beniaminki: Wisła, Wieczysta;
+    # oraz drużyny mocno przebudowane). Dolicza je z bieżącego sezonu StatsBomb, żeby
+    # pojawiły się w module „Przeciwnik" — oznaczone jako wstępne (mała próba).
+    try:
+        _supplement_provisional_teams(
+            sb, creds, pool, _rostermap, _ekstra_crests,
+            base_stats_by_role, universal_stats, pos_style_stats, _squad_ids, _squad_names)
+    except Exception as e:  # noqa: BLE001
+        print(f"[przeciwnik] Wstępne metryki pominięte (błąd): {e}", file=sys.stderr)
+
+    # DIAGNOSTYKA modułu „Przeciwnik": które drużyny Ekstraklasy mają zawodników w puli
+    # (a więc pojawią się w module) i których BRAKUJE. Drużyna wchodzi tylko, gdy ma
+    # zawodników z metrykami z ZESZŁEGO sezonu Ekstraklasy — beniaminek (był niżej) ich
+    # nie ma, więc znika. Ten log mówi wprost: brak = beniaminek/brak danych czy błąd mapowania.
+    try:
+        from collections import Counter as _Counter
+        _now_counts = _Counter(p.get("team_now") for p in pool
+                               if p.get("lg", "").startswith("Ekstraklasa") and p.get("team_now"))
+        _all_teams = set(_ekstra_crests.keys())
+        _present = set(_now_counts.keys())
+        _missing = sorted(t for t in _all_teams if t not in _present)
+        print(f"[przeciwnik] Drużyny z danymi w module: {len(_present)}/{len(_all_teams)}. "
+              f"Zawodnicy per drużyna: "
+              f"{', '.join(f'{t}:{n}' for t, n in sorted(_now_counts.items(), key=lambda x: -x[1]))}",
+              file=sys.stderr)
+        if _missing:
+            print(f"[przeciwnik] BRAK w module ({len(_missing)}) — zero zawodników z metrykami "
+                  f"zeszłego sezonu Ekstraklasy (beniaminek / błąd mapowania nazwy): "
+                  f"{', '.join(_missing)}", file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[przeciwnik] Diagnostyka drużyn pominięta: {e}", file=sys.stderr)
+
     return {
         "meta": {
             "source": "statsbomb+kaggle-values",
