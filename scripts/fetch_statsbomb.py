@@ -98,6 +98,13 @@ MIN_MINUTES = 540
 # RC (mocno ściągnięte shrinkage'em) z adnotacją „dane cząstkowe" — zamiast placeholdera
 # „b.d.". ~2 pełne mecze. Poniżej tego zostaje „b.d.".
 PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "180"))
+# CENY NA FRONCIE — wyłącznie z Transfermarktu (Scoutastic / publiczne TM API).
+# Gdy włączone (domyślnie): wartości z Kaggle (player_values.csv) NIE trafiają na
+# front jako cena — służą tylko do uzupełnień pomocniczych (wiek/kontrakt/output),
+# a `mv` pokazywane w aplikacji pochodzi tylko z Transfermarktu. Scoutastic pyta
+# wtedy o WSZYSTKICH kandydatów (nie tylko bez ceny), żeby pokrycie rosło z każdym
+# uruchomieniem. PRICES_TM_ONLY=0 przywraca dawne zachowanie (Kaggle + uzupełnienia).
+PRICES_TM_ONLY = os.getenv("PRICES_TM_ONLY", "1") not in ("0", "false", "False")
  
  
 def die(msg: str, code: int = 1):
@@ -278,6 +285,9 @@ def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_st
         # Wiek ze StatsBomb (jeśli jest); mv/contract/peak dokłada _enrich_squad.
         "age": _age(sb_row.get("birth_date")) if sb_row else None,
         "mv": 0.0, "contract": 0,
+        "height": (round(sb_row.get("player_height")) if sb_row and isinstance(sb_row.get("player_height"), (int, float))
+                   and sb_row.get("player_height") else 0),
+        "foot": None,
         "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
         "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
         "_sb": sb_row,
@@ -1793,6 +1803,10 @@ def build_dataset(sb, creds):
                 "coherence_ref": best_ref,
                 "age": _age(row.get("birth_date")),
                 "mv": 0.0, "contract": 0,
+                # Wzrost (cm) ze StatsBomb — wystawiony na front (karta „Odpowiednicy").
+                "height": (round(row.get("player_height")) if isinstance(row.get("player_height"), (int, float))
+                           and row.get("player_height") else 0),
+                "foot": None,   # noga — dopełnia Scoutastic (Transfermarkt), gdy dostępna
                 # Pola tymczasowe do dopasowania w Scoutastic (usuwane przed zapisem).
                 "_bd": (row.get("birth_date") or "")[:10] if isinstance(row.get("birth_date"), str) else "",
                 "_ht": row.get("player_height") if isinstance(row.get("player_height"), (int, float)) else 0,
@@ -1844,6 +1858,7 @@ def build_dataset(sb, creds):
                 matched_tok += 1
         if v:
             c["mv"] = v["mv"]           # wartość w mln EUR
+            c["mv_src"] = "kaggle"      # źródło ceny (patrz PRICES_TM_ONLY)
             if v.get("age"):
                 c["age"] = v["age"]
             if v.get("contract"):
@@ -1888,6 +1903,34 @@ def build_dataset(sb, creds):
     # ponownie. Błędy API nie wywalają runu (fallback = brak ceny).
     if os.getenv("TM_ENRICH") and tm is not None:
         _enrich_values_tm(pool)
+
+    # CENY WYŁĄCZNIE Z TRANSFERMARKTU: zeruj mv, które NIE pochodzi z Transfermarktu
+    # (Scoutastic / TM API) — na froncie ma być pokazywana tylko oficjalna wartość TM.
+    # Kaggle zostaje wyłącznie do uzupełnień pomocniczych (wiek/kontrakt/output),
+    # które już zostały wpisane wyżej. Pokrycie cenami rośnie z każdym uruchomieniem
+    # (Scoutastic dobiera kolejnych kandydatów z limitem na turę).
+    if PRICES_TM_ONLY:
+        _TM_SRC = ("transfermarkt", "tm")
+        dropped = 0
+        # Zdejmujemy też szczyt wyceny (peak) spoza TM — żeby ŻADNA wartość pieniężna
+        # pokazywana na froncie (cena bieżąca ORAZ szczyt w odznace „OKAZJA"/Czerwone
+        # flagi) nie pochodziła z innego źródła niż Transfermarkt.
+        for c in pool:
+            if c.get("mv_src") not in _TM_SRC:
+                if float(c.get("mv") or 0) > 0:
+                    c["mv"] = 0.0
+                    dropped += 1
+                if c.get("peak"):
+                    c["peak"] = 0.0
+        for s in squad:
+            if s.get("mv_src") not in _TM_SRC:
+                if float(s.get("mv") or 0) > 0:
+                    s["mv"] = 0.0
+                if s.get("peak"):
+                    s["peak"] = 0.0
+        kept = sum(1 for c in pool if float(c.get("mv") or 0) > 0)
+        print(f"[ceny] Tryb: wyłącznie Transfermarkt. Zdjęto {dropped} cen spoza TM "
+              f"(Kaggle); na froncie zostaje {kept}/{len(pool)} wycen z Transfermarktu.")
  
  
     # Kalibracja cen: mnożniki fee/mv wg wieku (z transfers.csv na Kaggle).
@@ -2201,6 +2244,7 @@ def _enrich_squad(squad, values_by_name, values_sur):
         if v:
             if v.get("mv"):
                 s["mv"] = v["mv"]
+                s["mv_src"] = "kaggle"
             if v.get("age") and not s.get("age"):
                 s["age"] = v["age"]
             if v.get("contract"):
@@ -2223,7 +2267,11 @@ def _enrich_squad(squad, values_by_name, values_sur):
                 cache = {}
             tol = int(os.getenv("SCOUTASTIC_DOB_TOL_DAYS", "4")) * 86400
             for s in squad:
-                if float(s.get("mv") or 0) > 0 and s.get("contract") and s.get("age"):
+                # W trybie TM-only pytamy, dopóki nie mamy ceny Z TRANSFERMARKTU;
+                # inaczej wystarczy jakakolwiek cena + kontrakt + wiek.
+                _has_price = (s.get("mv_src") == "transfermarkt") if PRICES_TM_ONLY \
+                    else (float(s.get("mv") or 0) > 0)
+                if _has_price and s.get("contract") and s.get("age"):
                     continue                      # komplet — nie pytamy
                 if not _is_valid_name(s.get("name")):
                     continue
@@ -2245,12 +2293,15 @@ def _enrich_squad(squad, values_by_name, values_sur):
                 if rec and not rec.get("miss"):
                     if rec.get("mv"):
                         s["mv"] = rec["mv"]
+                        s["mv_src"] = "transfermarkt"
                     if rec.get("contract"):
                         s["contract"] = rec["contract"]
                     if rec.get("peak"):
                         s["peak"] = rec["peak"]
                     if rec.get("age") and not s.get("age"):
                         s["age"] = rec["age"]
+                    if rec.get("foot"):
+                        s["foot"] = rec["foot"]
                     sc_fill += 1
             try:
                 cache_path.write_text(_json.dumps(cache, ensure_ascii=False, indent=1),
@@ -2294,7 +2345,9 @@ def _enrich_values_scoutastic(pool):
         return c["id"].split("pl-")[-1]
  
     client = sc.Client(token)
-    only_unpriced = os.getenv("SCOUTASTIC_ALL") not in ("1", "true", "True")
+    # W trybie „ceny wyłącznie z Transfermarktu" pytamy o WSZYSTKICH (nie tylko bez
+    # ceny z Kaggle), bo to Scoutastic ma dostarczyć jedyną cenę pokazywaną na froncie.
+    only_unpriced = (os.getenv("SCOUTASTIC_ALL") not in ("1", "true", "True")) and not PRICES_TM_ONLY
  
     targets = []
     for c in pool:
@@ -2337,8 +2390,11 @@ def _enrich_values_scoutastic(pool):
         raw = client.get_player(best.get("playerId"))
         if not shown_dbg and isinstance(raw, dict):
             keys = [k for k in raw.keys() if "market" in k.lower() or "contract" in k.lower()]
+            # Ujawnij realną nazwę pola „noga" (i wartość) — moje mapowanie czyta kilka
+            # wariantów; ten log pokaże, czy trzeba dopisać kolejny klucz.
+            fkeys = {k: raw.get(k) for k in raw.keys() if "foot" in k.lower()}
             print(f"[scoutastic] Przykład pól (weryfikacja): {keys} -> "
-                  f"marketValue={raw.get('marketValue')!r}")
+                  f"marketValue={raw.get('marketValue')!r}; noga={fkeys}")
             shown_dbg = True
         cache[pid] = sc.extract(raw) if raw else {"miss": True}
         if raw and cache[pid].get("mv"):
@@ -2357,18 +2413,24 @@ def _enrich_values_scoutastic(pool):
         print(f"[scoutastic] Nie zapisano cache: {e}", file=sys.stderr)
  
     # Nałóż na pulę (oficjalne wartości nadpisują Kaggle).
-    applied = 0
+    applied = footed = 0
     for c in pool:
         v = cache.get(_pid(c))
         if not v or v.get("miss"):
             continue
         if v.get("mv"):
             c["mv"] = v["mv"]
+            c["mv_src"] = "transfermarkt"   # oficjalne źródło ceny
             applied += 1
         if v.get("peak"):
             c["peak"] = v["peak"]
         if v.get("contract"):
             c["contract"] = v["contract"]
+        if v.get("foot"):
+            c["foot"] = v["foot"]           # noga (Transfermarkt)
+            footed += 1
+    if footed:
+        print(f"[scoutastic] Noga (Transfermarkt) dla {footed} kandydatów.")
     priced = sum(1 for c in pool if float(c.get("mv") or 0) > 0)
     print(f"[scoutastic] Ta tura: przetworzono {processed}, dopasowano z ceną {matched}. "
           f"Wartości w puli od Scoutastic: {applied}. Pokrycie cenami łącznie: {priced}/{len(pool)}.")
@@ -2412,6 +2474,7 @@ def _enrich_values_tm(pool):
             consec_fail = 0 if float(v.get("mv") or 0) > 0 else consec_fail + 1
         if v and float(v.get("mv") or 0) > 0:
             c["mv"] = v["mv"]
+            c["mv_src"] = "tm"          # publiczne API Transfermarktu
             if v.get("age"):
                 c["age"] = v["age"]
             if v.get("contract"):
