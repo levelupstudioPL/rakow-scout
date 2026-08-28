@@ -1067,18 +1067,31 @@ def _current_ekstraklasa_rosters():
 
 def _ekstraklasa_current_season_id(sb, creds, base_sid=318):
     """Najnowszy sezon Ekstraklasy (comp 38) NOWSZY niż bazowy — do wstępnych metryk
-    beniaminków (bieżący sezon). Env OPP_CURRENT_SEASON_ID nadpisuje ręcznie."""
+    beniaminków (bieżący sezon). Env OPP_CURRENT_SEASON_ID nadpisuje ręcznie.
+    Loguje WSZYSTKIE dostępne sezony comp 38 — żeby było wprost widać, czy StatsBomb
+    zebrał już bieżący sezon (jeśli nie, beniaminków nie da się policzyć z żadnego źródła)."""
     env = os.getenv("OPP_CURRENT_SEASON_ID")
     if env and env.strip().isdigit():
+        print(f"[przeciwnik] Wstępne metryki: sezon z env OPP_CURRENT_SEASON_ID={env}.", file=sys.stderr)
         return int(env)
     try:
         comps = sb.competitions(creds=creds).to_dict("records")
-    except Exception:  # noqa: BLE001
+    except Exception as e:  # noqa: BLE001
+        print(f"[przeciwnik] Wstępne metryki: brak listy rozgrywek ({e}).", file=sys.stderr)
         return None
-    sids = [c.get("season_id") for c in comps
-            if c.get("competition_id") == 38 and isinstance(c.get("season_id"), int)
-            and c.get("season_id") > base_sid]
-    return max(sids) if sids else None
+    ek = [c for c in comps if c.get("competition_id") == 38 and isinstance(c.get("season_id"), int)]
+    if ek:
+        listing = ", ".join(f"{c.get('season_id')}={c.get('season_name')}"
+                            for c in sorted(ek, key=lambda x: x.get("season_id", 0), reverse=True))
+        print(f"[przeciwnik] Sezony Ekstraklasy (comp 38) w StatsBomb: {listing}", file=sys.stderr)
+    sids = [c.get("season_id") for c in ek if c.get("season_id") > base_sid]
+    if sids:
+        return max(sids)
+    print(f"[przeciwnik] Wstępne metryki: brak sezonu Ekstraklasy nowszego niż bazowy "
+          f"({base_sid}) — StatsBomb prawdopodobnie nie zebrał jeszcze bieżącego. "
+          f"Beniaminków nie da się policzyć bez tych danych (albo wskaż OPP_CURRENT_SEASON_ID).",
+          file=sys.stderr)
+    return None
 
 
 def _supplement_provisional_teams(sb, creds, pool, rostermap, crests,
@@ -1101,18 +1114,22 @@ def _supplement_provisional_teams(sb, creds, pool, rostermap, crests,
                     if p.get("lg") == BASE and p.get("team_now"))
     need_min = int(os.getenv("OPP_PROVISIONAL_MIN_SQUAD", "6"))
     need_teams = {t for t in crests.keys() if have.get(t, 0) < need_min}
+    print(f"[przeciwnik] Wstępne metryki: drużyny bez danych bazowych (<{need_min} zaw.): "
+          f"{sorted(need_teams) if need_teams else 'żadnych'}. Wszystkie drużyny w rosterze: "
+          f"{sorted(crests.keys())}", file=sys.stderr)
     if not need_teams:
         return 0
     sid = _ekstraklasa_current_season_id(sb, creds)
     if not sid:
-        print("[przeciwnik] Wstępne metryki: nie znaleziono bieżącego sezonu Ekstraklasy "
-              "w StatsBomb (ustaw OPP_CURRENT_SEASON_ID).", file=sys.stderr)
         return 0
     try:
         rows = sb.player_season_stats(competition_id=38, season_id=sid, creds=creds).to_dict("records")
     except Exception as e:  # noqa: BLE001
         print(f"[przeciwnik] Wstępne metryki: brak danych sezonu {sid} ({e}).", file=sys.stderr)
         return 0
+    rk_teams = {_norm_ascii(str(r.get("team_name") or "")) for r in rows}
+    print(f"[przeciwnik] Wstępne metryki: sezon {sid} → {len(rows)} wierszy, "
+          f"{len(rk_teams)} drużyn w danych.", file=sys.stderr)
     floor = float(os.getenv("OPP_PROVISIONAL_MIN", "90"))
     existing = {p.get("id") for p in pool}
     added = _Counter()
