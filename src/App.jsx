@@ -141,6 +141,11 @@ export default function App() {
   const [err, setErr] = useState(null);
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
+  // Pozycja, wg której szukamy odpowiedników. Domyślnie podstawowa; dla zawodników
+  // grających też na innej (alt_pos, np. Makuch AM→ST) można przełączyć, żeby szukać
+  // bliźniaka dla właściwej roli. Reset przy zmianie zawodnika.
+  const [matchPos, setMatchPos] = useState(null);
+  useEffect(() => { setMatchPos(null); }, [sel && sel.id]);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("coherence");
   // Watchlista (localStorage). „short" = obserwowani (zgodność ze starą gwiazdką).
@@ -278,10 +283,19 @@ export default function App() {
     return out;
   }, [data]);
 
+  // Efektywny zawodnik do szukania odpowiedników: sel z ewentualnie nadpisaną pozycją
+  // (gdy wybrano alternatywną). role/line dostosowane, żeby etykiety i porównania grały.
+  const effSel = useMemo(() => {
+    if (!sel) return null;
+    const valid = matchPos && (matchPos === sel.pos || (Array.isArray(sel.alt_pos) && sel.alt_pos.includes(matchPos)));
+    if (!valid) return sel;
+    return { ...sel, pos: matchPos, role: ROLE_OF_POS[matchPos] || sel.role, line: lineOfPos(matchPos) };
+  }, [sel, matchPos]);
+
   const candidates = useMemo(() => {
-    if (!data || !sel) return [];
-    let rows = data.pool.map((p) => ({ p, m: matchScore(sel, p) }))
-      .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(sel, x.p), form: formIndex[x.p.id] || null }));
+    if (!data || !effSel) return [];
+    let rows = data.pool.filter((p) => !p.provisional).map((p) => ({ p, m: matchScore(effSel, p) }))
+      .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(effSel, x.p), form: formIndex[x.p.id] || null }));
     // --- filtrowanie ---
     const F = filters;
     rows = rows.filter(({ p, m, price }) => {
@@ -305,14 +319,14 @@ export default function App() {
       form: (a, b) => fpct(b) - fpct(a),
       level: (a, b) => b.m.level - a.m.level };
     return rows.sort(s[sortBy] || s.coherence);
-  }, [data, sel, sortBy, filters, formIndex]);
+  }, [data, effSel, sortBy, filters, formIndex]);
 
   // Wyszukiwarka ręczna: po nazwisku, w CAŁEJ puli (niezależnie od pozycji).
   const searchResults = useMemo(() => {
     if (!data || !query.trim()) return null;
     const q = query.trim().toLowerCase();
     return data.pool
-      .filter((p) => p.name && p.name !== "?" && p.name.toLowerCase().includes(q))
+      .filter((p) => !p.provisional && p.name && p.name !== "?" && p.name.toLowerCase().includes(q))
       .sort((a, b) => (Number(b.coherence) || 0) - (Number(a.coherence) || 0))
       .slice(0, 60);
   }, [data, query]);
@@ -494,7 +508,7 @@ export default function App() {
           {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
           {view === "roster" && <RosterView data={data} />}
           {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
-            short, toggleShort, shortRows, adjusted, fmt, median,
+            short, toggleShort, shortRows, adjusted, fmt, median, matchPos, setMatchPos,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
             FILTERS_DEFAULT, filtersOpen, setFiltersOpen }} />}
           {view === "priorities" && <PrioritiesView {...{ data, setSel, setView, fmt }} />}
@@ -675,11 +689,14 @@ function OutputChips({ p, fmt, form = null }) {
   );
 }
 
-function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median,
+function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median, matchPos, setMatchPos,
   filters, applied, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
   const [openCmp, setOpenCmp] = useState(null);   // id kandydata z rozwiniętym porównaniem
   if (!sel) return null;
-  const totalForPos = data.pool.filter((p) => p.pos === sel.pos).length;
+  // Pozycje, wg których można szukać odpowiednika: podstawowa + alternatywne (alt_pos).
+  const searchPositions = [sel.pos, ...((Array.isArray(sel.alt_pos) ? sel.alt_pos : []).filter((x) => x && x !== sel.pos))];
+  const activePos = (matchPos && searchPositions.includes(matchPos)) ? matchPos : sel.pos;
+  const totalForPos = data.pool.filter((p) => p.pos === activePos).length;
   const activeCount = countActiveFilters(applied, FILTERS_DEFAULT);
   // Etykiety atrybutów dopasowanych do pozycji (z data.json). Wektor profile_pos
   // ma tę samą kolejność. Brak (stare dane) → panele użyją profilu uniwersalnego.
@@ -688,7 +705,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
   const selLabs = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? posLabels : STYLE_LABELS;
   return (
     <div>
-      <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{sel.pos}</b>. Poziom = surowy + handicap ligi. Cena to estymacja.</Lead>
+      <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{activePos}</b>. Poziom = surowy + handicap ligi. Cena z Transfermarktu.</Lead>
       <RcExplainer compact />
 
       {/* Wybrany zawodnik — twarz + tożsamość (dla kogo szukamy następcy) */}
@@ -720,6 +737,26 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
           </div>
         </div>
       </div>
+
+      {/* Wybór pozycji do szukania odpowiednika — gdy zawodnik gra też gdzie indziej
+          (alt_pos). Rozwiązuje „Makuch AM, a realnie ST": szukasz bliźniaka dla ST. */}
+      {searchPositions.length > 1 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 7, margin: "10px 0 2px", flexWrap: "wrap" }}>
+          <span className="mono" style={{ fontSize: 10.5, letterSpacing: 1, color: C.steel }}>SZUKAJ JAKO</span>
+          {searchPositions.map((ps) => {
+            const on = ps === activePos;
+            return (
+              <button key={ps} onClick={() => setMatchPos && setMatchPos(ps)}
+                title={`Znajdź odpowiedników na pozycji ${ps}`}
+                style={{ background: on ? C.red : "transparent", color: on ? "#fff" : C.steel,
+                  border: `1px solid ${on ? C.red : C.line}`, borderRadius: 8, padding: "5px 11px",
+                  cursor: "pointer", fontSize: 12, fontWeight: 700 }}>
+                {ps}{ps === sel.pos ? " (podstawowa)" : ""}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div style={{ display: "flex", gap: 10, margin: "14px 0", flexWrap: "wrap", alignItems: "center" }}>
         <select value={sel.id} onChange={(e) => setSel(data.squad.find((p) => p.id === e.target.value))}
@@ -776,13 +813,13 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
       {candidates.length === 0 && (
         <Empty>
           {activeCount > 0 ? (
-            <>Żaden kandydat na pozycji <b className="mono">{sel.pos}</b> nie spełnia ustawionych filtrów
+            <>Żaden kandydat na pozycji <b className="mono">{activePos}</b> nie spełnia ustawionych filtrów
             {totalForPos > 0 ? <> (w puli jest ich {totalForPos})</> : null}.{" "}
             <button onClick={resetFilters}
               style={{ background: "none", border: "none", color: C.redHi, cursor: "pointer",
                 fontSize: 13.5, textDecoration: "underline", padding: 0 }}>Wyczyść filtry</button></>
           ) : (
-            <>Brak kandydatów na pozycji <b className="mono">{sel.pos}</b> w obecnej puli.</>
+            <>Brak kandydatów na pozycji <b className="mono">{activePos}</b> w obecnej puli.</>
           )}
         </Empty>
       )}
@@ -801,7 +838,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                   <Crest id={data.meta && data.meta.ekstra_crests && p.team_now ? data.meta.ekstra_crests[p.team_now] : null} size={18} />
                   <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name && p.name !== "?" ? p.name : p.lg}</span>
                 </div>
-                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{p.side ? `·${p.side}` : ""}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
                 {p.name && p.name !== "?" && (
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>
@@ -897,8 +934,10 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
 function SearchView({ data, query, setQuery, searchResults, short, toggleShort, fmt }) {
   const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
   const [roleF, setRoleF] = useState("");
+  const [sideF, setSideF] = useState("");   // "" dowolna · L lewy · C środek · P prawy (np. LCB/RCB)
   const crestId = (p) => (data.meta && data.meta.ekstra_crests && p.team_now ? data.meta.ekstra_crests[p.team_now] : null);
-  const shown = (searchResults || []).filter((p) => !roleF || roleKey(p) === roleF);
+  const sideOk = (p) => !sideF || (sideF === "C" ? !(p.side) : (p.side || "") === sideF);
+  const shown = (searchResults || []).filter((p) => (!roleF || roleKey(p) === roleF) && sideOk(p));
   return (
     <div>
       <Lead>Wyszukaj dowolnego zawodnika po nazwisku — w całej puli, niezależnie od pozycji. Poziom i koherencja pochodzą z modelu; „Transfermarkt" otwiera profil.</Lead>
@@ -927,10 +966,24 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
           );
         })}
       </div>
+      {/* Filtr strony boiska — rozwiązuje „LCB vs RCB": grupa pozycji zostaje jedna
+          (np. CB), a tu wybierasz lewą/prawą/środek. */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
+        <span className="mono" style={{ fontSize: 10.5, letterSpacing: 1, color: C.steel, marginRight: 2 }}>STRONA</span>
+        {[["", "dowolna"], ["L", "lewa"], ["C", "środek"], ["P", "prawa"]].map(([v, lab]) => {
+          const on = sideF === v;
+          return (
+            <button key={v || "any"} onClick={() => setSideF(v)}
+              style={{ background: on ? C.red : "transparent", color: on ? "#fff" : C.steel,
+                border: `1px solid ${on ? C.red : C.line}`, borderRadius: 8, padding: "5px 10px",
+                cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{lab}</button>
+          );
+        })}
+      </div>
 
       {!query.trim() && <Empty>Zacznij pisać, by wyszukać zawodnika po nazwisku.</Empty>}
       {query.trim() && searchResults && shown.length === 0 && (
-        <Empty>Brak zawodnika „{query}"{roleF ? ` w roli ${ROLE_LABEL[roleF] || roleF}` : ""} w puli {data.pool.length} kandydatów.</Empty>
+        <Empty>Brak zawodnika „{query}"{roleF ? ` w roli ${ROLE_LABEL[roleF] || roleF}` : ""}{sideF ? ` (strona: ${{ L: "lewa", C: "środek", P: "prawa" }[sideF]})` : ""} w puli {data.pool.length} kandydatów.</Empty>
       )}
 
       {shown.length > 0 && (
@@ -948,7 +1001,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                     <Crest id={crestId(p)} size={18} />
                     <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
                   </div>
-                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
+                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{p.side ? `·${p.side}` : ""}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
                 </div>
@@ -1872,6 +1925,9 @@ function OpponentView({ data }) {
   const [teamSel, setTeamSel] = useState("");
   const team = teams.includes(teamSel) ? teamSel : (teams[0] || "");
   const players = useMemo(() => pool.filter((p) => p.lg === BASE && teamOf(p) === team), [pool, team, useNow]);
+  // Drużyna oparta na WSTĘPNYCH metrykach bieżącego sezonu (beniaminek / brak danych
+  // bazowych) — mała próba, mocno ściągnięta. Front oznacza to wyraźnie.
+  const provisional = useMemo(() => players.length > 0 && players.every((p) => p.provisional), [players]);
 
   const an = useMemo(() => {
     if (!players.length) return null;
@@ -1953,6 +2009,15 @@ function OpponentView({ data }) {
           </button>
         )}
       </div>
+
+      {provisional && (
+        <div style={{ marginTop: 12, display: "flex", alignItems: "flex-start", gap: 9,
+          background: `${C.warn}14`, border: `1px solid ${C.warn}55`, borderRadius: 10,
+          padding: "10px 14px", fontSize: 12.5, color: C.steelHi, lineHeight: 1.5, maxWidth: 860 }}>
+          <span style={{ color: C.warn, fontSize: 15, flexShrink: 0 }}>⚠</span>
+          <span><b style={{ color: C.warn }}>Dane wstępne.</b> Ta drużyna to beniaminek / brak danych z poprzedniego sezonu Ekstraklasy — profil liczony z <b style={{ color: C.bone }}>bieżącego sezonu</b> na małej próbie (mocno ściągnięty w stronę średniej). Traktuj jako orientacyjny; dopełni się z kolejnymi kolejkami.</span>
+        </div>
+      )}
 
       {!an ? (
         <div style={{ marginTop: 16 }}>
