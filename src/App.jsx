@@ -290,7 +290,7 @@ export default function App() {
       // Cena: kandydaci BEZ wyceny (mv=0) traktowani osobno — wariant C.
       const hasPrice = Number(p.mv) > 0;
       if (!hasPrice && !F.showUnpriced) return false;
-      if (hasPrice && F.priceMax < 50 && price.est > F.priceMax) return false;
+      if (hasPrice && F.priceMax < 50 && Number(p.mv) > F.priceMax) return false;
       if (m.coherence < F.cohMin) return false;
       if (m.level < F.levelMin) return false;
       if (F.onlyReliable && p.level_estimated) return false;
@@ -300,8 +300,8 @@ export default function App() {
     const fpct = (r) => (r.form ? r.form.pct : -1);   // bez formy = na koniec
     const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
       coherence: (a, b) => b.m.coherence - a.m.coherence,
-      price: (a, b) => a.price.est - b.price.est,
-      price_desc: (a, b) => b.price.est - a.price.est,
+      price: (a, b) => (Number(a.p.mv) || 1e9) - (Number(b.p.mv) || 1e9),
+      price_desc: (a, b) => (Number(b.p.mv) || 0) - (Number(a.p.mv) || 0),
       form: (a, b) => fpct(b) - fpct(a),
       level: (a, b) => b.m.level - a.m.level };
     return rows.sort(s[sortBy] || s.coherence);
@@ -760,8 +760,11 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
       {candidates.length > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 18 }}>
           <Kpi l="Kandydatów" v={candidates.length} />
-          <Kpi l="Najtańszy" v={fmt(Math.min(...candidates.map((c) => c.price.est)))} c={C.good} />
-          <Kpi l="Mediana" v={fmt(median(candidates.map((c) => c.price.est)))} c={C.proxy} />
+          {(() => { const mvs = candidates.map((c) => Number(c.p.mv) || 0).filter((v) => v > 0);
+            return <>
+              <Kpi l="Najtańszy" v={mvs.length ? fmt(Math.min(...mvs)) : "—"} c={C.good} />
+              <Kpi l="Mediana (TM)" v={mvs.length ? fmt(median(mvs)) : "—"} c={C.proxy} />
+            </>; })()}
           <Kpi l="Najlepsza koh." v={`${Math.round(Math.max(...candidates.map((c) => c.m.coherence)))}%`} c={C.redHi} />
         </div>
       )}
@@ -798,7 +801,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                   <Crest id={data.meta && data.meta.ekstra_crests && p.team_now ? data.meta.ekstra_crests[p.team_now] : null} size={18} />
                   <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name && p.name !== "?" ? p.name : p.lg}</span>
                 </div>
-                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
                 {p.name && p.name !== "?" && (
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>
@@ -833,13 +836,13 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
               <div style={{ textAlign: "right" }}>
                 {Number(p.mv) > 0 ? (
                   <>
-                    <div className="disp" style={{ fontSize: 22, color: C.proxy, lineHeight: 0.9 }}>{fmt(price.est)}</div>
-                    <div style={{ fontSize: 10, color: C.steel }}>{fmt(price.lo)}–{fmt(price.hi)}</div>
+                    <div className="disp" style={{ fontSize: 22, color: C.proxy, lineHeight: 0.9 }}>{fmt(Number(p.mv))}</div>
+                    <div style={{ fontSize: 10, color: C.steel }}>Transfermarkt</div>
                   </>
                 ) : (
                   <>
                     <div style={{ fontSize: 12.5, color: C.steel, lineHeight: 1.2 }}>brak wyceny</div>
-                    <div style={{ fontSize: 10, color: C.steel, opacity: 0.7 }}>nie w bazie</div>
+                    <div style={{ fontSize: 10, color: C.steel, opacity: 0.7 }}>brak w Transfermarkt</div>
                   </>
                 )}
               </div>
@@ -871,22 +874,22 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
             <span className="disp" style={{ fontSize: 17, color: C.redHi }}>★ LISTA OBSERWOWANYCH</span>
             <span className="mono" style={{ fontSize: 12, color: C.steel }}>{shortRows.length} zawodn.</span>
             <span style={{ marginLeft: "auto", fontSize: 12, color: C.steel }}>
-              łączny koszt <b className="disp" style={{ fontSize: 20, color: C.proxy }}>
-                {fmt(shortRows.reduce((s, c) => s + c.price.est, 0))}</b>
+              łączna wartość (TM) <b className="disp" style={{ fontSize: 20, color: C.proxy }}>
+                {fmt(shortRows.reduce((s, c) => s + (Number(c.p.mv) || 0), 0))}</b>
             </span>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {shortRows.map((c) => (
               <span key={c.p.id} style={{ fontSize: 12, background: C.panel2, border: `1px solid ${C.line}`,
                 borderRadius: 8, padding: "6px 11px" }}>
-                {c.p.name && c.p.name !== "?" ? c.p.name : c.p.lg} · <b style={{ color: C.proxy }}>{fmt(c.price.est)}</b>
+                {c.p.name && c.p.name !== "?" ? c.p.name : c.p.lg} · <b style={{ color: C.proxy }}>{Number(c.p.mv) > 0 ? fmt(Number(c.p.mv)) : "—"}</b>
               </span>
             ))}
           </div>
         </div>
       )}
 
-      <Note>Cena to estymacja: wartość rynkowa korygowana o poziom vs RC, wiek, długość kontraktu i mnożnik ligi. Kalibrowana docelowo na zrealizowanych transferach.</Note>
+      <Note>Cena = oficjalna wartość rynkowa z <b>Transfermarktu</b> (przez Scoutastic), bez estymacji. „brak wyceny" = zawodnika nie ma jeszcze w Transfermarkt/Scoutastic albo dociągniemy go w kolejnym odświeżeniu (pokrycie rośnie z każdym runem). Wzrost ze StatsBomb; noga z Transfermarktu, gdy dostępna.</Note>
     </div>
   );
 }
@@ -945,7 +948,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                     <Crest id={crestId(p)} size={18} />
                     <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
                   </div>
-                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}</div>
+                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
                 </div>
@@ -1267,7 +1270,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
     if (age > 0 && ((F.ageMin && age < F.ageMin) || (F.ageMax && age > F.ageMax))) return false;
     const hasPrice = Number(p.mv) > 0;
     if (!hasPrice && F.showUnpriced === false) return false;
-    if (hasPrice && budget < 50 && price.est > budget) return false;     // budżet cienia
+    if (hasPrice && budget < 50 && Number(p.mv) > budget) return false;     // budżet cienia (wartość TM)
     if (F.cohMin && (Number(p.coherence) || 0) < F.cohMin) return false;
     if (F.levelMin && (Number(p.raw) || 0) < F.levelMin) return false;
     if (F.onlyReliable && p.level_estimated) return false;
@@ -1314,7 +1317,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
   const real = filled.filter((s) => !s.starter.rc_estimated);
   const shadows = xi.filter((s) => s.shadow);
   const avgCoh = shadows.length ? Math.round(mean(shadows.map((s) => s.shadow.coherence))) : null;
-  const totalCost = shadows.reduce((a, s) => a + (s.price ? s.price.est : 0), 0);
+  const totalCost = shadows.reduce((a, s) => a + (s.shadow ? (Number(s.shadow.mv) || 0) : 0), 0);
   const isManual = Object.keys(lineup).length > 0;
 
   // --- WSTAWIANIE ODPOWIEDNIKA: efektywny skład (nasz zawodnik lub wstawiony cień) ---
@@ -1330,7 +1333,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
   const avgBase = baseLevels.length ? Math.round(mean(baseLevels)) : null;
   const avgRC = avgBase;
   const nIns = xi.filter((s) => s.ins).length;
-  const insCost = xi.filter((s) => s.ins && s.price).reduce((a, s) => a + s.price.est, 0);
+  const insCost = xi.filter((s) => s.ins && s.shadow).reduce((a, s) => a + (Number(s.shadow.mv) || 0), 0);
   const lvlDelta = (avgNow != null && avgBase != null) ? avgNow - avgBase : 0;
   // Lista wyboru: najpierw zawodnicy NA pozycję slotu (podstawową LUB alternatywną),
   // potem pozostali (można wstawić kogo się chce — np. Tudora na wahadło). Bramkarze
@@ -1517,7 +1520,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                     <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: cohColor(shadow.coherence) }}>{Math.round(shadow.coherence)}%</span>
                     <span style={{ fontSize: 10, color: C.steel }}>koh.</span>
                     <span style={{ marginLeft: "auto", fontSize: 11, color: C.proxy }}>
-                      {price ? fmt(price.est) : (Number(shadow.mv) > 0 ? fmt(Number(shadow.mv)) : "—")}
+                      {Number(shadow.mv) > 0 ? fmt(Number(shadow.mv)) : "—"}
                     </span>
                   </div>
                 </div>
@@ -1619,6 +1622,9 @@ const ROLE_OF_POS = { GK: "Bramka", CB: "ŚO", WB: "Boczny", W: "Skrzydłowy", W
   DM: "6-8", CM: "6-8", AM: "10-9", ST: "10-9" };
 const roleKey = (p) => (p && p.role) || (p && ROLE_OF_POS[p.pos]) || null;
 const roleName = (p) => { const k = roleKey(p); return k ? (ROLE_LABEL[k] || k) : null; };
+// Noga (z Transfermarktu) — skrót do wyświetlenia: L / P / L+P. null gdy brak danych.
+const FOOT_SHORT = { lewa: "L", prawa: "P", "obunożny": "L+P" };
+const footLabel = (p) => (p && p.foot ? (FOOT_SHORT[p.foot] || p.foot) : null);
 
 function CorrView({ data }) {
   const corr = (data && data.correlations) || {};
@@ -2782,11 +2788,12 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
   // Domyślny profil obserwacji: młodzi (≤25 lat) i tani (≤3 mln €).
   const AGE_CAP = 25, PRICE_CAP = 3;
   const scored = candidates
-    .filter((c) => !c.p.level_estimated && c.price && c.price.est > 0
-      && c.price.est <= PRICE_CAP && (Number(c.p.age) || 99) <= AGE_CAP)
+    .filter((c) => !c.p.level_estimated && (Number(c.p.mv) || 0) > 0
+      && (Number(c.p.mv) || 0) <= PRICE_CAP && (Number(c.p.age) || 99) <= AGE_CAP)
     .map((c) => {
+      const mv = Number(c.p.mv) || 0;
       const skill = 0.45 * (Number(c.m.level) || 0) + 0.55 * (Number(c.m.coherence) || 0);
-      const value = skill / Math.sqrt(Math.max(c.price.est, 0.5));
+      const value = skill / Math.sqrt(Math.max(mv, 0.5));
       return { ...c, skill, value };
     });
   if (!scored.length) return (
@@ -2832,8 +2839,8 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
               <div style={{ fontSize: 9, color: C.steel }}>koh.</div>
             </div>
             <div style={{ textAlign: "right" }}>
-              <div className="disp" style={{ fontSize: 16, color: C.proxy, lineHeight: 0.9 }}>{fmt(c.price.est)}</div>
-              <div style={{ fontSize: 9, color: C.steel }}>cena</div>
+              <div className="disp" style={{ fontSize: 16, color: C.proxy, lineHeight: 0.9 }}>{fmt(Number(c.p.mv))}</div>
+              <div style={{ fontSize: 9, color: C.steel }}>Transfermarkt</div>
             </div>
             <div title="Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena">
               <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
@@ -3004,12 +3011,15 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
   const [tab, setTab] = useState("okazje");     // okazje | expiring
   const [posF, setPosF] = useState("all");
   const [minLevel, setMinLevel] = useState(55);
-  const [maxAge, setMaxAge] = useState(45);
+  const [maxAge, setMaxAge] = useState(32);     // domyślnie ≤32 (ustalenie ze spotkania)
+  const [expOnly, setExpOnly] = useState(false); // tylko wygasające kontrakty (w zakł. Okazje)
   const okazje = useMemo(() => computeOkazje(data, { minLevel }), [data, minLevel]);
   const expiring = useMemo(() => computeExpiring(data, { minLevel }), [data, minLevel]);
   const positions = useMemo(() => [...new Set(data.pool.map((p) => p.pos))].filter(Boolean).sort(), [data]);
   const base = tab === "okazje" ? okazje : expiring;
-  const rows = base.filter((r) => (posF === "all" || r.pos === posF) && (!r.age || r.age <= maxAge)).slice(0, 60);
+  const rows = base.filter((r) => (posF === "all" || r.pos === posF)
+    && (!r.age || r.age <= maxAge)
+    && (tab !== "okazje" || !expOnly || r.expiring)).slice(0, 60);
   const oColor = (o) => (o >= 40 ? C.good : o >= 15 ? C.proxy : o >= -15 ? C.steelHi : C.bad);
   const chip = (on) => ({ background: on ? C.red : "transparent", color: on ? "#fff" : C.steel,
     border: `1px solid ${on ? C.red : C.line}`, borderRadius: 7, padding: "5px 11px", fontSize: 12, cursor: "pointer", fontWeight: 600 });
@@ -3018,7 +3028,7 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
     <div>
       <Lead>Zawodnicy, których model ceni wyżej, niż wskazywałaby ich cena. „Okazja" = percentyl jakości minus percentyl ceny w obrębie pozycji. Zakładka „Wygasające" to potencjalnie tani lub wolni zawodnicy w ostatnim roku kontraktu.</Lead>
       <div className="mono" style={{ marginTop: 8, fontSize: 10.5, color: C.steel, lineHeight: 1.5, maxWidth: 720 }}>
-        Wartości i kontrakty to snapshot (zrzut Kaggle + oficjalne wartości Scoutastic), a nie dane pobierane na żywo — mogą odbiegać od aktualnego Transfermarktu. Link „Transfermarkt ↗" prowadzi do wersji live.
+        Wartości rynkowe pochodzą wyłącznie z <b>Transfermarktu</b> (przez Scoutastic) — snapshot z ostatniego odświeżenia, nie live. Zawodnicy bez wyceny w Transfermarkt nie wchodzą do „okazji". Link „Transfermarkt ↗" prowadzi do wersji live.
       </div>
 
       <div style={{ display: "flex", gap: 6, margin: "16px 0 14px", flexWrap: "wrap" }}>
@@ -3044,6 +3054,14 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
             <FLabel>Maks. wiek: <b style={{ color: C.bone }}>{maxAge >= 45 ? "bez limitu" : `${maxAge} lat`}</b></FLabel>
             <input type="range" min={17} max={45} value={maxAge} onChange={(e) => setMaxAge(+e.target.value)} style={{ width: "100%", accentColor: C.red }} />
           </div>
+          {tab === "okazje" && (
+            <div style={{ display: "flex", alignItems: "flex-end" }}>
+              <button onClick={() => setExpOnly((v) => !v)} style={chip(expOnly)}
+                title="Pokaż tylko zawodników z wygasającym kontraktem (ten lub przyszły rok)">
+                {expOnly ? "✓ " : ""}tylko wygasające kontrakty
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
