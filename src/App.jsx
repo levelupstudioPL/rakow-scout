@@ -386,6 +386,11 @@ export default function App() {
           .report-print .rp-muted { color:#444 !important; }
           .report-print .rp-card { border:1px solid #ccc !important; break-inside:avoid; }
           .report-print .rp-section { break-inside:avoid; }
+          /* Raport przeciwnika: chowamy ciemny ekran, pokazujemy jasny dokument. */
+          .opp-screen { display:none !important; }
+          .opp-print { display:block !important; color:#111 !important; }
+          .opp-print .rp-muted { color:#444 !important; }
+          .opp-print .rp-section { break-inside:avoid; }
           * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
           @page { margin:12mm; size:A4; }
         }
@@ -550,6 +555,14 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
           &nbsp;oznacza RC policzone z <b style={{ color: C.bone }}>danych poprzedniego sezonu</b> — zawodnik nie ma jeszcze próbki w bieżącym, więc ocena jest orientacyjna.
         </div>
       )}
+      {data.squad.some((p) => p.rc_partial) && (
+        <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 7,
+          background: `${C.warn}14`, border: `1px solid ${C.warn}44`, borderRadius: 9,
+          padding: "7px 12px", fontSize: 12, color: C.steelHi }}>
+          <b className="mono" style={{ color: C.warn, fontSize: 11 }}>dane cząstkowe</b>
+          &nbsp;= RC policzone na <b style={{ color: C.bone }}>małej próbie minut</b> (liga + doliczone puchary), mocno ściągnięte w stronę średniej — wstępne, dopełni się z minutami.
+        </div>
+      )}
       <RcExplainer />
       <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 18 }}>
         {order.map((line) => (
@@ -604,6 +617,7 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                         style={{ fontSize: 11, color: C.warn, fontWeight: 700, cursor: "help" }}>b.d.</span>
                         : <span className="disp" style={{ fontSize: 22, color: tc }}>{p.rc}</span>}
                       {p.rc_source === "historical" && <div style={{ marginTop: 2 }}><HistBadge p={p} fontSize={8} ml={0} /></div>}
+                      {p.rc_partial && <div style={{ marginTop: 2 }}><PartialBadge p={p} fontSize={8} ml={0} /></div>}
                     </div>
                     <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
                       <div className="bar" style={{ width: est ? "0%" : `${p.rc}%`, height: "100%", background: est ? C.warn : C.red }} />
@@ -702,6 +716,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
               ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 11, color: C.warn, fontWeight: 700 }}>b.d.</span>
               : <span className="disp" style={{ fontSize: 20, color: tierColor(sel.rc) }}>{sel.rc}<span style={{ fontSize: 10, color: C.steel }}> RC</span></span>}
             <HistBadge p={sel} fontSize={10} />
+            <PartialBadge p={sel} fontSize={10} ml={2} />
           </div>
         </div>
       </div>
@@ -779,7 +794,10 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
             <div className="rowh" style={{ padding: "15px 18px", display: "grid",
               gridTemplateColumns: "1.5fr 0.9fr 1fr 1fr auto", gap: 16, alignItems: "center" }}>
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name && p.name !== "?" ? p.name : p.lg}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+                  <Crest id={data.meta && data.meta.ekstra_crests && p.team_now ? data.meta.ekstra_crests[p.team_now] : null} size={18} />
+                  <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name && p.name !== "?" ? p.name : p.lg}</span>
+                </div>
                 <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}</div>
                 {p.name && p.name !== "?" && (
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
@@ -875,10 +893,13 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
 
 function SearchView({ data, query, setQuery, searchResults, short, toggleShort, fmt }) {
   const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
+  const [roleF, setRoleF] = useState("");
+  const crestId = (p) => (data.meta && data.meta.ekstra_crests && p.team_now ? data.meta.ekstra_crests[p.team_now] : null);
+  const shown = (searchResults || []).filter((p) => !roleF || roleKey(p) === roleF);
   return (
     <div>
       <Lead>Wyszukaj dowolnego zawodnika po nazwisku — w całej puli, niezależnie od pozycji. Poziom i koherencja pochodzą z modelu; „Transfermarkt" otwiera profil.</Lead>
-      <div style={{ display: "flex", gap: 10, margin: "18px 0", alignItems: "center", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 10, margin: "18px 0 10px", alignItems: "center", flexWrap: "wrap" }}>
         <input value={query} onChange={(e) => setQuery(e.target.value)} autoFocus
           placeholder="Wpisz nazwisko zawodnika…"
           style={{ flex: "1 1 320px", background: C.panel, color: C.bone, border: `1px solid ${C.line}`,
@@ -889,25 +910,42 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
               borderRadius: 8, padding: "9px 14px", cursor: "pointer", fontSize: 12 }}>Wyczyść</button>
         )}
       </div>
+      {/* Filtr po roli modelu */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
+        <span className="mono" style={{ fontSize: 10.5, letterSpacing: 1, color: C.steel, marginRight: 2 }}>ROLA</span>
+        {["", ...OPP_ROLE_ORDER].map((r) => {
+          const on = roleF === r;
+          return (
+            <button key={r || "all"} onClick={() => setRoleF(r)}
+              style={{ background: on ? C.red : "transparent", color: on ? "#fff" : C.steel,
+                border: `1px solid ${on ? C.red : C.line}`, borderRadius: 8, padding: "5px 10px",
+                cursor: "pointer", fontSize: 12, fontWeight: 600 }}>
+              {r ? (ROLE_LABEL[r] || r) : "wszystkie"}</button>
+          );
+        })}
+      </div>
 
       {!query.trim() && <Empty>Zacznij pisać, by wyszukać zawodnika po nazwisku.</Empty>}
-      {query.trim() && searchResults && searchResults.length === 0 && (
-        <Empty>Brak zawodnika „{query}" w puli {data.pool.length} kandydatów.</Empty>
+      {query.trim() && searchResults && shown.length === 0 && (
+        <Empty>Brak zawodnika „{query}"{roleF ? ` w roli ${ROLE_LABEL[roleF] || roleF}` : ""} w puli {data.pool.length} kandydatów.</Empty>
       )}
 
-      {searchResults && searchResults.length > 0 && (
+      {shown.length > 0 && (
         <>
           <div className="mono" style={{ fontSize: 11, color: C.steel, marginBottom: 10 }}>
-            {searchResults.length}{searchResults.length === 60 ? "+" : ""} wynik(ów)
+            {shown.length}{searchResults && searchResults.length === 60 ? "+" : ""} wynik(ów)
           </div>
           <div className="hscroll"><div style={{ display: "grid", gap: 9, minWidth: 640 }}>
-            {searchResults.map((p) => (
+            {shown.map((p) => (
               <div key={p.id} className="rowh" style={{ background: C.panel, border: `1px solid ${C.line}`,
                 borderRadius: 12, padding: "14px 18px", display: "grid",
                 gridTemplateColumns: "1.6fr 0.7fr 1fr 1fr auto", gap: 14, alignItems: "center" }}>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</div>
-                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos} · {p.age} lat · do {p.contract}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+                    <Crest id={crestId(p)} size={18} />
+                    <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}</div>
                   <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
                 </div>
@@ -1885,20 +1923,29 @@ function OpponentView({ data }) {
 
   const tipColor = (k) => (k === "luka" ? C.good : k === "uwaga" ? C.warn : k === "przewidywalnosc" ? C.blueHi : C.steelHi);
   const barRC = (rc) => `${Math.max(4, Math.min(100, rc))}%`;
+  const crestOf = (t) => (data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[t] : null);
+  const generated = (data.meta && data.meta.generated) || "";
 
   return (
     <div>
+     <div className="opp-screen">
       <Lead>Profil stylu rywala liczony na żywo z danych Ekstraklasy: jak grają per linia, gdzie mają jakość, gdzie lukę i jak przewidywalny jest ich styl. Wskazówki są <b>obserwacjami z danych</b> — ustawienie zostaje po stronie sztabu.</Lead>
 
       <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0 6px", flexWrap: "wrap" }}>
         <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: C.steel }}>PRZECIWNIK</span>
-        {(() => { const cid = data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[team] : null;
-          return cid ? <Crest id={cid} size={26} /> : null; })()}
+        {(() => { const cid = crestOf(team); return cid ? <Crest id={cid} size={26} /> : null; })()}
         <select value={team} onChange={(e) => setTeamSel(e.target.value)}
           style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9, padding: "9px 13px", fontSize: 13.5, minWidth: 240 }}>
           {teams.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
         <span style={{ fontSize: 12, color: C.steel }}>{players.length} zawodników w danych</span>
+        {an && (
+          <button onClick={() => window.print()}
+            style={{ marginLeft: "auto", background: C.red, color: "#fff", border: "none", borderRadius: 9,
+              padding: "9px 16px", fontSize: 13, cursor: "pointer", fontWeight: 700, whiteSpace: "nowrap" }}>
+            ⭳ Raport PDF
+          </button>
+        )}
       </div>
 
       {!an ? (
@@ -1975,6 +2022,110 @@ function OpponentView({ data }) {
           <Note>RC = jakość względem Ekstraklasy (percentyl metryk per rola). „Dużo/mało" = odchylenie stylu (z-score) danej linii od średniej ligi — nazwy atrybutów z modelu. „Przewidywalność" = podobieństwo stylu zawodników w linii; wysokie oznacza jednorodność, nie słabość. To analiza opisowa rywala i punkty zaczepienia — wybór formacji i składu zostaje przy trenerze. Skład = zawodnicy grający w klubie w BIEŻĄCYM sezonie (z meczów PL1); metryki liczone z sezonu poprzedniego, bo bieżący ma jeszcze za mało danych. Uwaga: zawodnik, który latem przyszedł spoza Ekstraklasy, pojawi się dopiero, gdy uzbiera dość minut w tym sezonie.</Note>
         </>
       )}
+     </div>
+
+      {an && <OpponentReportDoc team={team} an={an} nPlayers={players.length} generated={generated} />}
+    </div>
+  );
+}
+
+// Drukowalny raport przeciwnika (jasny, pod biały papier). Widoczny wyłącznie przy druku
+// (window.print()) — na ekranie schowany. Odbudowuje analizę z `an` w czytelnej formie.
+function OpponentReportDoc({ team, an, nPlayers, generated }) {
+  const rn = (role) => roleName({ role }) || role;
+  return (
+    <div className="opp-print" style={{ display: "none", background: "#fff", color: "#111", borderRadius: 8, padding: "28px 30px", maxWidth: 900 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid #E4022B", paddingBottom: 12, marginBottom: 18 }}>
+        <div>
+          <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: ".01em" }}>Raport przeciwnika — {team}</div>
+          <div className="rp-muted" style={{ fontSize: 12.5, marginTop: 3 }}>
+            Profil stylu i jakości · {nPlayers} zawodników w danych{generated ? ` · dane: ${generated}` : ""}
+          </div>
+        </div>
+        <div style={{ fontSize: 11, color: "#E4022B", fontWeight: 800, letterSpacing: 1 }}>RAKÓW SCOUT</div>
+      </div>
+
+      {/* Podsumowanie */}
+      <div className="rp-section" style={{ marginBottom: 16 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5 }}>
+          <tbody>
+            <tr style={{ borderTop: "1px solid #f0f0f0" }}>
+              <td className="rp-muted" style={{ padding: "5px 6px", width: 220 }}>Średnie RC drużyny</td>
+              <td style={{ padding: "5px 6px", fontWeight: 800 }}>{an.overallRC}</td>
+            </tr>
+            <tr style={{ borderTop: "1px solid #f0f0f0" }}>
+              <td className="rp-muted" style={{ padding: "5px 6px" }}>Przewidywalność stylu</td>
+              <td style={{ padding: "5px 6px", fontWeight: 700 }}>{an.predictability != null ? `${Math.round(an.predictability * 100)}%` : "—"}</td>
+            </tr>
+            <tr style={{ borderTop: "1px solid #f0f0f0" }}>
+              <td className="rp-muted" style={{ padding: "5px 6px" }}>Najsłabsza rola</td>
+              <td style={{ padding: "5px 6px", fontWeight: 700 }}>{an.weakest ? `${rn(an.weakest.role)} (RC ${an.weakest.rc}, ${an.weakest.n} zaw.)` : "—"}</td>
+            </tr>
+            <tr style={{ borderTop: "1px solid #f0f0f0" }}>
+              <td className="rp-muted" style={{ padding: "5px 6px" }}>Najmocniejsza rola</td>
+              <td style={{ padding: "5px 6px", fontWeight: 700 }}>{an.strongest ? `${rn(an.strongest.role)} (RC ${an.strongest.rc})` : "—"}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Jakość per rola */}
+      <div className="rp-section" style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#E4022B", borderBottom: "1px solid #eee", paddingBottom: 4, marginBottom: 8 }}>Jakość per rola (RC)</div>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+          <thead>
+            <tr style={{ color: "#666", textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: ".04em" }}>
+              <th style={{ padding: "3px 6px" }}>Rola</th><th style={{ padding: "3px 6px" }}>Zaw.</th><th style={{ padding: "3px 6px" }}>RC</th>
+            </tr>
+          </thead>
+          <tbody>
+            {an.roleRC.map((r) => (
+              <tr key={r.role} style={{ borderTop: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "4px 6px", fontWeight: 600 }}>{rn(r.role)}</td>
+                <td className="rp-muted" style={{ padding: "4px 6px" }}>{r.n}</td>
+                <td style={{ padding: "4px 6px", fontWeight: 700 }}>{r.rc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Styl per linia */}
+      <div className="rp-section" style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#E4022B", borderBottom: "1px solid #eee", paddingBottom: 4, marginBottom: 8 }}>Styl gry per linia (vs średnia Ekstraklasy)</div>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+          <thead>
+            <tr style={{ color: "#666", textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: ".04em" }}>
+              <th style={{ padding: "3px 6px" }}>Linia</th><th style={{ padding: "3px 6px" }}>Dużo</th>
+              <th style={{ padding: "3px 6px" }}>Mało</th><th style={{ padding: "3px 6px" }}>Przewid.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {an.lineStyle.map((ls) => (
+              <tr key={ls.line} style={{ borderTop: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "4px 6px", fontWeight: 700 }}>{ls.line}</td>
+                <td style={{ padding: "4px 6px" }}>{ls.hi.length ? ls.hi.map((h) => h.l).join(", ") : "—"}</td>
+                <td style={{ padding: "4px 6px" }}>{ls.lo.length ? ls.lo.map((h) => h.l).join(", ") : "—"}</td>
+                <td className="rp-muted" style={{ padding: "4px 6px" }}>{ls.predict != null ? `${Math.round(ls.predict * 100)}%` : "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Wskazówki */}
+      <div className="rp-section" style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#E4022B", borderBottom: "1px solid #eee", paddingBottom: 4, marginBottom: 8 }}>Wskazówki (z danych — sztab decyduje)</div>
+        {an.tips.length ? (
+          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.6 }}>
+            {an.tips.map((tp, i) => <li key={i} style={{ marginBottom: 4 }}>{tp.t}</li>)}
+          </ul>
+        ) : <div className="rp-muted" style={{ fontSize: 12.5 }}>Za mało sygnału, by wygenerować wskazówki dla tej drużyny.</div>}
+      </div>
+
+      <div className="rp-muted" style={{ fontSize: 10, marginTop: 12, borderTop: "1px solid #eee", paddingTop: 8, lineHeight: 1.5 }}>
+        RC = jakość względem Ekstraklasy (percentyl metryk per rola). „Dużo/mało" = odchylenie stylu (z-score) linii od średniej ligi. „Przewidywalność" = jednorodność stylu w linii (wysokie = łatwiejszy do rozpracowania). Analiza opisowa — wybór formacji i składu zostaje przy trenerze. Skład wg bieżącego sezonu, metryki z sezonu poprzedniego. Raport z narzędzia skautingowego Rakowa.
+      </div>
     </div>
   );
 }
@@ -2506,6 +2657,24 @@ function HistBadge({ p, fontSize = 9, ml = 5 }) {
       style={{ fontSize, color: C.blueHi, background: `${C.blueHi}1c`, border: `1px solid ${C.blueHi}66`,
         borderRadius: 4, padding: "1px 5px", fontWeight: 700, marginLeft: ml, whiteSpace: "nowrap", cursor: "help" }}>
       hist. {s}
+    </span>
+  );
+}
+// Znacznik „dane cząstkowe" — RC policzone na małej próbie (poniżej pełnego progu
+// minut), mocno ściągnięte shrinkage'em. Pokazywany zamiast „b.d.", gdy zawodnik ma
+// realne, choć niepełne dane. Tooltip mówi z ilu minut i czy doliczono puchary.
+function PartialBadge({ p, fontSize = 8, ml = 0 }) {
+  if (!p || !p.rc_partial) return null;
+  const mt = p.minutes_total != null ? Math.round(p.minutes_total) : null;
+  const cup = p.cup_counted && p.minutes_cup ? Math.round(p.minutes_cup) : 0;
+  const tip = "Dane cząstkowe — RC policzone na małej próbie minut"
+    + (mt != null ? ` (${mt}′${cup ? `, w tym ${cup}′ w pucharach` : ""})` : "")
+    + ", mocno ściągnięte w stronę średniej. Traktuj jako wstępne — dopełni się z minutami.";
+  return (
+    <span className="mono" title={tip}
+      style={{ fontSize, color: C.warn, background: `${C.warn}1c`, border: `1px solid ${C.warn}66`,
+        borderRadius: 4, padding: "1px 5px", fontWeight: 700, marginLeft: ml, whiteSpace: "nowrap", cursor: "help" }}>
+      dane cząstkowe
     </span>
   );
 }
@@ -3223,6 +3392,60 @@ function RecentView({ data, setSel, setView }) {
       </div>
 
       <Note>Źródło danych meczowych: <b>{V.source === "scoutastic" ? "Scoutastic / Transfermarkt" : "StatsBomb"}</b>{V.source === "scoutastic" ? " (minuty, gole, asysty — bez xG/xA)" : ""}; RC i koherencja liczone ze StatsBomb. Walidator opiera się na tym, co odporne: <b>minuty</b> (ujawniona preferencja trenera) i <b>realny output</b> (miękko, bo próba {V.nMatches} meczów jest mała — traktujemy jako sygnał, nie wyrok). <b>Koherencji ten ekran nie waliduje wprost</b> — koherencja to podobieństwo stylu między zawodnikami, nie wielkość meczowa; walidujemy ją pośrednio przez to, że XI realnie wystawiane przez trenera to zestaw opisywany przez ekran „Zależności formacji". Output ofensywny komentujemy dopiero od ~180 minut.</Note>
+
+      <EuropeanHistory matches={V.cupHistory} />
+    </div>
+  );
+}
+
+// Osobny blok: pełna historia meczów w europejskich pucharach (Liga Konferencji + eliminacje).
+// Niezależny od okna „ostatnich meczów" — pokazuje wszystkie zebrane spotkania pucharowe.
+function EuropeanHistory({ matches }) {
+  if (!Array.isArray(matches) || matches.length === 0) return null;
+
+  const rows = matches.slice();
+  const wins = rows.filter((m) => m.result === "W").length;
+  const draws = rows.filter((m) => m.result === "D").length;
+  const losses = rows.filter((m) => m.result === "L").length;
+  const gf = rows.reduce((a, m) => a + (m.gf != null ? m.gf : 0), 0);
+  const ga = rows.reduce((a, m) => a + (m.ga != null ? m.ga : 0), 0);
+
+  return (
+    <div style={{ marginTop: 30, paddingTop: 22, borderTop: `1px solid ${C.line}` }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <SectionLabel>Historia europejska · Liga Konferencji</SectionLabel>
+        <span className="mono" style={{ fontSize: 10.5, color: C.blueHi, border: `1px solid ${C.blueHi}66`,
+          borderRadius: 5, padding: "1px 7px", marginBottom: 8 }}>{rows.length} {rows.length === 1 ? "mecz" : "meczów"}</span>
+      </div>
+
+      <div style={{ fontSize: 12.5, color: C.steelHi, marginTop: -4, marginBottom: 14, lineHeight: 1.55 }}>
+        Wszystkie zebrane spotkania Rakowa w Lidze Konferencji i jej eliminacjach (StatsBomb) — niezależnie od okna „ostatnich meczów". Bilans:{" "}
+        <b className="mono" style={{ color: C.good }}>{wins}</b>-<b className="mono" style={{ color: C.steel }}>{draws}</b>-<b className="mono" style={{ color: C.bad }}>{losses}</b>,{" "}
+        bramki <b className="mono" style={{ color: gf >= ga ? C.good : C.bad }}>{gf}:{ga}</b>.
+      </div>
+
+      <div style={{ display: "grid", gap: 8,
+        gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}>
+        {rows.map((m, i) => (
+          <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`,
+            borderLeft: `3px solid ${RES_COLOR[m.result] || C.line}`, borderRadius: 9, padding: "8px 12px" }}>
+            <div className="mono" style={{ fontSize: 10, color: C.steel, display: "flex", alignItems: "center", gap: 5 }}>
+              <span>{m.home ? "dom" : "wyjazd"} · {m.date || ""}</span>
+              <span title={`Mecz pucharowy (${m.comp || "puchar"})`} style={{ fontSize: 8.5, fontWeight: 800, letterSpacing: 0.5,
+                color: C.blueHi, border: `1px solid ${C.blueHi}66`, borderRadius: 3, padding: "0px 3px" }}>
+                {m.comp || "LK"}</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0", minWidth: 0 }}>
+              <Crest id={m.opp_id} size={18} />
+              <span title={m.opponent || ""} style={{ fontSize: 13, fontWeight: 600, color: C.bone,
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{m.opponent || "—"}</span>
+            </div>
+            <div className="mono" style={{ fontSize: 12, color: RES_COLOR[m.result] || C.steel, fontWeight: 700 }}>
+              {m.result || "?"} {m.gf != null ? `${m.gf}:${m.ga}` : ""}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
