@@ -244,6 +244,17 @@ def _is_rakow_row(r):
 def _player_minutes(r):
     m = r.get("player_season_minutes")
     return m if isinstance(m, (int, float)) else 0
+
+
+def _height_cm(row):
+    """Wzrost w cm ze StatsBomb jako int, albo 0. NaN-safe: player_height bywa float('nan'),
+    które przechodzi isinstance i jest „truthy", ale round(NaN) rzuca ValueError."""
+    if not isinstance(row, dict):
+        return 0
+    h = row.get("player_height")
+    if not isinstance(h, (int, float)) or (isinstance(h, float) and math.isnan(h)) or h <= 0:
+        return 0
+    return round(h)
  
  
 VALID_POS = {p for (p, _ln) in POS_TO_LINE.values()}
@@ -285,8 +296,7 @@ def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_st
         # Wiek ze StatsBomb (jeśli jest); mv/contract/peak dokłada _enrich_squad.
         "age": _age(sb_row.get("birth_date")) if sb_row else None,
         "mv": 0.0, "contract": 0,
-        "height": (round(sb_row.get("player_height")) if sb_row and isinstance(sb_row.get("player_height"), (int, float))
-                   and sb_row.get("player_height") else 0),
+        "height": _height_cm(sb_row),
         "foot": None,
         "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
         "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
@@ -1804,8 +1814,7 @@ def build_dataset(sb, creds):
                 "age": _age(row.get("birth_date")),
                 "mv": 0.0, "contract": 0,
                 # Wzrost (cm) ze StatsBomb — wystawiony na front (karta „Odpowiednicy").
-                "height": (round(row.get("player_height")) if isinstance(row.get("player_height"), (int, float))
-                           and row.get("player_height") else 0),
+                "height": _height_cm(row),
                 "foot": None,   # noga — dopełnia Scoutastic (Transfermarkt), gdy dostępna
                 # Pola tymczasowe do dopasowania w Scoutastic (usuwane przed zapisem).
                 "_bd": (row.get("birth_date") or "")[:10] if isinstance(row.get("birth_date"), str) else "",
