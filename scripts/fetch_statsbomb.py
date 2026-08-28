@@ -93,6 +93,11 @@ RAKOW_TEAM_NAME = "Raków Częstochowa"
 # Odsiewa małe próbki, które zawyżają metryki per-90 (np. poziom 94/96
 # u zawodnika z jednym meczem). ~6 pełnych meczów.
 MIN_MINUTES = 540
+# Dolny próg „danych cząstkowych": zawodnik składu poniżej MIN_MINUTES, ale z co
+# najmniej tyloma minutami (liga + puchary) i realnymi metrykami, dostaje policzone
+# RC (mocno ściągnięte shrinkage'em) z adnotacją „dane cząstkowe" — zamiast placeholdera
+# „b.d.". ~2 pełne mecze. Poniżej tego zostaje „b.d.".
+PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "180"))
  
  
 def die(msg: str, code: int = 1):
@@ -738,6 +743,144 @@ def _statsbomb_cup_recent(sb, creds, squad):
     return matches_out, players
 
 
+def _combine_season_rows(rows):
+    """Łączy wiersze player_season_stats tej samej osoby (różne rozgrywki/sezony)
+    w jeden. Metryki są per-90/ratio, więc uśredniamy je ważąc MINUTAMI, a same
+    minuty sumujemy. Pola nienumeryczne (nazwa, pozycja, data ur.) bierzemy z wiersza
+    o największej liczbie minut. Dzięki temu RC liczone z połączonego wiersza traktuje
+    ligę i puchary jako jedną, większą próbę."""
+    rows = [r for r in rows if isinstance(r, dict) and _player_minutes(r) > 0]
+    if not rows:
+        return None
+    if len(rows) == 1:
+        return dict(rows[0])
+    total_min = sum(_player_minutes(r) for r in rows)
+    base = dict(max(rows, key=_player_minutes))  # pola nienumeryczne z najdłuższego
+    keys = set()
+    for r in rows:
+        for k, v in r.items():
+            if isinstance(v, bool):
+                continue
+            if isinstance(v, (int, float)) and not (isinstance(v, float) and math.isnan(v)):
+                keys.add(k)
+    MIN_KEY = "player_season_minutes"
+    for k in keys:
+        if k == MIN_KEY:
+            continue
+        num = 0.0
+        for r in rows:
+            v = r.get(k)
+            if isinstance(v, (int, float)) and not (isinstance(v, float) and math.isnan(v)):
+                num += float(v) * _player_minutes(r)
+        base[k] = num / total_min if total_min else base.get(k)
+    base[MIN_KEY] = total_min
+    return base
+
+
+def _statsbomb_cup_season_rows(sb, creds):
+    """Sezonowe metryki (player_season_stats) zawodników Rakowa z pucharów
+    (Liga Konferencji 353 + eliminacje 1896), 2 najnowsze sezony każdej rozgrywki,
+    połączone per zawodnik. {norm_ascii(nazwisko): wiersz}. Służy do doliczenia
+    minut i metryk pucharowych do RC składu (zawodnicy poniżej progu ligowego)."""
+    if os.getenv("RECENT_CUPS_SB", "1") in ("0", "false", "False"):
+        return {}
+    cup_ids = [int(x) for x in os.getenv("RECENT_CUP_COMP_IDS", "353,1896").split(",") if x.strip().isdigit()]
+    try:
+        comps = sb.competitions(creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[skład] Puchary (sezon): brak listy rozgrywek: {e}", file=sys.stderr)
+        return {}
+    per_player = {}
+    for cid in cup_ids:
+        rows = [c for c in comps if c.get("competition_id") == cid]
+        if not rows:
+            continue
+        for r in sorted(rows, key=lambda x: x.get("season_id", 0), reverse=True)[:2]:
+            sid = r.get("season_id")
+            try:
+                prs = sb.player_season_stats(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+            except Exception as e:  # noqa: BLE001
+                print(f"[skład] Puchary (sezon) {cid}/{sid}: brak danych ({e}).", file=sys.stderr)
+                continue
+            for pr in prs:
+                if "rakow" not in _norm_ascii(str(pr.get("team_name") or pr.get("team") or "")):
+                    continue
+                nm = pr.get("player_name")
+                if not _is_valid_name(nm):
+                    continue
+                per_player.setdefault(_norm_ascii(nm), []).append(pr)
+    out = {}
+    for key, rws in per_player.items():
+        c = _combine_season_rows(rws)
+        if c:
+            out[key] = c
+    if out:
+        n_min = sum(1 for c in out.values() if _player_minutes(c) > 0)
+        print(f"[skład] Puchary (sezon, StatsBomb): metryki {len(out)} zawodników Rakowa "
+              f"({n_min} z minutami).", file=sys.stderr)
+    return out
+
+
+def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_stats, pos_style_stats):
+    """Dolicza minuty i metryki PUCHAROWE (Liga Konferencji + eliminacje) do RC
+    zawodników składu, którzy w samej lidze mają za małą próbę (rc_estimated).
+    Trzy poziomy danych (data_tier), ustawiane dla KAŻDEGO zawodnika:
+      • full    — ≥ MIN_MINUTES (liga lub liga+puchary): pełne, wiarygodne RC;
+      • partial — PARTIAL_MINUTES..MIN_MINUTES i są realne metryki: RC policzone
+                  (mocno ściągnięte shrinkage'em), front oznacza „dane cząstkowe";
+      • none    — poniżej progu / brak metryk: zostaje „b.d.".
+    cup_counted = puchary realnie podbiły próbę. Zwraca liczbę zawodników, którym
+    puchary poprawiły dane (partial/full dzięki pucharom)."""
+    if os.getenv("SQUAD_CUP_RC", "1") in ("0", "false", "False"):
+        return 0
+    try:
+        cup_rows = _statsbomb_cup_season_rows(sb, creds)
+    except Exception as e:  # noqa: BLE001
+        print(f"[skład] Doliczanie pucharów do RC pominięte: {e}", file=sys.stderr)
+        return 0
+    improved = 0
+    for s in squad:
+        league_row = s.get("_sb")
+        league_min = _player_minutes(league_row) if isinstance(league_row, dict) else 0
+        cup_row = cup_rows.get(_norm_ascii(s.get("name", "")))
+        cup_min = _player_minutes(cup_row) if isinstance(cup_row, dict) else 0
+        s["minutes_league"] = round(league_min, 1)
+        s["minutes_cup"] = round(cup_min, 1)
+        s["minutes_total"] = round(league_min + cup_min, 1)
+        s.setdefault("cup_counted", False)
+        # Pełny RC z samej ligi (albo z fallbacku historycznego) — nie ruszamy liczby,
+        # tylko domykamy metadane poziomu danych.
+        if not s.get("rc_estimated"):
+            s.setdefault("data_tier", "full")
+            s.setdefault("rc_partial", False)
+            continue
+        role = s.get("role") or coh.role_of(s.get("pos"), s.get("line"))
+        combined = _combine_season_rows([r for r in (league_row, cup_row) if isinstance(r, dict)])
+        total_min = league_min + cup_min
+        qm = coh.QUALITY_METRICS.get(role, [])
+        has_metrics = bool(combined) and any(
+            isinstance(combined.get(m), (int, float)) for m in qm)
+        if not combined or not has_metrics or total_min < PARTIAL_MINUTES:
+            s["data_tier"] = "none"   # nadal „b.d."
+            s["rc_partial"] = False
+            continue
+        rc = coh.quality_level(combined, role, base_stats_by_role[role], minutes=total_min)
+        s["rc"] = rc
+        s["_sb"] = combined  # profil/koherencja z połączonej próby
+        s["profile"] = coh.style_profile(combined, universal_stats)
+        s["profile_pos"] = coh.pos_style_profile(combined, s["line"], pos_style_stats[s["line"]])
+        s["cup_counted"] = cup_min > 0
+        if total_min >= MIN_MINUTES:
+            s["rc_estimated"], s["rc_partial"], s["data_tier"] = False, False, "full"
+        else:
+            s["rc_estimated"], s["rc_partial"], s["data_tier"] = False, True, "partial"
+        improved += 1
+    if improved:
+        print(f"[skład] Doliczono puchary do danych: {improved} zawodników "
+              f"(pełne dzięki pucharom / dane cząstkowe).")
+    return improved
+
+
 def _merge_cup_into_recent(base, cup, squad, cap=12):
     """Wmerguj mecze pucharowe (StatsBomb) w wynik recent (Scoutastic-liga). In-place."""
     if not cup:
@@ -788,6 +931,8 @@ def _merge_cup_into_recent(base, cup, squad, cap=12):
     if combined:
         base["newest_date"] = combined[-1].get("date")
     base["available"] = bool(base.get("matches")) and bool(base.get("players"))
+    # Pełna historia europejska (wszystkie mecze pucharowe, bez cap-a okna) — osobny blok w UI.
+    base["cup_history"] = sorted(cup_matches, key=lambda m: m.get("date") or "", reverse=True)
     base["note"] = (base.get("note", "") + " Doliczono mecze pucharowe (Liga Konferencji + eliminacje, StatsBomb).").strip()
     return base
 
@@ -1526,6 +1671,21 @@ def build_dataset(sb, creds):
                 sb, creds, squad, base_stats_by_role, universal_stats, pos_style_stats)
         except Exception as e:  # noqa: BLE001
             print(f"[hist] Fallback historyczny pominięty: {e}", file=sys.stderr)
+
+    # DOLICZENIE PUCHARÓW do RC składu: dla zawodników z za małą próbą ligową
+    # (rezerwowi, nowi) dokłada minuty i metryki z Ligi Konferencji + eliminacji,
+    # ustawia data_tier (full / partial / none) i flagę cup_counted. Po fallbacku
+    # historycznym, PRZED liczeniem puli (bo aktualizuje _sb = referencję koherencji).
+    if squad:
+        try:
+            _augment_squad_with_cups(
+                sb, creds, squad, base_stats_by_role, universal_stats, pos_style_stats)
+        except Exception as e:  # noqa: BLE001
+            print(f"[skład] Doliczanie pucharów do RC pominięte: {e}", file=sys.stderr)
+        # Domknij data_tier dla zawodników, których augment nie dotknął (np. gdy wyłączony).
+        for _s in squad:
+            _s.setdefault("data_tier", "full" if not _s.get("rc_estimated") else "none")
+            _s.setdefault("rc_partial", False)
  
     if not squad:
         print("[uwaga] Sklad Rakowa jest pusty — sprawdz public/squad.json / dane StatsBomb.", file=sys.stderr)
