@@ -96,8 +96,9 @@ MIN_MINUTES = 540
 # Dolny próg „danych cząstkowych": zawodnik składu poniżej MIN_MINUTES, ale z co
 # najmniej tyloma minutami (liga + puchary) i realnymi metrykami, dostaje policzone
 # RC (mocno ściągnięte shrinkage'em) z adnotacją „dane cząstkowe" — zamiast placeholdera
-# „b.d.". ~2 pełne mecze. Poniżej tego zostaje „b.d.".
-PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "180"))
+# „b.d.". ~1 pełny mecz — świadomie nisko, żeby rezerwowi z choćby jednym występem mieli
+# jakieś RC (shrinkage i tak ściąga to mocno w stronę średniej). Poniżej — zostaje „b.d.".
+PARTIAL_MINUTES = float(os.getenv("PARTIAL_MINUTES", "90"))
 # CENY NA FRONCIE — wyłącznie z Transfermarktu (Scoutastic / publiczne TM API).
 # Gdy włączone (domyślnie): wartości z Kaggle (player_values.csv) NIE trafiają na
 # front jako cena — służą tylko do uzupełnień pomocniczych (wiek/kontrakt/output),
@@ -858,12 +859,44 @@ def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_sta
     except Exception as e:  # noqa: BLE001
         print(f"[skład] Doliczanie pucharów do RC pominięte: {e}", file=sys.stderr)
         return 0
-    improved = 0
+    # Indeks po nazwisku (tokeny) — nazwa w squad.json (Transfermarkt) często różni się
+    # od zapisu StatsBomb w pucharach (imię/pisownia), więc samo dopasowanie ascii gubi
+    # rezerwowych. Ten sam mechanizm rozmyty co dla ligi (surname + nakładanie tokenów).
+    cup_sur = _surname_index([(r.get("player_name") or "", r) for r in cup_rows.values()])
+    # Fuzzy fallback (difflib) na wypadek fonetycznej transliteracji nazwiska, której
+    # nie łapie ani ascii, ani token (np. „Jendryka" vs „Jędryka" -> jendryka/jedryka).
+    _cup_items = [(_norm_ascii(r.get("player_name") or ""), r) for r in cup_rows.values()]
+
+    def _fuzzy_cup(name):
+        import difflib
+        target = _norm_ascii(name)
+        if not target:
+            return None
+        scored = sorted(
+            ((difflib.SequenceMatcher(None, target, cn).ratio(), r) for cn, r in _cup_items if cn),
+            key=lambda x: x[0], reverse=True)
+        if not scored:
+            return None
+        best_r, best_row = scored[0]
+        second = scored[1][0] if len(scored) > 1 else 0.0
+        # Akceptuj tylko pewne, jednoznaczne trafienia: wysoka zgodność, wyraźnie
+        # lepsza od drugiej i ta sama pierwsza litera nazwiska (ostatniego tokenu).
+        st = _tokens(name); ct = _tokens(best_row.get("player_name") or "")
+        same_sur_init = bool(st) and bool(ct) and st[-1][:1] == ct[-1][:1]
+        if best_r >= 0.86 and (best_r - second) >= 0.06 and same_sur_init:
+            return best_row
+        return None
+
+    improved = matched_cup = 0
     for s in squad:
         league_row = s.get("_sb")
         league_min = _player_minutes(league_row) if isinstance(league_row, dict) else 0
-        cup_row = cup_rows.get(_norm_ascii(s.get("name", "")))
+        cup_row = cup_rows.get(_norm_ascii(s.get("name", ""))) \
+            or _match_by_tokens(s.get("name", ""), cup_sur, lambda r: r.get("player_id") or id(r)) \
+            or _fuzzy_cup(s.get("name", ""))
         cup_min = _player_minutes(cup_row) if isinstance(cup_row, dict) else 0
+        if cup_min > 0:
+            matched_cup += 1
         s["minutes_league"] = round(league_min, 1)
         s["minutes_cup"] = round(cup_min, 1)
         s["minutes_total"] = round(league_min + cup_min, 1)
@@ -880,9 +913,18 @@ def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_sta
         qm = coh.QUALITY_METRICS.get(role, [])
         has_metrics = bool(combined) and any(
             isinstance(combined.get(m), (int, float)) for m in qm)
-        if not combined or not has_metrics or total_min < PARTIAL_MINUTES:
-            s["data_tier"] = "none"   # nadal „b.d."
-            s["rc_partial"] = False
+        # Diagnostyka „czemu nadal b.d." — konkretny powód per zawodnik.
+        if not combined:
+            s["data_tier"] = "none"; s["rc_partial"] = False
+            s["_none_reason"] = "brak danych w lidze i pucharach (nie zagrał / inna pisownia w squad.json)"
+            continue
+        if not has_metrics:
+            s["data_tier"] = "none"; s["rc_partial"] = False
+            s["_none_reason"] = f"są minuty ({round(total_min)}′), ale brak metryk jakości dla roli {role} w danych"
+            continue
+        if total_min < PARTIAL_MINUTES:
+            s["data_tier"] = "none"; s["rc_partial"] = False
+            s["_none_reason"] = f"za mała próba: {round(total_min)}′ < {round(PARTIAL_MINUTES)}′ (liga {round(league_min)}′ + puchary {round(cup_min)}′)"
             continue
         rc = coh.quality_level(combined, role, base_stats_by_role[role], minutes=total_min)
         s["rc"] = rc
@@ -895,9 +937,14 @@ def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_sta
         else:
             s["rc_estimated"], s["rc_partial"], s["data_tier"] = False, True, "partial"
         improved += 1
-    if improved:
-        print(f"[skład] Doliczono puchary do danych: {improved} zawodników "
-              f"(pełne dzięki pucharom / dane cząstkowe).")
+    none_players = [s for s in squad if s.get("data_tier") == "none"]
+    print(f"[skład] Puchary: dopasowano do {matched_cup} zawodników składu; "
+          f"poprawiono dane {improved} (pełne/cząstkowe).")
+    for s in none_players:
+        print(f"[skład]   nadal b.d. — {s.get('name')}: {s.get('_none_reason', 'brak danych')}",
+              file=sys.stderr)
+    for s in squad:
+        s.pop("_none_reason", None)
     return improved
 
 
