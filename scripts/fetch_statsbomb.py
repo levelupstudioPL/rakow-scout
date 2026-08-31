@@ -522,8 +522,68 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_role,
               f"({int(_player_minutes(row))} min).")
     print(f"[hist] Odzyskano {recovered}/{len(todo)} zawodników z danych historycznych.")
     return recovered
- 
- 
+
+
+def _apply_other_league_fallback(squad, league_rows, base_name, base_stats_by_role,
+                                 universal_stats, pos_style_stats):
+    """PROGNOZA Z POPRZEDNIEGO KLUBU: dla zawodników składu wciąż bez RC (b.d.) szuka ich
+    w BIEŻĄCYM sezonie bazowym we WSZYSTKICH pobranych ligach POZA bazową (Ekstraklasą) —
+    czyli tam, gdzie grali przed transferem do Rakowa (np. Karić w chorwackiej lidze).
+    RC liczone względem Ekstraklasy (jak fallback historyczny), oznaczone
+    rc_source='other_league' + rc_league. To prognoza — zawodnik nie ma jeszcze minut
+    w Rakowie, więc ocena pochodzi z ostatniego miejsca gry. Reużywa już pobranych danych
+    (bez dodatkowych zapytań). Zwraca liczbę odzyskanych."""
+    if os.getenv("OTHER_LEAGUE_FALLBACK", "1") in ("0", "false", "False"):
+        return 0
+    todo = [e for e in squad if e.get("rc_estimated")]
+    if not todo:
+        return 0
+    # Indeks nazwisk ze WSZYSTKICH lig poza bazową; per nazwisko trzymamy wiersz z
+    # największą liczbą minut. Dodatkowo indeks nazwisk (tokeny) do dopasowania rozmytego.
+    exact, sur_items = {}, []
+    for lg_label, rows in league_rows.items():
+        if lg_label == base_name:
+            continue
+        for r in rows:
+            nm = r.get("player_name")
+            if not _is_valid_name(nm):
+                continue
+            key = _norm_ascii(nm)
+            cur = exact.get(key)
+            if cur is None or _player_minutes(r) > _player_minutes(cur[0]):
+                exact[key] = (r, lg_label)
+            sur_items.append((nm, (r, lg_label)))
+    sur = _surname_index(sur_items)
+    recovered = 0
+    for e in todo:
+        name, pos, line = e.get("name"), e.get("pos"), e.get("line")
+        role = e.get("role") or coh.role_of(pos, line)
+        hit = exact.get(_norm_ascii(name)) \
+            or _match_by_tokens(name, sur, lambda x: x[0].get("player_id"))
+        if not hit:
+            continue
+        row, lg_label = hit
+        if _player_minutes(row) < MIN_MINUTES:
+            continue
+        rc = coh.quality_level(row, role, base_stats_by_role[role], minutes=_player_minutes(row))
+        if not isinstance(rc, (int, float)):
+            continue
+        e["rc"] = rc
+        e["rc_estimated"] = False
+        e["rc_source"] = "other_league"
+        e["rc_league"] = lg_label
+        e["profile"] = coh.style_profile(row, universal_stats)
+        e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
+        e["_sb"] = row
+        e["alt_pos"] = _alt_positions(row, e.get("alt_pos"), pos)
+        recovered += 1
+        print(f"[prognoza] {name}: RC {rc} z „{lg_label}\" ({int(_player_minutes(row))} min) — "
+              f"prognoza z poprzedniego klubu.")
+    if recovered:
+        print(f"[prognoza] Odzyskano {recovered}/{len(todo)} zawodników z innej ligi (bieżący sezon).")
+    return recovered
+
+
 # =====================================================================
 #  OSTATNIE MECZE RAKOWA — walidator RC/koherencji na realnym boisku.
 #  Pobiera ostatnie N meczów Ekstraklasy i per-zawodnik statystyki meczowe.
@@ -1972,6 +2032,14 @@ def build_dataset(sb, creds):
                 sb, creds, squad, base_stats_by_role, universal_stats, pos_style_stats)
         except Exception as e:  # noqa: BLE001
             print(f"[hist] Fallback historyczny pominięty: {e}", file=sys.stderr)
+        # PROGNOZA Z POPRZEDNIEGO KLUBU: dla nadal b.d. — szukaj w innych ligach
+        # (bieżący sezon, już pobrane dane). Po historii, przed pucharami/pulą.
+        try:
+            _apply_other_league_fallback(
+                squad, league_rows, base_name, base_stats_by_role,
+                universal_stats, pos_style_stats)
+        except Exception as e:  # noqa: BLE001
+            print(f"[prognoza] Fallback z innej ligi pominięty: {e}", file=sys.stderr)
 
     # DOLICZENIE PUCHARÓW do RC składu: dla zawodników z za małą próbą ligową
     # (rezerwowi, nowi) dokłada minuty i metryki z Ligi Konferencji + eliminacji,
