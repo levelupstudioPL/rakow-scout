@@ -71,12 +71,19 @@ LEAGUE_CONFIG = [
     {"name": "Niké Liga (SK)",          "competition_id": 124,  "season_id": 318, "base": False},
     # Bułgaria — jest w StatsBombie, ale BRAK w SkillCornerze (koherencja bez fizyki).
     {"name": "First League (BG)",       "competition_id": 1865, "season_id": 318, "base": False},
+    # Szwecja (Allsvenskan) — gra wiosna–jesień (rok kalendarzowy). competition_id/season_id
+    # RESOLWOWANE automatycznie po nazwie z Twojej licencji StatsBomb (nie trzeba znać id).
+    # Sezon: env ALLSVENSKAN_SEASON_ID albo najnowszy dostępny (log wypisze wszystkie).
+    {"name": "Allsvenskan (SE)", "competition_id": None, "season_id": None, "base": False,
+     "resolve_name": "Allsvenskan", "season_env": "ALLSVENSKAN_SEASON_ID"},
     # (Turcja/Süper Lig — BRAK w licencji StatsBomb, więc nie da się dodać do modelu.)
     # (Węgry NB I — brak w licencji StatsBomb, więc pominięte mimo dostępności w SkillCorner.)
     {"name": "Jupiler / inne — dodaj wg potrzeb", "competition_id": None, "season_id": None, "base": False},
 ]
-# Uwaga: ostatni wpis to placeholder-przykład; usuń go albo uzupełnij realnym ID.
-LEAGUE_CONFIG = [lg for lg in LEAGUE_CONFIG if lg["competition_id"] is not None]
+# Zostaw wpisy z realnym competition_id ORAZ te do auto-resolucji (resolve_name);
+# placeholder bez jednego i drugiego (ostatni) wypada.
+LEAGUE_CONFIG = [lg for lg in LEAGUE_CONFIG
+                 if lg.get("competition_id") is not None or lg.get("resolve_name")]
  
 # Sezon HISTORYCZNY do fallbacku dla zawodników bez danych w bieżącym sezonie
 # (nowy transfer / za mało minut). Schemat season_id jest spójny między ligami:
@@ -223,6 +230,40 @@ def player_rc_from_stats(row) -> int:
     return 72
  
  
+def _resolve_dynamic_leagues(sb, creds):
+    """Uzupełnia competition_id + season_id dla lig z 'resolve_name' (np. Allsvenskan),
+    dopasowując po nazwie z sb.competitions() w Twojej licencji. Dzięki temu nie trzeba
+    znać id ręcznie. Sezon: env z 'season_env' (jeśli ustawiony) albo najnowszy dostępny.
+    Gdy rozgrywka nie jest w licencji — wpis zostaje bez id i Pass 1 go pominie."""
+    pending = [lg for lg in LEAGUE_CONFIG if lg.get("resolve_name") and not lg.get("competition_id")]
+    if not pending:
+        return
+    try:
+        comps = sb.competitions(creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[ligi] Auto-resolve pominięte (brak listy rozgrywek: {e}).", file=sys.stderr)
+        return
+    for lg in pending:
+        want = str(lg["resolve_name"]).lower()
+        cand = [c for c in comps if want in str(c.get("competition_name") or "").lower()]
+        if not cand:
+            print(f"[ligi] {lg['name']}: brak rozgrywki '{lg['resolve_name']}' w licencji — pomijam.",
+                  file=sys.stderr)
+            continue
+        env = os.getenv(lg.get("season_env", "") or "")
+        if env and env.strip().isdigit():
+            sid = int(env)
+        else:
+            sid = max((c.get("season_id") for c in cand if isinstance(c.get("season_id"), int)),
+                      default=None)
+        lg["competition_id"] = cand[0].get("competition_id")
+        lg["season_id"] = sid
+        seasons = ", ".join(f"{c.get('season_id')}={c.get('season_name')}"
+                            for c in sorted(cand, key=lambda x: x.get("season_id", 0), reverse=True))
+        print(f"[ligi] {lg['name']}: comp {lg['competition_id']}, sezon {sid}. "
+              f"Dostępne sezony: {seasons}")
+
+
 def league_handicap(league_rows, base_rows) -> dict:
     """
     Handicap ligi per linia (% odchylenia vs Ekstraklasa).
@@ -442,6 +483,8 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_role,
     # Pobierz sezon historyczny dla wszystkich lig i zbierz wiersze do jednego indeksu.
     hist_rows = []
     for lg in LEAGUE_CONFIG:
+        if lg.get("competition_id") is None:
+            continue
         try:
             stats = sb.player_season_stats(
                 competition_id=lg["competition_id"], season_id=HIST_SEASON_ID, creds=creds)
@@ -808,12 +851,19 @@ def _combine_season_rows(rows):
     for k in keys:
         if k == MIN_KEY:
             continue
-        num = 0.0
+        # WAŻNE: ważymy TYLKO wierszami, które MAJĄ tę metrykę — inaczej kolumna obecna
+        # w jednym źródle (np. fizyka SkillCorner w wierszu ligowym, brak w pucharowym)
+        # zostałaby rozcieńczona przez minuty drugiego wiersza. Dzieli przez sumę minut
+        # wierszy z wartością, nie przez łączne minuty.
+        num = wsum = 0.0
         for r in rows:
             v = r.get(k)
             if isinstance(v, (int, float)) and not (isinstance(v, float) and math.isnan(v)):
-                num += float(v) * _player_minutes(r)
-        base[k] = num / total_min if total_min else base.get(k)
+                m = _player_minutes(r)
+                num += float(v) * m
+                wsum += m
+        if wsum:
+            base[k] = num / wsum
     base[MIN_KEY] = total_min
     return base
 
@@ -859,6 +909,44 @@ def _statsbomb_cup_season_rows(sb, creds):
         n_min = sum(1 for c in out.values() if _player_minutes(c) > 0)
         print(f"[skład] Puchary (sezon, StatsBomb): metryki {len(out)} zawodników Rakowa "
               f"({n_min} z minutami).", file=sys.stderr)
+    return out
+
+
+def _statsbomb_cup_rows_all_by_id(sb, creds):
+    """Jak _statsbomb_cup_season_rows, ale dla WSZYSTKICH drużyn i kluczowane po player_id
+    (dokładnie, bez kolizji nazwisk). Do doliczenia europejskich pucharów zawodnikom PULI
+    — np. środek pola Jagiellonii (Liga Konferencji). {player_id: połączony wiersz}."""
+    if os.getenv("POOL_CUP_RC", "1") in ("0", "false", "False"):
+        return {}
+    cup_ids = [int(x) for x in os.getenv("RECENT_CUP_COMP_IDS", "353,1896").split(",") if x.strip().isdigit()]
+    try:
+        comps = sb.competitions(creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[puchary-pula]: brak listy rozgrywek ({e}).", file=sys.stderr)
+        return {}
+    per = {}
+    for cid in cup_ids:
+        rows = [c for c in comps if c.get("competition_id") == cid]
+        for r in sorted(rows, key=lambda x: x.get("season_id", 0), reverse=True)[:2]:
+            sid = r.get("season_id")
+            try:
+                prs = sb.player_season_stats(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+            except Exception as e:  # noqa: BLE001
+                print(f"[puchary-pula] {cid}/{sid}: brak danych ({e}).", file=sys.stderr)
+                continue
+            for pr in prs:
+                pid = pr.get("player_id")
+                if pid is None or not _is_valid_name(pr.get("player_name")):
+                    continue
+                per.setdefault(pid, []).append(pr)
+    out = {}
+    for pid, rws in per.items():
+        c = _combine_season_rows(rws)
+        if c and _player_minutes(c) > 0:
+            out[pid] = c
+    if out:
+        print(f"[puchary-pula] Metryki pucharowe (LK + elim) dla {len(out)} zawodników "
+              f"do doliczenia w puli.", file=sys.stderr)
     return out
 
 
@@ -1764,10 +1852,20 @@ def build_dataset(sb, creds):
     if not LEAGUE_CONFIG:
         die("LEAGUE_CONFIG jest puste — uzupełnij competition_id/season_id.")
  
+    # Auto-resolucja lig po nazwie (np. Allsvenskan) — uzupełnia competition_id/season_id
+    # z licencji, zanim zaczniemy pobierać. PRZED Pass 1.
+    try:
+        _resolve_dynamic_leagues(sb, creds)
+    except Exception as e:  # noqa: BLE001
+        print(f"[ligi] Auto-resolve pominięte (błąd: {e}).", file=sys.stderr)
+
     # --- Pass 1: pobierz pełne profile metryk dla każdej ligi ---
     league_rows = {}
     base_name = None
     for lg in LEAGUE_CONFIG:
+        if lg.get("competition_id") is None:
+            league_rows[lg["name"]] = []   # niezresolwowana liga (brak w licencji) — pomijamy
+            continue
         try:
             stats = sb.player_season_stats(
                 competition_id=lg["competition_id"],
@@ -1839,6 +1937,8 @@ def build_dataset(sb, creds):
     # --- Handicapy lig (bez zmian, realna metoda) ---
     leagues = []
     for lg in LEAGUE_CONFIG:
+        if lg.get("competition_id") is None:
+            continue   # liga niezresolwowana (np. brak Allsvenskan w licencji) — pomijamy
         rows = league_rows[lg["name"]]
         handicap = league_handicap(rows, base_rows)
         leagues.append({"lg": lg["name"], "base": lg.get("base", False), **handicap})
@@ -1922,6 +2022,15 @@ def build_dataset(sb, creds):
     pool = []
     _padj_diag = {}   # pozycja -> [n, suma_adj, suma_raw] do logu wpływu na RC
     _shr_diag = [0, 0.0]   # [ilu ściągniętych, suma delt] — log wpływu shrinkage
+    # Puchary europejskie dla PULI (np. Jagiellonia): metryki LK/elim po player_id.
+    # Domyślnie doliczamy tylko lidze bazowej (Ekstraklasa); POOL_CUP_LEAGUES=all rozszerza.
+    try:
+        _pool_cup = _statsbomb_cup_rows_all_by_id(sb, creds)
+    except Exception as e:  # noqa: BLE001
+        print(f"[puchary-pula] pominięte (błąd: {e}).", file=sys.stderr)
+        _pool_cup = {}
+    _pool_cup_all = os.getenv("POOL_CUP_LEAGUES", "ekstra") == "all"
+    _pool_cup_added = 0
     for lg in LEAGUE_CONFIG:
         is_base = lg.get("base")
         for row in league_rows[lg["name"]]:
@@ -1935,6 +2044,17 @@ def build_dataset(sb, creds):
             if (row.get("player_id") in _squad_ids
                     or _norm(row.get("player_name", "")) in _squad_names):
                 continue
+            # DOLICZENIE PUCHARÓW: jeśli zawodnik grał w europejskich pucharach, łączymy
+            # metryki ligowe + pucharowe (po player_id) — pełniejszy obraz, także dla modułu
+            # „Przeciwnik" (np. środek pola Jagiellonii). Minuty się sumują, więc liczą się
+            # też do progu MIN_MINUTES.
+            if _pool_cup and (is_base or _pool_cup_all):
+                _crow = _pool_cup.get(row.get("player_id"))
+                if _crow and _player_minutes(_crow) > 0:
+                    _combined = _combine_season_rows([row, _crow])
+                    if _combined:
+                        row = _combined
+                        _pool_cup_added += 1
             # FILTR MINUT: pomiń zawodników z małą próbką (zawyżone per-90).
             minutes = row.get("player_season_minutes")
             if not isinstance(minutes, (int, float)) or minutes < MIN_MINUTES:
@@ -2007,6 +2127,10 @@ def build_dataset(sb, creds):
                 "profile_pos": coh.pos_style_profile(row, line, pos_style_stats[line]),
             })
  
+    if _pool_cup_added:
+        print(f"[puchary-pula] Doliczono metryki europejskie do {_pool_cup_added} zawodników puli "
+              f"({'wszystkie ligi' if _pool_cup_all else 'tylko Ekstraklasa'}).")
+
     # LOG wpływu possession-adjustment na RC (per pozycja: adj vs raw).
     if _padj_diag:
         mode = "possession-adjusted" if coh.POSSESSION_ADJUST else "SUROWA (raw)"
