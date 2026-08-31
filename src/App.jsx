@@ -577,6 +577,14 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
           &nbsp;= RC policzone na <b style={{ color: C.bone }}>małej próbie minut</b> (liga + doliczone puchary), mocno ściągnięte w stronę średniej — wstępne, dopełni się z minutami.
         </div>
       )}
+      {data.squad.some((p) => p.rc_source === "other_league") && (
+        <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 7,
+          background: `${C.proxy}14`, border: `1px solid ${C.proxy}44`, borderRadius: 9,
+          padding: "7px 12px", fontSize: 12, color: C.steelHi }}>
+          <b className="mono" style={{ color: C.proxy, fontSize: 11 }}>prognoza</b>
+          &nbsp;= RC z gry zawodnika w <b style={{ color: C.bone }}>poprzednim klubie</b> (nie ma jeszcze minut w Rakowie) — orientacyjne, zweryfikuje się z pierwszymi występami.
+        </div>
+      )}
       <RcExplainer />
       <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 18 }}>
         {order.map((line) => (
@@ -631,6 +639,7 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                         style={{ fontSize: 11, color: C.warn, fontWeight: 700, cursor: "help" }}>b.d.</span>
                         : <span className="disp" style={{ fontSize: 22, color: tc }}>{p.rc}</span>}
                       {p.rc_source === "historical" && <div style={{ marginTop: 2 }}><HistBadge p={p} fontSize={8} ml={0} /></div>}
+                      {p.rc_source === "other_league" && <div style={{ marginTop: 2 }}><ForecastBadge p={p} fontSize={8} ml={0} /></div>}
                       {p.rc_partial && <div style={{ marginTop: 2 }}><PartialBadge p={p} fontSize={8} ml={0} /></div>}
                     </div>
                     <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
@@ -733,6 +742,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
               ? <span className="mono" title="Brak dostatecznych danych" style={{ fontSize: 11, color: C.warn, fontWeight: 700 }}>b.d.</span>
               : <span className="disp" style={{ fontSize: 20, color: tierColor(sel.rc) }}>{sel.rc}<span style={{ fontSize: 10, color: C.steel }}> RC</span></span>}
             <HistBadge p={sel} fontSize={10} />
+            <ForecastBadge p={sel} fontSize={10} ml={2} />
             <PartialBadge p={sel} fontSize={10} ml={2} />
           </div>
         </div>
@@ -2736,6 +2746,22 @@ function HistBadge({ p, fontSize = 9, ml = 5 }) {
       style={{ fontSize, color: C.blueHi, background: `${C.blueHi}1c`, border: `1px solid ${C.blueHi}66`,
         borderRadius: 4, padding: "1px 5px", fontWeight: 700, marginLeft: ml, whiteSpace: "nowrap", cursor: "help" }}>
       hist. {s}
+    </span>
+  );
+}
+// Znacznik „prognoza" — RC policzone z danych zawodnika w POPRZEDNIM KLUBIE/lidze
+// (bieżący sezon), bo nie ma jeszcze minut w Rakowie. Skraca etykietę ligi do kodu w ().
+function ForecastBadge({ p, fontSize = 9, ml = 5 }) {
+  if (!p || p.rc_source !== "other_league") return null;
+  const lg = p.rc_league || "";
+  const m = /\(([^)]+)\)/.exec(lg);          // np. „1. HNL (HR)" -> HR
+  const short = m ? m[1] : (lg.split(" ")[0] || "inna liga");
+  return (
+    <span className="mono"
+      title={`Prognoza: RC policzone z gry zawodnika w poprzednim klubie${lg ? ` (${lg})` : ""} — nie ma jeszcze minut w Rakowie. Ocena orientacyjna, zweryfikuje się z pierwszymi występami.`}
+      style={{ fontSize, color: C.proxy, background: `${C.proxy}1c`, border: `1px solid ${C.proxy}66`,
+        borderRadius: 4, padding: "1px 5px", fontWeight: 700, marginLeft: ml, whiteSpace: "nowrap", cursor: "help" }}>
+      prognoza · {short}
     </span>
   );
 }
