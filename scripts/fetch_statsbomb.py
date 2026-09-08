@@ -286,8 +286,16 @@ def _row_team_name(r):
     return ""
  
  
+def _is_rakow_name(name):
+    """True TYLKO dla Rakowa Częstochowa — 'rakow' jako OSOBNY token znormalizowanej
+    nazwy. NIE łapie klubów z Krakowa: 'Kraków'/'Krakow' normalizuje się do jednego
+    tokenu 'krakow' (zawiera podciąg 'rakow', ale nie jest nim) — luźne `"rakow" in ...`
+    błędnie wycinało Wieczystą i Wisłę Kraków."""
+    return "rakow" in _norm_ascii(name).split()
+
+
 def _is_rakow_row(r):
-    return "rakow" in _norm_ascii(_row_team_name(r))
+    return _is_rakow_name(_row_team_name(r))
  
  
 def _player_minutes(r):
@@ -835,8 +843,8 @@ def _statsbomb_cup_recent(sb, creds, squad):
                 continue
             for m in ms:
                 home = str(m.get("home_team") or ""); away = str(m.get("away_team") or "")
-                rk_home = "rakow" in _norm_ascii(home)
-                if not (rk_home or "rakow" in _norm_ascii(away)):
+                rk_home = _is_rakow_name(home)
+                if not (rk_home or _is_rakow_name(away)):
                     continue
                 hs, as_ = m.get("home_score"), m.get("away_score")
                 # StatsBomb bywa NaN (float) dla nierozegranych — NaN przechodzi isinstance,
@@ -858,7 +866,7 @@ def _statsbomb_cup_recent(sb, creds, squad):
                 except Exception:  # noqa: BLE001
                     pms = []
                 for pr in pms:
-                    if "rakow" not in _norm_ascii(str(pr.get("team_name") or pr.get("team") or "")):
+                    if not _is_rakow_name(str(pr.get("team_name") or pr.get("team") or "")):
                         continue
                     pname = pr.get("player_name")
                     if not _is_valid_name(pname):
@@ -954,7 +962,7 @@ def _statsbomb_cup_season_rows(sb, creds):
                 print(f"[skład] Puchary (sezon) {cid}/{sid}: brak danych ({e}).", file=sys.stderr)
                 continue
             for pr in prs:
-                if "rakow" not in _norm_ascii(str(pr.get("team_name") or pr.get("team") or "")):
+                if not _is_rakow_name(str(pr.get("team_name") or pr.get("team") or "")):
                     continue
                 nm = pr.get("player_name")
                 if not _is_valid_name(nm):
@@ -1430,7 +1438,7 @@ def _fetch_recent_statsbomb(sb, creds, squad, n_matches=5):
         return ""
  
     def _is_rakow(name):
-        return "rakow" in _norm_ascii(name)
+        return _is_rakow_name(name)
  
     def _date_key(m):
         d = m.get("match_date") or m.get("match_date_time") or ""
