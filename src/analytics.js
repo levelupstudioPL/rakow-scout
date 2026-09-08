@@ -535,6 +535,7 @@ export function computeRecentValidation(data, opts = {}) {
     seasonsUsed: Array.isArray(rec.seasons_used) ? rec.seasons_used : [],
     smallSample: nM < 3,
     note: rec.note || "",
+    // Pełna historia europejska (Liga Konferencji + eliminacje) — osobny blok, bez cap-a okna.
+    cupHistory: Array.isArray(rec.cup_history) ? rec.cup_history : [],
   };
 }
- 
