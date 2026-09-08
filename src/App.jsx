@@ -1926,14 +1926,18 @@ function OpponentView({ data }) {
   // aktualnych składów nie ma (np. brak tokenu), spadamy do danych bazowych.
   const useNow = useMemo(() => pool.some((p) => p.lg === BASE && p.team_now), [pool]);
   const teamOf = (p) => (useNow ? p.team_now : p.team);
+  // Wyklucz TYLKO Raków — ale nie drużyny z Krakowa! „Kraków"/„Krakow" zawiera podciąg
+  // „raków", więc luźne /raków/ omyłkowo wycinało Wieczystą i Wisłę Kraków. Kotwiczymy
+  // na początku nazwy (Raków Częstochowa zaczyna się od „Raków"; kluby z Krakowa nie).
+  const isRakow = (t) => /^\s*rak[oó]w\b/i.test(t || "");
   const teams = useMemo(() => {
     const s = new Set();
-    pool.forEach((p) => { const t = teamOf(p); if (p.lg === BASE && t && !/rak[oó]w/i.test(t)) s.add(t); });
+    pool.forEach((p) => { const t = teamOf(p); if (p.lg === BASE && t && !isRakow(t)) s.add(t); });
     // Dołóż WSZYSTKIE aktualne drużyny Ekstraklasy z rostera (herby) — także te bez
     // danych StatsBomb (Cracovia, Wisła Kraków: brak w bazie i w bieżącym feedzie).
     // Będą wybieralne, a przy braku danych pokażemy wyjaśnienie zamiast je chować.
     const crests = (data.meta && data.meta.ekstra_crests) || {};
-    Object.keys(crests).forEach((t) => { if (t && !/rak[oó]w/i.test(t)) s.add(t); });
+    Object.keys(crests).forEach((t) => { if (t && !isRakow(t)) s.add(t); });
     return Array.from(s).sort((a, b) => a.localeCompare(b));
   }, [pool, useNow, data]);
 
