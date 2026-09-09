@@ -183,6 +183,9 @@ export default function App() {
   // bliźniaka dla właściwej roli. Reset przy zmianie zawodnika.
   const [matchPos, setMatchPos] = useState(null);
   useEffect(() => { setMatchPos(null); }, [sel && sel.id]);
+  // Wybrany przeciwnik — współdzielony między „Przeciwnik" a „Drużyna cieni",
+  // żeby rekomendacje i tooltipy pod rywala były spójne w obu widokach.
+  const [oppTeam, setOppTeam] = useState("");
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState("coherence");
   // Watchlista (localStorage). „short" = obserwowani (zgodność ze starą gwiazdką).
@@ -575,12 +578,12 @@ export default function App() {
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
           {view === "watch" && <WatchlistView {...{ data, wl, setStatus, setNote, setSel, setView, fmt }} />}
           {view === "raport" && <ReportView {...{ data, wl, fmt }} />}
-          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView }} />}
+          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView, oppTeam, setOppTeam }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "metrics" && <MetricsView data={data} />}
           {view === "stability" && <StabilityView data={data} />}
           {view === "corr" && <CorrView data={data} />}
-          {view === "opponent" && <OpponentView data={data} />}
+          {view === "opponent" && <OpponentView data={data} oppTeam={oppTeam} setOppTeam={setOppTeam} />}
           {view === "compare" && <CompareView data={data} />}
           {view === "events" && <EventsView data={data} photoOf={photoOf} setSel={setSel} setView={setView} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
@@ -1371,8 +1374,27 @@ function WatchlistView({ data, wl, setStatus, setNote, setSel, setView, fmt }) {
   );
 }
 
-function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore = () => null, adjusted = () => ({ adj: 0 }), filters = {}, setSel, setView }) {
+function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore = () => null, adjusted = () => ({ adj: 0 }), filters = {}, setSel, setView, oppTeam = "", setOppTeam = () => {} }) {
   const squad = data.squad, pool = data.pool;
+  // --- Pod przeciwnika (współdzielone z modułem „Przeciwnik") ---
+  const BASE = "Ekstraklasa (PL)";
+  const labelsFor = (line) => (data.meta && data.meta.style_labels ? data.meta.style_labels[line] : null);
+  const useNow = useMemo(() => pool.some((p) => p.lg === BASE && p.team_now), [pool]);
+  const teamOf = (p) => (useNow ? p.team_now : p.team);
+  const isRakow = (t) => /^\s*rak[oó]w\b/i.test(t || "");
+  const oppTeams = useMemo(() => {
+    const s = new Set();
+    pool.forEach((p) => { const t = teamOf(p); if (p.lg === BASE && t && !isRakow(t)) s.add(t); });
+    const crests = (data.meta && data.meta.ekstra_crests) || {};
+    Object.keys(crests).forEach((t) => { if (t && !isRakow(t)) s.add(t); });
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [pool, useNow, data]);
+  const oppPlayers = useMemo(() => (oppTeam ? pool.filter((p) => p.lg === BASE && teamOf(p) === oppTeam) : []), [pool, oppTeam, useNow]);
+  const oppAn = useMemo(() => (oppPlayers.length ? computeTeamProfile(oppPlayers, labelsFor) : null), [oppPlayers]);
+  const oppRec = useMemo(() => computeOpponentRecommendations(squad, oppAn), [squad, oppAn]);
+  const roleRec = (p) => (oppRec && p ? oppRec.byOurRole[roleKey(p)] : null);
+  const recTint = (r) => (!r ? C.steel : r.kind === "atak" ? C.good : r.kind === "uwaga" ? C.warn : C.steel);
+  const crestOf = (t) => (data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[t] : null);
   const [lineup, setLineup] = useState({});   // slotId -> playerId (ręczny wybór)
   const [excluded, setExcluded] = useState([]);   // id zawodników wykluczonych ze składu (np. na wylocie)
   const [inserted, setInserted] = useState({});   // slotId -> true: wstaw cień (transfer) zamiast naszego zawodnika
@@ -1505,7 +1527,35 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
             onChange={(e) => setBudget(+e.target.value)} style={{ width: 130 }} />
           <b style={{ color: C.proxy, minWidth: 62 }}>{budget >= 50 ? "bez limitu" : `≤ €${budget}M`}</b>
         </label>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: C.steelHi }}>
+          <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>POD PRZECIWNIKA</span>
+          {(() => { const cid = oppTeam && crestOf(oppTeam); return cid ? <Crest id={cid} size={20} /> : null; })()}
+          <select value={oppTeam} onChange={(e) => setOppTeam(e.target.value)}
+            style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 8, padding: "6px 10px", fontSize: 12.5, minWidth: 180 }}>
+            <option value="">— brak —</option>
+            {oppTeams.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </label>
       </div>
+
+      {oppTeam && oppRec && oppRec.hasData && (
+        <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", margin: "2px 0 4px",
+          background: `${C.blue}12`, border: `1px solid ${C.blueHi}44`, borderRadius: 12, padding: "10px 15px", fontSize: 12.5, color: C.steelHi }}>
+          <span className="cond" style={{ fontSize: 11, letterSpacing: ".05em", color: C.blueHi, fontWeight: 700 }}>Rekomendacje pod {oppTeam}</span>
+          <span><b style={{ color: C.good }}>{oppRec.attack.length}</b> stref przewagi</span>
+          <span><b style={{ color: C.warn }}>{oppRec.caution.length}</b> stref ryzyka</span>
+          <span style={{ color: C.steel }}>Kropka przy pozycji = dopasowanie roli vs rywal (najedź, by zobaczyć wniosek).</span>
+          <button onClick={() => setView("opponent")} style={{ marginLeft: "auto", background: "transparent",
+            color: C.blueHi, border: `1px solid ${C.blueHi}66`, borderRadius: 8, padding: "5px 12px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>
+            Pełna analiza →
+          </button>
+        </div>
+      )}
+      {oppTeam && (!oppRec || !oppRec.hasData) && (
+        <div style={{ margin: "2px 0 4px", fontSize: 12, color: C.steel }}>
+          Brak profilu StatsBomb dla „{oppTeam}" — rekomendacje pojawią się, gdy drużyna uzbiera dane (zob. moduł „Przeciwnik").
+        </div>
+      )}
 
       {excludedPlayers.length > 0 && (
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", margin: "6px 0 2px" }}>
@@ -1565,7 +1615,12 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
               border: `1px solid ${ins ? C.blueHi : (starter && !starter.rc_estimated ? `${tierColor(starter.rc)}66` : C.line)}`,
               borderRadius: 11, padding: "8px 10px", color: C.bone }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                <span className="mono" style={{ fontSize: 9, fontWeight: 800, color: "#fff", background: C.red, borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>{slot.label}</span>
+                <span className="mono" style={{ fontSize: 9, fontWeight: 800, color: "#fff", background: C.blue, borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>{slot.label}</span>
+                {(() => { const rr = roleRec(starter); return rr ? (
+                  <span title={`${rr.headline}\n\n${rr.why}`}
+                    style={{ width: 9, height: 9, borderRadius: "50%", background: recTint(rr), flexShrink: 0,
+                      cursor: "help", boxShadow: `0 0 0 2px ${recTint(rr)}33` }} />
+                ) : null; })()}
                 <select value={starter ? starter.id : ""} title="Zmień zawodnika (dowolny z kadry)"
                   onChange={(e) => setLineup((l) => ({ ...l, [slot.id]: e.target.value || "" }))}
                   style={selStyle}>
@@ -2030,7 +2085,72 @@ function computeTeamProfile(players, labelsFor) {
   return { roleRC, weakest, strongest, overallRC, lineStyle, predictability, tips };
 }
 
-function OpponentView({ data }) {
+// Mapa opozycji na boisku: rola rywala -> rola Rakowa, która się z nią mierzy.
+// (skrzydło atakuje ich boczną obronę; nasze 10/9 grają przeciw ich środkowym obrońcom itd.)
+const OPP_OPPOSE = { "Skrzydłowy": "Boczny", "Boczny": "Skrzydłowy", "10-9": "ŚO", "ŚO": "10-9", "6-8": "6-8", "Bramka": "Bramka" };
+const OPP_LINE_OF_ROLE = { "Bramka": "Bramka", "ŚO": "Obrona", "Boczny": "Obrona", "6-8": "Pomoc", "Skrzydłowy": "Pomoc", "10-9": "Atak" };
+
+// Rekomendacje pod KONKRETNEGO przeciwnika: profil rywala (an z computeTeamProfile)
+// przełożony na decyzje składowe Rakowa — wskazówki per strefa, konkretni zawodnicy,
+// dopasowania ról 1v1. TYLKO ODCZYT policzonych RC/stylu (nie dotyka modelu RC).
+function computeOpponentRecommendations(squad, an) {
+  if (!an || !Array.isArray(squad) || !squad.length) return null;
+  const byRole = {};
+  squad.forEach((p) => { const k = roleKey(p); if (k) (byRole[k] = byRole[k] || []).push(p); });
+  const realIn = (k) => (byRole[k] || []).filter((p) => !p.rc_estimated && Number.isFinite(Number(p.rc)));
+  const bestIn = (k, n = 2) => realIn(k).sort((a, b) => (Number(b.rc) || 0) - (Number(a.rc) || 0)).slice(0, n);
+  const rakowRC = {};
+  Object.keys(byRole).forEach((k) => { const r = realIn(k); if (r.length) rakowRC[k] = Math.round(_mean(r.map((p) => Number(p.rc)))); });
+  const oppRC = {}; (an.roleRC || []).forEach((r) => { if (r && r.role != null && r.n >= 1) oppRC[r.role] = r.rc; });
+  const styleByLine = {}; (an.lineStyle || []).forEach((ls) => { styleByLine[ls.line] = ls; });
+  const weakRole = an.weakest && an.weakest.role, strongRole = an.strongest && an.strongest.role;
+
+  const matchups = [];
+  Object.keys(oppRC).forEach((oppRole) => {
+    const ours = OPP_OPPOSE[oppRole];
+    if (!ours || rakowRC[ours] == null) return;
+    matchups.push({ oppRole, oursRole: ours, oppRC: oppRC[oppRole], oursRC: rakowRC[ours],
+      delta: rakowRC[ours] - oppRC[oppRole], line: OPP_LINE_OF_ROLE[oppRole] });
+  });
+  matchups.sort((a, b) => b.delta - a.delta);
+
+  const recs = matchups.map((m) => {
+    const ourLabel = ROLE_LABEL[m.oursRole] || m.oursRole;
+    const oppLabel = ROLE_LABEL[m.oppRole] || m.oppRole;
+    const players = bestIn(m.oursRole, 2);
+    const ls = styleByLine[m.line];
+    const lo = ls && ls.lo && ls.lo.length ? ls.lo.map((x) => x.l).join(", ") : "";
+    const predHi = ls && ls.predict != null && ls.predict > 0.6 && ls.n >= 2;
+    let kind, headline, why;
+    if (m.delta >= 4) {
+      kind = "atak";
+      headline = `Obciążaj: ich ${oppLabel} (RC ${m.oppRC}) — nasze ${ourLabel} ma RC ${m.oursRC} (+${m.delta})`;
+      why = `Przewaga ${m.delta} pkt RC w tym pojedynku${m.oppRole === weakRole ? " — to ich najsłabsze ogniwo" : ""}. Kieruj grę w tę strefę.`
+        + (lo ? ` W linii ${m.line} robią mało: „${lo}" — jest tam wolna przestrzeń.` : "")
+        + (predHi ? ` Linia bardzo jednorodna (podob. ${Math.round(ls.predict * 100)}%) — styl przewidywalny.` : "");
+    } else if (m.delta <= -4) {
+      kind = "uwaga";
+      headline = `Uważaj: ich ${oppLabel} (RC ${m.oppRC}) — nasze ${ourLabel} RC ${m.oursRC} (${m.delta})`;
+      why = `Rywal ma przewagę ${Math.abs(m.delta)} pkt RC${m.oppRole === strongRole ? " — to ich najmocniejsza rola" : ""}. Unikaj pojedynków 1v1, rozważ asekurację lub podwojenie krycia.`;
+    } else {
+      kind = "rowno";
+      headline = `Wyrównanie: nasze ${ourLabel} (RC ${m.oursRC}) vs ich ${oppLabel} (RC ${m.oppRC})`;
+      why = `Różnica ${m.delta >= 0 ? "+" : ""}${m.delta} pkt RC — strefa neutralna, zdecydują detale i forma dnia.`;
+    }
+    return { ...m, kind, ourLabel, oppLabel, players, headline, why };
+  });
+
+  const byOurRole = {};
+  recs.forEach((r) => { byOurRole[r.oursRole] = r; });
+  return {
+    recs,
+    attack: recs.filter((r) => r.kind === "atak"),
+    caution: recs.filter((r) => r.kind === "uwaga"),
+    matchups, byOurRole, hasData: recs.length > 0,
+  };
+}
+
+function OpponentView({ data, oppTeam, setOppTeam }) {
   const BASE = "Ekstraklasa (PL)";
   const pool = Array.isArray(data.pool) ? data.pool : [];
   const labelsFor = (line) => (data.meta && data.meta.style_labels ? data.meta.style_labels[line] : null);
@@ -2055,14 +2175,14 @@ function OpponentView({ data }) {
     return Array.from(s).sort((a, b) => a.localeCompare(b));
   }, [pool, useNow, data]);
 
-  const [teamSel, setTeamSel] = useState("");
-  const team = teams.includes(teamSel) ? teamSel : (teams[0] || "");
+  const team = teams.includes(oppTeam) ? oppTeam : (teams[0] || "");
   const players = useMemo(() => pool.filter((p) => p.lg === BASE && teamOf(p) === team), [pool, team, useNow]);
   // Drużyna oparta na WSTĘPNYCH metrykach bieżącego sezonu (beniaminek / brak danych
   // bazowych) — mała próba, mocno ściągnięta. Front oznacza to wyraźnie.
   const provisional = useMemo(() => players.length > 0 && players.every((p) => p.provisional), [players]);
 
   const an = useMemo(() => computeTeamProfile(players, labelsFor), [players]);
+  const rec = useMemo(() => computeOpponentRecommendations(data.squad, an), [data.squad, an]);
 
   const tipColor = (k) => (k === "luka" ? C.good : k === "uwaga" ? C.warn : k === "przewidywalnosc" ? C.blueHi : C.steelHi);
   const barRC = (rc) => `${Math.max(4, Math.min(100, rc))}%`;
@@ -2077,7 +2197,7 @@ function OpponentView({ data }) {
       <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0 6px", flexWrap: "wrap" }}>
         <span className="mono" style={{ fontSize: 11, letterSpacing: 1.5, color: C.steel }}>PRZECIWNIK</span>
         {(() => { const cid = crestOf(team); return cid ? <Crest id={cid} size={26} /> : null; })()}
-        <select value={team} onChange={(e) => setTeamSel(e.target.value)}
+        <select value={team} onChange={(e) => setOppTeam(e.target.value)}
           style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9, padding: "9px 13px", fontSize: 13.5, minWidth: 240 }}>
           {teams.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
@@ -2173,6 +2293,64 @@ function OpponentView({ data }) {
               </div>
             )) : <Empty>Za mało sygnału, by wygenerować wskazówki dla tej drużyny.</Empty>}
           </div>
+
+          {rec && rec.hasData && (
+            <>
+              <SectionLabel>Rekomendacje pod skład — {team}</SectionLabel>
+              <div style={{ fontSize: 12.5, color: C.steel, marginBottom: 10, maxWidth: 820, lineHeight: 1.5 }}>
+                Profil rywala przełożony na decyzje składowe: gdzie mamy przewagę (obciążać), gdzie rywal jest mocniejszy (asekuracja) i kogo wystawić w danej strefie. Aktualizuje się z wyborem przeciwnika. To wsparcie z danych — decyzja zostaje przy trenerze.
+              </div>
+              <div style={{ display: "grid", gap: 10, maxWidth: 820 }}>
+                {[...rec.attack, ...rec.caution].map((r, i) => (
+                  <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`,
+                    borderLeft: `3px solid ${r.kind === "atak" ? C.good : C.warn}`, borderRadius: 11, padding: "13px 15px" }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 9, marginBottom: 6, flexWrap: "wrap" }}>
+                      <span className="cond" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".06em",
+                        color: r.kind === "atak" ? C.good : C.warn, flexShrink: 0 }}>{r.kind === "atak" ? "Obciążaj" : "Uważaj"}</span>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: C.bone, lineHeight: 1.35 }}>{r.headline}</span>
+                    </div>
+                    <div style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.55, marginBottom: r.players.length ? 9 : 0 }}>{r.why}</div>
+                    {r.players.length > 0 && (
+                      <div style={{ display: "flex", gap: 7, flexWrap: "wrap", alignItems: "center" }}>
+                        <span style={{ fontSize: 11, color: C.steel }}>{r.kind === "atak" ? "Wystaw:" : "Zabezpiecz:"}</span>
+                        {r.players.map((p) => (
+                          <span key={p.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: C.panel2,
+                            border: `1px solid ${C.line}`, borderRadius: 8, padding: "3px 9px", fontSize: 12 }}>
+                            <b style={{ color: C.bone, fontWeight: 600 }}>{p.name}</b>
+                            <span style={{ color: C.steel }}>{p.pos}</span>
+                            <span className="disp" style={{ color: tierColor(p.rc), fontSize: 13 }}>{p.rc}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {!rec.attack.length && !rec.caution.length && (
+                  <Empty>Brak wyraźnych przewag/luk strefowych — pojedynki wyrównane (zob. dopasowania 1v1 niżej).</Empty>
+                )}
+              </div>
+
+              <div style={{ marginTop: 14, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", maxWidth: 820 }}>
+                <div className="cond" style={{ fontSize: 11, letterSpacing: ".05em", color: C.steel, fontWeight: 640, marginBottom: 12 }}>Dopasowania ról 1v1 — Raków vs {team}</div>
+                <div style={{ display: "grid", gap: 9 }}>
+                  {rec.matchups.map((m, i) => {
+                    const adv = m.delta >= 0, strong = Math.abs(m.delta) >= 4;
+                    return (
+                      <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 74px 1fr", alignItems: "center", gap: 12 }}>
+                        <span style={{ fontSize: 12.5, color: C.bone, textAlign: "right", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {m.ourLabel} <b className="disp" style={{ color: tierColor(m.oursRC), fontSize: 14 }}>{m.oursRC}</b></span>
+                        <span className="disp" style={{ textAlign: "center", fontSize: 15,
+                          color: strong ? (adv ? C.good : C.warn) : C.steel }}>{adv ? "+" : ""}{m.delta}</span>
+                        <span style={{ fontSize: 12.5, color: C.steelHi, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          <b className="disp" style={{ color: tierColor(m.oppRC), fontSize: 14 }}>{m.oppRC}</b> {m.oppLabel}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 12, lineHeight: 1.5 }}>Różnica RC w opozycji pozycyjnej (nasze skrzydło ⟷ ich boczna obrona, nasze 10/9 ⟷ ich środkowi obrońcy itd.). ≥ +4 = realna przewaga strefy do obciążania; ≤ −4 = strefa ryzyka.</div>
+              </div>
+            </>
+          )}
 
           <Note>RC = jakość względem Ekstraklasy (percentyl metryk per rola). „Dużo/mało" = odchylenie stylu (z-score) danej linii od średniej ligi — nazwy atrybutów z modelu. „Przewidywalność" = podobieństwo stylu zawodników w linii; wysokie oznacza jednorodność, nie słabość. To analiza opisowa rywala i punkty zaczepienia — wybór formacji i składu zostaje przy trenerze. Skład = zawodnicy grający w klubie w BIEŻĄCYM sezonie (z meczów PL1); metryki liczone z sezonu poprzedniego, bo bieżący ma jeszcze za mało danych. Uwaga: zawodnik, który latem przyszedł spoza Ekstraklasy, pojawi się dopiero, gdy uzbiera dość minut w tym sezonie.</Note>
         </>
