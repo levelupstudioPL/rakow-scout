@@ -352,7 +352,7 @@ export default function App() {
   const SECTIONS = [
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
-    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"]] },
+    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"]] },
     { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
@@ -481,6 +481,7 @@ export default function App() {
             {view === "stability" && "Stabilność metryk (test-retest)"}
             {view === "corr" && "Zależności formacji"}
             {view === "opponent" && "Analiza przeciwnika"}
+            {view === "compare" && "Porównanie zespołów"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
             {view === "watch" && "Watchlista skauta"}
@@ -523,6 +524,7 @@ export default function App() {
           {view === "stability" && <StabilityView data={data} />}
           {view === "corr" && <CorrView data={data} />}
           {view === "opponent" && <OpponentView data={data} />}
+          {view === "compare" && <CompareView data={data} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
         </div>
       </main>
@@ -1915,6 +1917,59 @@ const _cos = (a, b) => {
   return (na && nb) ? d / Math.sqrt(na * nb) : 0;
 };
 const OPP_ROLE_ORDER = ["Bramka", "ŚO", "Boczny", "Skrzydłowy", "6-8", "10-9"];
+// Dopasowanie Rakowa — kotwiczone na początku nazwy, żeby NIE łapać klubów z Krakowa
+// („Kraków" zawiera podciąg „raków").
+const isRakowTeam = (t) => /^\s*rak[oó]w\b/i.test(t || "");
+
+// Profil drużyny (RC per rola, styl per linia, przewidywalność, wskazówki) z listy
+// zawodników. Używane przez „Przeciwnik" i „Porównanie zespołów" — jedno źródło prawdy.
+// TYLKO ODCZYT policzonych już wartości (raw/profile_pos) — nie dotyka modelu RC.
+// labelsFor(line) -> etykiety atrybutów profilu pozycyjnego dla danej linii.
+function computeTeamProfile(players, labelsFor) {
+  if (!players || !players.length) return null;
+  const byLine = {}, byRole = {};
+  players.forEach((p) => {
+    (byLine[p.line] = byLine[p.line] || []).push(p);
+    const r = p.role || p.line; (byRole[r] = byRole[r] || []).push(p);
+  });
+  const roleRC = Object.entries(byRole).map(([role, ps]) => ({
+    role, n: ps.length, rc: Math.round(_mean(ps.map((x) => x.raw))),
+  })).sort((a, b) => (OPP_ROLE_ORDER.indexOf(a.role) - OPP_ROLE_ORDER.indexOf(b.role)));
+  const rankByRC = [...roleRC].filter((r) => r.n >= 1).sort((a, b) => a.rc - b.rc);
+  const weakest = rankByRC[0] || null;
+  const strongest = rankByRC[rankByRC.length - 1] || null;
+  const overallRC = Math.round(_mean(players.map((p) => p.raw)));
+  const lineStyle = Object.entries(byLine).map(([line, ps]) => {
+    const labs = labelsFor(line);
+    const vecs = ps.map((x) => x.profile_pos).filter((v) => Array.isArray(v) && labs && v.length === labs.length);
+    if (!labs || !vecs.length) return { line, n: ps.length, hi: [], lo: [], predict: null };
+    const avg = labs.map((_, i) => _mean(vecs.map((v) => v[i])));
+    const ranked = labs.map((l, i) => ({ l, z: avg[i] })).sort((a, b) => b.z - a.z);
+    const hi = ranked.filter((x) => x.z > 0.3).slice(0, 3);
+    const lo = ranked.filter((x) => x.z < -0.3).slice(-3).reverse();
+    let sim = null;
+    if (vecs.length >= 2) {
+      const ps2 = [];
+      for (let i = 0; i < vecs.length; i++) for (let j = i + 1; j < vecs.length; j++) ps2.push(_cos(vecs[i], vecs[j]));
+      sim = _mean(ps2);
+    }
+    return { line, n: ps.length, hi, lo, predict: sim };
+  }).sort((a, b) => (["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(a.line) - ["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(b.line)));
+  const predVals = lineStyle.map((l) => l.predict).filter((v) => v != null);
+  const predictability = predVals.length ? _mean(predVals) : null;
+  const tips = [];
+  if (weakest) tips.push({ k: "luka", t: `Najsłabsze ogniwo: rola ${roleName({ role: weakest.role }) || weakest.role} (śr. RC ${weakest.rc}, ${weakest.n} zaw.). Naturalny kierunek gry.` });
+  if (strongest && strongest.rc - (weakest ? weakest.rc : 0) >= 6) tips.push({ k: "uwaga", t: `Najmocniejsza rola: ${roleName({ role: strongest.role }) || strongest.role} (RC ${strongest.rc}) — tu unikać strat i pojedynków 1v1.` });
+  lineStyle.forEach((ls) => {
+    if (ls.hi.length && ls.lo.length) {
+      tips.push({ k: "tendencja", t: `${ls.line}: dużo „${ls.hi.map((h) => h.l).join(", ")}", mało „${ls.lo.map((h) => h.l).join(", ")}" — przestrzeń tam, gdzie robią mało.` });
+    }
+    if (ls.predict != null && ls.predict > 0.6 && ls.n >= 2) {
+      tips.push({ k: "przewidywalnosc", t: `${ls.line} bardzo jednorodna (podobieństwo ${Math.round(ls.predict * 100)}%) — styl przewidywalny, łatwiejszy do rozpracowania.` });
+    }
+  });
+  return { roleRC, weakest, strongest, overallRC, lineStyle, predictability, tips };
+}
 
 function OpponentView({ data }) {
   const BASE = "Ekstraklasa (PL)";
@@ -1948,59 +2003,7 @@ function OpponentView({ data }) {
   // bazowych) — mała próba, mocno ściągnięta. Front oznacza to wyraźnie.
   const provisional = useMemo(() => players.length > 0 && players.every((p) => p.provisional), [players]);
 
-  const an = useMemo(() => {
-    if (!players.length) return null;
-    const byLine = {}, byRole = {};
-    players.forEach((p) => {
-      (byLine[p.line] = byLine[p.line] || []).push(p);
-      const r = p.role || p.line; (byRole[r] = byRole[r] || []).push(p);
-    });
-    // Jakość per rola (RC = raw; Ekstraklasa ma handicap 0, więc raw = RC)
-    const roleRC = Object.entries(byRole).map(([role, ps]) => ({
-      role, n: ps.length, rc: Math.round(_mean(ps.map((x) => x.raw))),
-    })).sort((a, b) => (OPP_ROLE_ORDER.indexOf(a.role) - OPP_ROLE_ORDER.indexOf(b.role)));
-    const rankByRC = [...roleRC].filter((r) => r.n >= 1).sort((a, b) => a.rc - b.rc);
-    const weakest = rankByRC[0] || null;
-    const strongest = rankByRC[rankByRC.length - 1] || null;
-    const overallRC = Math.round(_mean(players.map((p) => p.raw)));
-
-    // Styl (DNA) per linia: średni profile_pos, dominujące tendencje (nad/pod średnią Ekstraklasy)
-    const lineStyle = Object.entries(byLine).map(([line, ps]) => {
-      const labs = labelsFor(line);
-      const vecs = ps.map((x) => x.profile_pos).filter((v) => Array.isArray(v) && labs && v.length === labs.length);
-      if (!labs || !vecs.length) return { line, n: ps.length, hi: [], lo: [], predict: null };
-      const avg = labs.map((_, i) => _mean(vecs.map((v) => v[i])));
-      const ranked = labs.map((l, i) => ({ l, z: avg[i] })).sort((a, b) => b.z - a.z);
-      const hi = ranked.filter((x) => x.z > 0.3).slice(0, 3);
-      const lo = ranked.filter((x) => x.z < -0.3).slice(-3).reverse();
-      // przewidywalność linii = średnie podobieństwo par profili (wysokie = jednorodni)
-      let sim = null;
-      if (vecs.length >= 2) {
-        const ps2 = [];
-        for (let i = 0; i < vecs.length; i++) for (let j = i + 1; j < vecs.length; j++) ps2.push(_cos(vecs[i], vecs[j]));
-        sim = _mean(ps2);
-      }
-      return { line, n: ps.length, hi, lo, predict: sim };
-    }).sort((a, b) => (["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(a.line) - ["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(b.line)));
-
-    const predVals = lineStyle.map((l) => l.predict).filter((v) => v != null);
-    const predictability = predVals.length ? _mean(predVals) : null;
-
-    // Wskazówki (matchup) — generowane z danych, nie z powietrza.
-    const tips = [];
-    if (weakest) tips.push({ k: "luka", t: `Najsłabsze ogniwo: rola ${roleName({ role: weakest.role }) || weakest.role} (śr. RC ${weakest.rc}, ${weakest.n} zaw.). Naturalny kierunek gry.` });
-    if (strongest && strongest.rc - (weakest ? weakest.rc : 0) >= 6) tips.push({ k: "uwaga", t: `Najmocniejsza rola: ${roleName({ role: strongest.role }) || strongest.role} (RC ${strongest.rc}) — tu unikać strat i pojedynków 1v1.` });
-    lineStyle.forEach((ls) => {
-      if (ls.hi.length && ls.lo.length) {
-        tips.push({ k: "tendencja", t: `${ls.line}: dużo „${ls.hi.map((h) => h.l).join(", ")}", mało „${ls.lo.map((h) => h.l).join(", ")}" — przestrzeń tam, gdzie robią mało.` });
-      }
-      if (ls.predict != null && ls.predict > 0.6 && ls.n >= 2) {
-        tips.push({ k: "przewidywalnosc", t: `${ls.line} bardzo jednorodna (podobieństwo ${Math.round(ls.predict * 100)}%) — styl przewidywalny, łatwiejszy do rozpracowania.` });
-      }
-    });
-
-    return { roleRC, weakest, strongest, overallRC, lineStyle, predictability, tips };
-  }, [players]);
+  const an = useMemo(() => computeTeamProfile(players, labelsFor), [players]);
 
   const tipColor = (k) => (k === "luka" ? C.good : k === "uwaga" ? C.warn : k === "przewidywalnosc" ? C.blueHi : C.steelHi);
   const barRC = (rc) => `${Math.max(4, Math.min(100, rc))}%`;
@@ -2230,6 +2233,154 @@ function Tile({ label, val, sub, color = C.bone, hint }) {
       <div className="mono" style={{ fontSize: 10, letterSpacing: 1, color: C.steel, textTransform: "uppercase" }}>{label}</div>
       <div className="disp" style={{ fontSize: 22, color, marginTop: 4, lineHeight: 1.1 }}>{val}</div>
       {sub ? <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{sub}</div> : null}
+    </div>
+  );
+}
+
+// ============================ PORÓWNANIE ZESPÓŁ-DO-ZESPOŁU ============================
+// Dwie drużyny obok siebie (domyślnie Raków vs rywal). Czyta te same policzone profile
+// co „Przeciwnik" (RC per rola, styl per linia, przewidywalność) — ZERO zmian w RC.
+// Raków bierzemy ze składu (raw = rc, bez „b.d."), rywali z puli po aktualnym klubie.
+function CompareView({ data }) {
+  const BASE = "Ekstraklasa (PL)";
+  const RAKOW = "Raków Częstochowa";
+  const pool = Array.isArray(data.pool) ? data.pool : [];
+  const squad = Array.isArray(data.squad) ? data.squad : [];
+  const labelsFor = (line) => (data.meta && data.meta.style_labels ? data.meta.style_labels[line] : null);
+  const crestOf = (t) => (data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[t] : null);
+  const useNow = useMemo(() => pool.some((p) => p.lg === BASE && p.team_now), [pool]);
+  const teamOf = (p) => (useNow ? p.team_now : p.team);
+
+  const teams = useMemo(() => {
+    const s = new Set([RAKOW]);
+    pool.forEach((p) => { const t = teamOf(p); if (p.lg === BASE && t) s.add(t); });
+    Object.keys((data.meta && data.meta.ekstra_crests) || {}).forEach((t) => { if (t) s.add(t); });
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [pool, useNow, data]);
+  const others = teams.filter((t) => !isRakowTeam(t));
+
+  const [teamA, setTeamA] = useState(RAKOW);
+  const [teamB, setTeamB] = useState(others[0] || "");
+
+  const playersOf = (team) => {
+    if (isRakowTeam(team)) {
+      // Raków ze składu: tylko z realnym RC (bez placeholderów „b.d."), raw = rc.
+      return squad.filter((s) => !s.rc_estimated && typeof s.rc === "number")
+        .map((s) => ({ ...s, raw: s.rc }));
+    }
+    return pool.filter((p) => p.lg === BASE && teamOf(p) === team);
+  };
+  const nA = useMemo(() => playersOf(teamA).length, [teamA, pool, squad]);
+  const nB = useMemo(() => playersOf(teamB).length, [teamB, pool, squad]);
+  const profA = useMemo(() => computeTeamProfile(playersOf(teamA), labelsFor), [teamA, pool, squad]);
+  const profB = useMemo(() => computeTeamProfile(playersOf(teamB), labelsFor), [teamB, pool, squad]);
+
+  const pick = (t, set, other) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+      {crestOf(t) ? <Crest id={crestOf(t)} size={24} /> : null}
+      <select value={t} onChange={(e) => set(e.target.value)}
+        style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9,
+          padding: "9px 12px", fontSize: 13.5, minWidth: 180, flex: 1 }}>
+        {teams.map((x) => <option key={x} value={x}>{x}{isRakowTeam(x) ? "" : ""}</option>)}
+      </select>
+    </div>
+  );
+
+  // Mapy rola->rc dla obu drużyn (do zestawienia w jednym rzędzie).
+  const rcMap = (prof) => Object.fromEntries((prof ? prof.roleRC : []).map((r) => [r.role, r]));
+  const aMap = rcMap(profA), bMap = rcMap(profB);
+  const lineMap = (prof) => Object.fromEntries((prof ? prof.lineStyle : []).map((l) => [l.line, l]));
+  const alA = lineMap(profA), alB = lineMap(profB);
+  const LINES = ["Bramka", "Obrona", "Pomoc", "Atak"];
+  const cmp = (a, b) => (a == null || b == null) ? C.steel : (a > b ? C.good : a < b ? C.bad : C.steelHi);
+
+  return (
+    <div>
+      <Lead>Dwie drużyny obok siebie — Raków jako punkt odniesienia. Zestawiamy jakość per rola (RC), styl gry per linia i przewidywalność. To odczyt tych samych profili co „Przeciwnik" — sposób na szybkie „gdzie jesteśmy lepsi/słabsi" i gdzie rywal jest jednorodny.</Lead>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 12, alignItems: "center", margin: "18px 0 10px" }}>
+        {pick(teamA, setTeamA)}
+        <span className="disp" style={{ fontSize: 16, color: C.steel }}>vs</span>
+        {pick(teamB, setTeamB)}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 12, fontSize: 11, color: C.steel, marginBottom: 14 }}>
+        <span>{nA} zaw. w danych{isRakowTeam(teamA) ? " (skład)" : ""}</span><span />
+        <span style={{ textAlign: "right" }}>{nB} zaw. w danych{isRakowTeam(teamB) ? " (skład)" : ""}</span>
+      </div>
+
+      {(!profA || !profB) ? (
+        <div style={{ marginTop: 8, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11,
+          padding: "14px 16px", fontSize: 13, color: C.steelHi, lineHeight: 1.5 }}>
+          {!profA && <div>„{teamA}" — brak danych StatsBomb (beniaminek / bieżący sezon jeszcze niezebrany).</div>}
+          {!profB && <div>„{teamB}" — brak danych StatsBomb (beniaminek / bieżący sezon jeszcze niezebrany).</div>}
+          <div style={{ marginTop: 6, color: C.steel }}>Wybierz drużyny z policzonym profilem, żeby zobaczyć porównanie.</div>
+        </div>
+      ) : (
+        <>
+          {/* Podsumowanie */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 6 }}>
+            <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} />
+            <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} />
+            <Tile label="Przewidywalność" val={profA.predictability != null ? `${Math.round(profA.predictability * 100)}%` : "—"}
+              color={C.steelHi} sub={teamA} />
+            <Tile label="Przewidywalność" val={profB.predictability != null ? `${Math.round(profB.predictability * 100)}%` : "—"}
+              color={C.steelHi} sub={teamB} />
+          </div>
+
+          {/* Jakość per rola — lustrzane słupki (A w lewo, B w prawo) */}
+          <SectionLabel>Jakość per rola (RC) — {teamA} vs {teamB}</SectionLabel>
+          <div style={{ display: "grid", gap: 7 }}>
+            {OPP_ROLE_ORDER.map((role) => {
+              const a = aMap[role], b = bMap[role];
+              const arc = a ? a.rc : null, brc = b ? b.rc : null;
+              const bar = (rc) => `${Math.max(0, Math.min(100, rc || 0))}%`;
+              return (
+                <div key={role} style={{ display: "grid", gridTemplateColumns: "1fr 118px 1fr", alignItems: "center", gap: 10 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, justifyContent: "flex-end" }}>
+                    <span className="disp" style={{ fontSize: 14, color: arc == null ? C.steel : cmp(arc, brc), width: 26, textAlign: "right" }}>{arc == null ? "—" : arc}</span>
+                    <div style={{ flex: 1, maxWidth: 200, height: 9, background: C.panel2, borderRadius: 5, overflow: "hidden", display: "flex", justifyContent: "flex-end" }}>
+                      <div style={{ width: bar(arc), height: "100%", background: arc == null ? C.line : tierColor(arc) }} />
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "center", fontSize: 11.5, color: C.bone }}>{roleName({ role }) || role}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                    <div style={{ flex: 1, maxWidth: 200, height: 9, background: C.panel2, borderRadius: 5, overflow: "hidden" }}>
+                      <div style={{ width: bar(brc), height: "100%", background: brc == null ? C.line : tierColor(brc) }} />
+                    </div>
+                    <span className="disp" style={{ fontSize: 14, color: brc == null ? C.steel : cmp(brc, arc), width: 26 }}>{brc == null ? "—" : brc}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Styl per linia — dwie kolumny */}
+          <SectionLabel>Styl gry per linia (vs średnia Ekstraklasy)</SectionLabel>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {[[teamA, alA], [teamB, alB]].map(([tname, lm], ci) => (
+              <div key={ci} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "12px 14px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8 }}>
+                  {crestOf(tname) ? <Crest id={crestOf(tname)} size={18} /> : null}
+                  <b style={{ fontSize: 13, color: C.bone, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{tname}</b>
+                </div>
+                {LINES.filter((ln) => lm[ln]).map((ln) => { const ls = lm[ln]; return (
+                  <div key={ln} style={{ marginBottom: 8 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                      <b style={{ fontSize: 12, color: C.steelHi }}>{ln}</b>
+                      {ls.predict != null && <span className="mono" style={{ fontSize: 10, color: ls.predict > 0.6 ? C.blueHi : C.steel }}>przewid. {Math.round(ls.predict * 100)}%</span>}
+                    </div>
+                    {ls.hi.length ? <div style={{ fontSize: 11.5, color: C.steelHi }}><span style={{ color: C.good, fontWeight: 700 }}>dużo:</span> {ls.hi.map((h) => h.l).join(", ")}</div> : null}
+                    {ls.lo.length ? <div style={{ fontSize: 11.5, color: C.steelHi }}><span style={{ color: C.bad, fontWeight: 700 }}>mało:</span> {ls.lo.map((h) => h.l).join(", ")}</div> : null}
+                    {!ls.hi.length && !ls.lo.length ? <div style={{ fontSize: 11.5, color: C.steel }}>≈ średnia ligi</div> : null}
+                  </div>
+                ); })}
+              </div>
+            ))}
+          </div>
+
+          <Note>RC = jakość względem Ekstraklasy (percentyl metryk per rola). Raków liczony ze składu (bez „b.d."), rywale z bieżącego składu (aktualny klub). „Dużo/mało" = odchylenie stylu (z-score) linii od średniej ligi. Przewidywalność = jednorodność stylu w linii. To odczyt policzonych profili — nie zmienia modelu RC. Drużyny bez danych (beniaminki / niezebrany sezon) mogą mieć profil częściowy albo brak.</Note>
+        </>
+      )}
     </div>
   );
 }
