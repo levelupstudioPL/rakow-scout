@@ -2,23 +2,41 @@ import React, { useState, useEffect, useMemo } from "react";
 import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations, computeRecentValidation, adjLevel } from "./analytics.js";
 
 // ============================ TOKENS ============================
-const C = {
-  // Paleta „Apple clean" w barwach Rakowa — jasne, przewiewne tło z lekkim
-  // błękitnym podbiciem; błękit wiodący + czerwień jako drugi akcent klubowy.
-  // Semantyka tokenów zachowana (ink=tło, panel=powierzchnia, bone=tekst),
-  // więc reszta apki dziedziczy nowy wygląd bez zmian w JSX.
+// Paleta „Apple clean" w barwach Rakowa — błękit wiodący + czerwień jako drugi
+// akcent klubowy. Dwa motywy: jasny (domyślny) i ciemny. Semantyka tokenów zachowana
+// (ink=tło, panel=powierzchnia, bone=tekst), więc cała apka dziedziczy oba motywy
+// bez zmian w JSX. Wszystkie tokeny to 6-/8-cyfrowy hex, więc wzorzec `${C.x}NN`
+// (doklejanie alfy) działa w obu motywach.
+const LIGHT = {
   ink: "#EDF1F9", panel: "#FFFFFF", panel2: "#F5F8FD", panelHi: "#E9EFF8",
   line: "#DEE6F2", bone: "#0F1B33", steel: "#93A0B8", steelHi: "#54627E",
-  // „red*" to historycznie generyczny AKCENT interakcji (aktywne taby, przyciski,
-  // suwaki, zaznaczenia). W nowej identyfikacji akcentem wiodącym jest błękit, więc
-  // przemapowujemy je na błękit — cała interaktywność robi się niebieska jednym ruchem.
   red: "#2456D8", redHi: "#12306E", redDim: "#2456D8",
-  club: "#E4022B",   // czerwień klubowa — używana oszczędnie (nadtytuł sekcji, herb)
+  club: "#E4022B",
   good: "#1BA05E", warn: "#B8730A", bad: "#D63A2C", proxy: "#B8730A",
   blue: "#2456D8", blueHi: "#12306E", blueDim: "#2456D814",
-  // RC = jakość → sekwencja morska (oddzielona od błękitu marki i czerwieni)
   rcLo: "#9EC1D4", rcMid: "#2E93B6", rcHi: "#12BEB0",
 };
+const DARK = {
+  ink: "#0A1120", panel: "#131D31", panel2: "#182339", panelHi: "#1F2E49",
+  line: "#2A3A57", bone: "#EAF1FB", steel: "#6E7E9C", steelHi: "#AAB9D7",
+  red: "#4E86FF", redHi: "#8FB2FF", redDim: "#4E86FF",
+  club: "#FF3B4E",
+  good: "#30D158", warn: "#E5A93A", bad: "#FF453A", proxy: "#E5A93A",
+  blue: "#4E86FF", blueHi: "#8FB2FF", blueDim: "#4E86FF26",
+  rcLo: "#3A5A72", rcMid: "#3FA6C6", rcHi: "#33D6C6",
+};
+// C jest mutowalną kopią aktywnego motywu — komponenty czytają C.x w czasie renderu,
+// więc podmiana wartości + wymuszony re-render przełącza cały interfejs.
+const C = { ...LIGHT };
+function applyTheme(t) { Object.assign(C, t === "dark" ? DARK : LIGHT); }
+// Kolor liczby/etykiety RC wg progu — czytelny w obu motywach.
+function rcTextColor(v) {
+  if (!Number.isFinite(Number(v))) return C.steel;
+  const n = Number(v);
+  if (n >= 72) return C.rcHi;
+  if (n >= 58) return C.rcMid;
+  return C.steelHi;   // niski RC: neutralny, czytelny w obu motywach (nie ciemny bar-token)
+}
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const tmUrl = (name) => `https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(name || "")}`;
@@ -147,6 +165,16 @@ export default function App() {
   const [data, setData] = useState(null);
   const [photos, setPhotos] = useState({});   // { "Imię Nazwisko": url } z public/photos.json
   const [navOpen, setNavOpen] = useState(false);   // szuflada menu na mobile
+  // Motyw: jasny (domyślny) / ciemny, zapamiętany per przeglądarka.
+  const [theme, setTheme] = useState(() => {
+    try { const t = localStorage.getItem("rk_theme"); return t === "dark" || t === "light" ? t : "dark"; }
+    catch { return "dark"; }
+  });
+  const toggleTheme = () => setTheme((t) => {
+    const nt = t === "dark" ? "light" : "dark";
+    try { localStorage.setItem("rk_theme", nt); } catch {}
+    return nt;
+  });
   const [err, setErr] = useState(null);
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
@@ -348,6 +376,10 @@ export default function App() {
 
   // (Drużyna cieni liczona jest wewnątrz ShadowView — obsługuje ręczny skład.)
 
+  // Ustaw aktywny motyw ZANIM render odczyta tokeny C (mutacja + re-render przełącza
+  // cały interfejs; idempotentne, więc bezpieczne w ciele renderu).
+  applyTheme(theme);
+
   if (err && !data) return <Splash>{err}</Splash>;
   if (!data) return <Splash>Wczytywanie…</Splash>;
 
@@ -369,7 +401,7 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", background: C.ink, color: C.bone,
       fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',system-ui,Roboto,sans-serif",
-      WebkitFontSmoothing: "antialiased", display: "flex" }} className="shell">
+      WebkitFontSmoothing: "antialiased", colorScheme: theme === "dark" ? "dark" : "light", display: "flex" }} className="shell">
       <style>{`
         *{box-sizing:border-box;}
         body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
@@ -399,6 +431,7 @@ export default function App() {
             border-right:none!important;border-bottom:1px solid ${C.line};}
           .rail.closed{display:none!important;}
           .pagehead{padding:16px 18px 14px!important;}
+          .deskonly{display:none!important;}
           .content{padding:18px 18px 0!important;}
           h1.disp{font-size:26px!important;}
         }
@@ -433,6 +466,9 @@ export default function App() {
         <img src="/logo-rakow.webp" alt="Herb Raków" style={{ width: 26, height: 32, objectFit: "contain" }} />
         <div className="cond" style={{ fontWeight: 800, fontSize: 17 }}>RAKÓW</div>
         <span className="cond" style={{ marginLeft: "auto", fontSize: 12, color: C.steelHi, letterSpacing: 1 }}>{curSection.label}</span>
+        <button onClick={toggleTheme} aria-label="Przełącz motyw" title="Przełącz motyw jasny/ciemny" style={{
+          background: C.panel2, border: `1px solid ${C.line}`, color: C.bone, borderRadius: 8,
+          width: 40, height: 40, cursor: "pointer", fontSize: 16, lineHeight: 1 }}>{theme === "dark" ? "☀︎" : "☾"}</button>
       </div>
 
       {/* ===================== LEFT SIDEBAR (styl Football Manager) ===================== */}
@@ -467,7 +503,7 @@ export default function App() {
             </div>
           ))}
         </nav>
-        <div style={{ marginTop: "auto", padding: "16px 20px 0", display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ marginTop: "auto", padding: "16px 20px 0", display: "flex", flexDirection: "column", gap: 14 }}>
           <div>
             <div className="cond" style={{ fontSize: 11, letterSpacing: ".06em", color: C.steel, fontWeight: 640, marginBottom: 8 }}>Rozgrywki w bazie</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -483,7 +519,10 @@ export default function App() {
 
       {/* ===================== MAIN ===================== */}
       <main style={{ flex: 1, minWidth: 0, padding: "0 0 60px" }}>
-        <div className="pagehead" style={{ borderBottom: `1px solid ${C.line}`, background: C.panel, padding: "20px 30px 18px" }}>
+        <div className="pagehead" style={{ position: "relative", borderBottom: `1px solid ${C.line}`, background: C.panel, padding: "20px 30px 18px" }}>
+          <div className="noprint deskonly" style={{ position: "absolute", top: 18, right: 30, zIndex: 5 }}>
+            <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          </div>
           <div className="cond" style={{ fontSize: 11, letterSpacing: ".14em", color: C.club, fontWeight: 700 }}>{curSection.label}</div>
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
@@ -2947,6 +2986,26 @@ function Stat({ n, l, accent }) {
     </div>
   );
 }
+// Przełącznik motywu (segment jasny/ciemny) — prawy górny róg nagłówka.
+function ThemeToggle({ theme, onToggle }) {
+  return (
+    <div role="group" aria-label="Motyw" style={{ display: "inline-flex", gap: 3, padding: 3,
+      background: C.panel2, border: `1px solid ${C.line}`, borderRadius: 11 }}>
+      {[["light", "☀︎", "Jasny"], ["dark", "☾", "Ciemny"]].map(([m, ic, lab]) => {
+        const on = theme === m;
+        return (
+          <button key={m} onClick={() => { if (!on) onToggle(); }} aria-pressed={on} title={`Motyw ${lab.toLowerCase()}`}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 11px", borderRadius: 8,
+              border: "none", cursor: "pointer", fontSize: 13, fontWeight: on ? 640 : 500,
+              background: on ? C.panel : "transparent", color: on ? C.bone : C.steel,
+              boxShadow: on ? "0 1px 2px rgba(20,20,50,.14)" : "none" }}>
+            <span style={{ fontSize: 13, lineHeight: 1 }}>{ic}</span>{lab}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 function Kpi({ l, v, c }) {
   return (
     <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "12px 15px" }}>
@@ -3005,11 +3064,8 @@ function Empty({ children }) {
 }
 // Kolor "tieru" karty (FIFA-like): złoto / srebro / brąz wg poziomu RC.
 function tierColor(rc) {
-  const v = Number(rc);
-  if (!Number.isFinite(v)) return C.steel;
-  if (v >= 72) return "#0E9E93";   // wysoki RC — morski/cyjan
-  if (v >= 58) return "#2E93B6";   // średni RC — morski
-  return "#5A7C93";                // niższy RC — stalowy błękit (czytelny na jasnym)
+  // Kolor liczby RC — teraz świadomy motywu (deleguje do rcTextColor na tokenach C).
+  return rcTextColor(rc);
 }
 // Znacznik „ocena z danych historycznych" — dla zawodników, których RC policzono
 // z poprzedniego sezonu (brak wystarczającej próbki w bieżącym). Odróżnia realną
