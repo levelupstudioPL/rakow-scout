@@ -3,12 +3,21 @@ import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, com
 
 // ============================ TOKENS ============================
 const C = {
-  // Paleta w duchu rakow.com — głęboki granat + czerwień + biel.
-  ink: "#081733", panel: "#0E2246", panel2: "#14315F", panelHi: "#1B406F",
-  line: "#23426F", bone: "#F3F6FB", steel: "#7C90B0", steelHi: "#AAB9D4",
-  red: "#E4022B", redHi: "#FF2D4E", redDim: "#3A0A1C",
-  good: "#37D08A", warn: "#E8A13A", bad: "#E5544B", proxy: "#E8C15A",
-  blue: "#1F5FCE", blueHi: "#3E7BEC",
+  // Paleta „Apple clean" w barwach Rakowa — jasne, przewiewne tło z lekkim
+  // błękitnym podbiciem; błękit wiodący + czerwień jako drugi akcent klubowy.
+  // Semantyka tokenów zachowana (ink=tło, panel=powierzchnia, bone=tekst),
+  // więc reszta apki dziedziczy nowy wygląd bez zmian w JSX.
+  ink: "#EDF1F9", panel: "#FFFFFF", panel2: "#F5F8FD", panelHi: "#E9EFF8",
+  line: "#DEE6F2", bone: "#0F1B33", steel: "#93A0B8", steelHi: "#54627E",
+  // „red*" to historycznie generyczny AKCENT interakcji (aktywne taby, przyciski,
+  // suwaki, zaznaczenia). W nowej identyfikacji akcentem wiodącym jest błękit, więc
+  // przemapowujemy je na błękit — cała interaktywność robi się niebieska jednym ruchem.
+  red: "#2456D8", redHi: "#12306E", redDim: "#2456D8",
+  club: "#E4022B",   // czerwień klubowa — używana oszczędnie (nadtytuł sekcji, herb)
+  good: "#1BA05E", warn: "#B8730A", bad: "#D63A2C", proxy: "#B8730A",
+  blue: "#2456D8", blueHi: "#12306E", blueDim: "#2456D814",
+  // RC = jakość → sekwencja morska (oddzielona od błękitu marki i czerwieni)
+  rcLo: "#9EC1D4", rcMid: "#2E93B6", rcHi: "#12BEB0",
 };
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
@@ -353,31 +362,33 @@ export default function App() {
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"]] },
-    { id: "model",    label: "Model",    views: [["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
+    { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
 
   return (
     <div style={{ minHeight: "100vh", background: C.ink, color: C.bone,
-      fontFamily: "'Barlow', system-ui, sans-serif", display: "flex" }} className="shell">
+      fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',system-ui,Roboto,sans-serif",
+      WebkitFontSmoothing: "antialiased", display: "flex" }} className="shell">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
         *{box-sizing:border-box;}
-        ::selection{background:${C.red};color:#fff;}
-        .disp{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.01em;}
-        .cond{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.04em;}
-        .mono{font-family:'Space Grotesk',monospace;}
-        .navq{transition:all .12s ease;}
-        .navq:hover{background:${C.panel2};color:#fff;}
-        .card{transition:transform .15s ease, border-color .15s ease;}
-        .card:hover{border-color:${C.red};transform:translateY(-2px);}
+        body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+        ::selection{background:${C.blue};color:#fff;}
+        /* Typografia „Apple": jeden font systemowy (SF Pro), różne role przez wagę/spacing. */
+        .disp{font-family:inherit;font-weight:640;letter-spacing:-.021em;}
+        .cond{font-family:inherit;text-transform:uppercase;letter-spacing:.05em;font-weight:640;}
+        .mono{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-variant-numeric:tabular-nums;}
+        .navq{transition:background .14s ease,color .14s ease;}
+        .navq:hover{background:${C.panelHi};color:${C.bone};}
+        .card{transition:box-shadow .18s ease, transform .18s ease;}
+        .card:hover{box-shadow:0 2px 6px rgba(20,20,50,.06),0 22px 48px -22px rgba(20,30,80,.22);transform:translateY(-1px);}
         .rowh:hover{background:${C.panel2};}
         .trow:hover{background:${C.panel2};}
-        button:focus-visible{outline:2px solid ${C.redHi};outline-offset:2px;}
+        button:focus-visible{outline:2px solid ${C.blue};outline-offset:2px;}
         @media (prefers-reduced-motion:no-preference){.bar{transition:width .6s cubic-bezier(.2,.8,.2,1);}}
         /* Subtelna klubowa tekstura pod treścią (prześwituje ~8% spod granatu). */
         .bgwall{position:fixed;inset:0;z-index:0;pointer-events:none;
-          background:url('/bg-rakow.webp') center/cover no-repeat;opacity:.08;filter:saturate(.75);}
+          background:url('/bg-rakow.webp') center/cover no-repeat;opacity:.035;filter:saturate(.6);}
         .shell > .mobabar, .shell > .rail, .shell > main{position:relative;z-index:1;}
         .mobabar{display:none;}
         .hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
@@ -414,7 +425,7 @@ export default function App() {
 
       {/* ===================== MOBILE TOP BAR (hamburger) ===================== */}
       <div className="mobabar" style={{ position: "sticky", top: 0, zIndex: 40,
-        background: "linear-gradient(180deg, #0A1D40, #081733)", borderBottom: `1px solid ${C.line}`,
+        background: C.panel, borderBottom: `1px solid ${C.line}`,
         alignItems: "center", gap: 12, padding: "10px 16px" }}>
         <button onClick={() => setNavOpen((o) => !o)} aria-label="Menu" style={{
           background: C.panel2, border: `1px solid ${C.line}`, color: C.bone, borderRadius: 8,
@@ -425,31 +436,30 @@ export default function App() {
       </div>
 
       {/* ===================== LEFT SIDEBAR (styl Football Manager) ===================== */}
-      <aside className={"rail" + (navOpen ? "" : " closed")} style={{ width: 224, flexShrink: 0, minHeight: "100vh", position: "sticky", top: 0,
-        background: "linear-gradient(180deg, #0A1D40, #081733)", borderRight: `1px solid ${C.line}`,
-        display: "flex", flexDirection: "column", padding: "18px 0" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 18px 16px",
-          borderBottom: `1px solid ${C.line}`, marginBottom: 12 }}>
+      <aside className={"rail" + (navOpen ? "" : " closed")} style={{ width: 236, flexShrink: 0, minHeight: "100vh", position: "sticky", top: 0,
+        background: C.panel, borderRight: `1px solid ${C.line}`,
+        display: "flex", flexDirection: "column", padding: "20px 0" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "0 20px 18px",
+          borderBottom: `1px solid ${C.line}`, marginBottom: 14 }}>
           <img src="/logo-rakow.webp" alt="Herb Raków Częstochowa"
-            style={{ width: 32, height: 39, objectFit: "contain", display: "block" }} />
+            style={{ width: 36, height: 43, objectFit: "contain", display: "block" }} />
           <div>
-            <div className="cond" style={{ fontWeight: 800, fontSize: 17, lineHeight: 1 }}>RAKÓW</div>
-            <div className="mono" style={{ fontSize: 8.5, color: C.steel, letterSpacing: 2, marginTop: 2 }}>SCOUT ENGINE</div>
+            <div className="disp" style={{ fontWeight: 640, fontSize: 20, lineHeight: 1 }}>Raków</div>
+            <div style={{ fontSize: 12, color: C.steel, marginTop: 3, fontWeight: 500 }}>Scout</div>
           </div>
         </div>
-        <nav className="railnav" style={{ padding: "0 10px", display: "flex", flexDirection: "column", gap: 2 }}>
+        <nav className="railnav" style={{ padding: "0 12px", display: "flex", flexDirection: "column", gap: 3 }}>
           {SECTIONS.map((s) => (
-            <div key={s.id} style={{ marginBottom: 8 }}>
-              <div className="cond" style={{ fontSize: 10, letterSpacing: 2, color: C.steel, padding: "6px 10px 4px", fontWeight: 700 }}>{s.label}</div>
+            <div key={s.id} style={{ marginBottom: 14 }}>
+              <div className="cond" style={{ fontSize: 11, letterSpacing: ".06em", color: C.steel, padding: "2px 12px 8px", fontWeight: 640 }}>{s.label}</div>
               {s.views.map(([k, label]) => {
                 const on = view === k;
                 return (
                   <button key={k} className="navq" onClick={() => { setView(k); setNavOpen(false); }} style={{
                     display: "flex", alignItems: "center", width: "100%", textAlign: "left",
-                    background: on ? C.panel2 : "transparent", color: on ? "#fff" : C.steelHi,
-                    border: "none", borderLeft: `3px solid ${on ? C.red : "transparent"}`,
-                    padding: "9px 11px", borderRadius: "0 7px 7px 0", cursor: "pointer",
-                    fontSize: 13.5, fontWeight: on ? 700 : 500 }}>
+                    background: on ? C.blueDim : "transparent", color: on ? C.blue : C.steelHi,
+                    border: "none", padding: "11px 13px", borderRadius: 13, cursor: "pointer",
+                    fontSize: 15, fontWeight: on ? 600 : 500 }}>
                     {label}
                   </button>
                 );
@@ -457,7 +467,14 @@ export default function App() {
             </div>
           ))}
         </nav>
-        <div style={{ marginTop: "auto", padding: "12px 18px 0" }}>
+        <div style={{ marginTop: "auto", padding: "16px 20px 0", display: "flex", flexDirection: "column", gap: 12 }}>
+          <div>
+            <div className="cond" style={{ fontSize: 11, letterSpacing: ".06em", color: C.steel, fontWeight: 640, marginBottom: 8 }}>Rozgrywki w bazie</div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <CompChip name="Ekstraklasa" code="PL1" tint="#0A2A5E" abbr="EK" />
+              <CompChip name="Liga Konf." code="UCOL" tint="#0B7A3B" abbr="LK" />
+            </div>
+          </div>
           <span className="mono" style={{ fontSize: 10, letterSpacing: 1 }}>{isLive
             ? <span style={{ color: C.good }}>● live</span>
             : <span style={{ color: C.proxy }}>● snapshot (zapis)</span>}</span>
@@ -467,7 +484,7 @@ export default function App() {
       {/* ===================== MAIN ===================== */}
       <main style={{ flex: 1, minWidth: 0, padding: "0 0 60px" }}>
         <div className="pagehead" style={{ borderBottom: `1px solid ${C.line}`, background: C.panel, padding: "20px 30px 18px" }}>
-          <div className="cond" style={{ fontSize: 11, letterSpacing: ".18em", color: C.redHi, fontWeight: 700 }}>{curSection.label}</div>
+          <div className="cond" style={{ fontSize: 11, letterSpacing: ".14em", color: C.club, fontWeight: 700 }}>{curSection.label}</div>
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
             {view === "mecze" && "Ostatnie mecze — walidator"}
@@ -482,6 +499,7 @@ export default function App() {
             {view === "corr" && "Zależności formacji"}
             {view === "opponent" && "Analiza przeciwnika"}
             {view === "compare" && "Porównanie zespołów"}
+            {view === "events" && "Dane eventowe (Faza 2)"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
             {view === "watch" && "Watchlista skauta"}
@@ -525,6 +543,7 @@ export default function App() {
           {view === "corr" && <CorrView data={data} />}
           {view === "opponent" && <OpponentView data={data} />}
           {view === "compare" && <CompareView data={data} />}
+          {view === "events" && <EventsView data={data} photoOf={photoOf} setSel={setSel} setView={setView} />}
           {view === "help" && <HelpView data={data} setView={setView} />}
         </div>
       </main>
@@ -597,10 +616,10 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
               {line}<span style={{ color: C.steel, fontWeight: 400 }}>· {byLine[line].length}</span>
               <span style={{ flex: 1, height: 1, background: C.line }} />
             </div>
-            <div className="hscroll"><div style={{ minWidth: 560, border: `1px solid ${C.line}`, borderRadius: 10, overflow: "hidden" }}>
+            <div className="hscroll"><div style={{ minWidth: 560, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 18, overflow: "hidden", boxShadow: "0 1px 3px rgba(20,20,50,.04),0 14px 34px -18px rgba(20,30,80,.14)" }}>
               <div className="cond" style={{ display: "grid", gridTemplateColumns: COLS, gap: 12,
-                padding: "8px 14px", background: C.panel, borderBottom: `1px solid ${C.line}`,
-                fontSize: 10.5, letterSpacing: 1, color: C.steel, fontWeight: 700 }}>
+                padding: "12px 18px", background: C.panel2, borderBottom: `1px solid ${C.line}`,
+                fontSize: 11, letterSpacing: ".05em", color: C.steel, fontWeight: 640 }}>
                 <div>Poz.</div><div>Zawodnik</div><div style={{ textAlign: "center" }}>RC</div>
                 <div>Forma</div><div>Wyróżnia się</div><div />
               </div>
@@ -613,12 +632,12 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                   <button key={p.id} className="trow" onClick={() => { setSel(p); setView("match"); }}
                     style={{ display: "grid", gridTemplateColumns: COLS, gap: 12, alignItems: "center",
                       width: "100%", textAlign: "left", color: C.bone, cursor: "pointer",
-                      background: seld ? C.panel2 : "transparent", border: "none",
-                      borderBottom: `1px solid ${C.line}`, borderLeft: `3px solid ${seld ? C.red : "transparent"}`,
-                      padding: "9px 14px 9px 11px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
-                      <span className="cond" style={{ fontSize: 11.5, fontWeight: 800, color: "#fff",
-                        background: C.red, borderRadius: 4, padding: "1px 7px" }}>{p.pos}</span>
+                      background: seld ? C.blueDim : "transparent", border: "none",
+                      borderBottom: `1px solid ${C.line}`, borderLeft: `3px solid ${seld ? C.blue : "transparent"}`,
+                      padding: "14px 18px 14px 15px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
+                      <span className="cond" style={{ fontSize: 12, fontWeight: 640, color: "#fff",
+                        background: C.blue, borderRadius: 7, padding: "2px 9px" }}>{p.pos}</span>
                       {roleName(p) && (
                         <span className="cond" title="Rola w modelu (RC + koherencja)"
                           style={{ fontSize: 10, fontWeight: 700, color: C.steelHi, background: "transparent",
@@ -632,25 +651,26 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
                         </span>
                       )}
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-                      <Face name={p.name} src={photoOf(p.name)} size={32} ring={tc} />
-                      <span style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+                      <Face name={p.name} src={photoOf(p.name)} size={40} ring={tc} />
+                      <span style={{ fontWeight: 580, fontSize: 15.5, letterSpacing: "-.01em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
                     </div>
                     <div style={{ textAlign: "center" }}>
                       {est ? <span className="mono" title="Brak dostatecznych danych — zawodnik nie ma wystarczającej próbki meczowej, więc poziomu nie da się policzyć."
-                        style={{ fontSize: 11, color: C.warn, fontWeight: 700, cursor: "help" }}>b.d.</span>
-                        : <span className="disp" style={{ fontSize: 22, color: tc }}>{p.rc}</span>}
+                        style={{ fontSize: 12, color: C.warn, fontWeight: 700, cursor: "help" }}>b.d.</span>
+                        : <span className="disp" style={{ fontSize: 26, color: tc }}>{p.rc}</span>}
                       {p.rc_source === "historical" && <div style={{ marginTop: 2 }}><HistBadge p={p} fontSize={8} ml={0} /></div>}
                       {p.rc_source === "other_league" && <div style={{ marginTop: 2 }}><ForecastBadge p={p} fontSize={8} ml={0} /></div>}
                       {p.rc_partial && <div style={{ marginTop: 2 }}><PartialBadge p={p} fontSize={8} ml={0} /></div>}
                     </div>
-                    <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
-                      <div className="bar" style={{ width: est ? "0%" : `${p.rc}%`, height: "100%", background: est ? C.warn : C.red }} />
+                    <div style={{ height: 7, background: C.panelHi, borderRadius: 4, overflow: "hidden" }}>
+                      <div className="bar" style={{ width: est ? "0%" : `${p.rc}%`, height: "100%", borderRadius: 4,
+                        background: est ? C.warn : `linear-gradient(90deg, ${C.rcLo}, ${tierColor(p.rc)})` }} />
                     </div>
-                    <div style={{ fontSize: 12.5, color: C.steelHi, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <div style={{ fontSize: 13.5, color: C.steelHi, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {ts || <span style={{ color: C.steel }}>—</span>}
                     </div>
-                    <div style={{ textAlign: "center", color: C.steel }}>›</div>
+                    <div style={{ textAlign: "center", color: C.steel, fontSize: 18 }}>›</div>
                   </button>
                 );
               })}
@@ -2241,6 +2261,108 @@ function Tile({ label, val, sub, color = C.bone, hint }) {
 // Dwie drużyny obok siebie (domyślnie Raków vs rywal). Czyta te same policzone profile
 // co „Przeciwnik" (RC per rola, styl per linia, przewidywalność) — ZERO zmian w RC.
 // Raków bierzemy ze składu (raw = rc, bez „b.d."), rywali z puli po aktualnym klubie.
+// ============================ DANE EVENTOWE (Faza 2) ============================
+// Packing, łamanie linii (B1/B2/B3) i strefy przyjęć — z danych eventowych + 360
+// StatsBomb (moduł scripts/fetch_events_statsbomb.py, tryb 'season'). Osobny wymiar
+// taktyczny, świadomie NIE wchodzi do RC. Percentyle liczone vs Ekstraklasa.
+const EV_METRICS = [
+  ["packing", "Packing /90", "Rywale minięci celnym podaniem (z 360) — ile obrońców wyłączono z gry."],
+  ["linebreaks", "Łamanie linii /90", "Ile linii obrony rywala przecina podanie (B1/B2/B3)."],
+  ["recv_final3", "Przyjęcia w tercji /90", "Przyjęcia piłki w ostatniej tercji boiska."],
+  ["recv_box", "Przyjęcia w polu karnym /90", "Przyjęcia w polu karnym rywala."],
+  ["passes_fwd", "Podania do przodu /90", "Celne podania progresujące (do przodu)."],
+];
+function EventsView({ data, photoOf = () => null, setSel, setView }) {
+  const [metric, setMetric] = useState("packing");
+  const [scope, setScope] = useState("rakow");   // rakow | liga
+  const pctColor = (v) => (v == null ? C.steel : v >= 70 ? C.good : v >= 40 ? C.warn : C.bad);
+  const evVal = (p) => (p.ev ? p.ev[metric + "_90"] : null);
+  const evPct = (p) => (p.ev && p.ev.pct ? p.ev.pct[metric] : null);
+
+  const rows = useMemo(() => {
+    const squad = (data.squad || []).filter((s) => s.ev);
+    const pool = (data.pool || []).filter((p) => p.ev && (p.lg || "").startsWith("Ekstraklasa"));
+    const src = scope === "rakow" ? squad : pool;
+    return [...src].sort((a, b) => (evPct(b) ?? -1) - (evPct(a) ?? -1)).slice(0, scope === "rakow" ? 40 : 60);
+  }, [data, scope, metric]);
+
+  if (!(data.meta && data.meta.ev_available)) {
+    return (
+      <div>
+        <Lead>Dane eventowe (Faza 2): packing, łamanie linii B1/B2/B3 i strefy przyjęć — z eventów i danych 360 StatsBomb. Osobny wymiar taktyczny, świadomie <b>nie wchodzi do RC</b> (RC zostaje czysto techniczne).</Lead>
+        <div style={{ marginTop: 16, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11,
+          padding: "14px 16px", fontSize: 13, color: C.steelHi, lineHeight: 1.55, maxWidth: 780 }}>
+          <b style={{ color: C.bone }}>Brak danych eventowych w tym zestawie.</b> Moduł jest gotowy — uruchom <span className="mono">python scripts/fetch_events_statsbomb.py probe</span> (walidacja na jednym meczu), potem <span className="mono">season</span> (pełna Ekstraklasa → CSV), i odśwież pipeline. Metryki pojawią się tutaj automatycznie.
+        </div>
+      </div>
+    );
+  }
+
+  const mDef = EV_METRICS.find((m) => m[0] === metric) || EV_METRICS[0];
+  return (
+    <div>
+      <Lead>Packing, łamanie linii i strefy przyjęć — z eventów i danych 360 StatsBomb. Percentyle względem Ekstraklasy. To wymiar <b>taktyczny/kreacyjny</b>, obok RC — pokazuje, kto realnie przełamuje linie i wchodzi w groźne strefy.</Lead>
+
+      <div style={{ display: "flex", gap: 6, margin: "16px 0 10px", flexWrap: "wrap", alignItems: "center" }}>
+        <span className="mono" style={{ fontSize: 10.5, letterSpacing: 1, color: C.steel, marginRight: 2 }}>ZBIÓR</span>
+        {[["rakow", "Skład Rakowa"], ["liga", "Cała Ekstraklasa"]].map(([k, l]) => (
+          <button key={k} onClick={() => setScope(k)} style={{ background: scope === k ? C.red : "transparent",
+            color: scope === k ? "#fff" : C.steel, border: `1px solid ${scope === k ? C.red : C.line}`,
+            borderRadius: 8, padding: "5px 11px", cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{l}</button>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap", alignItems: "center" }}>
+        <span className="mono" style={{ fontSize: 10.5, letterSpacing: 1, color: C.steel, marginRight: 2 }}>METRYKA</span>
+        {EV_METRICS.map(([k, l]) => (
+          <button key={k} onClick={() => setMetric(k)} style={{ background: metric === k ? C.red : "transparent",
+            color: metric === k ? "#fff" : C.steel, border: `1px solid ${metric === k ? C.red : C.line}`,
+            borderRadius: 8, padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 600 }}>{l.replace(" /90", "")}</button>
+        ))}
+      </div>
+      <div style={{ fontSize: 12, color: C.steel, marginBottom: 10 }}>{mDef[2]} Sortowanie: <b style={{ color: C.steelHi }}>{mDef[1]}</b> (percentyl vs liga).</div>
+
+      {rows.length === 0 ? (
+        <Empty>Brak zawodników z danymi eventowymi w tym zbiorze.</Empty>
+      ) : (
+        <div style={{ display: "grid", gap: 7 }}>
+          {rows.map((p) => {
+            const pct = evPct(p), val = evVal(p);
+            const jump = () => { const s = (data.squad || []).find((x) => x.id === p.id); if (s) { setSel(s); setView("match"); } };
+            return (
+              <div key={p.id} className="rowh" style={{ background: C.panel, border: `1px solid ${C.line}`,
+                borderRadius: 11, padding: "11px 14px", display: "grid",
+                gridTemplateColumns: "1.4fr 1.4fr 0.5fr", gap: 12, alignItems: "center" }}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: C.bone, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {p.name}{p.pos ? <span className="mono" style={{ fontSize: 10.5, color: C.redHi, fontWeight: 700 }}> {p.pos}</span> : null}
+                  </div>
+                  <div style={{ fontSize: 10.5, color: C.steel, marginTop: 2 }}>
+                    {scope === "liga" ? `${p.team_now || p.team || p.lg} · ` : ""}{roleName(p) || ""}{p.ev && p.ev.minutes ? ` · ${Math.round(p.ev.minutes)}′ ev` : ""}
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                  <div style={{ flex: 1, height: 8, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
+                    <div style={{ width: `${pct == null ? 0 : Math.max(3, pct)}%`, height: "100%", background: pctColor(pct) }} />
+                  </div>
+                  <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: pctColor(pct), width: 34, textAlign: "right" }}>
+                    {pct == null ? "—" : `${pct}c`}
+                  </span>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div className="disp" style={{ fontSize: 17, color: C.bone }}>{val == null ? "—" : val.toFixed(1)}</div>
+                  <div style={{ fontSize: 9, color: C.steel }}>/90</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <Note>Źródło: eventy + dane 360 StatsBomb (pozycje wszystkich zawodników w momencie akcji), przeliczone per 90 minut i na percentyl względem Ekstraklasy (np. „82c" = lepszy od 82% ligi). Packing i łamanie linii liczone z realnego ustawienia rywala (nie z przybliżenia). To wymiar <b>kreacji/przełamywania</b> — celowo oddzielony od RC, które zostaje czysto techniczne. Dane pojawiają się po uruchomieniu modułu Faza 2 (season) i odświeżeniu.</Note>
+    </div>
+  );
+}
+
 function CompareView({ data }) {
   const BASE = "Ekstraklasa (PL)";
   const RAKOW = "Raków Częstochowa";
@@ -2820,8 +2942,8 @@ function Splash({ children }) {
 function Stat({ n, l, accent }) {
   return (
     <div>
-      <div className="disp" style={{ fontSize: 30, lineHeight: 0.9, color: accent ? C.redHi : C.bone }}>{n}</div>
-      <div className="mono" style={{ fontSize: 10, color: C.steel, letterSpacing: 1, marginTop: 3 }}>{l}</div>
+      <div className="disp" style={{ fontSize: 32, lineHeight: 0.95, color: accent ? C.club : C.bone }}>{n}</div>
+      <div style={{ fontSize: 11.5, color: C.steel, marginTop: 5, fontWeight: 500 }}>{l}</div>
     </div>
   );
 }
@@ -2885,9 +3007,9 @@ function Empty({ children }) {
 function tierColor(rc) {
   const v = Number(rc);
   if (!Number.isFinite(v)) return C.steel;
-  if (v >= 72) return "#E8C15A";   // złoto
-  if (v >= 58) return "#C7CBD1";   // srebro
-  return "#C58A5A";                // brąz
+  if (v >= 72) return "#0E9E93";   // wysoki RC — morski/cyjan
+  if (v >= 58) return "#2E93B6";   // średni RC — morski
+  return "#5A7C93";                // niższy RC — stalowy błękit (czytelny na jasnym)
 }
 // Znacznik „ocena z danych historycznych" — dla zawodników, których RC policzono
 // z poprzedniego sezonu (brak wystarczającej próbki w bieżącym). Odróżnia realną
@@ -3122,8 +3244,9 @@ function Face({ name, src, size = 44, ring = C.line }) {
   const [broken, setBroken] = useState(false);
   const show = src && !broken;
   return (
-    <div style={{ width: size, height: size, borderRadius: 10, overflow: "hidden", flexShrink: 0,
-      background: `linear-gradient(160deg, ${C.panelHi}, ${C.panel2})`, border: `1.5px solid ${ring}`,
+    <div style={{ width: size, height: size, borderRadius: "50%", overflow: "hidden", flexShrink: 0,
+      background: `linear-gradient(160deg, ${C.panelHi}, ${C.panel2})`, border: `1px solid ${ring}`,
+      boxShadow: "inset 0 0 0 1px rgba(0,0,0,.04)",
       display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
       {show ? (
         <img src={src} alt={name || ""} onError={() => setBroken(true)}
@@ -3462,6 +3585,25 @@ function Crest({ id, size = 18 }) {
     <img src={crestUrl(id)} alt="" width={size} height={size} loading="lazy"
       onError={(e) => { e.currentTarget.style.display = "none"; }}
       style={{ objectFit: "contain", flexShrink: 0, verticalAlign: "middle" }} />
+  );
+}
+// Plakietka rozgrywek (logo z Transfermarktu po kodzie rozgrywki). Jeśli logo się nie
+// załaduje, zostaje kolorowy monogram — plakietka nigdy nie znika.
+function CompChip({ name, code, tint = C.panel2, abbr }) {
+  const [broken, setBroken] = React.useState(false);
+  const url = `https://tmssl.akamaized.net/images/logo/header/${(code || "").toLowerCase()}.png`;
+  return (
+    <span title={name} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 11px 6px 7px",
+      border: `1px solid ${C.line}`, borderRadius: 11, background: C.panel2, fontSize: 12, fontWeight: 560, color: C.steelHi }}>
+      <span style={{ width: 22, height: 22, borderRadius: 6, flexShrink: 0, overflow: "hidden", display: "grid",
+        placeItems: "center", background: broken ? tint : C.panel, boxShadow: "inset 0 0 0 1px rgba(0,0,0,.05)" }}>
+        {broken || !code
+          ? <span style={{ fontSize: 9, fontWeight: 700, color: "#fff" }}>{abbr}</span>
+          : <img src={url} alt="" width={22} height={22} loading="lazy" onError={() => setBroken(true)}
+              style={{ objectFit: "contain" }} />}
+      </span>
+      {name}
+    </span>
   );
 }
 const VERDICT_META = {
