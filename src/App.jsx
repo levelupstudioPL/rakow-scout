@@ -394,9 +394,9 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
-    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
-    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
+    { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
+    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
@@ -529,6 +529,12 @@ export default function App() {
           <div className="cond" style={{ fontSize: 11, letterSpacing: ".14em", color: C.club, fontWeight: 700 }}>{curSection.label}</div>
           <h1 className="disp" style={{ margin: "3px 0 0", fontSize: "clamp(24px, 3vw, 34px)", lineHeight: 1 }}>
             {view === "twin" && "Obecny skład"}
+            {view === "digest" && "Podsumowanie"}
+            {view === "squadprofile" && "Profil kadry"}
+            {view === "contracts" && "Kalendarz kontraktów"}
+            {view === "values" && "Monitoring wartości"}
+            {view === "fixtures" && "Terminarz"}
+            {view === "shortlist" && "Shortlista skauta"}
             {view === "mecze" && "Ostatnie mecze — walidator"}
             {view === "roster" && "Aktualność składu"}
             {view === "match" && "Odpowiednicy z Europy"}
@@ -566,6 +572,12 @@ export default function App() {
 
         <div className="content" style={{ padding: "26px 34px 0", maxWidth: 1180, margin: "0 auto" }}>
           {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
+          {view === "digest" && <DigestView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
+          {view === "squadprofile" && <SquadProfileView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
+          {view === "contracts" && <ContractsView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
+          {view === "values" && <ValuesView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
+          {view === "fixtures" && <FixturesView data={data} oppTeam={oppTeam} setOppTeam={setOppTeam} setView={setView} />}
+          {view === "shortlist" && <ShortlistView {...{ data, fmt, photoOf, wl, setStatus, short, toggleShort, setSel, setView }} />}
           {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
           {view === "roster" && <RosterView data={data} />}
           {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
@@ -3435,9 +3447,13 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
             gap: 12, alignItems: "center", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 13px" }}>
             <span className="disp" style={{ fontSize: 18, color: C.proxy, textAlign: "center" }}>{i + 1}</span>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {c.p.name && c.p.name !== "?" ? c.p.name : c.p.lg}
-              </div>
+              <a href={tmUrl(c.p.name)} target="_blank" rel="noopener noreferrer" title="Otwórz profil w Transfermarkt"
+                style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                  display: "block", color: C.bone, textDecoration: "none" }}
+                onMouseOver={(e) => { e.currentTarget.style.color = C.blueHi; e.currentTarget.style.textDecoration = "underline"; }}
+                onMouseOut={(e) => { e.currentTarget.style.color = C.bone; e.currentTarget.style.textDecoration = "none"; }}>
+                {c.p.name && c.p.name !== "?" ? c.p.name : c.p.lg} <span style={{ fontSize: 9, color: C.steel }}>↗</span>
+              </a>
               <div style={{ fontSize: 10.5, color: C.steel, marginTop: 1 }}>{c.p.lg} · {c.p.age} lat · do {c.p.contract}</div>
             </div>
             <div style={{ textAlign: "center" }}>
@@ -4094,6 +4110,680 @@ function EuropeanHistory({ matches }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// NOWE MODUŁY (bez modelu RC) — kalendarz kontraktów, profil kadry, shortlista,
+// podsumowanie. Wszystko czyta policzone już pola (contract, age, mv, minutes,
+// coherence, profile). Nie dotyka liczenia RC.
+// ============================================================================
+
+// Eksport CSV po stronie klienta (z BOM pod Excel PL).
+function downloadCSV(filename, rows) {
+  const esc = (v) => { const s = String(v == null ? "" : v); return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const csv = "﻿" + rows.map((r) => r.map(esc).join(",")).join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 800);
+}
+function CsvBtn({ onClick, label = "Eksport CSV" }) {
+  return (
+    <button onClick={onClick} className="noprint" style={{ background: C.panel2, color: C.steelHi,
+      border: `1px solid ${C.line}`, borderRadius: 9, padding: "8px 14px", fontSize: 12.5, cursor: "pointer",
+      fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 7, whiteSpace: "nowrap" }}>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>{label}
+    </button>
+  );
+}
+// Rok „bieżącego sezonu" z meta.generated (fallback: rok systemowy).
+function curYearOf(data) {
+  const g = (data && data.meta && data.meta.generated) || "";
+  const m = /(20\d{2})/.exec(g); return m ? +m[1] : new Date().getFullYear();
+}
+const yearsLeftColor = (yl) => (yl == null ? C.steel : yl <= 0 ? C.bad : yl === 1 ? C.warn : yl === 2 ? C.proxy : C.good);
+
+// --------------------------------- KONTRAKTY --------------------------------
+function ContractsView({ data, fmt, setSel, setView }) {
+  const cur = curYearOf(data);
+  const squad = (data.squad || []).filter((p) => p.contract).slice().sort((a, b) => a.contract - b.contract);
+  const noC = (data.squad || []).filter((p) => !p.contract);
+  const expiringNow = squad.filter((p) => p.contract <= cur);
+  const lastYear = squad.filter((p) => p.contract === cur + 1);
+  const avgLeft = squad.length ? (squad.reduce((s, p) => s + (p.contract - cur), 0) / squad.length) : null;
+  const years = [];
+  for (let y = Math.min(cur, squad[0] ? squad[0].contract : cur); y <= (squad.length ? squad[squad.length - 1].contract : cur); y++) years.push(y);
+  const byYear = (y) => squad.filter((p) => p.contract === y);
+  const targets = useMemo(() => { try { return computeExpiring(data, { minLevel: 55 }).slice(0, 14); } catch { return []; } }, [data]);
+  const exportCsv = () => downloadCSV(`rakow-kontrakty.csv`, [
+    ["Zawodnik", "Pozycja", "Rola", "Wiek", "Kontrakt do", "Lata do końca", "Wartość (M€)"],
+    ...squad.map((p) => [p.name, p.pos, roleName(p) || "", p.age || "", p.contract, p.contract - cur, Number(p.mv) || 0]),
+  ]);
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+        <Lead>Kalendarz umów kadry — kto wchodzi w ostatni rok, kto może odejść za darmo i gdzie zrobi się luka. Bazuje na dacie końca kontraktu (bieżący sezon: {cur}/{cur + 1}). Bez modelu RC.</Lead>
+        <CsvBtn onClick={exportCsv} />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 12, margin: "16px 0 8px" }}>
+        <Tile label="Wygasają w tym sezonie" val={expiringNow.length} color={expiringNow.length ? C.bad : C.good} sub={`do ${cur}`} />
+        <Tile label="Ostatni pełny rok" val={lastYear.length} color={lastYear.length ? C.warn : C.good} sub={`do ${cur + 1}`} />
+        <Tile label="Śr. lata do końca" val={avgLeft != null ? avgLeft.toFixed(1) : "—"} color={C.blueHi} />
+        <Tile label="Bez daty kontraktu" val={noC.length} color={C.steel} />
+      </div>
+
+      <SectionLabel>Oś czasu wygaśnięć</SectionLabel>
+      <div style={{ display: "grid", gap: 10 }}>
+        {years.map((y) => {
+          const ps = byYear(y); if (!ps.length) return null;
+          const yl = y - cur;
+          return (
+            <div key={y} style={{ display: "grid", gridTemplateColumns: "72px 1fr", gap: 14, alignItems: "start" }}>
+              <div style={{ textAlign: "right", paddingTop: 8 }}>
+                <div className="disp" style={{ fontSize: 20, color: yearsLeftColor(yl) }}>{y}</div>
+                <div style={{ fontSize: 10.5, color: C.steel }}>{yl <= 0 ? "wygasa" : yl === 1 ? "ostatni rok" : `za ${yl} lata`}</div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, borderLeft: `2px solid ${yearsLeftColor(yl)}`, paddingLeft: 14, paddingBottom: 4 }}>
+                {ps.map((p) => (
+                  <button key={p.id} onClick={() => { setSel(p); setView("match"); }}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8, background: C.panel, border: `1px solid ${C.line}`,
+                      borderRadius: 10, padding: "7px 11px", cursor: "pointer", color: C.bone }}>
+                    <span className="cond" style={{ fontSize: 10, fontWeight: 700, color: "#fff", background: C.blue, borderRadius: 5, padding: "1px 6px" }}>{p.pos}</span>
+                    <b style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</b>
+                    <span style={{ fontSize: 11.5, color: C.steel }}>{p.age ? `${p.age} lat` : ""}</span>
+                    {Number(p.mv) > 0 && <span style={{ fontSize: 11.5, color: C.proxy }}>{fmt(Number(p.mv))}</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {targets.length > 0 && (
+        <>
+          <SectionLabel>Cele na wygaśnięciu (z puli — tani / wolni)</SectionLabel>
+          <div style={{ fontSize: 12, color: C.steel, marginBottom: 8, maxWidth: 760 }}>
+            Kandydaci z lig w puli w ostatnim roku umowy (poziom ≥ 55). Potencjalnie okazyjne wzmocnienia — pełna analiza w „Odpowiednikach".
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 8 }}>
+            {targets.map((t) => (
+              <div key={t.id} style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${t.free ? C.bad : C.warn}`, borderRadius: 10, padding: "10px 12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+                  <b style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.name}</b>
+                  <span className="disp" style={{ fontSize: 15, color: tierColor(t.adj) }}>{t.adj}</span>
+                </div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{t.pos} · {t.lg} · {t.age || "?"} lat</div>
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontSize: 11.5 }}>
+                  <span style={{ color: t.free ? C.bad : C.warn, fontWeight: 600 }}>{t.free ? "wolny (do " + t.contract + ")" : "ostatni rok (" + t.contract + ")"}</span>
+                  <span style={{ color: C.proxy }}>{Number(t.mv) > 0 ? fmt(Number(t.mv)) : "—"}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      <Note>Kontrakt = rok zakończenia umowy (z danych Transfermarkt/Scoutastic). „Wygasa" = kończy się w bieżącym sezonie ({cur}) → możliwy wolny transfer latem. To zestawienie planistyczne — nie dotyka modelu RC.</Note>
+    </div>
+  );
+}
+
+// ------------------------------- PROFIL KADRY -------------------------------
+function SquadProfileView({ data, fmt, setSel, setView }) {
+  const cur = curYearOf(data);
+  const squad = data.squad || [];
+  const real = squad.filter((p) => !p.rc_estimated);
+  const ages = squad.map((p) => p.age).filter((a) => a > 0);
+  const avgAge = ages.length ? (ages.reduce((s, a) => s + a, 0) / ages.length) : null;
+  const AGE_BUCKETS = [["≤ 20", (a) => a <= 20], ["21–23", (a) => a >= 21 && a <= 23], ["24–26", (a) => a >= 24 && a <= 26], ["27–29", (a) => a >= 27 && a <= 29], ["30+", (a) => a >= 30]];
+  const ageDist = AGE_BUCKETS.map(([lab, f]) => ({ lab, n: ages.filter(f).length }));
+  const ageMax = Math.max(1, ...ageDist.map((b) => b.n));
+
+  const ROLES = ["Bramka", "ŚO", "Boczny", "6-8", "Skrzydłowy", "10-9"];
+  const depth = ROLES.map((r) => {
+    const ps = squad.filter((p) => roleKey(p) === r);
+    const realN = ps.filter((p) => !p.rc_estimated).length;
+    return { role: r, label: ROLE_LABEL[r] || r, n: ps.length, realN, thin: ps.length < 2 };
+  });
+
+  const withMin = squad.filter((p) => Number(p.minutes_total) > 0).slice().sort((a, b) => (b.minutes_total || 0) - (a.minutes_total || 0));
+  const minMax = Math.max(1, ...withMin.map((p) => p.minutes_total || 0));
+
+  const feet = { lewa: 0, prawa: 0, "obunożny": 0, brak: 0 };
+  squad.forEach((p) => { const f = p.foot; if (f === "lewa" || f === "prawa" || f === "obunożny") feet[f]++; else feet.brak++; });
+  const heights = squad.map((p) => p.height).filter((h) => h > 0);
+  const avgH = heights.length ? Math.round(heights.reduce((s, h) => s + h, 0) / heights.length) : null;
+
+  const exportCsv = () => downloadCSV("rakow-profil-kadry.csv", [
+    ["Zawodnik", "Pozycja", "Rola", "Wiek", "Wzrost (cm)", "Noga", "Minuty (sezon)", "Kontrakt do", "Wartość (M€)", "RC"],
+    ...squad.map((p) => [p.name, p.pos, roleName(p) || "", p.age || "", p.height || "", p.foot || "", Math.round(p.minutes_total || 0), p.contract || "", Number(p.mv) || 0, p.rc_estimated ? "b.d." : p.rc]),
+  ]);
+
+  const Bar = ({ w, color }) => (
+    <div style={{ height: 9, background: C.panelHi, borderRadius: 5, overflow: "hidden", flex: 1 }}>
+      <div style={{ width: `${Math.max(2, w)}%`, height: "100%", background: color, borderRadius: 5 }} />
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+        <Lead>Struktura kadry na jednym ekranie: wiek, głębokość per rola, obciążenie minutami, profil fizyczny. Do planowania składu i transferów. Bez modelu RC.</Lead>
+        <CsvBtn onClick={exportCsv} />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12, margin: "16px 0 8px" }}>
+        <Tile label="Zawodników" val={squad.length} color={C.bone} />
+        <Tile label="Średni wiek" val={avgAge != null ? avgAge.toFixed(1) : "—"} color={C.blueHi} />
+        <Tile label="Śr. wzrost" val={avgH != null ? `${avgH} cm` : "—"} color={C.blueHi} />
+        <Tile label="Cienkie pozycje" val={depth.filter((d) => d.thin).length} color={depth.some((d) => d.thin) ? C.warn : C.good} hint="Role z mniej niż 2 zawodnikami w kadrze." />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 18, marginTop: 8 }}>
+        <div>
+          <SectionLabel>Piramida wieku</SectionLabel>
+          <div style={{ display: "grid", gap: 8 }}>
+            {ageDist.map((b) => (
+              <div key={b.lab} style={{ display: "grid", gridTemplateColumns: "54px 1fr 28px", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 12.5, color: C.steelHi, textAlign: "right" }}>{b.lab}</span>
+                <Bar w={(b.n / ageMax) * 100} color={C.blue} />
+                <span className="disp" style={{ fontSize: 14, textAlign: "right" }}>{b.n}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <SectionLabel>Głębokość per rola</SectionLabel>
+          <div style={{ display: "grid", gap: 8 }}>
+            {depth.map((d) => (
+              <div key={d.role} style={{ display: "grid", gridTemplateColumns: "120px 1fr 54px", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 12, color: C.steelHi, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.label}</span>
+                <Bar w={(d.n / 8) * 100} color={d.thin ? C.warn : C.rcMid} />
+                <span style={{ fontSize: 12, textAlign: "right", color: d.thin ? C.warn : C.bone }}>
+                  <b className="disp" style={{ fontSize: 14 }}>{d.n}</b><span style={{ color: C.steel }}> ({d.realN})</span>
+                </span>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 10.5, color: C.steel, marginTop: 6 }}>Liczba = wszyscy w roli, w nawiasie z policzonym RC. Bursztyn = cienko (&lt; 2).</div>
+        </div>
+      </div>
+
+      <SectionLabel>Obciążenie minutami (bieżący sezon)</SectionLabel>
+      <div style={{ display: "grid", gap: 6 }}>
+        {withMin.slice(0, 16).map((p) => (
+          <div key={p.id} style={{ display: "grid", gridTemplateColumns: "170px 1fr 96px", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 12.5, color: C.bone, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              <span style={{ color: C.steel }}>{p.pos}</span> {p.name}</span>
+            <Bar w={(p.minutes_total / minMax) * 100} color={C.rcMid} />
+            <span className="mono" style={{ fontSize: 11.5, textAlign: "right", color: C.steelHi }}>
+              {Math.round(p.minutes_total)}′{p.minutes_cup > 0 ? <span style={{ color: C.steel }}> (+{Math.round(p.minutes_cup)} puch.)</span> : null}</span>
+          </div>
+        ))}
+        {!withMin.length && <Empty>Brak danych o minutach w tym zestawie.</Empty>}
+      </div>
+
+      <SectionLabel>Profil fizyczny</SectionLabel>
+      <div style={{ display: "flex", gap: 22, flexWrap: "wrap", fontSize: 13, color: C.steelHi }}>
+        <div><b style={{ color: C.bone }}>Noga:</b> lewa {feet.lewa} · prawa {feet.prawa} · obu {feet["obunożny"]}{feet.brak ? ` · b.d. ${feet.brak}` : ""}</div>
+        <div><b style={{ color: C.bone }}>Średni wzrost:</b> {avgH != null ? `${avgH} cm` : "—"}</div>
+      </div>
+      <Note>Wszystkie metryki liczone z pól już obecnych w danych (wiek, minuty, wzrost, noga, kontrakt). Widok planistyczny — nie zmienia modelu RC.</Note>
+    </div>
+  );
+}
+
+// -------------------------------- SHORTLISTA --------------------------------
+const CMP_COLORS = ["#2456D8", "#E4022B", "#12BEB0", "#B8730A"];
+function ShortlistView({ data, fmt, photoOf = () => null, wl = {}, setStatus = () => {}, short = [], toggleShort = () => {}, setSel, setView }) {
+  const poolById = useMemo(() => { const m = {}; (data.pool || []).forEach((p) => { m[p.id] = p; }); return m; }, [data]);
+  // Shortlista = wszystkie wpisy watchlisty (obserwowani + do sprawdzenia).
+  const items = useMemo(() => Object.keys(wl)
+    .filter((id) => wl[id] && (wl[id].s === "obserwowany" || wl[id].s === "sprawdzic"))
+    .map((id) => ({ id, meta: wl[id], p: poolById[id] || null }))
+    .sort((a, b) => (b.p ? b.p.coherence || 0 : 0) - (a.p ? a.p.coherence || 0 : 0)), [wl, poolById]);
+
+  const [sel, setSelCmp] = useState([]);
+  const toggleCmp = (id) => setSelCmp((s) => s.includes(id) ? s.filter((x) => x !== id) : (s.length >= 4 ? s : [...s, id]));
+  const cmp = sel.map((id) => items.find((it) => it.id === id)).filter((it) => it && it.p);
+
+  const exportCsv = () => downloadCSV("rakow-shortlista.csv", [
+    ["Zawodnik", "Liga", "Pozycja", "Rola", "Wiek", "Kontrakt", "Wartość (M€)", "Koherencja %", "Poziom (surowy)", "Status"],
+    ...items.map(({ meta, p }) => [meta.nm || (p && p.name) || "", p ? p.lg : meta.lg || "", p ? p.pos : meta.pos || "",
+      p ? (roleName(p) || "") : "", p ? p.age || "" : "", p ? p.contract || "" : "", p ? Number(p.mv) || 0 : (meta.mv || 0),
+      p ? Math.round(p.coherence || 0) : "", p ? p.raw || "" : "", meta.s]),
+  ]);
+
+  // Radar stylu (17 osi, profile z-score) dla porównywanych.
+  const Radar = ({ players }) => {
+    const N = STYLE_LABELS.length, R = 92, cx = 130, cy = 118;
+    const withProf = players.filter((it) => Array.isArray(it.p.profile) && it.p.profile.length === N);
+    if (withProf.length < 1) return null;
+    const ang = (i) => (Math.PI * 2 * i) / N - Math.PI / 2;
+    const rad = (z) => Math.max(0, Math.min(1, (Number(z) + 3) / 6)) * R;
+    const pt = (i, r) => [cx + Math.cos(ang(i)) * r, cy + Math.sin(ang(i)) * r];
+    const rings = [0.25, 0.5, 0.75, 1];
+    return (
+      <svg viewBox="0 0 260 236" style={{ width: "100%", maxWidth: 300, display: "block" }}>
+        {rings.map((rr, k) => (
+          <polygon key={k} points={STYLE_LABELS.map((_, i) => pt(i, R * rr).join(",")).join(" ")}
+            fill="none" stroke={C.line} strokeWidth="1" />
+        ))}
+        {STYLE_LABELS.map((_, i) => { const [x, y] = pt(i, R); return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke={C.line} strokeWidth="0.5" />; })}
+        {withProf.map((it, k) => {
+          const col = CMP_COLORS[sel.indexOf(it.id) % CMP_COLORS.length];
+          const pts = it.p.profile.map((z, i) => pt(i, rad(z)).join(",")).join(" ");
+          return <polygon key={it.id} points={pts} fill={col + "22"} stroke={col} strokeWidth="2" />;
+        })}
+      </svg>
+    );
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+        <Lead>Twoja shortlista obserwowanych — zaznacz 2–4, żeby porównać styl (radar), cenę, wiek, kontrakt i koherencję obok siebie. Zawodników dodajesz gwiazdką w „Odpowiednikach", „Okazjach" i „Szukaj".</Lead>
+        {items.length > 0 && <CsvBtn onClick={exportCsv} />}
+      </div>
+
+      {!items.length ? (
+        <Empty>Shortlista jest pusta. Wejdź w „Odpowiednicy" lub „Okazje" i dodaj zawodników gwiazdką (☆) — pojawią się tutaj do porównania.</Empty>
+      ) : (
+        <>
+          {cmp.length >= 1 && (
+            <div style={{ display: "grid", gridTemplateColumns: cmp.length > 2 ? "260px 1fr" : "260px 1fr", gap: 18, alignItems: "start", margin: "14px 0 6px",
+              background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, padding: "16px 18px", boxShadow: "var(--sl-shadow)" }}>
+              <div>
+                <div className="cond" style={{ fontSize: 11, letterSpacing: ".05em", color: C.steel, fontWeight: 640, marginBottom: 8 }}>Profil stylu (z-score vs liga)</div>
+                <Radar players={cmp} />
+                <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 8 }}>
+                  {cmp.map((it) => (
+                    <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12 }}>
+                      <span style={{ width: 11, height: 11, borderRadius: 3, background: CMP_COLORS[sel.indexOf(it.id) % CMP_COLORS.length] }} />
+                      <span style={{ color: C.bone }}>{it.p.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 12.5 }}>
+                  <thead><tr>
+                    <th style={{ textAlign: "left", color: C.steel, fontWeight: 600, padding: "4px 8px" }}>Atrybut</th>
+                    {cmp.map((it) => <th key={it.id} style={{ textAlign: "right", color: C.bone, fontWeight: 600, padding: "4px 8px", whiteSpace: "nowrap" }}>{it.p.name.split(" ").slice(-1)[0]}</th>)}
+                  </tr></thead>
+                  <tbody>
+                    {[["Liga", (p) => p.lg], ["Pozycja", (p) => p.pos + (p.side ? "·" + p.side : "")], ["Rola", (p) => roleName(p) || "—"],
+                      ["Wiek", (p) => p.age ? p.age + " lat" : "—"], ["Kontrakt do", (p) => p.contract || "—"],
+                      ["Wartość", (p) => Number(p.mv) > 0 ? fmt(Number(p.mv)) : "—"], ["Koherencja", (p) => (Math.round(p.coherence || 0)) + "%"],
+                      ["Poziom (surowy)", (p) => p.raw || "—"]].map(([lab, f]) => (
+                      <tr key={lab} style={{ borderTop: `1px solid ${C.line}` }}>
+                        <td style={{ color: C.steelHi, padding: "6px 8px" }}>{lab}</td>
+                        {cmp.map((it) => <td key={it.id} style={{ textAlign: "right", color: C.bone, padding: "6px 8px", whiteSpace: "nowrap" }}>{f(it.p)}</td>)}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <button onClick={() => setSelCmp([])} className="noprint" style={{ marginTop: 10, background: "transparent", color: C.steel, border: `1px solid ${C.line}`, borderRadius: 8, padding: "5px 12px", fontSize: 12, cursor: "pointer" }}>Wyczyść porównanie</button>
+              </div>
+            </div>
+          )}
+
+          <SectionLabel>Shortlista · {items.length}</SectionLabel>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10 }}>
+            {items.map(({ id, meta, p }) => {
+              const on = sel.includes(id);
+              return (
+                <div key={id} style={{ background: on ? C.blueDim : C.panel, border: `1px solid ${on ? C.blue : C.line}`, borderRadius: 12, padding: "12px 13px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <Face name={meta.nm || (p && p.name)} src={p ? photoOf(p.name) : null} size={38} ring={p ? tierColor(p.raw) : C.line} />
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{meta.nm || (p && p.name) || id}</div>
+                      <div style={{ fontSize: 11, color: C.steel }}>{p ? `${p.pos} · ${p.lg}` : (meta.pos ? `${meta.pos} · poza pulą` : "poza pulą")}</div>
+                    </div>
+                    {meta.s === "sprawdzic" && <span className="mono" style={{ fontSize: 9, color: C.warn, border: `1px solid ${C.warn}66`, borderRadius: 4, padding: "1px 4px" }}>sprawdź</span>}
+                  </div>
+                  {p && (
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontSize: 11.5, color: C.steelHi }}>
+                      <span>{p.age || "?"} lat · do {p.contract || "?"}</span>
+                      <span><b style={{ color: cohShort(p.coherence) }}>{Math.round(p.coherence || 0)}%</b> koh.</span>
+                      <span style={{ color: C.proxy }}>{Number(p.mv) > 0 ? fmt(Number(p.mv)) : "—"}</span>
+                    </div>
+                  )}
+                  <div style={{ display: "flex", gap: 6, marginTop: 10 }} className="noprint">
+                    <button onClick={() => toggleCmp(id)} disabled={!p} title={p ? "" : "Poza aktualną pulą — brak profilu do porównania"}
+                      style={{ flex: 1, background: on ? C.blue : "transparent", color: on ? "#fff" : (p ? C.blue : C.steel), border: `1px solid ${p ? C.blue : C.line}`,
+                        borderRadius: 8, padding: "5px 8px", fontSize: 11.5, cursor: p ? "pointer" : "not-allowed", fontWeight: 600 }}>
+                      {on ? "✓ w porównaniu" : "porównaj"}
+                    </button>
+                    {p && <button onClick={() => { setSel(p); setView("match"); }} style={{ background: "transparent", color: C.steelHi, border: `1px solid ${C.line}`, borderRadius: 8, padding: "5px 9px", fontSize: 11.5, cursor: "pointer" }}>odp. →</button>}
+                    <button onClick={() => setStatus({ id }, null)} title="Usuń z shortlisty" style={{ background: "transparent", color: C.steel, border: `1px solid ${C.line}`, borderRadius: 8, padding: "5px 9px", fontSize: 11.5, cursor: "pointer" }}>✕</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+      <Note>Shortlista = obserwowani z watchlisty (zapis lokalny w przeglądarce). „Poza pulą" = zawodnik wypadł z bieżących danych, więc chwilowo bez profilu do porównania. Radar to styl (profile z-score vs liga), nie jakość — RC bez zmian.</Note>
+    </div>
+  );
+}
+function cohShort(c) { const v = Number(c) || 0; return v > 70 ? C.good : v > 45 ? C.warn : C.bad; }
+
+// -------------------------------- PODSUMOWANIE ------------------------------
+function DigestView({ data, fmt, setSel, setView }) {
+  const cur = curYearOf(data);
+  const squad = data.squad || [];
+  const expiring = squad.filter((p) => p.contract && p.contract <= cur + 1).sort((a, b) => a.contract - b.contract);
+  const okazje = useMemo(() => { try { return computeOkazje(data, { minLevel: 60 }).slice(0, 6); } catch { return []; } }, [data]);
+  const flags = useMemo(() => { try { return computeRedFlags(data); } catch { return { players: [], counts: {} }; } }, [data]);
+  const ROLES = ["Bramka", "ŚO", "Boczny", "6-8", "Skrzydłowy", "10-9"];
+  const thin = ROLES.map((r) => ({ role: r, label: ROLE_LABEL[r] || r, n: squad.filter((p) => roleKey(p) === r).length })).filter((d) => d.n < 2);
+  const sqVal = squad.reduce((s, p) => s + (Number(p.mv) || 0), 0);
+  const ages = squad.map((p) => p.age).filter((a) => a > 0);
+  const avgAge = ages.length ? (ages.reduce((s, a) => s + a, 0) / ages.length).toFixed(1) : "—";
+
+  const Card = ({ title, accent, count, view, children }) => (
+    <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderTop: `3px solid ${accent}`, borderRadius: 14, padding: "15px 17px", display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 10 }}>
+        <b style={{ fontSize: 15, color: C.bone }}>{title}</b>
+        {count != null && <span className="disp" style={{ fontSize: 22, color: accent }}>{count}</span>}
+      </div>
+      <div style={{ flex: 1 }}>{children}</div>
+      {view && <button onClick={() => setView(view)} className="noprint" style={{ marginTop: 12, alignSelf: "flex-start", background: "transparent", color: C.blue, border: `1px solid ${C.blue}44`, borderRadius: 8, padding: "5px 12px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>Otwórz →</button>}
+    </div>
+  );
+  const Row = ({ left, right, rc, onClick }) => (
+    <button onClick={onClick} disabled={!onClick} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, width: "100%",
+      background: "transparent", border: "none", borderTop: `1px solid ${C.line}`, padding: "7px 0", cursor: onClick ? "pointer" : "default", textAlign: "left", color: C.bone }}>
+      <span style={{ fontSize: 12.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{left}</span>
+      <span style={{ fontSize: 12, color: C.steel, whiteSpace: "nowrap", flexShrink: 0 }}>{right}</span>
+    </button>
+  );
+
+  return (
+    <div>
+      <Lead>Szybki przegląd stanu na dziś — co wymaga uwagi po stronie kadry i rynku. Wszystko liczone z bieżących danych; klik przenosi do modułu. Bez modelu RC.</Lead>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12, margin: "16px 0 14px" }}>
+        <Tile label="Wartość kadry" val={fmt(sqVal)} color={C.proxy} />
+        <Tile label="Średni wiek" val={avgAge} color={C.blueHi} />
+        <Tile label="Wygasające umowy" val={expiring.length} color={expiring.length ? C.warn : C.good} sub={`do ${cur + 1}`} />
+        <Tile label="Czerwone flagi" val={(flags.players || []).length} color={(flags.players || []).length ? C.bad : C.good} />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 14 }}>
+        <Card title="Wygasające kontrakty" accent={C.warn} count={expiring.length} view="contracts">
+          {expiring.length ? expiring.slice(0, 6).map((p) => (
+            <Row key={p.id} left={<><span style={{ color: C.steel }}>{p.pos}</span> {p.name}</>} right={`do ${p.contract}`} onClick={() => { setSel(p); setView("match"); }} />
+          )) : <div style={{ fontSize: 12.5, color: C.steel }}>Brak umów w ostatnim roku — spokojnie.</div>}
+        </Card>
+
+        <Card title="Najlepsze okazje" accent={C.good} count={okazje.length} view="okazje">
+          {okazje.length ? okazje.map((o) => (
+            <Row key={o.id} left={<><span style={{ color: C.steel }}>{o.pos}</span> {o.name}</>} right={`+${o.okazja} · ${Number(o.mv) > 0 ? fmt(Number(o.mv)) : "—"}`} onClick={() => { const p = (data.pool || []).find((x) => x.id === o.id); if (p) { setSel(p); setView("match"); } }} />
+          )) : <div style={{ fontSize: 12.5, color: C.steel }}>Brak wycen — okazje pojawią się po odświeżeniu cen.</div>}
+        </Card>
+
+        <Card title="Czerwone flagi" accent={C.bad} count={(flags.players || []).length} view="flags">
+          {(flags.players || []).length ? flags.players.slice(0, 6).map((p) => (
+            <Row key={p.id} left={<><span style={{ color: C.steel }}>{p.pos}</span> {p.name}</>} right={p.flags.map((f) => f.label.split(" ")[0]).slice(0, 2).join(", ")} onClick={() => { const s = squad.find((x) => x.id === p.id); if (s) { setSel(s); setView("match"); } }} />
+          )) : <div style={{ fontSize: 12.5, color: C.steel }}>Brak flag — kadra bez sygnałów ryzyka.</div>}
+        </Card>
+
+        <Card title="Cienkie pozycje" accent={C.warn} count={thin.length} view="squadprofile">
+          {thin.length ? thin.map((d) => (
+            <Row key={d.role} left={d.label} right={`${d.n} zaw.`} />
+          )) : <div style={{ fontSize: 12.5, color: C.steel }}>Każda rola ma co najmniej 2 zawodników.</div>}
+        </Card>
+      </div>
+      <Note>Podsumowanie zbiera sygnały z modułów Kontrakty, Okazje, Czerwone flagi i Profil kadry — bez zmian w modelu RC. Do cyklicznego digestu (np. co tydzień) można podpiąć zaplanowane zadanie.</Note>
+    </div>
+  );
+}
+
+// ------------------------- MONITORING WARTOŚCI (w czasie) -------------------
+// Czyta public/value_history.json (migawki {data, values:{id:mv}}) zapisywane
+// przez scripts/archive_values.py po każdym odświeżeniu. Pokazuje trend wartości
+// kadry i największych rosnących/spadających. Bez modelu RC — sama wycena (mv).
+function ValuesView({ data, fmt, setSel, setView }) {
+  const [hist, setHist] = useState(undefined);   // undefined=ładowanie, null=brak pliku
+  useEffect(() => {
+    let ok = true;
+    fetch("value_history.json").then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (ok) setHist(j && Array.isArray(j.snapshots) ? j.snapshots : null); })
+      .catch(() => { if (ok) setHist(null); });
+    return () => { ok = false; };
+  }, []);
+  const [scope, setScope] = useState("kadra");   // kadra | pula
+
+  const idMap = useMemo(() => {
+    const m = {};
+    (data.squad || []).forEach((p) => { m[p.id] = { name: p.name, pos: p.pos, lg: "Raków", squad: true }; });
+    (data.pool || []).forEach((p) => { if (!m[p.id]) m[p.id] = { name: p.name, pos: p.pos, lg: p.lg, squad: false }; });
+    return m;
+  }, [data]);
+
+  const snaps = useMemo(() => (hist || []).slice().sort((a, b) => (a.date || "").localeCompare(b.date || "")), [hist]);
+  const enough = snaps.length >= 2;
+  const first = snaps[0], last = snaps[snaps.length - 1];
+
+  const squadTrend = useMemo(() => snaps.map((s) => {
+    let sum = 0; (data.squad || []).forEach((p) => { const v = s.values[p.id]; if (v > 0) sum += v; });
+    return { date: s.date, sum: Math.round(sum * 10) / 10 };
+  }), [snaps, data]);
+
+  const changes = useMemo(() => {
+    if (!enough) return [];
+    const out = [];
+    const wantSquad = scope === "kadra";
+    Object.keys(last.values).forEach((id) => {
+      const meta = idMap[id]; if (!meta) return;
+      if (wantSquad && !meta.squad) return;
+      if (!wantSquad && meta.squad) return;
+      const now = last.values[id]; const base = first.values[id];
+      if (!(now > 0) || !(base > 0)) return;
+      const delta = Math.round((now - base) * 100) / 100;
+      if (delta === 0) return;
+      out.push({ id, ...meta, now, base, delta, pct: base ? delta / base : 0 });
+    });
+    out.sort((a, b) => b.delta - a.delta);
+    return out;
+  }, [enough, last, first, idMap, scope]);
+
+  const risers = changes.filter((c) => c.delta > 0).slice(0, 10);
+  const fallers = changes.filter((c) => c.delta < 0).slice(-10).reverse();
+  const jump = (id) => { const p = (data.pool || []).find((x) => x.id === id) || (data.squad || []).find((x) => x.id === id); if (p) { setSel(p); setView("match"); } };
+
+  const Spark = ({ pts, color }) => {
+    if (pts.length < 2) return null;
+    const w = 260, h = 46, pad = 4;
+    const xs = pts.map((_, i) => pad + (i * (w - 2 * pad)) / (pts.length - 1));
+    const mn = Math.min(...pts), mx = Math.max(...pts), rng = (mx - mn) || 1;
+    const ys = pts.map((v) => h - pad - ((v - mn) / rng) * (h - 2 * pad));
+    const dpath = xs.map((x, i) => `${i ? "L" : "M"}${x.toFixed(1)},${ys[i].toFixed(1)}`).join(" ");
+    return (
+      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ width: "100%", height: 46, display: "block" }}>
+        <path d={dpath} fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx={xs[xs.length - 1]} cy={ys[ys.length - 1]} r="3.4" fill={C.rcHi} />
+      </svg>
+    );
+  };
+  const Row = ({ c }) => (
+    <button onClick={() => jump(c.id)} style={{ display: "grid", gridTemplateColumns: "1fr 74px 66px", alignItems: "center", gap: 8, width: "100%",
+      background: "transparent", border: "none", borderTop: `1px solid ${C.line}`, padding: "8px 0", cursor: "pointer", textAlign: "left", color: C.bone }}>
+      <span style={{ fontSize: 12.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <span style={{ color: C.steel }}>{c.pos}</span> {c.name}{!c.squad && <span style={{ color: C.steel, fontSize: 10.5 }}> · {c.lg}</span>}</span>
+      <span className="mono" style={{ fontSize: 12, textAlign: "right", color: c.delta >= 0 ? C.good : C.bad, fontWeight: 600 }}>
+        {c.delta >= 0 ? "+" : ""}{fmt(Math.abs(c.delta)).replace("€", c.delta < 0 ? "−€" : "€")}</span>
+      <span className="mono" style={{ fontSize: 11, textAlign: "right", color: C.steel }}>{c.base > 0 ? `${c.pct >= 0 ? "+" : ""}${Math.round(c.pct * 100)}%` : ""}</span>
+    </button>
+  );
+
+  return (
+    <div>
+      <Lead>Jak zmienia się wartość rynkowa (Transfermarkt) w czasie — trend wartości kadry oraz najwięksi rosnący i spadający między migawkami. Historia zbiera się z każdym odświeżeniem cen. Bez modelu RC.</Lead>
+
+      {hist === undefined ? (
+        <div style={{ marginTop: 16, color: C.steel, fontSize: 13 }}>Ładowanie historii…</div>
+      ) : !enough ? (
+        <div style={{ marginTop: 16, display: "flex", alignItems: "flex-start", gap: 10, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", fontSize: 13, color: C.steelHi, lineHeight: 1.55, maxWidth: 820 }}>
+          <span style={{ color: C.blueHi, fontSize: 15, flexShrink: 0 }}>ℹ</span>
+          <span><b style={{ color: C.bone }}>Gromadzimy historię wycen.</b> Mamy {snaps.length} {snaps.length === 1 ? "migawkę" : "migawki"} — trend i ranking zmian pojawią się po kolejnym odświeżeniu cen. Snapshoty dopisuje <span className="mono">scripts/archive_values.py</span> po każdym buildzie danych.</span>
+        </div>
+      ) : (
+        <>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 12, margin: "16px 0 8px" }}>
+            <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 14, padding: "14px 16px" }}>
+              <div style={{ fontSize: 12, color: C.steel, fontWeight: 560, marginBottom: 8 }}>Wartość kadry — trend</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                <span className="disp" style={{ fontSize: 26, color: C.proxy }}>{fmt(squadTrend[squadTrend.length - 1].sum)}</span>
+                {(() => { const d = squadTrend[squadTrend.length - 1].sum - squadTrend[0].sum; return <span className="mono" style={{ fontSize: 12.5, color: d >= 0 ? C.good : C.bad, fontWeight: 600 }}>{d >= 0 ? "+" : "−"}{fmt(Math.abs(d))}</span>; })()}
+              </div>
+              <Spark pts={squadTrend.map((s) => s.sum)} color={C.proxy} />
+            </div>
+            <Tile label="Rosnący (kadra)" val={changes.filter((c) => c.squad && c.delta > 0).length} color={C.good} />
+            <Tile label="Spadający (kadra)" val={changes.filter((c) => c.squad && c.delta < 0).length} color={C.bad} />
+            <Tile label="Okno" val={`${snaps.length} migawek`} color={C.blueHi} sub={`${first.date} → ${last.date}`} />
+          </div>
+
+          <div style={{ display: "flex", gap: 7, margin: "10px 0 4px" }}>
+            {[["kadra", "Kadra"], ["pula", "Cała pula"]].map(([k, l]) => (
+              <button key={k} onClick={() => setScope(k)} style={{ background: scope === k ? C.blue : "transparent", color: scope === k ? "#fff" : C.steel,
+                border: `1px solid ${scope === k ? C.blue : C.line}`, borderRadius: 8, padding: "5px 12px", fontSize: 12.5, cursor: "pointer", fontWeight: 600 }}>{l}</button>
+            ))}
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 18, marginTop: 6 }}>
+            <div>
+              <SectionLabel>Najwięksi rosnący ▲</SectionLabel>
+              {risers.length ? risers.map((c) => <Row key={c.id} c={c} />) : <Empty>Brak wzrostów w tym oknie.</Empty>}
+            </div>
+            <div>
+              <SectionLabel>Najwięksi spadający ▼</SectionLabel>
+              {fallers.length ? fallers.map((c) => <Row key={c.id} c={c} />) : <Empty>Brak spadków w tym oknie.</Empty>}
+            </div>
+          </div>
+        </>
+      )}
+      <Note>Wartości z Transfermarkt (przez Scoutastic), zapisywane jako migawki po każdym odświeżeniu. Zmiana liczona między najstarszą a najnowszą migawką w oknie. To śledzenie ceny rynkowej — nie dotyka modelu RC.</Note>
+    </div>
+  );
+}
+
+// ------------------------------- TERMINARZ ----------------------------------
+// Czyta public/fixtures.json (lista meczów). Dopasowuje nazwę rywala do drużyn
+// z danych (rozmyte), pokazuje herb i przycisk do analizy/rekomendacji pod tego
+// rywala. Zawsze dostępny „szybki wybór rywala", nawet bez wypełnionego terminarza.
+function _normTeam(s) {
+  return String(s || "").toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/\b(rks|ks|mks|gks|ks\.|sa|s\.a\.|fc|sc)\b/g, " ")
+    .replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+}
+function FixturesView({ data, oppTeam, setOppTeam, setView }) {
+  const [fx, setFx] = useState(undefined);
+  useEffect(() => {
+    let ok = true;
+    fetch("fixtures.json").then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (ok) setFx(j || null); })
+      .catch(() => { if (ok) setFx(null); });
+    return () => { ok = false; };
+  }, []);
+  const isRakow = (t) => /^\s*rak[oó]w\b/i.test(t || "");
+  const teams = useMemo(() => {
+    const crests = (data.meta && data.meta.ekstra_crests) || {};
+    return Object.keys(crests).filter((t) => t && !isRakow(t)).sort((a, b) => a.localeCompare(b));
+  }, [data]);
+  const crestOf = (t) => (data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[t] : null);
+  // Rozmyte dopasowanie nazwy rywala z terminarza do drużyny z danych.
+  const matchTeam = useMemo(() => {
+    const idx = teams.map((t) => ({ t, toks: new Set(_normTeam(t).split(" ").filter(Boolean)) }));
+    return (opp) => {
+      const q = _normTeam(opp); if (!q) return null;
+      const qt = new Set(q.split(" ").filter(Boolean));
+      let best = null, bestScore = 0;
+      for (const { t, toks } of idx) {
+        let inter = 0; qt.forEach((x) => { if (toks.has(x)) inter++; });
+        const score = inter / Math.max(1, Math.min(qt.size, toks.size));
+        if (score > bestScore) { bestScore = score; best = t; }
+      }
+      return bestScore >= 0.5 ? best : null;
+    };
+  }, [teams]);
+
+  const pickOpp = (team) => { if (team) { setOppTeam(team); setView("opponent"); } };
+
+  const today = new Date().toISOString().slice(0, 10);
+  const fixtures = (fx && Array.isArray(fx.fixtures)) ? fx.fixtures.slice() : [];
+  const parsed = fixtures.map((m) => ({ ...m, team: matchTeam(m.opp) })).sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+  const upcoming = parsed.filter((m) => !m.date || m.date >= today);
+  const past = parsed.filter((m) => m.date && m.date < today).reverse();
+
+  const FxRow = ({ m, next }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, background: next ? `${C.blue}12` : C.panel,
+      border: `1px solid ${next ? C.blueHi + "55" : C.line}`, borderRadius: 12, padding: "12px 15px" }}>
+      <div style={{ minWidth: 96 }}>
+        <div className="mono" style={{ fontSize: 12.5, color: C.bone }}>{m.date || "—"}</div>
+        <div style={{ fontSize: 10.5, color: C.steel }}>{m.comp || "Ekstraklasa"}</div>
+      </div>
+      <span className="cond" style={{ fontSize: 10, fontWeight: 700, color: m.home ? C.good : C.steelHi,
+        border: `1px solid ${m.home ? C.good + "66" : C.line}`, borderRadius: 5, padding: "2px 7px", flexShrink: 0 }}>{m.home ? "DOM" : "WYJAZD"}</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
+        {m.team && crestOf(m.team) ? <Crest id={crestOf(m.team)} size={22} /> : null}
+        <b style={{ fontSize: 14, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{m.team || m.opp}</b>
+        {!m.team && <span style={{ fontSize: 10.5, color: C.warn }}>(brak dopasowania)</span>}
+      </div>
+      {m.team ? (
+        <button onClick={() => pickOpp(m.team)} style={{ flexShrink: 0, background: next ? C.blue : "transparent", color: next ? "#fff" : C.blue,
+          border: `1px solid ${C.blue}${next ? "" : "66"}`, borderRadius: 8, padding: "6px 13px", fontSize: 12.5, cursor: "pointer", fontWeight: 600 }}>
+          {next ? "Rekomendacje →" : "Analiza →"}
+        </button>
+      ) : null}
+    </div>
+  );
+
+  return (
+    <div>
+      <Lead>Terminarz Rakowa spięty z modułem rekomendacji — klik przy meczu ustawia rywala i przenosi do analizy pod ten skład. Bez terminarza działa „szybki wybór rywala" niżej. Bez modelu RC.</Lead>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "16px 0 6px", flexWrap: "wrap",
+        background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 15px" }}>
+        <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>SZYBKI WYBÓR RYWALA</span>
+        <select value={teams.includes(oppTeam) ? oppTeam : ""} onChange={(e) => pickOpp(e.target.value)}
+          style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 8, padding: "8px 12px", fontSize: 13, minWidth: 220 }}>
+          <option value="">— wybierz drużynę —</option>
+          {teams.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
+        <span style={{ fontSize: 12, color: C.steel }}>→ przenosi do analizy i rekomendacji pod skład</span>
+      </div>
+
+      {fx === undefined ? (
+        <div style={{ marginTop: 16, color: C.steel, fontSize: 13 }}>Ładowanie terminarza…</div>
+      ) : upcoming.length ? (
+        <>
+          <SectionLabel>Najbliższe mecze</SectionLabel>
+          <div style={{ display: "grid", gap: 8 }}>
+            {upcoming.map((m, i) => <FxRow key={i} m={m} next={i === 0} />)}
+          </div>
+          {past.length > 0 && (
+            <>
+              <SectionLabel>Rozegrane</SectionLabel>
+              <div style={{ display: "grid", gap: 8, opacity: 0.75 }}>
+                {past.slice(0, 6).map((m, i) => <FxRow key={i} m={m} next={false} />)}
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <div style={{ marginTop: 16, display: "flex", alignItems: "flex-start", gap: 10, background: C.panel, border: `1px dashed ${C.line2}`, borderRadius: 12, padding: "14px 16px", fontSize: 13, color: C.steelHi, lineHeight: 1.6, maxWidth: 860 }}>
+          <span style={{ color: C.blueHi, fontSize: 15, flexShrink: 0 }}>ℹ</span>
+          <span><b style={{ color: C.bone }}>Terminarz jest pusty.</b> Uzupełnij <span className="mono">public/fixtures.json</span> — tablica <span className="mono">fixtures</span>, każdy wpis: <span className="mono">{"{ \"date\":\"2026-09-14\", \"opp\":\"Cracovia\", \"home\":true, \"comp\":\"Ekstraklasa\" }"}</span>. Nazwa rywala dopasuje się rozmyta do drużyn z danych (herb dołączy automatycznie). Można podpiąć automat nadpisujący ten plik. Do czasu uzupełnienia korzystaj z „szybkiego wyboru rywala" powyżej.</span>
+        </div>
+      )}
+      <Note>Terminarz czytany z public/fixtures.json. Dopasowanie nazwy rywala do drużyn z danych jest rozmyte (tokeny nazwy); gdy się nie uda, pokazujemy „brak dopasowania" — popraw nazwę w pliku. Ten moduł tylko wybiera rywala do analizy — nie dotyka modelu RC.</Note>
     </div>
   );
 }
