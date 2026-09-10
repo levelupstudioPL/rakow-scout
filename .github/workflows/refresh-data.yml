@@ -40,16 +40,18 @@ jobs:
           TM_ENRICH_TOP: ${{ github.event.inputs.tm_top }}
         run: python scripts/fetch_statsbomb.py
  
+      - name: Zarchiwizuj wyceny (historia wartości)
+        run: python scripts/archive_values.py
+
       - name: Zapisz zmiany
         run: |
-          if git diff --quiet -- public/data.json; then
-            echo "Brak zmian w data.json."
+          git add public/data.json public/value_history.json
+          if git diff --cached --quiet; then
+            echo "Brak zmian w data.json / value_history.json."
           else
             git config user.name "rakow-scout-bot"
             git config user.email "actions@github.com"
-            git add public/data.json
-            git commit -m "Odswiezenie danych ze StatsBomb [auto]"
+            git commit -m "Odswiezenie danych ze StatsBomb + migawka wycen [auto]"
             git pull --rebase origin main
             git push
           fi
- 
