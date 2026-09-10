@@ -1,0 +1,6 @@
+{
+  "team": "Raków Częstochowa",
+  "updated": "",
+  "note": "Uzupełnij tablicę 'fixtures' meczami. Format wpisu: {\"date\":\"2026-09-14\",\"opp\":\"Cracovia\",\"home\":true,\"comp\":\"Ekstraklasa\"}. 'opp' = nazwa rywala (dopasuje się rozmyta do drużyn z danych), 'home' = true/false, 'comp' opcjonalne. Można to podpiąć pod automat (skrypt pobierający terminarz) i nadpisywać ten plik.",
+  "fixtures": []
+}
