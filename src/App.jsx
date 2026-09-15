@@ -145,6 +145,17 @@ const STYLE_LABELS = [
   "Śr. długość podania", "Zaangażowanie z piłką",
 ];
 
+// ============================ LOGOWANIE / OCENY ============================
+// Wspólne hasło do aplikacji (NAMIASTKA — kod jest w bundlu, więc to miękka bramka,
+// nie realna ochrona; dane chroni dopiero hasło na poziomie Netlify). ZMIEŃ na własne.
+const ACCESS_CODE = "rakow2026";
+const AUTH_KEY = "rk_auth_v1";
+const EVAL_KEY = "rk_eval_v1";
+// Lista sztabu do podpisania ocen. Uzupełnij/popraw wg realnych trenerów.
+const STAFF = [
+  "Igor Rybiński", "Robert Chwastek", "Marek", "Filip", "Michał Dziwniel",
+];
+
 // Formacja 3-4-3. Kolejność = priorytet obsadzania (najpierw najwęższe pule:
 // bramka, środek obrony, napastnik). x/y = pozycja na boisku w % (y: 0=góra/atak).
 const FORMATION_343 = [
@@ -175,6 +186,15 @@ export default function App() {
     try { localStorage.setItem("rk_theme", nt); } catch {}
     return nt;
   });
+  // Logowanie: wspólne hasło (namiastka bramki) + podpis nazwiskiem trenera.
+  // Sesja per przeglądarka. Realną ochronę danych daje hasło na poziomie Netlify.
+  const [auth, setAuth] = useState(() => {
+    try { const j = JSON.parse(localStorage.getItem(AUTH_KEY) || "null"); return (j && j.ok && j.evaluator) ? j : null; }
+    catch { return null; }
+  });
+  const doLogin = (evaluator) => { const a = { ok: true, evaluator, ts: Date.now() };
+    try { localStorage.setItem(AUTH_KEY, JSON.stringify(a)); } catch {} setAuth(a); };
+  const doLogout = () => { try { localStorage.removeItem(AUTH_KEY); } catch {} setAuth(null); };
   const [err, setErr] = useState(null);
   const [view, setView] = useState("twin");
   const [sel, setSel] = useState(null);
@@ -383,6 +403,8 @@ export default function App() {
   // cały interfejs; idempotentne, więc bezpieczne w ciele renderu).
   applyTheme(theme);
 
+  if (!auth) return <LoginGate theme={theme} toggleTheme={toggleTheme} onLogin={doLogin} />;
+
   if (err && !data) return <Splash>{err}</Splash>;
   if (!data) return <Splash>Wczytywanie…</Splash>;
 
@@ -394,7 +416,7 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
@@ -495,11 +517,11 @@ export default function App() {
                 const on = view === k;
                 return (
                   <button key={k} className="navq" onClick={() => { setView(k); setNavOpen(false); }} style={{
-                    display: "flex", alignItems: "center", width: "100%", textAlign: "left",
+                    display: "flex", alignItems: "center", gap: 11, width: "100%", textAlign: "left",
                     background: on ? C.blueDim : "transparent", color: on ? C.blue : C.steelHi,
-                    border: "none", padding: "11px 13px", borderRadius: 13, cursor: "pointer",
+                    border: "none", padding: "10px 13px", borderRadius: 13, cursor: "pointer",
                     fontSize: 15, fontWeight: on ? 600 : 500 }}>
-                    {label}
+                    <NavIcon k={k} /><span>{label}</span>
                   </button>
                 );
               })}
@@ -517,6 +539,14 @@ export default function App() {
           <span className="mono" style={{ fontSize: 10, letterSpacing: 1 }}>{isLive
             ? <span style={{ color: C.good }}>● live</span>
             : <span style={{ color: C.proxy }}>● snapshot (zapis)</span>}</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, paddingTop: 4, borderTop: `1px solid ${C.line}` }}>
+            <span style={{ fontSize: 11.5, color: C.steelHi, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+              title={`Zalogowany: ${auth.evaluator}`}>
+              <span style={{ color: C.steel }}>Zalogowany:</span> {auth.evaluator}
+            </span>
+            <button onClick={doLogout} title="Wyloguj" style={{ flexShrink: 0, background: "transparent", color: C.steel,
+              border: `1px solid ${C.line}`, borderRadius: 8, padding: "3px 9px", fontSize: 11, cursor: "pointer" }}>Wyloguj</button>
+          </div>
         </div>
       </aside>
 
@@ -533,6 +563,7 @@ export default function App() {
             {view === "squadprofile" && "Profil kadry"}
             {view === "contracts" && "Kalendarz kontraktów"}
             {view === "values" && "Monitoring wartości"}
+            {view === "eval" && "Ocena trenera"}
             {view === "fixtures" && "Terminarz"}
             {view === "shortlist" && "Shortlista skauta"}
             {view === "mecze" && "Ostatnie mecze — walidator"}
@@ -576,6 +607,7 @@ export default function App() {
           {view === "squadprofile" && <SquadProfileView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "contracts" && <ContractsView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "values" && <ValuesView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
+          {view === "eval" && <EvalView data={data} evaluator={auth.evaluator} />}
           {view === "fixtures" && <FixturesView data={data} oppTeam={oppTeam} setOppTeam={setOppTeam} setView={setView} />}
           {view === "shortlist" && <ShortlistView {...{ data, fmt, photoOf, wl, setStatus, short, toggleShort, setSel, setView }} />}
           {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
@@ -4785,5 +4817,214 @@ function FixturesView({ data, oppTeam, setOppTeam, setView }) {
       )}
       <Note>Terminarz czytany z public/fixtures.json. Dopasowanie nazwy rywala do drużyn z danych jest rozmyte (tokeny nazwy); gdy się nie uda, pokazujemy „brak dopasowania" — popraw nazwę w pliku. Ten moduł tylko wybiera rywala do analizy — nie dotyka modelu RC.</Note>
     </div>
+  );
+}
+
+// ============================ LOGOWANIE (ekran) ============================
+function LoginGate({ theme, toggleTheme, onLogin }) {
+  const [code, setCode] = useState("");
+  const [who, setWho] = useState("");
+  const [custom, setCustom] = useState("");
+  const [err, setErr] = useState("");
+  const submit = (e) => {
+    if (e) e.preventDefault();
+    const name = who === "__inny__" ? custom.trim() : who;
+    if (code !== ACCESS_CODE) { setErr("Nieprawidłowe hasło."); return; }
+    if (!name) { setErr("Wybierz lub wpisz swoje nazwisko."); return; }
+    onLogin(name);
+  };
+  return (
+    <div style={{ minHeight: "100vh", background: C.ink, color: C.bone, display: "grid", placeItems: "center", padding: 20,
+      fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif",
+      colorScheme: theme === "dark" ? "dark" : "light" }}>
+      <div className="noprint" style={{ position: "fixed", top: 18, right: 20 }}>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+      </div>
+      <form onSubmit={submit} style={{ width: "100%", maxWidth: 380, background: C.panel, border: `1px solid ${C.line}`,
+        borderRadius: 20, padding: "30px 28px", boxShadow: "0 1px 3px rgba(20,20,50,.06),0 24px 60px -24px rgba(20,30,80,.35)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
+          <img src="/logo-rakow.webp" alt="Raków" style={{ width: 38, height: 45, objectFit: "contain" }} />
+          <div>
+            <div className="disp" style={{ fontSize: 22, fontWeight: 640, lineHeight: 1 }}>Raków Scout</div>
+            <div style={{ fontSize: 12.5, color: C.steel, marginTop: 3 }}>Logowanie</div>
+          </div>
+        </div>
+        <div style={{ fontSize: 12.5, color: C.steelHi, margin: "14px 0 18px", lineHeight: 1.5 }}>
+          Wpisz hasło dostępu i wybierz swoje nazwisko — będzie podpisywać Twoje oceny.
+        </div>
+        <label style={{ display: "block", fontSize: 12, color: C.steel, marginBottom: 6, fontWeight: 600 }}>Hasło</label>
+        <input type="password" value={code} onChange={(e) => { setCode(e.target.value); setErr(""); }} autoFocus
+          style={{ width: "100%", background: C.panel2, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 11,
+            padding: "11px 13px", fontSize: 14, marginBottom: 16, fontFamily: "inherit" }} />
+        <label style={{ display: "block", fontSize: 12, color: C.steel, marginBottom: 6, fontWeight: 600 }}>Kto ocenia</label>
+        <select value={who} onChange={(e) => { setWho(e.target.value); setErr(""); }}
+          style={{ width: "100%", background: C.panel2, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 11,
+            padding: "11px 13px", fontSize: 14, marginBottom: who === "__inny__" ? 10 : 18 }}>
+          <option value="">— wybierz —</option>
+          {STAFF.map((s) => <option key={s} value={s}>{s}</option>)}
+          <option value="__inny__">Inny (wpisz)…</option>
+        </select>
+        {who === "__inny__" && (
+          <input value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Imię i nazwisko"
+            style={{ width: "100%", background: C.panel2, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 11,
+              padding: "11px 13px", fontSize: 14, marginBottom: 18, fontFamily: "inherit" }} />
+        )}
+        {err && <div style={{ fontSize: 12.5, color: C.bad, marginBottom: 12 }}>{err}</div>}
+        <button type="submit" style={{ width: "100%", background: C.blue, color: "#fff", border: "none", borderRadius: 12,
+          padding: "12px", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Wejdź</button>
+        <div style={{ fontSize: 11, color: C.steel, marginTop: 14, lineHeight: 1.5 }}>
+          Hasło to miękka bramka wejścia (identyfikacja ocen). Realną ochronę danych ustawia się na poziomie Netlify.
+        </div>
+      </form>
+    </div>
+  );
+}
+
+// ============================ OCENA TRENERA ============================
+// Trener ocenia skład NA ŚLEPO (bez RC), w kilku wymiarach. Zapis lokalny per
+// oceniający + eksport CSV do zebrania „danych wjazdowych" do walidacji RC.
+function EvalView({ data, evaluator }) {
+  const loadAll = () => { try { return JSON.parse(localStorage.getItem(EVAL_KEY) || "{}") || {}; } catch { return {}; } };
+  const [store, setStore] = useState(loadAll);
+  const mine = store[evaluator] || {};
+  const persist = (nextMine) => {
+    const all = { ...store, [evaluator]: nextMine };
+    setStore(all); try { localStorage.setItem(EVAL_KEY, JSON.stringify(all)); } catch {}
+  };
+  const setField = (pid, field, val) => {
+    const cur = mine[pid] || {};
+    persist({ ...mine, [pid]: { ...cur, [field]: val, ts: Date.now() } });
+  };
+  const clampNum = (v) => { if (v === "" || v == null) return ""; const n = Math.max(0, Math.min(100, Math.round(Number(v)))); return Number.isFinite(n) ? n : ""; };
+
+  const squad = data.squad || [];
+  const byLine = { Bramka: [], Obrona: [], Pomoc: [], Atak: [] };
+  squad.forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
+  const order = ["Bramka", "Obrona", "Pomoc", "Atak"];
+  const done = squad.filter((p) => { const e = mine[p.id]; return e && (e.lvl === 0 || e.lvl); }).length;
+  const pct = squad.length ? Math.round((done / squad.length) * 100) : 0;
+
+  const exportCsv = () => {
+    const date = new Date().toISOString().slice(0, 10);
+    const rows = [["Trener", "Data", "Zawodnik", "Pozycja", "Rola", "Wiek", "Obecny poziom", "Potencjał", "Pewność (1-5)", "Notatka"]];
+    squad.forEach((p) => {
+      const e = mine[p.id] || {};
+      if (e.lvl === "" || e.lvl == null) return;   // tylko ocenieni
+      rows.push([evaluator, date, p.name, p.pos, roleName(p) || "", p.age || "", e.lvl, e.pot ?? "", e.conf ?? "", (e.note || "").replace(/\n/g, " ")]);
+    });
+    downloadCSV(`oceny-${evaluator.replace(/\s+/g, "_")}-${date}.csv`, rows);
+  };
+  const resetMine = () => { if (window.confirm("Wyczyścić WSZYSTKIE Twoje oceny?")) persist({}); };
+
+  const numInput = (pid, field, ph) => {
+    const e = mine[pid] || {};
+    return (
+      <input type="number" min={0} max={100} inputMode="numeric" placeholder={ph}
+        value={e[field] === 0 ? 0 : (e[field] || "")}
+        onChange={(ev) => setField(pid, field, clampNum(ev.target.value))}
+        style={{ width: "100%", background: C.panel2, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 8,
+          padding: "7px 9px", fontSize: 14, fontFamily: "inherit", textAlign: "center" }} />
+    );
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+        <Lead>Oceniasz jako <b style={{ color: C.bone }}>{evaluator}</b>. Oceń zawodników <b style={{ color: C.bone }}>na ślepo</b> — celowo bez liczby RC, żeby model nie sugerował oceny. Zapis jest automatyczny (lokalnie w przeglądarce); na koniec <b style={{ color: C.bone }}>wyeksportuj CSV</b> i odeślij.</Lead>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={resetMine} className="noprint" style={{ background: "transparent", color: C.steel, border: `1px solid ${C.line}`, borderRadius: 9, padding: "8px 12px", fontSize: 12.5, cursor: "pointer" }}>Wyczyść</button>
+          <CsvBtn onClick={exportCsv} label="Eksport ocen (CSV)" />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "16px 0 6px", maxWidth: 620 }}>
+        <div style={{ flex: 1, height: 9, background: C.panelHi, borderRadius: 5, overflow: "hidden" }}>
+          <div style={{ width: `${pct}%`, height: "100%", background: `linear-gradient(90deg, ${C.rcMid}, ${C.rcHi})`, borderRadius: 5 }} />
+        </div>
+        <span className="mono" style={{ fontSize: 12.5, color: C.steelHi }}>{done}/{squad.length} ocenionych</span>
+      </div>
+
+      <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 6 }}>
+        Skala „obecny poziom”: 85–100 klasa TOP · 70–84 pewny starter · 55–69 rotacja · 40–54 zaplecze · 0–39 poniżej I zespołu. Pewność 1 (niska) – 5 (wysoka).
+      </div>
+
+      {order.map((line) => byLine[line].length > 0 && (
+        <div key={line} style={{ marginTop: 6 }}>
+          <SectionLabel>{line} · {byLine[line].length}</SectionLabel>
+          <div className="hscroll"><div style={{ minWidth: 720, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden" }}>
+            <div className="cond" style={{ display: "grid", gridTemplateColumns: "1.4fr 92px 92px 128px 1.5fr", gap: 12,
+              padding: "10px 16px", background: C.panel2, borderBottom: `1px solid ${C.line}`, fontSize: 11, letterSpacing: ".04em", color: C.steel, fontWeight: 640 }}>
+              <div>Zawodnik</div><div style={{ textAlign: "center" }}>Poziom</div><div style={{ textAlign: "center" }}>Potencjał</div><div style={{ textAlign: "center" }}>Pewność</div><div>Notatka</div>
+            </div>
+            {byLine[line].map((p) => {
+              const e = mine[p.id] || {};
+              return (
+                <div key={p.id} style={{ display: "grid", gridTemplateColumns: "1.4fr 92px 92px 128px 1.5fr", gap: 12, alignItems: "center",
+                  padding: "10px 16px", borderTop: `1px solid ${C.line}` }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                    <span className="cond" style={{ fontSize: 11, fontWeight: 640, color: "#fff", background: C.blue, borderRadius: 6, padding: "2px 8px", flexShrink: 0 }}>{p.pos}</span>
+                    <span style={{ fontWeight: 560, fontSize: 14.5, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
+                  </div>
+                  {numInput(p.id, "lvl", "0–100")}
+                  {numInput(p.id, "pot", "0–100")}
+                  <div style={{ display: "flex", gap: 3, justifyContent: "center" }}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <button key={n} onClick={() => setField(p.id, "conf", e.conf === n ? "" : n)} title={`Pewność ${n}`}
+                        style={{ width: 20, height: 24, borderRadius: 6, cursor: "pointer", fontSize: 11.5, fontWeight: 600,
+                          border: `1px solid ${e.conf === n ? C.blue : C.line}`, background: e.conf === n ? C.blue : "transparent",
+                          color: e.conf === n ? "#fff" : C.steel }}>{n}</button>
+                    ))}
+                  </div>
+                  <input value={e.note || ""} onChange={(ev) => setField(p.id, "note", ev.target.value)} placeholder="opcjonalnie…"
+                    style={{ width: "100%", background: C.panel2, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 8,
+                      padding: "7px 9px", fontSize: 13, fontFamily: "inherit" }} />
+                </div>
+              );
+            })}
+          </div></div>
+        </div>
+      ))}
+      <Note>Oceny zapisują się lokalnie w Twojej przeglądarce (klucz {EVAL_KEY}) — nie synchronizują się między osobami. Żeby trafiły do wspólnej bazy walidacyjnej, wyeksportuj CSV i odeślij. Ocena jest „na ślepo” (bez RC) celowo — dzięki temu zestawienie ocen z RC jest uczciwym testem modelu.</Note>
+    </div>
+  );
+}
+
+// ============================ IKONY NAWIGACJI ============================
+// Jedna ikona (stroke, dziedziczy currentColor) na pozycję menu. 17x17.
+const NAV_SVG = {
+  twin: (<><circle cx="9" cy="8" r="3.3"/><path d="M3.5 20v-1a5 5 0 0 1 5-5h1a5 5 0 0 1 5 5v1"/><path d="M16 5.4a3 3 0 0 1 0 5.6"/><path d="M20.5 20v-1a4 4 0 0 0-2.6-3.7"/></>),
+  digest: (<><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></>),
+  squadprofile: (<><rect x="3.5" y="11" width="3.6" height="9" rx="1"/><rect x="10.2" y="5" width="3.6" height="15" rx="1"/><rect x="16.9" y="14" width="3.6" height="6" rx="1"/></>),
+  contracts: (<><rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9.2" x2="21" y2="9.2"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/></>),
+  values: (<><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></>),
+  eval: (<><rect x="6" y="4" width="12" height="16.5" rx="2"/><rect x="9" y="2.4" width="6" height="3.2" rx="1"/><path d="M9.3 13l2 2 3.6-3.8"/></>),
+  mecze: (<path d="M3 12h4l3 8 4-16 3 8h4"/>),
+  roster: (<><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 3.5v4h-4"/></>),
+  flags: (<><path d="M5 21V4"/><path d="M5 4.2h11l-2 3 2 3H5"/></>),
+  match: (<><circle cx="10.5" cy="10.5" r="6.5"/><line x1="20.5" y1="20.5" x2="15.5" y2="15.5"/></>),
+  priorities: (<><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></>),
+  okazje: (<><circle cx="7.2" cy="7.2" r="2.1"/><circle cx="16.8" cy="16.8" r="2.1"/><line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/></>),
+  shortlist: (<><line x1="8.5" y1="6" x2="21" y2="6"/><line x1="8.5" y1="12" x2="21" y2="12"/><line x1="8.5" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1.2" fill="currentColor" stroke="none"/></>),
+  search: (<><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.3" y2="16.3"/></>),
+  watch: (<><path d="M2.2 12S6 5.5 12 5.5 21.8 12 21.8 12 18 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3"/></>),
+  raport: (<><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="16.5" x2="15" y2="16.5"/></>),
+  shadow: (<><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.4"/></>),
+  corr: (<><circle cx="6" cy="6" r="2.3"/><circle cx="18" cy="7" r="2.3"/><circle cx="12" cy="18" r="2.3"/><line x1="7.6" y1="7.6" x2="10.6" y2="15.8"/><line x1="16.4" y1="8.8" x2="13.2" y2="16.2"/><line x1="8.2" y1="6.2" x2="15.7" y2="6.8"/></>),
+  opponent: (<path d="M12 3l8 3v5c0 5-3.4 8-8 10-4.6-2-8-5-8-10V6z"/>),
+  compare: (<><rect x="3.5" y="4" width="7" height="16" rx="1.5"/><rect x="13.5" y="4" width="7" height="16" rx="1.5"/></>),
+  fixtures: (<><rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9.2" x2="21" y2="9.2"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/><circle cx="8" cy="14" r="0.9" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.9" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="0.9" fill="currentColor" stroke="none"/></>),
+  events: (<path d="M13 2.5L4.5 13.5H11l-1 8 8.5-11.5H12z"/>),
+  leagues: (<><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="13"/><line x1="12" y1="9" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1.8" y1="12" x2="6.2" y2="12"/><line x1="9.8" y1="11" x2="14.2" y2="11"/><line x1="17.8" y1="14" x2="22.2" y2="14"/></>),
+  metrics: (<><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></>),
+  stability: (<><path d="M17 2.5l3.5 3.5L17 9.5"/><path d="M3.5 11V9a3.5 3.5 0 0 1 3.5-3.5h13.5"/><path d="M7 21.5L3.5 18 7 14.5"/><path d="M20.5 13v2a3.5 3.5 0 0 1-3.5 3.5H3.5"/></>),
+  help: (<><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 0 1 4.9.6c0 1.7-2.4 2-2.4 3.4"/><circle cx="12" cy="17" r="0.7" fill="currentColor" stroke="none"/></>),
+};
+function NavIcon({ k }) {
+  const inner = NAV_SVG[k] || (<circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>);
+  return (
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.9"
+      strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, opacity: 0.95 }} aria-hidden="true">
+      {inner}
+    </svg>
   );
 }
