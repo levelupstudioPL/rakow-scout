@@ -18,6 +18,12 @@
     "line": "Bramka"
   },
   {
+    "id": "rk-karol-surzyn",
+    "name": "Karol Surzyn",
+    "pos": "GK",
+    "line": "Bramka"
+  },
+  {
     "id": "rk-stratos-svarnas",
     "name": "Stratos Svarnas",
     "pos": "CB",
@@ -44,6 +50,18 @@
   {
     "id": "rk-nikodem-całko",
     "name": "Nikodem Całko",
+    "pos": "CB",
+    "line": "Obrona"
+  },
+  {
+    "id": "rk-nils-zätterström",
+    "name": "Nils Zätterström",
+    "pos": "CB",
+    "line": "Obrona"
+  },
+  {
+    "id": "rk-arvid-brorsson",
+    "name": "Arvid Brorsson",
     "pos": "CB",
     "line": "Obrona"
   },
@@ -80,12 +98,6 @@
   {
     "id": "rk-fran-tudor",
     "name": "Fran Tudor",
-    "pos": "WM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-michael-ameyaw",
-    "name": "Michael Ameyaw",
     "pos": "WM",
     "line": "Pomoc"
   },
@@ -150,8 +162,8 @@
     "line": "Pomoc"
   },
   {
-    "id": "rk-jesús-díaz",
-    "name": "Jesús Díaz",
+    "id": "rk-marko-perović",
+    "name": "Marko Perović",
     "pos": "AM",
     "line": "Pomoc"
   },
