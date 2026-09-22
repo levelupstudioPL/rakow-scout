@@ -29,8 +29,17 @@ jobs:
           python-version: "3.12"
  
       - name: Zainstaluj zależności
-        run: pip install statsbombpy pandas
- 
+        run: pip install statsbombpy pandas openpyxl requests
+
+      - name: Zaciągnij pierwszy skład z arkusza Google
+        # Raków aktualizuje arkusz → automat filtruje „Raków Częstochowa" (pierwszy
+        # skład) i nadpisuje public/squad.json. Nieudane pobranie NIE psuje składu
+        # (skrypt zostawia stary plik). Arkusz musi być udostępniony „każdy z linkiem".
+        env:
+          SQUAD_SHEET_ID: ${{ vars.SQUAD_SHEET_ID }}
+          SQUAD_SHEET_URL: ${{ vars.SQUAD_SHEET_URL }}
+        run: python scripts/fetch_squad_sheet.py
+
       - name: Pobierz dane i wygeneruj data.json
         env:
           SB_USERNAME: ${{ secrets.SB_USERNAME }}
@@ -45,9 +54,9 @@ jobs:
 
       - name: Zapisz zmiany
         run: |
-          git add public/data.json public/value_history.json
+          git add public/data.json public/value_history.json public/squad.json
           if git diff --cached --quiet; then
-            echo "Brak zmian w data.json / value_history.json."
+            echo "Brak zmian w data.json / value_history.json / squad.json."
           else
             git config user.name "rakow-scout-bot"
             git config user.email "actions@github.com"
