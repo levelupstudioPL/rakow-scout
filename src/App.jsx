@@ -40,6 +40,10 @@ function rcTextColor(v) {
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const tmUrl = (name) => `https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(name || "")}`;
+// Normalizacja tekstu do wyszukiwania: zdejmuje znaki diakrytyczne (ł→l, ż→z, ó→o…)
+// i sprowadza do małych liter. Bez tego trener wpisujący „rubezic" nie znajdzie
+// „Rubežić", a to głównie zawodnicy Ekstraklasy (polskie/bałkańskie nazwiska).
+const foldTxt = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l").replace(/Ł/g, "l").toLowerCase().trim();
 // Mnożnik poziomu rynkowego ligi do estymacji ceny (heurystyka: droższe ligi = wyższy
 // mnożnik). Nazwy MUSZĄ zgadzać się z LEAGUE_CONFIG (wcześniej były nieaktualne —
 // „Championship (EN)"/„Liga Portugalska" — przez co mnożnik dla większości lig = 1).
@@ -151,6 +155,7 @@ const STYLE_LABELS = [
 const ACCESS_CODE = "rakow2026";
 const AUTH_KEY = "rk_auth_v1";
 const EVAL_KEY = "rk_eval_v1";
+const EXPECT_KEY = "rk_expect_v1";   // oczekiwanie trenera per zawodnik (mocna/słaba strona okiem trenera)
 // Lista sztabu do podpisania ocen. Uzupełnij/popraw wg realnych trenerów.
 const STAFF = [
   "Igor Rybiński", "Robert Chwastek", "Marek", "Filip", "Michał Dziwniel",
@@ -237,7 +242,11 @@ export default function App() {
 
   function loadData(url, live = false) {
     setLoading(true); setErr(null);
-    fetch(url)
+    // Cache-busting: bez tego przeglądarka / CDN Netlify potrafią podać stary
+    // data.json (trenerzy widzą nieaktualny skład po odświeżeniu składu). Dokładamy
+    // znacznik czasu i no-store, żeby zawsze zaciągnąć świeże dane.
+    const bust = url.includes("?") ? url : `${url}?v=${Date.now()}`;
+    fetch(bust, { cache: "no-store" })
       .then((r) => {
         const ct = r.headers.get("content-type") || "";
         if (!r.ok || !ct.includes("json")) throw new Error(`Zła odpowiedź (${r.status})`);
@@ -384,9 +393,9 @@ export default function App() {
   // Wyszukiwarka ręczna: po nazwisku, w CAŁEJ puli (niezależnie od pozycji).
   const searchResults = useMemo(() => {
     if (!data || !query.trim()) return null;
-    const q = query.trim().toLowerCase();
+    const q = foldTxt(query);
     return data.pool
-      .filter((p) => !p.provisional && p.name && p.name !== "?" && p.name.toLowerCase().includes(q))
+      .filter((p) => !p.provisional && p.name && p.name !== "?" && foldTxt(p.name).includes(q))
       .sort((a, b) => (Number(b.coherence) || 0) - (Number(a.coherence) || 0))
       .slice(0, 60);
   }, [data, query]);
@@ -622,7 +631,7 @@ export default function App() {
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
           {view === "watch" && <WatchlistView {...{ data, wl, setStatus, setNote, setSel, setView, fmt }} />}
           {view === "raport" && <ReportView {...{ data, wl, fmt }} />}
-          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView, oppTeam, setOppTeam }} />}
+          {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView, oppTeam, setOppTeam, short }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "metrics" && <MetricsView data={data} />}
           {view === "stability" && <StabilityView data={data} />}
@@ -907,7 +916,23 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
       </div>
 
       <SectionLabel>{`W czym ${sel.name} jest mocny`}</SectionLabel>
+      {(() => {
+        const tb = topBottomAttr(selVec, selLabs);
+        if (!tb || (!tb.top && !tb.bottom)) return null;
+        return (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, margin: "0 0 10px" }}>
+            {tb.top && <span style={{ fontSize: 12, fontWeight: 600, color: C.good, background: C.panel,
+              border: `1px solid ${C.line}`, borderRadius: 999, padding: "4px 12px" }}>
+              ▲ Najmocniej: {tb.top.label}</span>}
+            {tb.bottom && <span style={{ fontSize: 12, fontWeight: 600, color: C.bad, background: C.panel,
+              border: `1px solid ${C.line}`, borderRadius: 999, padding: "4px 12px" }}>
+              ▼ Najsłabiej: {tb.bottom.label}</span>}
+            <span style={{ fontSize: 10.5, color: C.steel, alignSelf: "center" }}>wg danych modelu</span>
+          </div>
+        );
+      })()}
       <StrengthsPanel profile={selVec} labels={selLabs} name={sel.name} />
+      <CoachExpectation playerId={sel.id} playerName={sel.name} />
 
       <FilterPanel {...{ data, filters, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT,
         filtersOpen, setFiltersOpen, activeCount, shown: candidates.length, total: totalForPos }} />
@@ -1418,7 +1443,7 @@ function WatchlistView({ data, wl, setStatus, setNote, setSel, setView, fmt }) {
   );
 }
 
-function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore = () => null, adjusted = () => ({ adj: 0 }), filters = {}, setSel, setView, oppTeam = "", setOppTeam = () => {} }) {
+function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore = () => null, adjusted = () => ({ adj: 0 }), filters = {}, setSel, setView, oppTeam = "", setOppTeam = () => {}, short = [] }) {
   const squad = data.squad, pool = data.pool;
   // --- Pod przeciwnika (współdzielone z modułem „Przeciwnik") ---
   const BASE = "Ekstraklasa (PL)";
@@ -1448,6 +1473,13 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
   // nie €20M+. Suwak niżej pozwala zmienić aż do „bez limitu".
   const [budget, setBudget] = useState(
     Number.isFinite(filters.priceMax) && filters.priceMax < 50 ? filters.priceMax : 5);
+  // --- Cienie z shortlisty (obserwowani) ---
+  // Trener przegląda kandydatów, dodaje wybranych do obserwowanych („short"), a tu
+  // ci zawodnicy są PREFEROWANI jako cienie w swoich pozycjach. Przełącznik pozwala
+  // ograniczyć cienie wyłącznie do shortlisty.
+  const shortSet = useMemo(() => new Set(short || []), [short]);
+  const [onlyShort, setOnlyShort] = useState(false);
+  const shortlisted = useMemo(() => pool.filter((p) => shortSet.has(p.id)), [pool, shortSet]);
   const cohColor = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
   const surname = (nm) => { const t = String(nm || "").trim().split(" "); return t[t.length - 1]; };
   const isExcluded = (id) => excluded.includes(id);
@@ -1491,17 +1523,24 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
       if (!starter && !(slot.id in lineup)) { starter = pickAuto(slot); if (starter) used.add(starter.id); }
       let shadow = null, price = null;
       if (starter) {
-        const cands = pool
+        let cands = pool
           .filter((p) => p.pos === starter.pos && typeof p.coherence === "number" && !usedShadows.has(p.id))
           .map((p) => ({ p, price: estimatePrice(starter, p) }))
           .filter(({ p, price }) => passes(p, price));
-        const pref = cands.filter(({ p }) => p.coherence_ref === starter.name);
+        // Tryb „tylko z shortlisty" — cienie wyłącznie spośród obserwowanych.
+        if (onlyShort) cands = cands.filter(({ p }) => shortSet.has(p.id));
+        // Priorytet: 1) obserwowani (shortlista), 2) odpowiednik konkretnego zawodnika,
+        // 3) reszta puli — zawsze wg najwyższej koherencji.
+        const shortHere = cands.filter(({ p }) => shortSet.has(p.id));
+        const refPref = cands.filter(({ p }) => p.coherence_ref === starter.name);
+        const pref = shortHere.length ? shortHere : refPref;
         const list = (pref.length ? pref : cands).sort((a, b) => b.p.coherence - a.p.coherence);
         if (list[0]) { shadow = list[0].p; price = list[0].price; usedShadows.add(shadow.id); }
       }
-      return { slot, starter, shadow, price, ins: !!inserted[slot.id] && !!shadow };
+      return { slot, starter, shadow, price, ins: !!inserted[slot.id] && !!shadow,
+        fromShort: !!shadow && shortSet.has(shadow.id) };
     });
-  }, [data, lineup, excluded, budget, filters, inserted]);
+  }, [data, lineup, excluded, budget, filters, inserted, onlyShort, shortSet]);
 
   const filled = xi.filter((s) => s.starter);
   const real = filled.filter((s) => !s.starter.rc_estimated);
@@ -1553,6 +1592,50 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
   return (
     <div>
       <Lead>Skład Rakowa w formacji <b className="mono" style={{ color: C.redHi }}>3-4-3</b> — ustaw go ręcznie (rozwijane listy na kartach), a pod każdym zawodnikiem zobaczysz jego najlepszy <b style={{ color: C.bone }}>cień</b>. Niżej macierz koherencji: jak podobnie stylem grają wybrani zawodnicy względem siebie.</Lead>
+
+      {/* Cienie z shortlisty — obserwowani zawodnicy preferowani jako cienie */}
+      {(() => {
+        const usedShort = xi.filter((s) => s.fromShort).length;
+        return (
+          <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12,
+            padding: "12px 16px", margin: "14px 0 4px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.blue, fontWeight: 700 }}>
+                CIENIE Z TWOJEJ SHORTLISTY {shortlisted.length ? `· ${usedShort}/${shortlisted.length} w składzie` : ""}
+              </div>
+              {shortlisted.length > 0 && (
+                <label style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: C.steelHi, cursor: "pointer" }}>
+                  <input type="checkbox" checked={onlyShort} onChange={(e) => setOnlyShort(e.target.checked)} />
+                  Tylko z shortlisty
+                </label>
+              )}
+            </div>
+            {shortlisted.length === 0 ? (
+              <div style={{ fontSize: 12, color: C.steel, marginTop: 8 }}>
+                Dodaj kandydatów do <b style={{ color: C.bone }}>obserwowanych</b> (ikona listy w „Odpowiednikach", „Szukaj" czy „Okazjach"), a pojawią się tu jako <b style={{ color: C.bone }}>preferowani cienie</b> na swoich pozycjach — kilku naraz, wcześniej wybranych z przeglądanej listy.
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 10 }}>
+                {shortlisted.map((p) => {
+                  const used = xi.some((s) => s.shadow && s.shadow.id === p.id);
+                  return (
+                    <button key={p.id} onClick={() => { setSel(p); setView("match"); }}
+                      title="Otwórz kartę zawodnika"
+                      style={{ display: "flex", alignItems: "center", gap: 7, background: used ? C.blueDim : C.ink,
+                        border: `1px solid ${used ? C.blue : C.line}`, borderRadius: 999, padding: "4px 11px",
+                        fontSize: 12, color: C.bone, cursor: "pointer" }}>
+                      <span style={{ fontWeight: 600 }}>{surname(p.name)}</span>
+                      <span className="mono" style={{ fontSize: 10, color: C.steel }}>{p.pos}</span>
+                      {typeof p.coherence === "number" && <span style={{ fontSize: 11, fontWeight: 700, color: cohColor(p.coherence) }}>{Math.round(p.coherence)}%</span>}
+                      {used && <span style={{ fontSize: 10, color: C.blue }}>✓ cień</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "14px 0 4px", flexWrap: "wrap" }}>
         <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>
@@ -3355,6 +3438,89 @@ function AttrBar({ label, z, better }) {
     </div>
   );
 }
+// Najmocniejszy i najsłabszy atrybut wg profilu stylu (z-score vs Ekstraklasa).
+// Zwraca { top, bottom } albo null, gdy profil płaski/brak danych.
+function topBottomAttr(profile, labels) {
+  if (!Array.isArray(profile) || !profile.length) return null;
+  const L = (Array.isArray(labels) && labels.length) ? labels : STYLE_LABELS;
+  const items = profile.map((z, i) => ({ label: L[i], z: Number(z) || 0 }))
+    .filter((x) => x.label && x.z !== 0);
+  if (!items.length) return null;
+  const top = items.reduce((a, b) => (b.z > a.z ? b : a));
+  const bottom = items.reduce((a, b) => (b.z < a.z ? b : a));
+  return { top: top.z >= 0.4 ? top : null, bottom: bottom.z <= -0.4 ? bottom : null };
+}
+
+// Oczekiwanie trenera: subiektywna najmocniejsza/najsłabsza strona zawodnika okiem
+// sztabu — zapisywana lokalnie (per zawodnik), obok danych modelu. To celowo NIE
+// wpływa na RC ani koherencję; to notatka trenerska do zestawienia z profilem.
+function loadExpect() {
+  try { return JSON.parse(localStorage.getItem(EXPECT_KEY) || "{}") || {}; } catch { return {}; }
+}
+function CoachExpectation({ playerId, playerName }) {
+  const [store, setStore] = useState(loadExpect);
+  const cur = (playerId && store[playerId]) || {};
+  const [strong, setStrong] = useState(cur.strong || "");
+  const [weak, setWeak] = useState(cur.weak || "");
+  const [note, setNote] = useState(cur.note || "");
+  const [saved, setSaved] = useState(false);
+  useEffect(() => {
+    const c = (playerId && loadExpect()[playerId]) || {};
+    setStrong(c.strong || ""); setWeak(c.weak || ""); setNote(c.note || ""); setSaved(false);
+  }, [playerId]);
+  let by = "", at = "";
+  try { const a = JSON.parse(localStorage.getItem(AUTH_KEY) || "{}"); by = (a && a.evaluator) || ""; } catch {}
+  const save = () => {
+    if (!playerId) return;
+    const rec = { strong: strong.trim(), weak: weak.trim(), note: note.trim(),
+      by: by || cur.by || "", at: new Date().toISOString().slice(0, 10) };
+    const next = { ...loadExpect(), [playerId]: rec };
+    try { localStorage.setItem(EXPECT_KEY, JSON.stringify(next)); } catch {}
+    setStore(next); at = rec.at; setSaved(true);
+  };
+  const dirty = strong !== (cur.strong || "") || weak !== (cur.weak || "") || note !== (cur.note || "");
+  const field = { width: "100%", boxSizing: "border-box", background: C.ink, color: C.bone,
+    border: `1px solid ${C.line}`, borderRadius: 8, padding: "8px 10px", fontSize: 12.5,
+    fontFamily: "inherit", resize: "vertical", outline: "none" };
+  const lab = { fontSize: 10.5, letterSpacing: 1.2, fontWeight: 700, marginBottom: 5, display: "block" };
+  return (
+    <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "16px 18px", marginTop: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, gap: 10, flexWrap: "wrap" }}>
+        <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.5, color: C.blue, fontWeight: 700 }}>OCZEKIWANIE TRENERA</div>
+        <div style={{ fontSize: 10.5, color: C.steel }}>
+          {cur.at ? `zapisano ${cur.by ? `przez ${cur.by} ` : ""}· ${cur.at}` : "notatka trenerska — nie wpływa na RC"}
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "12px 20px" }}>
+        <div>
+          <span className="mono" style={{ ...lab, color: C.good }}>NAJMOCNIEJSZA STRONA</span>
+          <textarea rows={2} style={field} value={strong} onChange={(e) => { setStrong(e.target.value); setSaved(false); }}
+            placeholder="np. gra w powietrzu, 1v1 w obronie…" />
+        </div>
+        <div>
+          <span className="mono" style={{ ...lab, color: C.bad }}>NAJSŁABSZA STRONA</span>
+          <textarea rows={2} style={field} value={weak} onChange={(e) => { setWeak(e.target.value); setSaved(false); }}
+            placeholder="np. gra pod presją, wykończenie…" />
+        </div>
+      </div>
+      <div style={{ marginTop: 12 }}>
+        <span className="mono" style={{ ...lab, color: C.steel }}>UWAGI / OCZEKIWANIE</span>
+        <textarea rows={2} style={field} value={note} onChange={(e) => { setNote(e.target.value); setSaved(false); }}
+          placeholder="czego oczekujemy od zawodnika, w jakiej roli…" />
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 12 }}>
+        <button onClick={save} disabled={!dirty && !saved}
+          style={{ background: dirty ? C.blue : C.panel2, color: dirty ? "#fff" : C.steel,
+            border: `1px solid ${dirty ? C.blue : C.line}`, borderRadius: 8, padding: "7px 16px",
+            fontSize: 12, fontWeight: 700, cursor: dirty ? "pointer" : "default" }}>
+          {saved && !dirty ? "Zapisano ✓" : "Zapisz"}
+        </button>
+        {saved && !dirty && <span style={{ fontSize: 11, color: C.good }}>zapisano lokalnie</span>}
+      </div>
+    </div>
+  );
+}
+
 // Mocne strony zawodnika — top atrybuty wg profilu stylu (z-score vs Ekstraklasa).
 function StrengthsPanel({ profile, name, labels }) {
   if (!Array.isArray(profile) || profile.length === 0) {
