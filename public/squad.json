@@ -18,14 +18,8 @@
     "line": "Bramka"
   },
   {
-    "id": "rk-karol-surzyn",
-    "name": "Karol Surzyn",
-    "pos": "GK",
-    "line": "Bramka"
-  },
-  {
-    "id": "rk-stratos-svarnas",
-    "name": "Stratos Svarnas",
+    "id": "rk-arvid-brorsson",
+    "name": "Arvid Brorsson",
     "pos": "CB",
     "line": "Obrona"
   },
@@ -60,39 +54,33 @@
     "line": "Obrona"
   },
   {
-    "id": "rk-arvid-brorsson",
-    "name": "Arvid Brorsson",
+    "id": "rk-stratos-svarnas",
+    "name": "Stratos Svarnas",
     "pos": "CB",
     "line": "Obrona"
-  },
-  {
-    "id": "rk-marko-bulat",
-    "name": "Marko Bulat",
-    "pos": "DM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-oskar-repka",
-    "name": "Oskar Repka",
-    "pos": "DM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-vladyslav-kochergin",
-    "name": "Vladyslav Kochergin",
-    "pos": "DM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-karol-struski",
-    "name": "Karol Struski",
-    "pos": "DM",
-    "line": "Pomoc"
   },
   {
     "id": "rk-abraham-ojo",
     "name": "Abraham Ojo",
     "pos": "DM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-adriano",
+    "name": "Adriano",
+    "pos": "WM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-bogdan-mirčetić",
+    "name": "Bogdan Mirčetić",
+    "pos": "AM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-erick-otieno",
+    "name": "Erick Otieno",
+    "pos": "WM",
     "line": "Pomoc"
   },
   {
@@ -108,26 +96,50 @@
     "line": "Pomoc"
   },
   {
-    "id": "rk-adriano",
-    "name": "Adriano",
-    "pos": "WM",
-    "line": "Pomoc"
-  },
-  {
     "id": "rk-jean-carlos-silva",
     "name": "Jean Carlos Silva",
     "pos": "WM",
     "line": "Pomoc"
   },
   {
-    "id": "rk-erick-otieno",
-    "name": "Erick Otieno",
-    "pos": "WM",
+    "id": "rk-karol-struski",
+    "name": "Karol Struski",
+    "pos": "DM",
     "line": "Pomoc"
   },
   {
     "id": "rk-lamine-diaby-fadiga",
     "name": "Lamine Diaby-Fadiga",
+    "pos": "AM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-marko-bulat",
+    "name": "Marko Bulat",
+    "pos": "DM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-marko-perović",
+    "name": "Marko Perović",
+    "pos": "WM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-oliwier-kwiatkowski",
+    "name": "Oliwier Kwiatkowski",
+    "pos": "AM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-oskar-repka",
+    "name": "Oskar Repka",
+    "pos": "DM",
+    "line": "Pomoc"
+  },
+  {
+    "id": "rk-patryk-makuch",
+    "name": "Patryk Makuch",
     "pos": "AM",
     "line": "Pomoc"
   },
@@ -138,9 +150,9 @@
     "line": "Pomoc"
   },
   {
-    "id": "rk-bogdan-mirčetić",
-    "name": "Bogdan Mirčetić",
-    "pos": "AM",
+    "id": "rk-vladyslav-kochergin",
+    "name": "Vladyslav Kochergin",
+    "pos": "DM",
     "line": "Pomoc"
   },
   {
@@ -150,26 +162,8 @@
     "line": "Pomoc"
   },
   {
-    "id": "rk-patryk-makuch",
-    "name": "Patryk Makuch",
-    "pos": "AM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-oliwier-kwiatkowski",
-    "name": "Oliwier Kwiatkowski",
-    "pos": "AM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-marko-perović",
-    "name": "Marko Perović",
-    "pos": "AM",
-    "line": "Pomoc"
-  },
-  {
-    "id": "rk-mahir-emreli",
-    "name": "Mahir Emreli",
+    "id": "rk-adam-basse",
+    "name": "Adam Basse",
     "pos": "ST",
     "line": "Atak"
   },
@@ -180,8 +174,8 @@
     "line": "Atak"
   },
   {
-    "id": "rk-adam-basse",
-    "name": "Adam Basse",
+    "id": "rk-mahir-emreli",
+    "name": "Mahir Emreli",
     "pos": "ST",
     "line": "Atak"
   }
