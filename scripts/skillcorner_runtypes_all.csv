@@ -205,7 +205,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1171,Ekstraklasa (PL),30944,0.11,Bogdan Racovițan,B. Racovițan,0.17,0.06,0.11,0.39,0.0,0.44,0.33,0.94,6.39
 1171,Ekstraklasa (PL),31043,3.25,Vahan Bichakhchyan,V. Bichakhchyan,2.38,0.06,0.5,1.69,0.44,5.25,0.5,3.25,0.31
 1171,Ekstraklasa (PL),31320,0.07,Pau Resta Tell,P. Resta,0.21,0.21,0.21,0.29,0.0,0.43,0.43,1.43,1.36
-1171,Ekstraklasa (PL),31962,8.47,Eduardo David Espiau Hernández,Edu Espiau,5.05,0.16,0.05,2.63,1.0,5.0,0.58,0.79,0.0
+1171,Ekstraklasa (PL),31962,8.47,Eduardo David Espiau Hernández,E. Espiau,5.05,0.16,0.05,2.63,1.0,5.0,0.58,0.79,0.0
 1171,Ekstraklasa (PL),31996,0.0,Jérémy Demian Blasco,J. Blasco,0.0,0.0,0.0,0.5,0.0,0.0,0.12,0.62,5.88
 1171,Ekstraklasa (PL),32021,0.61,Sergio Guerrero Romero,Sergio Guerrero,0.67,0.0,0.22,2.22,0.33,2.83,1.33,3.5,0.72
 1171,Ekstraklasa (PL),32026,0.0,Alvis Jaunzems,A. Jaunzems,0.0,1.11,1.33,0.0,0.11,2.33,1.0,3.56,1.0
@@ -259,7 +259,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1171,Ekstraklasa (PL),42628,2.63,Francisco Javier Álvarez Rodríguez,Fran Álvarez,3.74,0.21,0.11,5.05,1.21,4.79,1.89,4.74,0.63
 1171,Ekstraklasa (PL),42766,0.0,Brahim Traoré,B. Traoré,0.17,0.17,0.0,0.17,0.0,0.17,0.67,1.0,3.0
 1171,Ekstraklasa (PL),43113,1.14,Sam Greenwood,S. Greenwood,2.14,0.86,1.14,4.29,1.64,5.29,3.36,4.29,0.86
-1171,Ekstraklasa (PL),43248,1.0,Alejandro Cantero Sánchez,Alejandro Cantero,0.67,0.17,0.17,0.5,0.0,1.5,0.33,0.33,0.0
+1171,Ekstraklasa (PL),43248,1.0,Alejandro Cantero Sánchez,Alex Cantero,0.67,0.17,0.17,0.5,0.0,1.5,0.33,0.33,0.0
 1171,Ekstraklasa (PL),46307,1.9,Juljan Shehu,J. Shehu,2.57,0.29,0.81,5.57,1.1,5.71,0.9,5.86,0.81
 1171,Ekstraklasa (PL),49236,1.08,Matúš Kmet,M. Kmet,0.85,1.69,0.77,0.54,0.15,3.54,3.0,3.23,1.0
 1171,Ekstraklasa (PL),49242,12.75,Tomáš Bobček,T. Bobček,8.1,0.2,0.35,1.5,2.4,6.2,0.8,1.15,0.2
@@ -292,7 +292,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1171,Ekstraklasa (PL),63001,4.47,Tomasz Pieńko,T. Pieńko,2.16,0.37,0.74,4.0,0.79,7.0,1.89,1.63,0.74
 1171,Ekstraklasa (PL),64231,1.75,Samed Baždar,S. Baždar,1.5,1.0,1.0,0.25,1.75,3.0,0.75,2.5,0.0
 1171,Ekstraklasa (PL),67375,3.75,Levente Szabó,L. Szabó,1.5,0.0,0.0,1.0,0.25,3.25,0.0,1.75,0.0
-1171,Ekstraklasa (PL),67578,4.5,Bryan Solhaug Fiabema,B. Fiabema,1.7,0.2,0.3,1.3,0.3,3.0,0.6,0.3,0.1
+1171,Ekstraklasa (PL),67578,4.5,Bryan Benjamin Solhaug Fiabema,B. Fiabema,1.7,0.2,0.3,1.3,0.3,3.0,0.6,0.3,0.1
 1171,Ekstraklasa (PL),67652,3.0,Camilo Andrés Mena Márquez,C. Mena,2.1,1.24,0.71,1.48,0.57,10.19,4.14,3.67,1.43
 1171,Ekstraklasa (PL),67663,0.23,Tamar Svetlin,T. Svetlin,1.45,0.59,0.45,6.73,0.32,4.09,0.91,6.95,2.09
 1171,Ekstraklasa (PL),68501,0.0,Matúš Vojtko,M. Vojtko,0.16,3.16,1.42,0.16,0.05,2.84,2.58,4.79,2.42
@@ -1637,7 +1637,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1191,Czech Liga (CZ),852315,0.0,Eric Hunál,E. Hunál,0.0,0.0,0.0,0.18,0.0,0.06,0.24,0.06,1.88
 1191,Czech Liga (CZ),852321,0.5,Tomáš Jelínek,T. Jelínek,0.75,0.0,0.75,3.25,1.0,3.0,0.25,2.75,0.75
 1191,Czech Liga (CZ),852331,3.81,Tomáš Jedlička,T. Jedlička,1.94,0.25,0.38,1.25,0.62,5.31,1.38,1.5,0.19
-1191,Czech Liga (CZ),852369,2.39,Soliu Afolabi,S. Afolabi,1.96,0.39,0.26,0.52,0.39,5.48,1.61,1.43,0.09
+1191,Czech Liga (CZ),852369,2.39,Afolabi Soliu,A. Soliu,1.96,0.39,0.26,0.52,0.39,5.48,1.61,1.43,0.09
 1191,Czech Liga (CZ),852377,2.67,Lukáš Branecký,L. Branecký,0.67,0.17,0.17,0.83,0.67,3.33,0.5,0.5,0.0
 1191,Czech Liga (CZ),852378,0.5,Elmedin  Rama,E. Rama,0.0,0.0,0.0,1.0,0.0,0.5,0.0,0.0,0.0
 1191,Czech Liga (CZ),865088,1.14,Simon Bammens,S. Bammens,1.62,0.1,0.05,1.0,0.19,2.9,0.29,0.76,2.0
@@ -1647,7 +1647,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1191,Czech Liga (CZ),926589,0.38,Daniel Danihel,D. Danihel,0.25,0.5,0.12,0.25,0.12,2.62,2.25,3.0,2.0
 1191,Czech Liga (CZ),927907,2.67,Youssoupha Sanyang,Y. Sanyang,1.33,1.67,0.67,0.78,0.67,7.67,2.44,1.67,0.22
 1191,Czech Liga (CZ),931008,0.0,Jakub Kolar,,0.0,0.0,0.0,0.82,0.0,0.36,0.45,0.45,3.91
-1191,Czech Liga (CZ),969829,0.67,Dominik Mašek,D. Masek,0.33,1.67,0.0,0.33,1.0,0.0,1.33,1.67,0.0
+1191,Czech Liga (CZ),969829,0.67,Dominik Mašek,D. Masek,1.0,1.67,0.0,1.0,1.0,0.0,0.0,1.67,2.67
 1191,Czech Liga (CZ),970599,0.14,Šimon Černý,Š. Černý,0.29,0.0,0.57,0.43,0.29,1.29,0.43,1.43,0.14
 1191,Czech Liga (CZ),978891,1.83,David Kozel,D. Kozel,1.5,0.17,0.33,3.0,0.5,4.83,0.0,4.5,0.17
 1191,Czech Liga (CZ),979085,0.0,Mouhamed Tidjane Traore,M. Tidjane,0.0,0.0,0.0,0.0,0.25,0.5,0.5,1.5,3.5
@@ -2031,7 +2031,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1194,Jupiler Pro League (BE),809015,0.33,Mahamadou Doumbia,M. Doumbia,0.17,0.33,0.5,4.17,1.17,5.17,5.33,6.33,1.0
 1194,Jupiler Pro League (BE),809827,1.2,Erick Nunes Barbosa dos Santos,Erick,1.13,1.13,0.6,0.47,0.47,3.73,0.87,1.87,0.27
 1194,Jupiler Pro League (BE),810784,0.12,Ibrahima Makaya Diaby,I. Diaby,1.0,0.0,0.24,1.94,0.29,1.29,0.24,2.06,0.65
-1194,Jupiler Pro League (BE),810927,6.0,Afonso Cruz Patrão ,Afonso Patrão,3.0,0.0,0.0,4.0,1.0,8.0,0.0,2.0,0.0
+1194,Jupiler Pro League (BE),810927,6.0,Afonso Cruz Patrão,A. Patrão,3.0,0.0,0.0,4.0,1.0,8.0,0.0,2.0,0.0
 1194,Jupiler Pro League (BE),817777,0.06,Jakob Kiilerich Rask,J. Kiilerich,0.06,0.11,0.28,0.67,0.0,0.44,0.17,1.06,2.61
 1194,Jupiler Pro League (BE),818643,0.0,Alouis Diriken,A. Diriken,0.2,0.2,0.4,2.8,0.0,0.6,0.0,1.4,0.4
 1194,Jupiler Pro League (BE),819000,0.19,Emmanuel Kakou,E. Kakou,0.19,0.12,0.12,0.38,0.0,0.56,0.44,1.25,2.5
@@ -2965,7 +2965,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1208,1. SNL (SI),32741,10.62,Dario Vizinger,D. Vizinger,7.33,0.24,0.29,1.43,1.52,6.14,0.95,1.52,0.0
 1208,1. SNL (SI),33162,0.0,Scotty Sadzoute,S. Sadzoute,1.0,1.0,2.0,0.0,0.0,4.0,1.0,1.0,0.0
 1208,1. SNL (SI),33176,0.0,Nathan Monzango,N. Monzango,0.0,0.0,0.08,0.33,0.0,0.0,0.17,0.25,1.5
-1208,1. SNL (SI),33180,3.56,Patrick orphe M'bina,P. M'bina,1.56,0.11,0.11,0.44,0.11,2.11,0.22,0.44,0.0
+1208,1. SNL (SI),33180,3.56,Patrick Orphé Mbina,P. M'bina,1.56,0.11,0.11,0.44,0.11,2.11,0.22,0.44,0.0
 1208,1. SNL (SI),33188,0.0,Bradley Matufueni M'Bondo,B. M'bondo,0.14,0.14,0.19,0.43,0.0,0.29,0.1,0.86,3.57
 1208,1. SNL (SI),33766,6.06,Matej Poplatnik,M. Poplatnik,4.44,0.0,0.0,0.12,0.31,1.75,0.0,0.25,0.0
 1208,1. SNL (SI),34131,1.56,Ivijan  Svržnjak,I. Svržnjak,1.78,0.22,0.39,2.78,0.67,4.83,0.72,3.78,0.17
@@ -3655,7 +3655,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1212,2. Bundesliga (DE),25520,0.0,Sven Köhler,S. Köhler,0.0,0.19,0.06,1.31,0.06,1.19,0.81,2.06,2.12
 1212,2. Bundesliga (DE),25521,0.85,Moritz Heyer,M. Heyer,0.38,1.62,1.69,0.77,0.08,3.38,0.46,4.23,0.77
 1212,2. Bundesliga (DE),25523,4.46,Etienne Amenyido,E. Amenyido,3.15,0.31,0.38,2.77,1.31,7.69,1.23,2.08,0.08
-1212,2. Bundesliga (DE),25541,0.47,Finn Porath,F. Porath,0.74,0.37,0.42,0.16,0.05,1.79,0.47,1.58,0.79
+1212,2. Bundesliga (DE),25541,0.47,Finn-Dominik Porath,F. Porath,0.74,0.37,0.42,0.16,0.05,1.79,0.47,1.58,0.79
 1212,2. Bundesliga (DE),25545,0.73,Fabian Nürnberger,F. Nürnberger,0.93,1.33,0.73,0.27,0.0,4.0,0.87,4.6,1.47
 1212,2. Bundesliga (DE),25549,2.5,Immanuel Pherai,I. Pherai,1.0,0.0,0.5,2.5,0.0,10.0,0.5,5.5,0.0
 1212,2. Bundesliga (DE),26139,0.42,Aljaž Casar,A. Casar,1.17,0.17,0.17,1.83,0.67,2.5,0.5,3.67,0.75
@@ -3968,7 +3968,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1212,2. Bundesliga (DE),848661,2.83,Husseyn Chakroun,H. Chakroun,2.5,0.58,0.25,1.58,0.58,4.92,2.58,2.33,0.42
 1212,2. Bundesliga (DE),849213,0.25,Leon Robinson,L. Robinson,0.2,0.25,0.05,0.15,0.2,0.5,0.65,0.9,1.5
 1212,2. Bundesliga (DE),850762,0.0,Jordi Paulina ,J. Paulina,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0
-1212,2. Bundesliga (DE),850770,0.0,Marc Niclas   Dühring,N. Dühring,0.0,1.0,0.0,0.0,0.0,0.0,0.0,3.0,1.0
+1212,2. Bundesliga (DE),850770,0.0,Marc Niclas Dühring,N. Dühring,0.0,1.0,0.0,0.0,0.0,0.0,0.0,3.0,1.0
 1212,2. Bundesliga (DE),850831,0.18,Tim Janisch,T. Janisch,0.41,0.71,0.53,0.24,0.0,1.88,1.94,2.71,2.29
 1212,2. Bundesliga (DE),851060,0.6,David  Abrangao,D. Abrangao,1.4,1.4,0.8,0.8,0.0,5.6,1.4,2.2,1.0
 1212,2. Bundesliga (DE),852294,1.09,Soufian El-Faouzi,S. El-Faouzi,2.17,1.0,1.26,4.04,1.48,8.57,2.48,7.48,1.17
@@ -4586,7 +4586,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1227,Bundesliga (AT),1028951,0.0,Precious Benjamin,P. Benjamin,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0
 1227,Bundesliga (AT),1030848,5.0,Arbnor Prenqi,A. Prenqi,1.0,0.0,0.0,0.0,0.0,3.0,0.0,0.5,0.0
 1227,Bundesliga (AT),1030849,1.0,Ryan  Wesley Ogam Rabok ,R. Wesley Ogam Rabok,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-1227,Bundesliga (AT),1036609,0.0,Vasilije  Markovic,V. Markovic,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0
+1227,Bundesliga (AT),1036609,0.0,Vasilije Markovic,V. Markovic,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0
 1227,Bundesliga (AT),1036625,0.0,Musibau Aziz,M. Aziz,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
 1230,Eredivisie (NL),90,0.44,Aaron Meijers,A. Meijers,0.0,1.22,0.11,0.22,0.0,2.56,1.22,1.78,2.44
 1230,Eredivisie (NL),348,7.0,Alassane Pléa,A. Pléa,11.5,0.0,0.0,5.0,1.0,4.0,0.0,1.0,0.0
@@ -4903,7 +4903,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1230,Eredivisie (NL),161790,3.0,Noé Lebreton,N. Lebreton,3.92,0.5,0.83,3.5,2.0,6.0,0.58,3.25,0.42
 1230,Eredivisie (NL),167045,0.44,Nolan Martens,N. Martens,0.33,1.78,0.22,0.44,0.11,2.0,1.44,2.89,2.0
 1230,Eredivisie (NL),167699,1.63,Joel Ideho,J. Ideho,0.79,0.53,0.11,0.58,0.16,5.47,1.11,1.53,0.79
-1230,Eredivisie (NL),171394,2.63,Weslley  Pinto Batista,Weslley Patati,3.53,0.21,0.58,3.11,1.26,7.95,2.32,3.58,0.26
+1230,Eredivisie (NL),171394,2.63,Weslley Pinto Batista,W. Patati,3.53,0.21,0.58,3.11,1.26,7.95,2.32,3.58,0.26
 1230,Eredivisie (NL),174321,3.86,Sayfallah Ltaief,S. Ltaief,2.29,1.43,0.29,1.0,0.57,8.14,2.29,2.0,0.43
 1230,Eredivisie (NL),178839,1.56,Stefan Mitrović,S. Mitrović,0.89,0.22,0.11,0.67,0.0,4.11,0.78,1.33,0.22
 1230,Eredivisie (NL),179101,1.73,Oscar Gloukh,O. Gloukh,2.18,0.27,0.45,5.59,0.86,6.77,1.73,4.0,0.59
@@ -4925,7 +4925,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1230,Eredivisie (NL),285219,0.05,Teo Quintero León,T. Quintero,0.19,1.95,0.76,0.71,0.05,2.38,1.05,3.43,3.57
 1230,Eredivisie (NL),301646,1.67,Zach Booth,Z. Booth,1.33,0.33,0.0,3.67,0.33,5.33,0.33,2.0,0.0
 1230,Eredivisie (NL),308174,10.59,Thom van Bergen,T. van Bergen,6.05,0.27,0.59,2.45,1.41,9.59,0.73,2.09,0.18
-1230,Eredivisie (NL),374695,2.32,Kees  Smit,K. Smit,2.37,0.37,1.58,9.68,0.89,6.95,1.37,9.0,1.37
+1230,Eredivisie (NL),374695,2.32,Kees Smit,K. Smit,2.37,0.37,1.58,9.68,0.89,6.95,1.37,9.0,1.37
 1230,Eredivisie (NL),397543,0.53,Deron Payne,D. Payne,0.4,0.87,0.33,0.2,0.0,3.6,1.33,2.47,1.67
 1230,Eredivisie (NL),397544,3.68,Jorg Schreuders,J. Schreuders,2.59,1.14,1.14,3.41,0.32,9.73,2.86,5.5,1.82
 1230,Eredivisie (NL),426445,2.42,Givairo Read,G. Read,1.42,1.83,0.58,0.33,0.25,6.67,1.58,5.08,2.0
@@ -5158,7 +5158,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1265,Primeira Liga (PT),26604,0.0,Rafel Obrador Burguera,Rafel Obrador,0.0,5.0,0.0,0.0,0.0,5.0,2.0,11.0,1.0
 1265,Primeira Liga (PT),26780,2.0,Arjen van der Heide,A. van der Heide,0.5,0.0,0.0,0.0,0.0,4.0,0.5,2.0,0.5
 1265,Primeira Liga (PT),26900,1.61,Hidemasa Morita,H. Morita,1.11,0.06,0.5,3.89,0.67,2.78,1.22,4.0,1.28
-1265,Primeira Liga (PT),27238,1.07,Diogo Dos Santos Cabral,Calila,1.0,0.86,0.71,0.14,0.07,3.0,0.93,2.86,1.21
+1265,Primeira Liga (PT),27238,1.07,Diogo Dos Santos Cabral,Diogo Calila,1.0,0.86,0.71,0.14,0.07,3.0,0.93,2.86,1.21
 1265,Primeira Liga (PT),27240,1.86,Tiago Alexandre  Sousa Esgaio,Tiago Esgaio,1.05,0.71,0.43,0.33,0.29,5.05,2.05,3.57,2.05
 1265,Primeira Liga (PT),27242,0.0,Nilton Varela Lopes,Nilton Varela,1.0,2.0,0.0,0.0,0.0,4.0,0.0,3.0,0.0
 1265,Primeira Liga (PT),27244,3.18,Cassiano Dias Moreira,Cassiano,4.36,0.14,0.23,0.91,0.27,3.27,0.41,0.68,0.05
@@ -5376,7 +5376,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1265,Primeira Liga (PT),171764,0.62,Otar Mamageishvili,O. Mamageishvili,0.88,0.12,0.0,0.88,0.38,1.25,0.38,0.62,0.0
 1265,Primeira Liga (PT),171804,4.53,Lucas Figueiredo dos Santos,Figueiredo,3.33,0.33,0.4,3.47,1.47,6.87,2.47,1.33,0.13
 1265,Primeira Liga (PT),171805,0.09,Matheus Nunes Fagundes de Araújo,MT,0.0,0.55,0.27,0.27,0.09,0.45,0.55,2.45,2.55
-1265,Primeira Liga (PT),173032,0.0,Dominik Prpić ,D. Prpić,0.0,0.0,0.0,0.6,0.0,0.4,0.0,0.2,1.2
+1265,Primeira Liga (PT),173032,0.0,Dominik Prpić,D. Prpić,0.0,0.0,0.0,0.6,0.0,0.4,0.0,0.2,1.2
 1265,Primeira Liga (PT),174161,0.0,Rhaldney Norberto Simião Gomes,Rhaldney,0.0,0.0,0.0,3.0,0.5,1.5,0.5,3.0,2.0
 1265,Primeira Liga (PT),174243,1.8,Alberto Oliveira Baio,Alberto Costa,0.3,3.0,1.0,0.55,0.05,5.25,1.65,5.85,2.25
 1265,Primeira Liga (PT),174264,0.22,Sidi Bane,S. Bane,0.33,0.89,0.33,0.0,0.11,1.33,1.67,2.0,3.56
@@ -5537,7 +5537,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1265,Primeira Liga (PT),1003590,0.0,Henrique Fernandes da Silva,Henrique Silva,0.33,0.0,0.0,0.33,0.0,0.5,0.5,0.67,2.83
 1265,Primeira Liga (PT),1004603,0.67,Renato Sam Na Nhaga,Renato Nhaga,1.33,0.17,0.22,3.94,1.11,5.72,1.89,4.67,1.17
 1265,Primeira Liga (PT),1008882,0.67,Rodrigo Prata Deusdado Rodrigues,Rodrigo Rodrigues,0.33,0.0,0.67,0.33,0.0,1.67,1.33,0.33,0.0
-1265,Primeira Liga (PT),1008931,0.47,José Luís Rocha Tavares,José Tavares,0.27,0.33,0.33,3.27,0.87,1.93,0.6,2.67,0.47
+1265,Primeira Liga (PT),1008931,0.47,José Luís Rocha Tavares,Djé,0.27,0.33,0.33,3.27,0.87,1.93,0.6,2.67,0.47
 1265,Primeira Liga (PT),1022354,1.0,Edson Joelder Lobo Mucuana,E. Mucuana,0.0,2.0,1.0,0.0,0.0,1.0,0.0,9.0,0.0
 1265,Primeira Liga (PT),1022520,5.25,Umar Abubakar,U. Abubakar,1.92,0.08,0.08,0.58,0.83,2.33,0.0,0.33,0.0
 1265,Primeira Liga (PT),1022911,2.0,Flavio Ferreira Gonçalves Gonçalves,Flavio Gonçalves,1.0,1.0,0.0,1.0,0.0,2.0,0.0,0.0,0.0

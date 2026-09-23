@@ -103,7 +103,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1265,Primeira Liga (PT),26604,0.0,Rafel Obrador Burguera,Rafel Obrador,0.0,5.0,0.0,0.0,0.0,5.0,2.0,11.0,1.0
 1265,Primeira Liga (PT),26780,2.0,Arjen van der Heide,A. van der Heide,0.5,0.0,0.0,0.0,0.0,4.0,0.5,2.0,0.5
 1265,Primeira Liga (PT),26900,1.61,Hidemasa Morita,H. Morita,1.11,0.06,0.5,3.89,0.67,2.78,1.22,4.0,1.28
-1265,Primeira Liga (PT),27238,1.07,Diogo Dos Santos Cabral,Calila,1.0,0.86,0.71,0.14,0.07,3.0,0.93,2.86,1.21
+1265,Primeira Liga (PT),27238,1.07,Diogo Dos Santos Cabral,Diogo Calila,1.0,0.86,0.71,0.14,0.07,3.0,0.93,2.86,1.21
 1265,Primeira Liga (PT),27240,1.86,Tiago Alexandre  Sousa Esgaio,Tiago Esgaio,1.05,0.71,0.43,0.33,0.29,5.05,2.05,3.57,2.05
 1265,Primeira Liga (PT),27242,0.0,Nilton Varela Lopes,Nilton Varela,1.0,2.0,0.0,0.0,0.0,4.0,0.0,3.0,0.0
 1265,Primeira Liga (PT),27244,3.18,Cassiano Dias Moreira,Cassiano,4.36,0.14,0.23,0.91,0.27,3.27,0.41,0.68,0.05
@@ -321,7 +321,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1265,Primeira Liga (PT),171764,0.62,Otar Mamageishvili,O. Mamageishvili,0.88,0.12,0.0,0.88,0.38,1.25,0.38,0.62,0.0
 1265,Primeira Liga (PT),171804,4.53,Lucas Figueiredo dos Santos,Figueiredo,3.33,0.33,0.4,3.47,1.47,6.87,2.47,1.33,0.13
 1265,Primeira Liga (PT),171805,0.09,Matheus Nunes Fagundes de Araújo,MT,0.0,0.55,0.27,0.27,0.09,0.45,0.55,2.45,2.55
-1265,Primeira Liga (PT),173032,0.0,Dominik Prpić ,D. Prpić,0.0,0.0,0.0,0.6,0.0,0.4,0.0,0.2,1.2
+1265,Primeira Liga (PT),173032,0.0,Dominik Prpić,D. Prpić,0.0,0.0,0.0,0.6,0.0,0.4,0.0,0.2,1.2
 1265,Primeira Liga (PT),174161,0.0,Rhaldney Norberto Simião Gomes,Rhaldney,0.0,0.0,0.0,3.0,0.5,1.5,0.5,3.0,2.0
 1265,Primeira Liga (PT),174243,1.8,Alberto Oliveira Baio,Alberto Costa,0.3,3.0,1.0,0.55,0.05,5.25,1.65,5.85,2.25
 1265,Primeira Liga (PT),174264,0.22,Sidi Bane,S. Bane,0.33,0.89,0.33,0.0,0.11,1.33,1.67,2.0,3.56
@@ -482,7 +482,7 @@ competition_edition,league,player_id,runtype_run_in_behind,player_name,player_sh
 1265,Primeira Liga (PT),1003590,0.0,Henrique Fernandes da Silva,Henrique Silva,0.33,0.0,0.0,0.33,0.0,0.5,0.5,0.67,2.83
 1265,Primeira Liga (PT),1004603,0.67,Renato Sam Na Nhaga,Renato Nhaga,1.33,0.17,0.22,3.94,1.11,5.72,1.89,4.67,1.17
 1265,Primeira Liga (PT),1008882,0.67,Rodrigo Prata Deusdado Rodrigues,Rodrigo Rodrigues,0.33,0.0,0.67,0.33,0.0,1.67,1.33,0.33,0.0
-1265,Primeira Liga (PT),1008931,0.47,José Luís Rocha Tavares,José Tavares,0.27,0.33,0.33,3.27,0.87,1.93,0.6,2.67,0.47
+1265,Primeira Liga (PT),1008931,0.47,José Luís Rocha Tavares,Djé,0.27,0.33,0.33,3.27,0.87,1.93,0.6,2.67,0.47
 1265,Primeira Liga (PT),1022354,1.0,Edson Joelder Lobo Mucuana,E. Mucuana,0.0,2.0,1.0,0.0,0.0,1.0,0.0,9.0,0.0
 1265,Primeira Liga (PT),1022520,5.25,Umar Abubakar,U. Abubakar,1.92,0.08,0.08,0.58,0.83,2.33,0.0,0.33,0.0
 1265,Primeira Liga (PT),1022911,2.0,Flavio Ferreira Gonçalves Gonçalves,Flavio Gonçalves,1.0,1.0,0.0,1.0,0.0,2.0,0.0,0.0,0.0
