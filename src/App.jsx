@@ -545,9 +545,28 @@ export default function App() {
               <CompChip name="Liga Konf." code="UCOL" tint="#0B7A3B" abbr="LK" />
             </div>
           </div>
-          <span className="mono" style={{ fontSize: 10, letterSpacing: 1 }}>{isLive
-            ? <span style={{ color: C.good }}>● live</span>
-            : <span style={{ color: C.proxy }}>● snapshot (zapis)</span>}</span>
+          <div className="mono" style={{ fontSize: 10, letterSpacing: 1, display: "flex", flexDirection: "column", gap: 5 }}>
+            <span>{isLive
+              ? <span style={{ color: C.good }}>● live</span>
+              : <span style={{ color: C.proxy }}>● snapshot (zapis)</span>}</span>
+            {(() => {
+              const g = (data.meta && data.meta.generated) || "";
+              if (!g) return null;
+              const fmt = /^\d{4}-\d{2}-\d{2}/.test(g) ? g.slice(0, 10).split("-").reverse().join(".") : g;
+              const d = new Date(g.length <= 10 ? g + "T00:00:00" : g);
+              let ago = "";
+              if (!isNaN(d)) {
+                const n = Math.floor((Date.now() - d.getTime()) / 86400000);
+                ago = n <= 0 ? "dziś" : n === 1 ? "wczoraj" : `${n} dni temu`;
+              }
+              return (
+                <span title={`Ostatnia aktualizacja danych: ${fmt}${ago ? ` (${ago})` : ""}`}
+                  style={{ color: C.steel }}>
+                  ⟳ Dane: <span style={{ color: C.steelHi }}>{fmt}</span>{ago ? ` · ${ago}` : ""}
+                </span>
+              );
+            })()}
+          </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, paddingTop: 4, borderTop: `1px solid ${C.line}` }}>
             <span style={{ fontSize: 11.5, color: C.steelHi, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
               title={`Zalogowany: ${auth.evaluator}`}>
