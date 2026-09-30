@@ -40,6 +40,23 @@ function rcTextColor(v) {
 
 const pctToRC = (p) => Math.round((Number(p) || 0) / 10);
 const tmUrl = (name) => `https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(name || "")}`;
+// Link do Transfermarktu: jeśli zawodnik ma dokładny link z danych (p.tm — z arkusza
+// Raków, najbardziej aktualny), używamy go; inaczej fallback do wyszukiwarki po nazwisku.
+const tmLink = (p) => (p && typeof p.tm === "string" && p.tm) ? p.tm : tmUrl(p && p.name);
+// Ważony kosinus profili stylu (z-score) → 0-100. Wagi per wymiar pozwalają
+// trenerowi ręcznie przeważyć/wyciszyć cechy (uwaga #1 Igora: „ręczna modyfikacja
+// poszukiwanego profilu"). To client-side re-ranking stylu — NIE zmienia RC.
+const wcosStyle = (a, b, w) => {
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length || !a.length) return null;
+  let dot = 0, na = 0, nb = 0;
+  for (let i = 0; i < a.length; i++) {
+    const wi = (w && w[i] != null) ? w[i] : 1;
+    const ai = (Number(a[i]) || 0) * wi, bi = (Number(b[i]) || 0) * wi;
+    dot += ai * bi; na += ai * ai; nb += bi * bi;
+  }
+  if (na === 0 || nb === 0) return null;
+  return Math.max(0, Math.min(100, Math.round((dot / Math.sqrt(na * nb) + 1) / 2 * 100)));
+};
 // Normalizacja tekstu do wyszukiwania: zdejmuje znaki diakrytyczne (ł→l, ż→z, ó→o…)
 // i sprowadza do małych liter. Bez tego trener wpisujący „rubezic" nie znajdzie
 // „Rubežić", a to głównie zawodnicy Ekstraklasy (polskie/bałkańskie nazwiska).
@@ -425,7 +442,7 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["roster", "Aktualność składu"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
@@ -595,7 +612,6 @@ export default function App() {
             {view === "fixtures" && "Terminarz"}
             {view === "shortlist" && "Shortlista skauta"}
             {view === "mecze" && "Ostatnie mecze — walidator"}
-            {view === "roster" && "Aktualność składu"}
             {view === "match" && "Odpowiednicy z Europy"}
             {view === "priorities" && "Priorytety transferowe"}
             {view === "okazje" && "Okazje — jakość za euro"}
@@ -639,7 +655,6 @@ export default function App() {
           {view === "fixtures" && <FixturesView data={data} oppTeam={oppTeam} setOppTeam={setOppTeam} setView={setView} />}
           {view === "shortlist" && <ShortlistView {...{ data, fmt, photoOf, wl, setStatus, short, toggleShort, setSel, setView }} />}
           {view === "mecze" && <RecentView data={data} setSel={setSel} setView={setView} />}
-          {view === "roster" && <RosterView data={data} />}
           {view === "match" && <MatchView {...{ data, photoOf, sel, setSel, candidates, sortBy, setSortBy,
             short, toggleShort, shortRows, adjusted, fmt, median, matchPos, setMatchPos,
             filters: draft, applied: filters, setF, applyFilters, resetFilters, filtersDirty,
@@ -837,6 +852,9 @@ function OutputChips({ p, fmt, form = null }) {
 function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy, setSortBy, short, toggleShort, shortRows, adjusted, fmt, median, matchPos, setMatchPos,
   filters, applied, setF, applyFilters, resetFilters, filtersDirty, FILTERS_DEFAULT, filtersOpen, setFiltersOpen }) {
   const [openCmp, setOpenCmp] = useState(null);   // id kandydata z rozwiniętym porównaniem
+  const [tunerOpen, setTunerOpen] = useState(false);   // panel „dostrój profil" (uwaga #1 Igora)
+  const [profW, setProfW] = useState({});              // idx wymiaru -> waga (0..2), brak = 1
+  useEffect(() => { setProfW({}); setTunerOpen(false); }, [sel && sel.id]);
   if (!sel) return null;
   // Pozycje, wg których można szukać odpowiednika: podstawowa + alternatywne (alt_pos).
   const searchPositions = [sel.pos, ...((Array.isArray(sel.alt_pos) ? sel.alt_pos : []).filter((x) => x && x !== sel.pos))];
@@ -848,6 +866,17 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
   const posLabels = data.meta && data.meta.style_labels ? data.meta.style_labels[sel.line] : null;
   const selVec = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? sel.profile_pos : sel.profile;
   const selLabs = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? posLabels : STYLE_LABELS;
+  // --- Dostrojenie profilu (uwaga #1 Igora) ---
+  const wArr = (Array.isArray(selVec) ? selVec : []).map((_, i) => (profW[i] == null ? 1 : profW[i]));
+  const tuned = wArr.some((w) => w !== 1);
+  const alignVec = (p) => (Array.isArray(p.profile_pos) && Array.isArray(selVec) && p.profile_pos.length === selVec.length)
+    ? p.profile_pos : (Array.isArray(p.profile) && Array.isArray(selVec) && p.profile.length === selVec.length ? p.profile : null);
+  const tunedScore = (p) => wcosStyle(selVec, alignVec(p), wArr);
+  const viewCands = tuned
+    ? candidates.map((c) => ({ ...c, tw: tunedScore(c.p) }))
+        .sort((a, b) => (b.tw == null ? -1 : b.tw) - (a.tw == null ? -1 : a.tw))
+    : candidates;
+  const resetTuner = () => setProfW({});
   return (
     <div>
       <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{activePos}</b>. Poziom = surowy + handicap ligi. Cena z Transfermarktu.</Lead>
@@ -934,6 +963,52 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
         </div>
       </div>
 
+      {Array.isArray(selVec) && selVec.length > 0 && selLabs.length === selVec.length && (
+        <div style={{ margin: "4px 0 14px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <button onClick={() => setTunerOpen((o) => !o)}
+              title="Ręcznie przeważ cechy profilu — lista odpowiedników przeliczy styl (nie zmienia RC)"
+              style={{ background: tuned ? C.blueDim : "transparent", color: tuned ? C.blue : C.steelHi,
+                border: `1px solid ${tuned ? C.blue : C.line}`, borderRadius: 9, padding: "7px 13px",
+                fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+              🎛 Dostrój profil{tuned ? ` · ${wArr.filter((w) => w !== 1).length} zmian` : ""} {tunerOpen ? "▲" : "▼"}
+            </button>
+            {tuned && (
+              <button onClick={resetTuner} style={{ background: "transparent", color: C.steel,
+                border: `1px solid ${C.line}`, borderRadius: 8, padding: "6px 11px", fontSize: 11.5, cursor: "pointer" }}>
+                Reset
+              </button>
+            )}
+            {tuned && <span style={{ fontSize: 11, color: C.blue }}>lista odpowiedników posortowana wg dostrojonego stylu</span>}
+          </div>
+          {tunerOpen && (
+            <div style={{ marginTop: 10, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12,
+              padding: "14px 16px" }}>
+              <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 12 }}>
+                Przeważ cechy istotniejsze w tym przypadku (np. gdy trener zmienił styl gry i szukasz zawodnika o trochę innym profilu). 1.0 = jak w modelu, 0 = pomiń cechę, 2.0 = podwójna waga. Zmienia tylko ranking stylu, nie RC.
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "10px 22px",
+                maxHeight: 320, overflowY: "auto" }}>
+                {selLabs.map((lab, i) => {
+                  const w = wArr[i];
+                  return (
+                    <label key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 11.5 }}>
+                      <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        color: w === 1 ? C.steelHi : (w > 1 ? C.good : C.bad) }} title={lab}>{lab}</span>
+                      <input type="range" min={0} max={2} step={0.1} value={w}
+                        onChange={(e) => { const v = +e.target.value; setProfW((m) => ({ ...m, [i]: v })); }}
+                        style={{ width: 96 }} />
+                      <span className="mono" style={{ width: 30, textAlign: "right", fontWeight: 700,
+                        color: w === 1 ? C.steel : (w > 1 ? C.good : C.bad) }}>{w.toFixed(1)}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <SectionLabel>{`W czym ${sel.name} jest mocny`}</SectionLabel>
       {(() => {
         const tb = topBottomAttr(selVec, selLabs);
@@ -987,9 +1062,10 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
       )}
 
       <div className="hscroll"><div style={{ display: "grid", gap: 9, minWidth: 680 }}>
-        {candidates.map(({ p, m, price, form }) => {
+        {viewCands.map(({ p, m, price, form, tw }) => {
           const a = adjusted(p);
           const open = openCmp === p.id;
+          const cs = (tuned && tw != null) ? tw : m.coherence;   // dostrojony styl lub koherencja modelu
           return (
            <div key={p.id} style={{ background: C.panel, border: `1px solid ${open ? `${C.redHi}88` : C.line}`,
              borderRadius: 12, overflow: "hidden" }}>
@@ -1002,7 +1078,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                 </div>
                 <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{p.side ? `·${p.side}` : ""}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
                 {p.name && p.name !== "?" && (
-                  <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+                  <a href={tmLink(p)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>
                     Transfermarkt ↗
                   </a>
@@ -1021,15 +1097,16 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
               </div>
               <div>
                 <div style={{ fontSize: 11.5, color: C.steel, marginBottom: 5 }}>
-                  koherencja{m.ref ? <span style={{ color: C.steelHi }}> · {m.ref}</span> : ""}
+                  {tuned && tw != null ? <span style={{ color: C.blue }}>styl (dostrojony)</span>
+                    : <>koherencja{m.ref ? <span style={{ color: C.steelHi }}> · {m.ref}</span> : ""}</>}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <div style={{ flex: 1, height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
-                    <div className="bar" style={{ width: `${m.coherence}%`, height: "100%",
-                      background: m.coherence > 70 ? C.good : m.coherence > 45 ? C.warn : C.bad }} />
+                    <div className="bar" style={{ width: `${cs}%`, height: "100%",
+                      background: cs > 70 ? C.good : cs > 45 ? C.warn : C.bad }} />
                   </div>
                   <span className="mono" style={{ fontSize: 11, fontWeight: 700,
-                    color: m.coherence > 70 ? C.good : m.coherence > 45 ? C.warn : C.bad }}>{Math.round(m.coherence)}%</span>
+                    color: cs > 70 ? C.good : cs > 45 ? C.warn : C.bad }}>{Math.round(cs)}%</span>
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
@@ -1164,7 +1241,7 @@ function SearchView({ data, query, setQuery, searchResults, short, toggleShort, 
                     <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
                   </div>
                   <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{p.side ? `·${p.side}` : ""}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
-                  <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+                  <a href={tmLink(p)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
                 </div>
                 <div>
@@ -1833,7 +1910,7 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
                       {ins ? "cofnij" : "wstaw ⇄"}
                     </button>
                   </div>
-                  <a href={tmUrl(shadow.name)} target="_blank" rel="noopener noreferrer" title="Otwórz profil w Transfermarkt"
+                  <a href={tmLink(shadow)} target="_blank" rel="noopener noreferrer" title="Otwórz profil w Transfermarkt"
                     style={{ fontSize: 11.5, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                       display: "block", color: C.bone, textDecoration: "none" }}
                     onMouseOver={(e) => { e.currentTarget.style.color = C.redHi; e.currentTarget.style.textDecoration = "underline"; }}
@@ -2119,7 +2196,7 @@ function RosterView({ data }) {
                   {p.stats && (p.stats.goals || p.stats.assists) ? ` · ${p.stats.goals || 0}G ${p.stats.assists || 0}A` : ""}
                 </div>
               </div>
-              <a href={tmUrl(p.name)} target="_blank" rel="noopener noreferrer"
+              <a href={tmLink(p)} target="_blank" rel="noopener noreferrer"
                 style={{ fontSize: 11, color: C.steelHi, textDecoration: "none", border: `1px solid ${C.line}`, borderRadius: 6, padding: "4px 8px" }}>
                 Transfermarkt ↗</a>
             </div>
@@ -3664,7 +3741,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
             gap: 12, alignItems: "center", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 13px" }}>
             <span className="disp" style={{ fontSize: 18, color: C.proxy, textAlign: "center" }}>{i + 1}</span>
             <div style={{ minWidth: 0 }}>
-              <a href={tmUrl(c.p.name)} target="_blank" rel="noopener noreferrer" title="Otwórz profil w Transfermarkt"
+              <a href={tmLink(c.p)} target="_blank" rel="noopener noreferrer" title="Otwórz profil w Transfermarkt"
                 style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                   display: "block", color: C.bone, textDecoration: "none" }}
                 onMouseOver={(e) => { e.currentTarget.style.color = C.blueHi; e.currentTarget.style.textDecoration = "underline"; }}
@@ -3827,7 +3904,7 @@ function PrioritiesView({ data, setSel, setView, fmt }) {
                       </div>
                       <div><span className="disp" style={{ fontSize: 16 }}>{t.adj}</span><span style={{ fontSize: 9, color: C.steel }}> poz.</span></div>
                       <div style={{ color: t.mv > 0 ? C.proxy : C.steel }}>{fmtMv(t.mv)}</div>
-                      <a href={tmUrl(t.name)} target="_blank" rel="noopener noreferrer"
+                      <a href={tmLink(t)} target="_blank" rel="noopener noreferrer"
                         style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", whiteSpace: "nowrap" }}>TM ↗</a>
                     </div>
                   ))}
@@ -3927,7 +4004,7 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
                 {r.expiring && <span style={{ color: C.warn }}> · wygasa</span>}
                 {r.free && <span style={{ color: C.good }}> · wolny</span>}
               </div>
-              <a href={tmUrl(r.name)} target="_blank" rel="noopener noreferrer"
+              <a href={tmLink(r)} target="_blank" rel="noopener noreferrer"
                 style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
             </div>
             <div>
