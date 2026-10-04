@@ -2,3 +2,20 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+ 
+# Dane skautingowe muszą być zawsze świeże — bez tego CDN Netlija cache'uje
+# data.json i trenerzy po odświeżeniu składu wciąż widzą stary zestaw.
+[[headers]]
+  for = "/data.json"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+ 
+[[headers]]
+  for = "/squad.json"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+ 
+[[headers]]
+  for = "/value_history.json"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
