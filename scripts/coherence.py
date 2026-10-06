@@ -142,11 +142,18 @@ LINE_METRICS = {
 # PROXY posiadania drużyny (współczynnik z wolumenu podań drużyny w obrębie ligi).
 # fetch_statsbomb dolicza do wierszy pola z sufiksem __tpadj PRZED liczeniem RC.
 TEAM_NORM_SUFFIX = "__tpadj"
+# Metryki WARTOŚCI/WOLUMENU w RC bez natywnego wariantu per-posiadanie (OBV, xA, xG,
+# gole) — normalizowane PROXY posiadania drużyny, żeby zneutralizować wpływ silnej
+# drużyny (uwaga Igora: te metryki leciały „gołe"). Wskaźniki intensywne (*_ratio,
+# *_per_shot) i metryki bramkarza celowo POZA listą — nie są zawyżane przez posiadanie.
 TEAM_NORM_METRICS = [
-    "player_season_key_passes_90",
-    "player_season_passes_into_box_90",
-    "player_season_np_shots_90",
-    "player_season_touches_inside_box_90",
+    "player_season_obv_defensive_action_90",
+    "player_season_obv_pass_90",
+    "player_season_obv_dribble_carry_90",
+    "player_season_obv_shot_90",
+    "player_season_xa_90",
+    "player_season_np_xg_90",
+    "player_season_npg_90",
 ]
  
 # WERSJA SUROWA (per-90, wolumen) — Twój dotychczasowy zestaw. Problem z audytu:
@@ -181,27 +188,29 @@ QUALITY_METRICS_RAW = {
 # RC liczy każdą metrykę jako PERCENTYL vs Ekstraklasa, więc mieszanie skal jest OK.
 # Bramka i Atak (xG/output) — bez zmian, tam problem posiadania nie występuje.
 QUALITY_METRICS_PADJ = {
-    # Jak RAW, ale budowanie/rozgrywanie liczone per-posiadanie. Wskaźniki skuteczności
-    # (ratio, per_shot) są niewrażliwe na posiadanie → identyczne jak w RAW.
+    # Jak RAW, ale: budowanie/rozgrywanie przez natywne per-posiadanie StatsBomb, a
+    # metryki wartości (OBV, xA, xG, gole) przez PROXY posiadania drużyny (sufiks __tpadj,
+    # dokładany w fetch_statsbomb). Wskaźniki skuteczności (ratio, per_shot) oraz bramkarz —
+    # niewrażliwe na posiadanie, zostają surowe.
     "Bramka": ["player_season_gsaa_90", "player_season_save_ratio",
                "player_season_positive_outcome_90", "player_season_obv_gk_90"],
-    "ŚO": ["player_season_obv_defensive_action_90", "player_season_aerial_ratio",
+    "ŚO": ["player_season_obv_defensive_action_90__tpadj", "player_season_aerial_ratio",
            "player_season_challenge_ratio", "player_season_blocks_per_shot",
            "player_season_op_xgbuildup_per_possession",
            "player_season_defensive_actions_above_expectation_90"],
-    "Boczny": ["player_season_obv_dribble_carry_90", "player_season_obv_pass_90",
-               "player_season_xa_90", "player_season_op_xgbuildup_per_possession",
+    "Boczny": ["player_season_obv_dribble_carry_90__tpadj", "player_season_obv_pass_90__tpadj",
+               "player_season_xa_90__tpadj", "player_season_op_xgbuildup_per_possession",
                "player_season_challenge_ratio"],
-    "Skrzydłowy": ["player_season_np_xg_90", "player_season_xa_90",
-                   "player_season_obv_dribble_carry_90", "player_season_np_xg_per_shot",
+    "Skrzydłowy": ["player_season_np_xg_90__tpadj", "player_season_xa_90__tpadj",
+                   "player_season_obv_dribble_carry_90__tpadj", "player_season_np_xg_per_shot",
                    "player_season_dribble_ratio"],
     "6-8": ["player_season_op_xgchain_per_possession",
             "player_season_xgbuildup_per_possession",
-            "player_season_xa_90", "player_season_obv_defensive_action_90",
-            "player_season_obv_pass_90"],
-    "10-9": ["player_season_np_xg_90", "player_season_npg_90",
-             "player_season_xa_90", "player_season_np_xg_per_shot",
-             "player_season_obv_shot_90"],
+            "player_season_xa_90__tpadj", "player_season_obv_defensive_action_90__tpadj",
+            "player_season_obv_pass_90__tpadj"],
+    "10-9": ["player_season_np_xg_90__tpadj", "player_season_npg_90__tpadj",
+             "player_season_xa_90__tpadj", "player_season_np_xg_per_shot",
+             "player_season_obv_shot_90__tpadj"],
 }
  
 # Przełącznik: POSSESSION_ADJUST=0 wraca do wersji surowej (do porównań A/B).
@@ -689,4 +698,3 @@ if __name__ == "__main__":
     print("Poziom gracza 1:", quality_level(base[0], "6-8", st))
     print("Koherencja 1↔2:", coherence(base[0], base[1], "6-8", st), "%")
     print("Koherencja 1↔1:", coherence(base[0], base[0], "6-8", st), "% (powinno ~100)")
- 
