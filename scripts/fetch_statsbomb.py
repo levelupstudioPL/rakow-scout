@@ -1962,10 +1962,13 @@ def build_dataset(sb, creds):
     # POSSESSION-ADJUSTMENT: RC korzysta teraz z NATYWNYCH metryk StatsBomb per-posiadanie
     # (op_xgbuildup_per_possession, op_xgchain_per_possession, xgbuildup_per_possession) —
     # liczonych na poziomie akcji, więc lepszych niż jakikolwiek proxy/% posiadania drużyny.
-    # Stary proxy z op_passes (pola __tpadj) po oczyszczeniu metryk RC nie jest już przez nic
-    # czytany, więc go NIE uruchamiamy (funkcja _normalize_team_possession zostaje na wypadek
-    # powrotu metryki wolumenowej do RC, ale domyślnie jest wyłączona: TEAM_POSSESSION_ADJUST).
-    if os.getenv("TEAM_POSSESSION_ADJUST", "0") not in ("0", "false", "False"):
+    # Proxy posiadania drużyny (pola __tpadj) neutralizuje wpływ silnej drużyny na
+    # metryki wartości RC (OBV, xA, xG, gole) — patrz coh.TEAM_NORM_METRICS. Zestaw
+    # possession-adjusted (QUALITY_METRICS_PADJ) korzysta z tych pól, więc proxy musi
+    # chodzić zawsze, gdy RC jest w trybie possession (domyślnie). TEAM_POSSESSION_ADJUST=0
+    # wymusza wyłączenie (do A/B: wtedy __tpadj = wartość surowa).
+    _force_off = os.getenv("TEAM_POSSESSION_ADJUST", "") in ("0", "false", "False")
+    if coh.POSSESSION_ADJUST and not _force_off:
         _normalize_team_possession(league_rows)
  
     base_rows = league_rows.get(base_name, []) if base_name else []
