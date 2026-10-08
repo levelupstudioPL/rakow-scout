@@ -2400,6 +2400,9 @@ def build_dataset(sb, creds):
             "price_calibration": price_calibration,
             # Herby klubów Ekstraklasy (nazwa aktualnego klubu -> id Transfermarkt) do modułu „Przeciwnik".
             "ekstra_crests": _ekstra_crests,
+            # Diagnostyka fallbacku RC per rola: ilu zawodników ma komplet/część/zero
+            # metryk jakości (zero → RC=72 neutralne). Pokazuje luki w pokryciu metryk.
+            "rc_diag": coh.diag_summary(),
         },
         "squad": squad,
         "leagues": leagues,
