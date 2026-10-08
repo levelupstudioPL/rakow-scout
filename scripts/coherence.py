@@ -404,6 +404,40 @@ def quality_level(row, line, league_stats, metrics=None, minutes=None):
         return 72
     rc = max(0, min(100, round(avg)))
     return shrink_rc(rc, minutes)[0]  # shrinkage tylko gdy podano minuty
+
+
+def diag_summary():
+    """Podsumowanie pokrycia metryk jakości per rola (odczyt DIAG, bez zmiany logiki).
+    Dla każdej roli: ile zawodników policzono, ile metryk w zestawie, ilu miało pełny
+    komplet, częściowy, a ilu wpadło na FALLBACK (0 metryk → RC=72 neutralne). Pokazuje
+    wprost, gdzie brakuje danych — diagnostyka fallbacku (uwaga Igora)."""
+    out = {}
+    for role, d in DIAG.items():
+        n = d.get("n", 0)
+        full = partial = none = 0
+        total_metrics = None
+        for k, c in d.get("counts", {}).items():
+            try:
+                u, t = (int(x) for x in k.split("/"))
+            except ValueError:
+                continue
+            total_metrics = t
+            if u == 0:
+                none += c
+            elif u >= t:
+                full += c
+            else:
+                partial += c
+        out[role] = {
+            "zawodnikow": n,
+            "metryk_w_zestawie": total_metrics,
+            "pelny_komplet": full,
+            "czesciowe": partial,
+            "fallback_brak_metryk": none,
+            "pct_fallback": round(100.0 * none / n, 1) if n else 0.0,
+            "przyklad_brakujace": d.get("missing") or [],
+        }
+    return out
  
  
 def _zprofile(row, line, base_stats):
