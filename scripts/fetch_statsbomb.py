@@ -1969,7 +1969,12 @@ def build_dataset(sb, creds):
     # wymusza wyłączenie (do A/B: wtedy __tpadj = wartość surowa).
     _force_off = os.getenv("TEAM_POSSESSION_ADJUST", "") in ("0", "false", "False")
     if coh.POSSESSION_ADJUST and not _force_off:
-        _normalize_team_possession(league_rows)
+        try:
+            _poss_map = _team_possession_map(sb, creds)
+        except Exception as e:  # noqa: BLE001
+            print(f"[RC] Pobranie realnego %% posiadania pominięte ({e}) — proxy.", file=sys.stderr)
+            _poss_map = {}
+        _normalize_team_possession(league_rows, _poss_map)
  
     base_rows = league_rows.get(base_name, []) if base_name else []
     if not base_rows:
@@ -2416,36 +2421,93 @@ def build_dataset(sb, creds):
     }
  
  
-def _normalize_team_possession(league_rows):
-    """Dokończenie possession-adjustment dla metryk wolumenowych bez natywnego wariantu
-    per-posiadanie (coh.TEAM_NORM_METRICS: podania kluczowe, do pola karnego, strzały,
-    touche w polu karnym). Dla każdej ligi liczymy PROXY posiadania drużyny jako
-    minuto-ważoną średnią op_passes_90 jej zawodników, potem współczynnik
-    = proxy_drużyny / średnia_ligi (clamp 0.6–1.6), i dzielimy metryki wolumenowe przez
-    ten współczynnik. Wynik zapisujemy w polach z sufiksem __tpadj. Liczone W OBRĘBIE
-    LIGI (usuwa przewagę wolumenu wynikającą z większego posiadania względem rówieśników
-    z tej samej ligi). To PROXY posiadania (z wolumenu podań), nie oficjalny % — świadome
-    uproszczenie bez dodatkowego zapytania do API. Wyłączalne: TEAM_POSSESSION_ADJUST=0
-    (wtedy __tpadj = wartość surowa, więc RC wraca do niezmienionego wolumenu)."""
+def _team_possession_map(sb, creds):
+    """REALNY % posiadania per drużyna z team_season_stats StatsBomb (uwaga Igora:
+    lepsze niż proxy z wolumenu podań). Zwraca {nazwa_ligi: {team_id: posiadanie}}.
+    Pole posiadania wykrywane automatycznie (nazwy bywają różne między wersjami API):
+    bierzemy kolumnę z „possession" w nazwie, o wartościach liczbowych i sensownej skali.
+    Każdy błąd/brak → pomijamy ligę (normalizacja spada wtedy na proxy)."""
+    if not hasattr(sb, "team_season_stats"):
+        print("[RC] team_season_stats niedostępne w tej wersji statsbombpy — "
+              "zostaję przy proxy posiadania.", file=sys.stderr)
+        return {}
+    POSS_HINTS = ("possession",)
+    out = {}
+    fields_used = set()
+    for lg in LEAGUE_CONFIG:
+        cid, sid = lg.get("competition_id"), lg.get("season_id")
+        if cid is None or sid is None:
+            continue
+        try:
+            recs = sb.team_season_stats(competition_id=cid, season_id=sid, creds=creds).to_dict("records")
+        except Exception as e:  # noqa: BLE001
+            print(f"[RC] team_season_stats {lg['name']}: {e}", file=sys.stderr)
+            continue
+        if not recs:
+            continue
+        cand = None
+        for k in recs[0].keys():
+            kl = str(k).lower()
+            if any(h in kl for h in POSS_HINTS) and "per_possession" not in kl and "directness" not in kl \
+               and "transition" not in kl and "rate" not in kl:
+                vals = [r.get(k) for r in recs if isinstance(r.get(k), (int, float))]
+                if len(vals) >= max(3, len(recs) // 2):
+                    cand = k
+                    break
+        if not cand:
+            continue
+        m = {}
+        for r in recs:
+            tid = r.get("team_id")
+            v = r.get(cand)
+            if tid is not None and isinstance(v, (int, float)) and not (math.isnan(v) or math.isinf(v)):
+                m[tid] = v
+        if len(m) >= 3:
+            out[lg["name"]] = m
+            fields_used.add(cand)
+    if out:
+        print(f"[RC] Realny %% posiadania pobrany dla {len(out)} lig "
+              f"(pole: {', '.join(sorted(fields_used))}).", file=sys.stderr)
+    else:
+        print("[RC] Realnego %% posiadania nie pobrano (brak pola/danych) — proxy.", file=sys.stderr)
+    return out
+
+
+def _normalize_team_possession(league_rows, possession_map=None):
+    """Possession-adjustment metryk wartości RC (coh.TEAM_NORM_METRICS: OBV, xA, xG, gole).
+    Dla każdej ligi współczynnik posiadania = posiadanie_drużyny / średnia_ligi (clamp
+    0.6–1.6), dzielimy przez niego metryki (pola z sufiksem __tpadj). ŹRÓDŁO posiadania:
+    REALNY %% z team_season_stats (possession_map) tam, gdzie dostępny; inaczej PROXY
+    z minuto-ważonego op_passes_90 (fallback). Liczone W OBRĘBIE LIGI. Wyłączalne:
+    TEAM_POSSESSION_ADJUST=0 (wtedy __tpadj = wartość surowa)."""
     on = os.getenv("TEAM_POSSESSION_ADJUST", "1") not in ("0", "false", "False")
+    possession_map = possession_map or {}
     srcs = coh.TEAM_NORM_METRICS
     suf = coh.TEAM_NORM_SUFFIX
     n_adj, spread = 0, []
-    for _lg, rows in league_rows.items():
-        num, den = {}, {}
+    src_real, src_proxy = 0, 0
+    for lg_name, rows in league_rows.items():
+        real = possession_map.get(lg_name)
+        if real and len(real) >= 3:
+            share = real
+            src_real += 1
+        else:
+            num, den = {}, {}
+            for r in rows:
+                op = r.get("player_season_op_passes_90")
+                mn = r.get("player_season_minutes")
+                tid = r.get("team_id") or (_row_team_name(r) or None)
+                if isinstance(op, (int, float)) and isinstance(mn, (int, float)) and mn > 0 and tid is not None:
+                    num[tid] = num.get(tid, 0.0) + op * mn
+                    den[tid] = den.get(tid, 0.0) + mn
+            share = {t: num[t] / den[t] for t in num if den[t] > 0}
+            if rows:
+                src_proxy += 1
+        lg_mean = (sum(share.values()) / len(share)) if share else 0.0
         for r in rows:
-            op = r.get("player_season_op_passes_90")
-            mn = r.get("player_season_minutes")
             tid = r.get("team_id") or (_row_team_name(r) or None)
-            if isinstance(op, (int, float)) and isinstance(mn, (int, float)) and mn > 0 and tid is not None:
-                num[tid] = num.get(tid, 0.0) + op * mn
-                den[tid] = den.get(tid, 0.0) + mn
-        prox = {t: num[t] / den[t] for t in num if den[t] > 0}
-        lg_mean = (sum(prox.values()) / len(prox)) if prox else 0.0
-        for r in rows:
-            tid = r.get("team_id") or (_row_team_name(r) or None)
-            if on and lg_mean > 0 and tid in prox:
-                f = max(0.6, min(1.6, prox[tid] / lg_mean))
+            if on and lg_mean > 0 and tid in share:
+                f = max(0.6, min(1.6, share[tid] / lg_mean))
             else:
                 f = 1.0
             if on and abs(f - 1.0) > 1e-9:
@@ -2459,8 +2521,8 @@ def _normalize_team_possession(league_rows):
     if on:
         lo = min(spread) if spread else 1.0
         hi = max(spread) if spread else 1.0
-        print(f"[RC] Normalizacja przez posiadanie drużyny (proxy): aktywna. "
-              f"Skorygowano {n_adj} wartości; współczynnik posiadania {lo:.2f}–{hi:.2f}.",
+        print(f"[RC] Normalizacja przez posiadanie: aktywna. Ligi z realnym %% = {src_real}, "
+              f"z proxy = {src_proxy}. Skorygowano {n_adj} wartości; współczynnik {lo:.2f}–{hi:.2f}.",
               file=sys.stderr)
     else:
         print("[RC] Normalizacja przez posiadanie drużyny: WYŁĄCZONA (TEAM_POSSESSION_ADJUST=0).",
