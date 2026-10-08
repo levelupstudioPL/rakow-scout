@@ -64,18 +64,25 @@ def slug(name):
     return "rk-" + re.sub(r"[^0-9a-zżźćńśłóęąóa-z\-]", "", s)
 
 def load_bytes(src):
-    """Zwraca bajty xlsx: z pliku lokalnego albo z URL (requests → fallback urllib)."""
+    """Zwraca bajty xlsx: z pliku lokalnego albo z URL (requests → fallback urllib).
+    Sprawdza sygnaturę xlsx (PK...) — gdy Google zwróci stronę HTML (arkusz NIE jest
+    udostępniony „każdy z linkiem"), rzucamy czytelny błąd zamiast kryptycznego."""
     if os.path.exists(src):
         return Path(src).read_bytes()
     try:
         import requests
         r = requests.get(src, timeout=45, allow_redirects=True)
         r.raise_for_status()
-        return r.content
+        data = r.content
     except ImportError:
         import urllib.request
         with urllib.request.urlopen(src, timeout=45) as resp:
-            return resp.read()
+            data = resp.read()
+    # xlsx to archiwum ZIP → zaczyna się od "PK". HTML (login/zgoda Google) = nie-publiczny arkusz.
+    if not data[:2] == b"PK":
+        raise ValueError("arkusz nie zwrocil pliku xlsx - prawdopodobnie NIE jest udostepniony "
+                         "jako 'kazdy z linkiem moze wyswietlac' (Google oddal strone HTML)")
+    return data
 
 def parse_first_team(xlsx_bytes):
     from openpyxl import load_workbook
