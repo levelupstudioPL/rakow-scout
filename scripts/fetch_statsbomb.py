@@ -472,63 +472,93 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_role, universa
     return squad, rc_from_model
  
  
+def _fallback_seasons(sb, creds):
+    """Lista sezonów do odzyskiwania zawodników składu bez danych bazowych, w kolejności
+    priorytetu: najpierw BIEŻĄCY (nowy) sezon Ekstraklasy (po przełomie to tam są aktywni
+    zawodnicy), potem sezon historyczny. Sezon bazowy pomijamy (już spróbowany w passie
+    głównym). Auto-detekcja bieżącego sezonu — odporne na przełom roku."""
+    base_sid = next((lg["season_id"] for lg in LEAGUE_CONFIG if lg.get("base")), 318)
+    seasons = []
+    try:
+        cur = _ekstraklasa_current_season_id(sb, creds, base_sid=base_sid)
+        if cur:
+            seasons.append((int(cur), f"bieżący (id {cur})"))
+    except Exception as e:  # noqa: BLE001
+        print(f"[hist] Auto-detekcja bieżącego sezonu pominięta: {e}", file=sys.stderr)
+    seasons.append((HIST_SEASON_ID, HIST_SEASON_LABEL))
+    # dedup z zachowaniem kolejności; pomiń sezon bazowy
+    seen, out = set(), []
+    for sid, lab in seasons:
+        if sid and sid != base_sid and sid not in seen:
+            seen.add(sid)
+            out.append((sid, lab))
+    return out
+
+
 def _apply_historical_fallback(sb, creds, squad, base_stats_by_role,
                                universal_stats, pos_style_stats):
-    """Dla zawodników składu bez danych w bieżącym sezonie (rc_estimated) szuka ich
-    w SEZONIE POPRZEDNIM (HIST_SEASON_ID) we wszystkich skonfigurowanych ligach i —
-    jeśli mają tam wystarczającą próbkę — liczy RC oraz profile z tych danych.
-    Percentyl liczony WZGLĘDEM BIEŻĄCEJ ligi bazowej (base_stats_by_line), żeby RC
-    było porównywalne z resztą składu. Wpis dostaje rc_source="historical" +
-    rc_season, więc front pokaże, że to ocena na danych historycznych.
-    Zwraca liczbę odzyskanych zawodników."""
+    """Dla zawodników składu bez danych w sezonie bazowym (rc_estimated) próbuje ich
+    odzyskać z KOLEJNYCH sezonów (fallback wieloseznowy): bieżący 2026/27 → historyczny.
+    To naprawia lukę w pokryciu na PRZEŁOMIE sezonu, gdy część zawodników nie ma jeszcze
+    danych w sezonie bazowym. Percentyl liczony względem bieżącej ligi bazowej, więc RC
+    porównywalne z resztą składu. Wpis: rc_source="historical" + rc_season (który sezon
+    odzyskał). Zwraca liczbę odzyskanych. Wyłączalne: HIST_FALLBACK=0."""
     if os.getenv("HIST_FALLBACK", "1") not in ("1", "true", "True"):
         return 0
     todo = [e for e in squad if e.get("rc_estimated")]
     if not todo:
         return 0
-    print(f"[hist] {len(todo)} zawodników bez danych bieżącego sezonu — "
-          f"szukam w sezonie {HIST_SEASON_LABEL} (id {HIST_SEASON_ID})…")
-    # Pobierz sezon historyczny dla wszystkich lig i zbierz wiersze do jednego indeksu.
-    hist_rows = []
-    for lg in LEAGUE_CONFIG:
-        if lg.get("competition_id") is None:
-            continue
-        try:
-            stats = sb.player_season_stats(
-                competition_id=lg["competition_id"], season_id=HIST_SEASON_ID, creds=creds)
-            hist_rows.extend(stats.to_dict("records"))
-        except Exception as e:  # noqa: BLE001
-            print(f"[hist] Nie pobrano {lg['name']} ({HIST_SEASON_LABEL}): {e}", file=sys.stderr)
-    if not hist_rows:
-        print("[hist] Brak danych historycznych — pomijam fallback.", file=sys.stderr)
-        return 0
-    hist_by_name = _name_index(hist_rows)
-    hist_sur = _surname_index(
-        [(r.get("player_name") or r.get("player_known_name") or "", r) for r in hist_rows])
+    seasons = _fallback_seasons(sb, creds)
+    print(f"[hist] {len(todo)} zawodników bez danych bazowych — próbuję sezony: "
+          f"{', '.join(lab for _, lab in seasons)}.")
     recovered = 0
-    for e in todo:
-        name, line = e["name"], e["line"]
-        role = e.get("role") or coh.role_of(e.get("pos"), line)
-        row = hist_by_name.get(_norm(name)) \
-            or _match_by_tokens(name, hist_sur, lambda r: r.get("player_id"))
-        if not row or _player_minutes(row) < MIN_MINUTES:
+    for sid, label in seasons:
+        remaining = [e for e in todo if e.get("rc_estimated")]
+        if not remaining:
+            break
+        rows = []
+        for lg in LEAGUE_CONFIG:
+            if lg.get("competition_id") is None:
+                continue
+            try:
+                rows.extend(sb.player_season_stats(
+                    competition_id=lg["competition_id"], season_id=sid, creds=creds).to_dict("records"))
+            except Exception:  # noqa: BLE001
+                pass            # liga bez tego sezonu — pomijamy cicho
+        if not rows:
             continue
-        rc = coh.quality_level(row, role, base_stats_by_role[role], minutes=_player_minutes(row))
-        if not isinstance(rc, (int, float)):
-            continue
-        e["rc"] = rc
-        e["rc_estimated"] = False
-        e["rc_source"] = "historical"
-        e["rc_season"] = HIST_SEASON_LABEL
-        e["profile"] = coh.style_profile(row, universal_stats)
-        e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
-        e["_sb"] = row              # staje się też referencją koherencji dla puli
-        # dołóż pozycję alternatywną z danych historycznych (zachowaj manualne)
-        e["alt_pos"] = _alt_positions(row, e.get("alt_pos"), e["pos"])
-        recovered += 1
-        print(f"[hist] {name}: RC {rc} z sezonu {HIST_SEASON_LABEL} "
-              f"({int(_player_minutes(row))} min).")
-    print(f"[hist] Odzyskano {recovered}/{len(todo)} zawodników z danych historycznych.")
+        # Wiersze fallbacku też muszą dostać pola __tpadj (normalizacja posiadaniem),
+        # inaczej QUALITY_METRICS (warianty __tpadj) liczyłoby się z okrojonego zestawu.
+        if coh.POSSESSION_ADJUST and os.getenv("TEAM_POSSESSION_ADJUST", "") not in ("0", "false", "False"):
+            _normalize_team_possession({f"fallback-{sid}": rows})
+        by_name = _name_index(rows)
+        sur = _surname_index(
+            [(r.get("player_name") or r.get("player_known_name") or "", r) for r in rows])
+        got = 0
+        for e in remaining:
+            name, line = e["name"], e["line"]
+            role = e.get("role") or coh.role_of(e.get("pos"), line)
+            row = by_name.get(_norm(name)) \
+                or _match_by_tokens(name, sur, lambda r: r.get("player_id"))
+            if not row or _player_minutes(row) < MIN_MINUTES:
+                continue
+            rc = coh.quality_level(row, role, base_stats_by_role[role], minutes=_player_minutes(row))
+            if not isinstance(rc, (int, float)):
+                continue
+            e["rc"] = rc
+            e["rc_estimated"] = False
+            e["rc_source"] = "historical"
+            e["rc_season"] = label
+            e["profile"] = coh.style_profile(row, universal_stats)
+            e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
+            e["_sb"] = row          # staje się też referencją koherencji dla puli
+            e["alt_pos"] = _alt_positions(row, e.get("alt_pos"), e["pos"])
+            recovered += 1
+            got += 1
+            print(f"[hist] {name}: RC {rc} z sezonu {label} ({int(_player_minutes(row))} min).")
+        if got:
+            print(f"[hist] Sezon {label}: odzyskano {got} zawodników.")
+    print(f"[hist] Odzyskano łącznie {recovered}/{len(todo)} zawodników (fallback wieloseznowy).")
     return recovered
 
 
