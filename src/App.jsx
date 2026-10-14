@@ -442,7 +442,7 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["problems", "Problemy zespołu"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
@@ -606,6 +606,7 @@ export default function App() {
             {view === "twin" && "Obecny skład"}
             {view === "digest" && "Podsumowanie"}
             {view === "squadprofile" && "Profil kadry"}
+            {view === "problems" && "Problemy zespołu"}
             {view === "contracts" && "Kalendarz kontraktów"}
             {view === "values" && "Monitoring wartości"}
             {view === "eval" && "Ocena trenera"}
@@ -649,6 +650,7 @@ export default function App() {
           {view === "twin" && <TwinView data={data} photoOf={photoOf} sel={sel} setSel={setSel} setView={setView} />}
           {view === "digest" && <DigestView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "squadprofile" && <SquadProfileView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
+          {view === "problems" && <ProblemsView data={data} />}
           {view === "contracts" && <ContractsView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "values" && <ValuesView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "eval" && <EvalView data={data} evaluator={auth.evaluator} />}
@@ -5253,10 +5255,311 @@ function EvalView({ data, evaluator }) {
 
 // ============================ IKONY NAWIGACJI ============================
 // Jedna ikona (stroke, dziedziczy currentColor) na pozycję menu. 17x17.
+// ANALIZA PROBLEMÓW ZESPOŁU — łączy wynik ostatnich meczów (bramki za/przeciw, forma,
+// trend) z profilem stylu/jakości kadry vs Ekstraklasa (agregacja per linia, minuto-ważona),
+// i wskazuje główne słabości w ataku i obronie. Wszystko z danych, które już mamy
+// (recent + squad.profile_pos + style_labels). Nie dotyka RC.
+const _DEF_RE = /obron|przechwyt|odbior|odbiór|powietrz|wybici|blok|odzysk|pressing|interwencj|gsaa/i;
+const _ATT_RE = /xg|xa|gol|strza|wykończ|wykoncz|pole karn|asyst|drybling|kluczow|xgchain|xgbuildup|wymuszone|do przodu|progresj|tercji ataku/i;
+function _phaseOf(label) {
+  if (_DEF_RE.test(label)) return "def";   // obrona najpierw (np. „Bloki strzałów")
+  if (_ATT_RE.test(label)) return "att";
+  return null;                              // neutralne (wolumen podań, fizyka) — pomijamy
+}
+
+// z-score → przybliżony percentyl 0-100 (dystrybuanta normalna, aproksymacja A&S 7.1.26).
+function _erf(x) {
+  const s = x < 0 ? -1 : 1; x = Math.abs(x);
+  const t = 1 / (1 + 0.3275911 * x);
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+  return s * y;
+}
+const _zPct = (z) => Math.max(0, Math.min(100, Math.round(50 * (1 + _erf(z / Math.SQRT2)))));
+
+function ProblemsView({ data }) {
+  const squad = data.squad || [];
+  const labs = (data.meta && data.meta.style_labels) || {};
+  const recent = data.recent || {};
+  const team = recent.team || {};
+  const matches = (recent.matches || []).slice()
+    .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+  const n = matches.length;
+  const sumK = (arr, k) => arr.reduce((s, m) => s + (Number(m[k]) || 0), 0);
+  const gf = typeof team.gf === "number" ? team.gf : sumK(matches, "gf");
+  const ga = typeof team.ga === "number" ? team.ga : sumK(matches, "ga");
+  const gfpm = n ? gf / n : null, gapm = n ? ga / n : null;
+  const last5 = matches.slice(-5), prev = matches.slice(0, Math.max(0, n - 5));
+  const pmd = (arr, k) => (arr.length ? sumK(arr, k) / arr.length : null);
+  const gfTrend = (pmd(last5, "gf") != null && pmd(prev, "gf") != null) ? pmd(last5, "gf") - pmd(prev, "gf") : null;
+  const gaTrend = (pmd(last5, "ga") != null && pmd(prev, "ga") != null) ? pmd(last5, "ga") - pmd(prev, "ga") : null;
+
+  // Agregacja z-score per linia (minuto-ważona), tylko zawodnicy z realnym profilem.
+  const lineAgg = {};
+  Object.keys(labs).forEach((line) => {
+    const L = labs[line] || []; const d = L.length;
+    const sz = new Array(d).fill(0), w = new Array(d).fill(0);
+    squad.filter((p) => p.line === line && !p.rc_estimated && Array.isArray(p.profile_pos) && p.profile_pos.length === d)
+      .forEach((p) => {
+        const mw = Math.max(1, Number(p.minutes_total) || 0);
+        p.profile_pos.forEach((z, i) => { if (typeof z === "number") { sz[i] += z * mw; w[i] += mw; } });
+      });
+    lineAgg[line] = L.map((label, i) => ({ label, line, z: w[i] ? sz[i] / w[i] : null }));
+  });
+  const LINE_SHORT = { Bramka: "bramka", Obrona: "obrona", Pomoc: "pomoc", Atak: "atak" };
+  const pool = [];
+  Object.values(lineAgg).forEach((arr) => arr.forEach((a) => {
+    if (a.z == null) return; const ph = _phaseOf(a.label); if (ph) pool.push({ ...a, ph });
+  }));
+  // problemy = najbardziej poniżej średniej ligi (z<0); mocne strony = najwyżej (z>0)
+  const attProblems = pool.filter((a) => a.ph === "att" && a.z < -0.1).sort((a, b) => a.z - b.z).slice(0, 6);
+  const defProblems = pool.filter((a) => a.ph === "def" && a.z < -0.1).sort((a, b) => a.z - b.z).slice(0, 6);
+  const attStrong = pool.filter((a) => a.ph === "att" && a.z > 0.3).sort((a, b) => b.z - a.z).slice(0, 3);
+  const defStrong = pool.filter((a) => a.ph === "def" && a.z > 0.3).sort((a, b) => b.z - a.z).slice(0, 3);
+
+  // Najsłabsze role wg RC (realne) — kontekst do problemów.
+  const realRC = squad.filter((p) => !p.rc_estimated && typeof p.rc === "number");
+  const weakRoles = (() => {
+    const by = {}; realRC.forEach((p) => { const r = roleKey(p); (by[r] = by[r] || []).push(p.rc); });
+    return Object.entries(by).map(([r, xs]) => ({ r, label: ROLE_LABEL[r] || r, avg: xs.reduce((s, x) => s + x, 0) / xs.length, n: xs.length }))
+      .sort((a, b) => a.avg - b.avg);
+  })();
+
+  // Strzelcy/kreatorzy z ostatnich meczów.
+  const rpl = (recent.players || []).map((p) => ({ ...p, ga: (p.stats && (Number(p.stats.goals) || 0) + (Number(p.stats.assists) || 0)) || 0 }))
+    .filter((p) => p.ga > 0).sort((a, b) => b.ga - a.ga).slice(0, 6);
+
+  // --- Intuicyjne wskaźniki fazowe: średni z-score składowych → percentyl vs Ekstraklasa ---
+  const gaugeZ = (specs) => {
+    const zs = [];
+    specs.forEach(([line, re]) => (lineAgg[line] || []).forEach((a) => { if (a.z != null && re.test(a.label)) zs.push(a.z); }));
+    return zs.length ? zs.reduce((s, x) => s + x, 0) / zs.length : null;
+  };
+  const defGauges = [
+    { name: "Zaangażowanie: pressing i odzyski", z: gaugeZ([["Obrona", /pressing|odzysk/i]]) },
+    { name: "Udaremnianie podań / skuteczność odbioru", z: gaugeZ([["Obrona", /odbior|odbiór|przechwyt/i]]) },
+    { name: "Krycie: pojedynki powietrzne, bloki", z: gaugeZ([["Obrona", /powietrz|blok/i]]) },
+  ].filter((g) => g.z != null);
+  const attGauges = [
+    { name: "Kreatywność: xA, podania kluczowe, w pole karne", z: gaugeZ([["Pomoc", /xa|kluczow|pole karn/i], ["Atak", /xa|kluczow|pole karn/i]]) },
+    { name: "Agresywność: drybling, pressing, wymuszone faule", z: gaugeZ([["Pomoc", /drybling|pressing|wymuszone/i], ["Atak", /drybling|wymuszone/i]]) },
+    { name: "Skuteczność podań", z: gaugeZ([["Pomoc", /celno/i]]) },
+    { name: "Panowanie nad środkiem: xGChain/Buildup, progresja", z: gaugeZ([["Pomoc", /xgchain|xgbuildup|progresj|prowadzen/i]]) },
+  ].filter((g) => g.z != null);
+
+  // --- Najbardziej problematyczni zawodnicy per faza (realny profil, ≥300 min) ---
+  const playerPhaseZ = (p, phase) => {
+    const L = labs[p.line]; if (!Array.isArray(p.profile_pos) || !L || p.profile_pos.length !== L.length) return null;
+    const zs = []; p.profile_pos.forEach((z, i) => { if (typeof z === "number" && _phaseOf(L[i]) === phase) zs.push(z); });
+    return zs.length ? zs.reduce((s, x) => s + x, 0) / zs.length : null;
+  };
+  const problemPlayers = (phase, roles) => squad
+    .filter((p) => !p.rc_estimated && Array.isArray(p.profile_pos) && roles.has(roleKey(p)) && (Number(p.minutes_total) || 0) >= 300)
+    .map((p) => ({ p, z: playerPhaseZ(p, phase) }))
+    .filter((x) => x.z != null).sort((a, b) => a.z - b.z).slice(0, 3)
+    .map((x) => {
+      const L = labs[x.p.line]; let worst = null;
+      x.p.profile_pos.forEach((z, i) => { if (typeof z === "number" && _phaseOf(L[i]) === phase && (worst == null || z < worst.z)) worst = { label: L[i], z }; });
+      return { ...x, worst };
+    });
+  const attBadPlayers = problemPlayers("att", new Set(["10-9", "Skrzydłowy"]));
+  const defBadPlayers = problemPlayers("def", new Set(["Bramka", "ŚO", "6-8", "Skrzydłowy"]));
+
+  if (!recent.available && !Object.keys(lineAgg).length) {
+    return <Empty>Brak danych ostatnich meczów i profilu kadry — moduł pojawi się po najbliższym odświeżeniu.</Empty>;
+  }
+
+  const fmt2 = (x) => (x == null ? "—" : x.toFixed(2));
+  const sdLabel = (z) => `${z > 0 ? "+" : ""}${z.toFixed(1)} SD`;
+  const maxAbs = Math.max(0.6, ...[...attProblems, ...defProblems].map((a) => Math.abs(a.z)));
+
+  const Problem = ({ a }) => (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 72px", alignItems: "center", gap: 10, padding: "7px 0", borderBottom: `1px solid ${C.line}` }}>
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: 12.5, color: C.bone, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.label}</div>
+        <div style={{ fontSize: 10, color: C.steel, marginTop: 1 }}>{LINE_SHORT[a.line] || a.line}</div>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
+        <div style={{ flex: 1, height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
+          <div style={{ width: `${Math.min(100, Math.abs(a.z) / maxAbs * 100)}%`, height: "100%", background: C.bad, marginLeft: "auto" }} />
+        </div>
+        <span className="mono" style={{ fontSize: 10.5, fontWeight: 700, color: C.bad, minWidth: 40, textAlign: "right" }}>{sdLabel(a.z)}</span>
+      </div>
+    </div>
+  );
+
+  const Phase = ({ title, tint, perMatch, perMatchLabel, trend, trendGood, problems, strong, interp }) => (
+    <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 14, padding: "16px 18px" }}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
+        <div className="disp" style={{ fontSize: 17, fontWeight: 800, color: tint }}>{title}</div>
+        <div style={{ textAlign: "right" }}>
+          <div className="disp" style={{ fontSize: 24, lineHeight: 1, color: C.bone }}>{fmt2(perMatch)}</div>
+          <div style={{ fontSize: 10, color: C.steel }}>{perMatchLabel}</div>
+        </div>
+      </div>
+      {trend != null && (
+        <div style={{ fontSize: 11, marginTop: 6, color: trendGood ? C.good : C.bad }}>
+          Ostatnie 5 meczów: {trend > 0 ? "+" : ""}{trend.toFixed(2)}/mecz vs wcześniej {trendGood ? "▲ lepiej" : "▼ gorzej"}
+        </div>
+      )}
+      <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.steel, fontWeight: 700, margin: "14px 0 4px" }}>GŁÓWNE PROBLEMY (vs Ekstraklasa)</div>
+      {problems.length ? problems.map((a) => <Problem key={a.line + a.label} a={a} />)
+        : <div style={{ fontSize: 12, color: C.steel, padding: "6px 0" }}>Brak wyraźnych słabości profilowych w tej fazie — zespół powyżej średniej ligi.</div>}
+      {strong.length > 0 && (
+        <div style={{ fontSize: 11, color: C.steel, marginTop: 10 }}>
+          Atuty: {strong.map((a) => a.label).join(", ")}.
+        </div>
+      )}
+      <div style={{ fontSize: 11.5, color: C.steelHi, marginTop: 10, lineHeight: 1.45 }}>{interp}</div>
+    </div>
+  );
+
+  const topList = (arr) => arr.slice(0, 2).map((a) => a.label.toLowerCase()).join(" i ");
+  const attInterp = `Raków strzela ${fmt2(gfpm)} gola na mecz (${gf} w ${n} meczach).` +
+    (attProblems.length ? ` Najsłabsze ogniwa w ataku: ${topList(attProblems)} — tu kadra jest wyraźnie poniżej średniej Ekstraklasy.` : " W ataku brak wyraźnych luk profilowych.");
+  const defInterp = `Raków traci ${fmt2(gapm)} gola na mecz (${ga} w ${n} meczach).` +
+    (defProblems.length ? ` Najsłabsze ogniwa w obronie: ${topList(defProblems)}.` : " W obronie brak wyraźnych luk profilowych.");
+
+  return (
+    <div>
+      <Lead>Główne problemy Rakowa w ataku i obronie — wynik ostatnich {n} meczów (bramki, forma, trend) zestawiony z profilem kadry względem Ekstraklasy. Słabości profilowe liczone jako minuto-ważona średnia atrybutów zawodników vs średnia ligi (z-score &lt; 0 = poniżej ligi). Wyniki = ostatnie mecze; profil = bieżący sezon. Bez modelu RC.</Lead>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 12, margin: "16px 0 10px" }}>
+        <Tile label="Mecze (próbka)" val={n} color={C.bone} />
+        <Tile label="Forma" val={<span className="mono" style={{ fontSize: 15, letterSpacing: 1 }}>{team.form || "—"}</span>} color={C.steelHi} hint="Najstarszy → najnowszy mecz." />
+        <Tile label="Bilans bramek" val={`${gf}:${ga}`} color={gf >= ga ? C.good : C.bad} />
+        <Tile label="Punkty" val={typeof team.points === "number" ? team.points : "—"} color={C.blueHi} />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 16, marginTop: 6 }}>
+        <Phase title="⚔ Atak" tint={C.good} perMatch={gfpm} perMatchLabel="gole / mecz" trend={gfTrend} trendGood={(gfTrend || 0) >= 0}
+          problems={attProblems} strong={attStrong} interp={attInterp} />
+        <Phase title="🛡 Obrona" tint={C.bad} perMatch={gapm} perMatchLabel="stracone / mecz" trend={gaTrend} trendGood={(gaTrend || 0) <= 0}
+          problems={defProblems} strong={defStrong} interp={defInterp} />
+      </div>
+
+      {(defGauges.length > 0 || attGauges.length > 0) && (() => {
+        const gcol = (p) => (p >= 60 ? C.good : p >= 45 ? C.warn : C.bad);
+        const Gauge = ({ name, z }) => {
+          const p = _zPct(z);
+          return (
+            <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.line}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 5 }}>
+                <span style={{ fontSize: 12, color: C.bone }}>{name}</span>
+                <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: gcol(p) }}>{p}%</span>
+              </div>
+              <div style={{ height: 6, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: `${p}%`, height: "100%", background: gcol(p) }} />
+              </div>
+            </div>
+          );
+        };
+        return (
+          <div style={{ marginTop: 20 }}>
+            <SectionLabel>Intuicyjne wskaźniki fazowe (percentyl vs Ekstraklasa)</SectionLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16 }}>
+              <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
+                <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.bad, fontWeight: 700, marginBottom: 6 }}>OBRONA</div>
+                {defGauges.map((g) => <Gauge key={g.name} {...g} />)}
+              </div>
+              <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
+                <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.good, fontWeight: 700, marginBottom: 6 }}>ATAK</div>
+                {attGauges.map((g) => <Gauge key={g.name} {...g} />)}
+              </div>
+            </div>
+            <div style={{ fontSize: 10.5, color: C.steel, marginTop: 8 }}>
+              Percentyl = pozycja Rakowa wśród zawodników Ekstraklasy dla składowych danego wskaźnika (minuto-ważony profil). 50% = średnia ligi; poniżej 45% (czerwone) = realna słabość.
+            </div>
+          </div>
+        );
+      })()}
+
+      {(attBadPlayers.length > 0 || defBadPlayers.length > 0) && (() => {
+        const Bad = ({ x }) => (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10, alignItems: "center",
+            padding: "8px 12px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13, color: C.bone, fontWeight: 600 }}>{x.p.name}
+                <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}> · {roleName(x.p) || x.p.pos} · {Math.round(x.p.minutes_total || 0)} min</span>
+              </div>
+              {x.worst && <div style={{ fontSize: 10.5, color: C.steel, marginTop: 1 }}>najsłabszy atrybut: {x.worst.label}</div>}
+            </div>
+            <span className="mono" style={{ fontSize: 11.5, fontWeight: 700, color: C.bad, whiteSpace: "nowrap" }}>
+              {x.z > 0 ? "+" : ""}{x.z.toFixed(1)} SD
+            </span>
+          </div>
+        );
+        return (
+          <div style={{ marginTop: 20 }}>
+            <SectionLabel>Najbardziej problematyczni zawodnicy (profil vs Ekstraklasa, ≥300 min)</SectionLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16 }}>
+              <div>
+                <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.good, fontWeight: 700, marginBottom: 6 }}>W ATAKU</div>
+                <div style={{ display: "grid", gap: 7 }}>
+                  {attBadPlayers.length ? attBadPlayers.map((x) => <Bad key={x.p.id || x.p.name} x={x} />)
+                    : <div style={{ fontSize: 12, color: C.steel }}>Brak wyraźnie słabych zawodników ofensywnych.</div>}
+                </div>
+              </div>
+              <div>
+                <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.bad, fontWeight: 700, marginBottom: 6 }}>W OBRONIE</div>
+                <div style={{ display: "grid", gap: 7 }}>
+                  {defBadPlayers.length ? defBadPlayers.map((x) => <Bad key={x.p.id || x.p.name} x={x} />)
+                    : <div style={{ fontSize: 12, color: C.steel }}>Brak wyraźnie słabych zawodników defensywnych.</div>}
+                </div>
+              </div>
+            </div>
+            <div style={{ fontSize: 10.5, color: C.steel, marginTop: 8 }}>
+              Ranking: średni z-score zawodnika w atrybutach danej fazy (atak / obrona), od najniższego. To zawodnicy, którzy najbardziej ciągną profil w dół w swojej roli — do zestawienia z oceną trenera.
+            </div>
+          </div>
+        );
+      })()}
+
+      {weakRoles.length > 0 && (
+        <div style={{ marginTop: 18 }}>
+          <SectionLabel>Najsłabsze ogniwa wg RC (poziom vs Ekstraklasa)</SectionLabel>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {weakRoles.slice(0, 4).map((r) => (
+              <span key={r.r} style={{ fontSize: 12, color: C.bone, background: C.panel, border: `1px solid ${C.line}`,
+                borderRadius: 999, padding: "5px 12px" }}>
+                {r.label}: <b style={{ color: tierColor(Math.round(r.avg)) }}>{Math.round(r.avg)}</b> <span style={{ color: C.steel }}>(n{r.n})</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {rpl.length > 0 && (
+        <div style={{ marginTop: 18 }}>
+          <SectionLabel>Kto tworzy ofensywę (ostatnie mecze: gole + asysty)</SectionLabel>
+          <div style={{ display: "grid", gap: 7 }}>
+            {rpl.map((p) => (
+              <div key={p.id || p.name} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 12, alignItems: "center",
+                padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9 }}>
+                <span style={{ fontSize: 13, color: C.bone, fontWeight: 600 }}>{p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {roleName(p) || p.pos}</span></span>
+                <span style={{ fontSize: 11.5, color: C.steel }}>{Math.round(p.minutes || 0)} min</span>
+                <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: C.good }}>
+                  {Math.round((p.stats && p.stats.goals) || 0)}G / {Math.round((p.stats && p.stats.assists) || 0)}A
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 16, lineHeight: 1.5 }}>
+        Jak czytać: „gole/stracone na mecz" i forma pochodzą z ostatnich {n} meczów (liga + puchary, źródło: {recent.source || "—"}).
+        „Główne problemy" to atrybuty, w których kadra jest średnio poniżej Ekstraklasy (minuto-ważony z-score profilu stylu),
+        pogrupowane w fazę ataku i obrony. To diagnoza tendencji, nie ocena pojedynczego meczu.
+      </div>
+    </div>
+  );
+}
+
 const NAV_SVG = {
   twin: (<><circle cx="9" cy="8" r="3.3"/><path d="M3.5 20v-1a5 5 0 0 1 5-5h1a5 5 0 0 1 5 5v1"/><path d="M16 5.4a3 3 0 0 1 0 5.6"/><path d="M20.5 20v-1a4 4 0 0 0-2.6-3.7"/></>),
   digest: (<><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></>),
   squadprofile: (<><rect x="3.5" y="11" width="3.6" height="9" rx="1"/><rect x="10.2" y="5" width="3.6" height="15" rx="1"/><rect x="16.9" y="14" width="3.6" height="6" rx="1"/></>),
+  problems: (<><path d="M12 3 2 20h20L12 3z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="17" x2="12" y2="17"/></>),
   contracts: (<><rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9.2" x2="21" y2="9.2"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/></>),
   values: (<><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></>),
   eval: (<><rect x="6" y="4" width="12" height="16.5" rx="2"/><rect x="9" y="2.4" width="6" height="3.2" rx="1"/><path d="M9.3 13l2 2 3.6-3.8"/></>),
