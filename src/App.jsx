@@ -5364,6 +5364,80 @@ function ProblemsView({ data }) {
   const attBadPlayers = problemPlayers("att", new Set(["10-9", "Skrzydłowy"]));
   const defBadPlayers = problemPlayers("def", new Set(["Bramka", "ŚO", "6-8", "Skrzydłowy"]));
 
+  // --- Inne intuicyjne słabości (cała drużyna, poza wskaźnikami fazowymi) — tylko te poniżej średniej ligi ---
+  const extraGauges = [
+    { name: "Finalizacja: marnowanie sytuacji", hint: "Skuteczność wykończenia, gole bez karnych, strzały na kontakt — ile z okazji zamienia się w gole.", z: gaugeZ([["Atak", /wykończ|gole|strzały na kontakt/i]]) },
+    { name: "Intensywność biegowa obrony i pomocy", hint: "Dystans, sprinty i prędkość w dwóch pierwszych liniach — ile zespół „przejeżdża” bez piłki.", z: gaugeZ([["Obrona", /dystans|intensywn|sprint/i], ["Pomoc", /dystans|intensywn|sprint/i]]) },
+    { name: "Pressing i wysoki odbiór (obrona + pomoc)", hint: "Liczba akcji pressingowych i odzysków w defensywie i środku pola.", z: gaugeZ([["Obrona", /pressing|odzysk/i], ["Pomoc", /pressing|odzysk/i]]) },
+    { name: "Gra w powietrzu w ataku", hint: "Pojedynki powietrzne i ich skuteczność u napastników — gra na dośrodkowaniach.", z: gaugeZ([["Atak", /powietrz/i]]) },
+    { name: "Wyprowadzenie piłki do przodu z obrony", hint: "Podania do przodu zakładane przez obrońców — rozbijanie pressingu podaniem.", z: gaugeZ([["Obrona", /podania do przodu/i]]) },
+    { name: "Prowokowanie fauli / gra ciałem w ataku", hint: "Wymuszone faule przez napastników — wywalczanie stałych fragmentów.", z: gaugeZ([["Atak", /wymuszone/i]]) },
+  ].filter((g) => g.z != null && _zPct(g.z) < 50).sort((a, b) => a.z - b.z);
+
+  // --- Komentarz opisowy: automatyczna narracja syntezująca policzone wskaźniki w prozę ---
+  const _joinPl = (arr) => (arr.length <= 1 ? (arr[0] || "") : arr.slice(0, -1).join(", ") + " i " + arr[arr.length - 1]);
+  const _gLow = (gauges) => gauges.filter((g) => _zPct(g.z) < 45).sort((a, b) => a.z - b.z);
+  const _gHigh = (gauges) => gauges.filter((g) => _zPct(g.z) >= 55).sort((a, b) => b.z - a.z);
+  const _gName = (g) => `${g.name.split(":")[0].trim().toLowerCase()} (${_zPct(g.z)}%)`;
+  const _f2 = (x) => (x == null ? "—" : x.toFixed(2));
+  const narrative = (() => {
+    if (!n && !pool.length) return [];
+    const paras = [];
+    // 1) Obraz ogólny — bilans, forma, trend
+    const rec = matches.reduce((o, m) => {
+      const f = Number(m.gf), a = Number(m.ga);
+      if (Number.isFinite(f) && Number.isFinite(a)) { if (f > a) o.w++; else if (f === a) o.d++; else o.l++; }
+      return o;
+    }, { w: 0, d: 0, l: 0 });
+    let head = n
+      ? `W ostatnich ${n} meczach Raków ma bilans ${rec.w}-${rec.d}-${rec.l} (forma ${team.form || "—"}, od najstarszego meczu): strzela ${_f2(gfpm)} i traci ${_f2(gapm)} gola na mecz (${gf}:${ga}).`
+      : "Brak danych wynikowych z ostatnich meczów — diagnoza opiera się wyłącznie na profilu kadry względem Ekstraklasy.";
+    const tr = [];
+    if (gfTrend != null && Math.abs(gfTrend) >= 0.3) tr.push(gfTrend > 0 ? "ofensywa w ostatnich 5 meczach przyspieszyła" : "ofensywa wyhamowała");
+    if (gaTrend != null && Math.abs(gaTrend) >= 0.3) tr.push(gaTrend < 0 ? "obrona złapała równowagę (mniej traconych)" : "obrona zaczęła tracić więcej");
+    if (tr.length) head += ` Tendencja: ${_joinPl(tr)}.`;
+    paras.push({ t: "Obraz ogólny", c: C.steelHi, body: head });
+
+    // 2) Atak
+    {
+      const bits = [], low = _gLow(attGauges), high = _gHigh(attGauges);
+      if (low.length) bits.push(`najniżej wypada ${_joinPl(low.map(_gName))} — poniżej średniej ligi`);
+      if (attProblems.length) bits.push(`w profilu najmocniej ciągną w dół: ${_joinPl(attProblems.slice(0, 2).map((a) => a.label.toLowerCase()))}`);
+      if (attBadPlayers.length) bits.push(`indywidualnie profil najbardziej obniżają ${_joinPl(attBadPlayers.slice(0, 2).map((x) => x.p.name))}`);
+      let body = bits.length
+        ? `W fazie ataku ${bits.join("; ")}.`
+        : "W fazie ataku kadra nie wykazuje wyraźnych luk profilowych względem Ekstraklasy.";
+      if (high.length) body += ` Mocną stroną pozostaje ${_joinPl(high.map(_gName))}.`;
+      else if (attStrong.length) body += ` Atutem jest ${_joinPl(attStrong.slice(0, 2).map((a) => a.label.toLowerCase()))}.`;
+      if (rpl.length) body += ` Ofensywę w ostatnich meczach napędzają głównie ${_joinPl(rpl.slice(0, 2).map((p) => p.name))}.`;
+      paras.push({ t: "⚔ Atak", c: C.good, body });
+    }
+
+    // 3) Obrona
+    {
+      const bits = [], low = _gLow(defGauges), high = _gHigh(defGauges);
+      if (low.length) bits.push(`najsłabiej wypada ${_joinPl(low.map(_gName))}`);
+      if (defProblems.length) bits.push(`w profilu obronnym pod średnią ligi są: ${_joinPl(defProblems.slice(0, 2).map((a) => a.label.toLowerCase()))}`);
+      if (defBadPlayers.length) bits.push(`indywidualnie najwięcej odejmują ${_joinPl(defBadPlayers.slice(0, 2).map((x) => x.p.name))}`);
+      let body = bits.length
+        ? `W fazie obrony ${bits.join("; ")}.`
+        : "W fazie obrony kadra trzyma poziom Ekstraklasy — bez wyraźnych słabości profilowych.";
+      if (high.length) body += ` Lepiej wygląda ${_joinPl(high.map(_gName))}.`;
+      else if (defStrong.length) body += ` Atutem jest ${_joinPl(defStrong.slice(0, 2).map((a) => a.label.toLowerCase()))}.`;
+      if (weakRoles.length) { const wr = weakRoles[0]; body += ` Najsłabszym ogniwem wg RC pozostaje formacja „${wr.label}" (śr. ${Math.round(wr.avg)}).`; }
+      paras.push({ t: "🛡 Obrona", c: C.bad, body });
+    }
+
+    // 4) Inne intuicyjne słabości (przekrojowe, poza podziałem na fazy)
+    if (extraGauges.length) {
+      const top = extraGauges.slice(0, 3).map((g) => `${g.name.split(":")[0].split("(")[0].trim().toLowerCase()} (${_zPct(g.z)}%)`);
+      let body = `Poza samym podziałem na fazy, w intuicyjnych statystykach Raków najbardziej odstaje od Ekstraklasy w: ${_joinPl(top)}.`;
+      if (extraGauges.length > 3) body += ` Pełne zestawienie (${extraGauges.length} wskaźników) niżej.`;
+      paras.push({ t: "Inne słabe punkty", c: C.warn, body });
+    }
+    return paras;
+  })();
+
   if (!recent.available && !Object.keys(lineAgg).length) {
     return <Empty>Brak danych ostatnich meczów i profilu kadry — moduł pojawi się po najbliższym odświeżeniu.</Empty>;
   }
@@ -5430,6 +5504,26 @@ function ProblemsView({ data }) {
         <Tile label="Punkty" val={typeof team.points === "number" ? team.points : "—"} color={C.blueHi} />
       </div>
 
+      {narrative.length > 0 && (
+        <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 14, padding: "16px 18px", margin: "6px 0 2px" }}>
+          <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.steel, fontWeight: 700, marginBottom: 11 }}>KOMENTARZ ANALITYCZNY (automatyczny)</div>
+          <div style={{ display: "grid", gap: 11 }}>
+            {narrative.map((p) => (
+              <div key={p.t} style={{ display: "grid", gridTemplateColumns: "4px 1fr", gap: 12 }}>
+                <div style={{ background: p.c, borderRadius: 2, opacity: 0.85 }} />
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: p.c, marginBottom: 3 }}>{p.t}</div>
+                  <div style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.5 }}>{p.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 10, color: C.steel, marginTop: 12 }}>
+            Tekst generowany automatycznie z policzonych wskaźników (wynik ostatnich meczów + profil kadry vs Ekstraklasa). Skrót diagnozy — nie zastępuje oceny trenera.
+          </div>
+        </div>
+      )}
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 16, marginTop: 6 }}>
         <Phase title="⚔ Atak" tint={C.good} perMatch={gfpm} perMatchLabel="gole / mecz" trend={gfTrend} trendGood={(gfTrend || 0) >= 0}
           problems={attProblems} strong={attStrong} interp={attInterp} />
@@ -5468,6 +5562,35 @@ function ProblemsView({ data }) {
             </div>
             <div style={{ fontSize: 10.5, color: C.steel, marginTop: 8 }}>
               Percentyl = pozycja Rakowa wśród zawodników Ekstraklasy dla składowych danego wskaźnika (minuto-ważony profil). 50% = średnia ligi; poniżej 45% (czerwone) = realna słabość.
+            </div>
+          </div>
+        );
+      })()}
+
+      {extraGauges.length > 0 && (() => {
+        const gcol = (p) => (p >= 45 ? C.warn : C.bad);
+        return (
+          <div style={{ marginTop: 20 }}>
+            <SectionLabel>Inne słabe punkty — intuicyjne statystyki (cała drużyna, percentyl vs Ekstraklasa)</SectionLabel>
+            <div style={{ display: "grid", gap: 10 }}>
+              {extraGauges.map((g) => {
+                const p = _zPct(g.z);
+                return (
+                  <div key={g.name} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "12px 15px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, marginBottom: 6 }}>
+                      <span style={{ fontSize: 13, color: C.bone, fontWeight: 600 }}>{g.name}</span>
+                      <span className="mono" style={{ fontSize: 13, fontWeight: 800, color: gcol(p) }}>{p}%</span>
+                    </div>
+                    <div style={{ height: 6, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
+                      <div style={{ width: `${p}%`, height: "100%", background: gcol(p) }} />
+                    </div>
+                    <div style={{ fontSize: 11, color: C.steel, marginTop: 6, lineHeight: 1.4 }}>{g.hint}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ fontSize: 10.5, color: C.steel, marginTop: 8 }}>
+              Przekrojowe wskaźniki spoza podziału fazowego, policzone z profilu stylu (minuto-ważony z-score składowych → percentyl). Pokazane tylko te poniżej średniej ligi (50%). Niższy słupek = większa słabość względem Ekstraklasy.
             </div>
           </div>
         );
