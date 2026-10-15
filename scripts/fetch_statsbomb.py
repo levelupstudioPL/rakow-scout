@@ -747,7 +747,40 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
         print(f"[mecze] Scoutastic: w puli {n_cup_total} rozegranych meczów pucharowych Rakowa.", file=sys.stderr)
     rk.sort(key=_dk)
     recent = rk[-n_matches:]
- 
+
+    # --- Pełny bilans sezonu Ekstraklasy (wszystkie rozegrane kolejki, bez cap-a okna) ---
+    # Okno „recent" (ostatnie N) służy do formy i statystyk zawodników; bilans bramkowy
+    # drużyny powinien odzwierciedlać CAŁY sezon ligowy (25 straconych ≠ suma 5 ostatnich).
+    def _mg(m):
+        rh = str(m.get("homeTeamId")) == team_ext
+        try:
+            gf = int(m.get("scoreHome")) if rh else int(m.get("scoreAway"))
+            ga = int(m.get("scoreAway")) if rh else int(m.get("scoreHome"))
+        except Exception:  # noqa: BLE001
+            return None
+        return {"date": _dk(m)[:10], "home": rh,
+                "opponent": (m.get("awayTeamName") if rh else m.get("homeTeamName")),
+                "gf": gf, "ga": ga, "result": "W" if gf > ga else ("D" if gf == ga else "L"),
+                "week": m.get("matchday"),
+                "opp_id": str((m.get("awayTeamId") if rh else m.get("homeTeamId")) or ""),
+                "rk_id": team_ext}
+    league_all = [x for x in (_mg(m) for m in rk if (m.get("_comp") or comp) == comp) if x]
+    if league_all:
+        lgf = sum(x["gf"] for x in league_all); lga = sum(x["ga"] for x in league_all)
+        lw = sum(1 for x in league_all if x["result"] == "W")
+        ld = sum(1 for x in league_all if x["result"] == "D")
+        ll = sum(1 for x in league_all if x["result"] == "L")
+        league_season = {
+            "season": season, "comp": comp, "rounds": len(league_all),
+            "gf": lgf, "ga": lga, "points": lw * 3 + ld, "w": lw, "d": ld, "l": ll,
+            "form": "".join(x["result"] for x in league_all[-10:]),
+            "matches": league_all,
+        }
+        print(f"[mecze] Scoutastic: pełny sezon {comp}/{season} = {len(league_all)} kolejek, "
+              f"bilans {lgf}:{lga}, {lw*3+ld} pkt ({lw}-{ld}-{ll}).", file=sys.stderr)
+    else:
+        league_season = None
+
     squad_by_norm = {_norm_ascii(s.get("name", "")): s for s in squad}
     matches_out, players_agg = [], {}
     team_gf = team_ga = team_pts = 0
@@ -836,6 +869,7 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
         "team": {"gf": team_gf, "ga": team_ga, "points": team_pts,
                  "form": "".join(form), "minutes_available": minutes_available},
         "seasons_used": [{"season_id": season, "matches": len(matches_out), "provisional": False}],
+        "league_season": league_season,
         "newest_date": newest, "stale": stale, "days_since": days_since, "provisional": False,
         "note": ("Źródło: Scoutastic/Transfermarkt (minuty/gole/asysty). Mecz waliduje "
                  "minuty (preferencja trenera) i wynik; output miękko (bez xG/xA)."),
