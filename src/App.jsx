@@ -5281,17 +5281,37 @@ function ProblemsView({ data }) {
   const labs = (data.meta && data.meta.style_labels) || {};
   const recent = data.recent || {};
   const team = recent.team || {};
-  const matches = (recent.matches || []).slice()
-    .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
-  const n = matches.length;
   const sumK = (arr, k) => arr.reduce((s, m) => s + (Number(m[k]) || 0), 0);
-  const gf = typeof team.gf === "number" ? team.gf : sumK(matches, "gf");
-  const ga = typeof team.ga === "number" ? team.ga : sumK(matches, "ga");
+
+  // Okno „ostatnich meczów" (liga + puchary) — do formy i statystyk zawodników.
+  const winMatches = (recent.matches || []).slice()
+    .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+  const winN = winMatches.length;
+  const winGf = typeof team.gf === "number" ? team.gf : sumK(winMatches, "gf");
+  const winGa = typeof team.ga === "number" ? team.ga : sumK(winMatches, "ga");
+  const winForm = team.form || "";
+
+  // Pełny sezon Ekstraklasy (wszystkie kolejki) — bilans bramkowy headline.
+  // Fallback do okna, jeśli pipeline nie dostarczył league_season (np. ścieżka StatsBomb).
+  const ls = recent.league_season || null;
+  const seasonMatches = ls && Array.isArray(ls.matches)
+    ? ls.matches.slice().sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))
+    : winMatches;
+  const isSeason = !!(ls && seasonMatches.length);
+  const n = isSeason ? (ls.rounds || seasonMatches.length) : winN;
+  const gf = isSeason ? ls.gf : winGf;
+  const ga = isSeason ? ls.ga : winGa;
+  const pts = isSeason ? ls.points : (typeof team.points === "number" ? team.points : null);
+  const form = isSeason ? (ls.form || "") : winForm;
+  const scopeLabel = isSeason ? "Ekstraklasa — sezon" : "Ostatnie mecze";
   const gfpm = n ? gf / n : null, gapm = n ? ga / n : null;
-  const last5 = matches.slice(-5), prev = matches.slice(0, Math.max(0, n - 5));
+
+  // Trend: ostatnie 5 vs wcześniejsze kolejki (w ramach tego samego źródła).
+  const trN = seasonMatches.length;
+  const last5 = seasonMatches.slice(-5), prev = seasonMatches.slice(0, Math.max(0, trN - 5));
   const pmd = (arr, k) => (arr.length ? sumK(arr, k) / arr.length : null);
-  const gfTrend = (pmd(last5, "gf") != null && pmd(prev, "gf") != null) ? pmd(last5, "gf") - pmd(prev, "gf") : null;
-  const gaTrend = (pmd(last5, "ga") != null && pmd(prev, "ga") != null) ? pmd(last5, "ga") - pmd(prev, "ga") : null;
+  const gfTrend = (pmd(last5, "gf") != null && pmd(prev, "gf") != null && prev.length) ? pmd(last5, "gf") - pmd(prev, "gf") : null;
+  const gaTrend = (pmd(last5, "ga") != null && pmd(prev, "ga") != null && prev.length) ? pmd(last5, "ga") - pmd(prev, "ga") : null;
 
   // Agregacja z-score per linia (minuto-ważona), tylko zawodnicy z realnym profilem.
   const lineAgg = {};
@@ -5384,14 +5404,18 @@ function ProblemsView({ data }) {
     if (!n && !pool.length) return [];
     const paras = [];
     // 1) Obraz ogólny — bilans, forma, trend
-    const rec = matches.reduce((o, m) => {
-      const f = Number(m.gf), a = Number(m.ga);
-      if (Number.isFinite(f) && Number.isFinite(a)) { if (f > a) o.w++; else if (f === a) o.d++; else o.l++; }
-      return o;
-    }, { w: 0, d: 0, l: 0 });
+    const rec = isSeason
+      ? { w: ls.w, d: ls.d, l: ls.l }
+      : seasonMatches.reduce((o, m) => {
+          const f = Number(m.gf), a = Number(m.ga);
+          if (Number.isFinite(f) && Number.isFinite(a)) { if (f > a) o.w++; else if (f === a) o.d++; else o.l++; }
+          return o;
+        }, { w: 0, d: 0, l: 0 });
+    const scopeTxt = isSeason ? `W ${n} kolejkach Ekstraklasy` : `W ostatnich ${n} meczach`;
     let head = n
-      ? `W ostatnich ${n} meczach Raków ma bilans ${rec.w}-${rec.d}-${rec.l} (forma ${team.form || "—"}, od najstarszego meczu): strzela ${_f2(gfpm)} i traci ${_f2(gapm)} gola na mecz (${gf}:${ga}).`
-      : "Brak danych wynikowych z ostatnich meczów — diagnoza opiera się wyłącznie na profilu kadry względem Ekstraklasy.";
+      ? `${scopeTxt} Raków ma bilans ${rec.w}-${rec.d}-${rec.l} (forma ${form || "—"}, od najstarszej kolejki): strzela ${_f2(gfpm)} i traci ${_f2(gapm)} gola na mecz (${gf}:${ga}).`
+      : "Brak danych wynikowych — diagnoza opiera się wyłącznie na profilu kadry względem Ekstraklasy.";
+    if (isSeason && winN) head += ` Dla porównania ostatnie ${winN} meczów (z pucharami): forma ${winForm || "—"}, bilans ${winGf}:${winGa}.`;
     const tr = [];
     if (gfTrend != null && Math.abs(gfTrend) >= 0.3) tr.push(gfTrend > 0 ? "ofensywa w ostatnich 5 meczach przyspieszyła" : "ofensywa wyhamowała");
     if (gaTrend != null && Math.abs(gaTrend) >= 0.3) tr.push(gaTrend < 0 ? "obrona złapała równowagę (mniej traconych)" : "obrona zaczęła tracić więcej");
@@ -5495,13 +5519,13 @@ function ProblemsView({ data }) {
 
   return (
     <div>
-      <Lead>Główne problemy Rakowa w ataku i obronie — wynik ostatnich {n} meczów (bramki, forma, trend) zestawiony z profilem kadry względem Ekstraklasy. Słabości profilowe liczone jako minuto-ważona średnia atrybutów zawodników vs średnia ligi (z-score &lt; 0 = poniżej ligi). Wyniki = ostatnie mecze; profil = bieżący sezon. Bez modelu RC.</Lead>
+      <Lead>Główne problemy Rakowa w ataku i obronie — {isSeason ? `wynik całego sezonu Ekstraklasy (${n} kolejek)` : `wynik ostatnich ${n} meczów`} (bramki, forma, trend) zestawiony z profilem kadry względem Ekstraklasy. Słabości profilowe liczone jako minuto-ważona średnia atrybutów zawodników vs średnia ligi (z-score &lt; 0 = poniżej ligi). Bilans bramkowy = {isSeason ? "pełna tabela ligowa (bez pucharów)" : "okno ostatnich meczów"}; profil = bieżący sezon. Bez modelu RC.</Lead>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 12, margin: "16px 0 10px" }}>
-        <Tile label="Mecze (próbka)" val={n} color={C.bone} />
-        <Tile label="Forma" val={<span className="mono" style={{ fontSize: 15, letterSpacing: 1 }}>{team.form || "—"}</span>} color={C.steelHi} hint="Najstarszy → najnowszy mecz." />
-        <Tile label="Bilans bramek" val={`${gf}:${ga}`} color={gf >= ga ? C.good : C.bad} />
-        <Tile label="Punkty" val={typeof team.points === "number" ? team.points : "—"} color={C.blueHi} />
+        <Tile label={isSeason ? "Kolejki (Ekstraklasa)" : "Mecze (próbka)"} val={n} color={C.bone} hint={isSeason ? "Rozegrane kolejki bieżącego sezonu ligowego." : undefined} />
+        <Tile label={isSeason ? "Forma (ostatnie 10)" : "Forma"} val={<span className="mono" style={{ fontSize: 15, letterSpacing: 1 }}>{form || "—"}</span>} color={C.steelHi} hint={isSeason ? "Najstarsza → najnowsza kolejka ligi." : "Najstarszy → najnowszy mecz."} />
+        <Tile label={isSeason ? "Bilans bramek (sezon)" : "Bilans bramek"} val={`${gf}:${ga}`} color={gf >= ga ? C.good : C.bad} hint={isSeason ? "Cała Ekstraklasa, bez pucharów." : undefined} />
+        <Tile label={isSeason ? "Punkty (Ekstraklasa)" : "Punkty"} val={typeof pts === "number" ? pts : "—"} color={C.blueHi} />
       </div>
 
       {narrative.length > 0 && (
@@ -5670,8 +5694,10 @@ function ProblemsView({ data }) {
       )}
 
       <div style={{ fontSize: 10.5, color: C.steel, marginTop: 16, lineHeight: 1.5 }}>
-        Jak czytać: „gole/stracone na mecz" i forma pochodzą z ostatnich {n} meczów (liga + puchary, źródło: {recent.source || "—"}).
-        „Główne problemy" to atrybuty, w których kadra jest średnio poniżej Ekstraklasy (minuto-ważony z-score profilu stylu),
+        Jak czytać: {isSeason
+          ? `bilans bramkowy, forma, punkty i „gole/stracone na mecz" obejmują cały sezon Ekstraklasy (${n} kolejek, bez pucharów; źródło: ${recent.source || "—"}). Statystyki zawodników i strzelcy liczone są z okna ostatnich ${winN} meczów (liga + puchary).`
+          : `„gole/stracone na mecz" i forma pochodzą z ostatnich ${n} meczów (liga + puchary, źródło: ${recent.source || "—"}).`}
+        {" "}„Główne problemy" to atrybuty, w których kadra jest średnio poniżej Ekstraklasy (minuto-ważony z-score profilu stylu),
         pogrupowane w fazę ataku i obrony. To diagnoza tendencji, nie ocena pojedynczego meczu.
       </div>
     </div>
