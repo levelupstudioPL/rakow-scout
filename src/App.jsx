@@ -443,7 +443,7 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["problems", "Problemy zespołu"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["problems", "Problemy zespołu"], ["planpracy", "Plan pracy"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
@@ -608,6 +608,7 @@ export default function App() {
             {view === "digest" && "Podsumowanie"}
             {view === "squadprofile" && "Profil kadry"}
             {view === "problems" && "Problemy zespołu"}
+            {view === "planpracy" && "Plan pracy zawodników"}
             {view === "contracts" && "Kalendarz kontraktów"}
             {view === "values" && "Monitoring wartości"}
             {view === "eval" && "Ocena trenera"}
@@ -652,6 +653,7 @@ export default function App() {
           {view === "digest" && <DigestView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "squadprofile" && <SquadProfileView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "problems" && <ProblemsView data={data} />}
+          {view === "planpracy" && <WorkPlanView data={data} />}
           {view === "contracts" && <ContractsView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "values" && <ValuesView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "eval" && <EvalView data={data} evaluator={auth.evaluator} />}
@@ -5277,6 +5279,107 @@ function _erf(x) {
 }
 const _zPct = (z) => Math.max(0, Math.min(100, Math.round(50 * (1 + _erf(z / Math.SQRT2)))));
 
+// Słownik wskazówek treningowych: atrybut profilu (słowo-klucz w etykiecie) → konkretna praca.
+const _CUE_MAP = [
+  [/wykończ/i, "trening wykończenia i jakości ostatniego podania"],
+  [/pressing/i, "koordynacja pressingu i wyzwalaczy (kiedy atakujemy piłkę)"],
+  [/odzysk/i, "reakcja po stracie — gegenpressing w pierwszych 5 sekundach"],
+  [/odbior|odbiór|przechwyt/i, "timing wejścia w pojedynek i ustawianie ciała"],
+  [/powietrz/i, "gra głową: ustawianie, timing wyskoku, pojedynki powietrzne"],
+  [/blok/i, "blokowanie strzałów i ustawianie w polu karnym"],
+  [/wybici/i, "czystość wybicia i wyprowadzenie piłki po nim"],
+  [/do przodu|progresj|tercji ataku/i, "odważne podanie do przodu, łamanie linii rywala"],
+  [/celno/i, "dokładność podań pod presją i szybkość decyzji"],
+  [/drybling/i, "pojedynki 1v1 i eliminacja rywala dryblingiem"],
+  [/xa|kluczow|pole karn|asyst/i, "kreowanie: podania kluczowe i dogranie w pole karne"],
+  [/xg|gol|strza|wykoncz/i, "pozycjonowanie w polu karnym i finalizacja"],
+  [/xgchain|xgbuildup|udział w akcjach/i, "udział w rozegraniu i łączenie gry"],
+  [/prowadzen/i, "prowadzenie piłki z progresją na połowę rywala"],
+  [/dystans|intensywn|sprint|prędkość/i, "wytrzymałość biegowa i powtarzalność sprintów"],
+  [/wymuszone/i, "gra ciałem, utrzymanie piłki i prowokowanie fauli"],
+  [/gsaa|obron|interwencj/i, "pozycjonowanie bramkarza i interwencje w polu karnym"],
+  [/długie|dystrybucj|podania/i, "jakość wyprowadzenia i dystrybucji piłki"],
+];
+const _cue = (label) => { for (const [re, c] of _CUE_MAP) if (re.test(label)) return c; return "praca indywidualna nad tym elementem"; };
+
+// Lekki wykres liniowy (inline SVG, 1–2 serie) — trend w czasie. Reaguje na motyw przez C.
+function TrendChart({ series, xLabels, height = 190, yStep = 1, yMin = 0, baseline0 = true }) {
+  const [hover, setHover] = useState(null);
+  const N = xLabels.length;
+  if (!N || !series.length) return <Empty>Za mało danych do wykresu.</Empty>;
+  const W = 640, padL = 30, padR = 54, padT = 16, padB = 22;
+  const allV = series.flatMap((s) => s.values.filter((v) => typeof v === "number"));
+  const rawMax = allV.length ? Math.max(...allV) : 1;
+  const lo = baseline0 ? Math.min(yMin, ...allV, 0) : Math.min(...allV);
+  const hi = Math.ceil((rawMax + yStep * 0.4) / yStep) * yStep || 1;
+  const span = hi - lo || 1;
+  const xAt = (i) => padL + (N === 1 ? 0 : (i * (W - padL - padR)) / (N - 1));
+  const yAt = (v) => padT + (1 - (v - lo) / span) * (height - padT - padB);
+  const ticks = []; for (let t = lo; t <= hi + 1e-9; t += yStep) ticks.push(t);
+  return (
+    <div style={{ position: "relative", width: "100%" }}
+      onMouseLeave={() => setHover(null)}>
+      <svg viewBox={`0 0 ${W} ${height}`} width="100%" style={{ display: "block", overflow: "visible" }} aria-hidden="true">
+        {ticks.map((t) => (
+          <g key={t}>
+            <line x1={padL} x2={W - padR} y1={yAt(t)} y2={yAt(t)} stroke={C.line} strokeWidth="1" />
+            <text x={padL - 6} y={yAt(t) + 3} textAnchor="end" fontSize="9.5" fill={C.steel}>{Number.isInteger(t) ? t : t.toFixed(1)}</text>
+          </g>
+        ))}
+        {series.map((s) => {
+          const pts = s.values.map((v, i) => (typeof v === "number" ? `${xAt(i)},${yAt(v)}` : null)).filter(Boolean).join(" ");
+          const last = s.values.length - 1;
+          return (
+            <g key={s.name}>
+              <polyline points={pts} fill="none" stroke={s.color} strokeWidth="2.2"
+                strokeLinejoin="round" strokeLinecap="round" strokeDasharray={s.dash ? "5 4" : "none"} />
+              {s.values.map((v, i) => typeof v === "number" ? (
+                <circle key={i} cx={xAt(i)} cy={yAt(v)} r={hover === i ? 4 : 2.6} fill={C.panel} stroke={s.color} strokeWidth="2" />
+              ) : null)}
+              {typeof s.values[last] === "number" && (
+                <text x={xAt(last) + 7} y={yAt(s.values[last]) + 3.5} fontSize="10.5" fontWeight="700" fill={s.color}>{s.name}</text>
+              )}
+            </g>
+          );
+        })}
+        {hover != null && <line x1={xAt(hover)} x2={xAt(hover)} y1={padT} y2={height - padB} stroke={C.steel} strokeWidth="1" strokeDasharray="3 3" />}
+        {[0, Math.floor((N - 1) / 2), N - 1].filter((v, i, a) => a.indexOf(v) === i && v >= 0).map((i) => (
+          <text key={i} x={xAt(i)} y={height - 7} textAnchor="middle" fontSize="9" fill={C.steel}>{xLabels[i]}</text>
+        ))}
+      </svg>
+      <div style={{ position: "absolute", inset: 0, display: "flex" }}>
+        {xLabels.map((_, i) => (
+          <div key={i} style={{ flex: 1, cursor: "default" }} onMouseEnter={() => setHover(i)} />
+        ))}
+      </div>
+      {hover != null && (
+        <div style={{ position: "absolute", top: 4, left: `${(xAt(hover) / W) * 100}%`, transform: "translateX(-50%)",
+          background: C.panelHi, border: `1px solid ${C.line}`, borderRadius: 8, padding: "5px 9px", pointerEvents: "none",
+          fontSize: 11, color: C.bone, whiteSpace: "nowrap", boxShadow: "0 4px 14px -6px rgba(10,20,50,.4)", zIndex: 2 }}>
+          <div style={{ color: C.steelHi, fontSize: 10, marginBottom: 2 }}>{xLabels[hover]}</div>
+          {series.map((s) => (
+            <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 9, height: 2.5, background: s.color, borderRadius: 2, flexShrink: 0 }} />
+              {s.name}: <b className="mono">{typeof s.values[hover] === "number" ? s.values[hover].toFixed(s.int ? 0 : 2) : "—"}</b>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+function ChartLegend({ series }) {
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 14, margin: "2px 0 8px" }}>
+      {series.map((s) => (
+        <span key={s.name} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11.5, color: C.steelHi }}>
+          <span style={{ width: 16, height: 0, borderTop: `2.5px ${s.dash ? "dashed" : "solid"} ${s.color}` }} />{s.name}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function ProblemsView({ data }) {
   const squad = data.squad || [];
   const labs = (data.meta && data.meta.style_labels) || {};
@@ -5518,6 +5621,42 @@ function ProblemsView({ data }) {
   const defInterp = `Raków traci ${fmt2(gapm)} gola na mecz (${ga} w ${n} meczach).` +
     (defProblems.length ? ` Najsłabsze ogniwa w obronie: ${topList(defProblems)}.` : " W obronie brak wyraźnych luk profilowych.");
 
+  // --- Dane do wykresów trendów (mecze sezonu / okna, od najstarszego) ---
+  const chartMatches = seasonMatches;
+  const oppShort = (m) => { const o = String(m.opponent || "").trim(); return o.length > 12 ? o.slice(0, 11) + "…" : (o || "—"); };
+  const xLabels = chartMatches.map((m, i) => `${i + 1}. ${oppShort(m)} (${m.gf}:${m.ga})`);
+  const goalSeries = [
+    { name: "Strzelone", color: C.good, int: true, values: chartMatches.map((m) => Number(m.gf)) },
+    { name: "Stracone", color: C.bad, dash: true, int: true, values: chartMatches.map((m) => Number(m.ga)) },
+  ];
+  const _ptsOf = (r) => (r === "W" ? 3 : r === "D" ? 1 : 0);
+  const ppg = chartMatches.map((m, i) => {
+    const w = chartMatches.slice(Math.max(0, i - 4), i + 1);
+    return w.reduce((s, x) => s + _ptsOf(x.result), 0) / (w.length || 1);
+  });
+  const formSeries = [{ name: "PPG (okno 5)", color: C.blue, values: ppg }];
+
+  // --- Wskazówki dla trenera (automatyczne, z metryk) ---
+  const coachTips = (() => {
+    const out = [];
+    const defWorse = (gapm != null && gfpm != null) ? gapm >= gfpm : !!defProblems.length;
+    if (defWorse && defProblems.length) {
+      out.push({ prio: "Priorytet", area: "Obrona", text: `Obrona jest większym problemem niż atak (traci ${fmt2(gapm)} vs strzela ${fmt2(gfpm)} gola/mecz). Najpierw faza obronna: najsłabsze ${defProblems.slice(0, 2).map((a) => a.label.toLowerCase()).join(" i ")} → ${_cue(defProblems[0].label)}.` });
+    } else if (!defWorse && attProblems.length) {
+      out.push({ prio: "Priorytet", area: "Atak", text: `Atak jest słabszą stroną profilu. Najsłabsze ${attProblems.slice(0, 2).map((a) => a.label.toLowerCase()).join(" i ")} → ${_cue(attProblems[0].label)}.` });
+    }
+    const fin = extraGauges.find((g) => /finalizacj/i.test(g.name));
+    if (fin) out.push({ prio: "Wysoki", area: "Atak", text: `Finalizacja na ${_zPct(fin.z)}% ligi — dużo sytuacji, słaba konwersja. Trenuj jakość okazji i wykończenie, nie samą liczbę strzałów.` });
+    const intG = extraGauges.find((g) => /intensywno/i.test(g.name));
+    if (intG) out.push({ prio: "Wysoki", area: "Kondycja", text: `Intensywność biegowa obrony i pomocy na ${_zPct(intG.z)}% — ${_cue("dystans")}; pilnuj kompaktowości i pressingu bez piłki.` });
+    if (gaTrend != null && gaTrend >= 0.3) out.push({ prio: "Uwaga", area: "Obrona", text: `Obrona traci coraz więcej w ostatnich 5 meczach (+${gaTrend.toFixed(2)}/mecz) — zatrzymaj trend, zanim się utrwali.` });
+    if (gfTrend != null && gfTrend <= -0.3) out.push({ prio: "Uwaga", area: "Atak", text: `Skuteczność ofensywna spada w ostatnich 5 meczach (${gfTrend.toFixed(2)}/mecz) — odśwież wzorce kreowania sytuacji.` });
+    const air = extraGauges.find((g) => /powietrz/i.test(g.name));
+    if (air) out.push({ prio: "Średni", area: "Atak", text: `Słaba gra w powietrzu w ataku (${_zPct(air.z)}%) — dośrodkowania mało opłacalne; graj niżej / na dogranie do nogi albo wprowadź grę głową.` });
+    if (defBadPlayers.length) out.push({ prio: "Średni", area: "Kadra", text: `Profil obrony najbardziej obniżają ${defBadPlayers.slice(0, 2).map((x) => x.p.name).join(" i ")} — indywidualny plan pracy (zakładka „Plan pracy") i dobór ustawienia.` });
+    return out.slice(0, 7);
+  })();
+
   return (
     <div>
       <Lead>Główne problemy Rakowa w ataku i obronie — {isSeason ? `wynik całego sezonu Ekstraklasy (${n} kolejek)` : `wynik ostatnich ${n} meczów`} (bramki, forma, trend) zestawiony z profilem kadry względem Ekstraklasy. Słabości profilowe liczone jako minuto-ważona średnia atrybutów zawodników vs średnia ligi (z-score &lt; 0 = poniżej ligi). Bilans bramkowy = {isSeason ? "pełna tabela ligowa (bez pucharów)" : "okno ostatnich meczów"}; profil = bieżący sezon. Bez modelu RC.</Lead>
@@ -5694,6 +5833,48 @@ function ProblemsView({ data }) {
         </div>
       )}
 
+      <div style={{ marginTop: 22 }}>
+        <SectionLabel>Wskazówki dla trenera (wynikające z danych)</SectionLabel>
+        <div style={{ display: "grid", gap: 8 }}>
+          {coachTips.length ? coachTips.map((t, i) => {
+            const pc = t.prio === "Priorytet" ? C.bad : (t.prio === "Wysoki" || t.prio === "Uwaga") ? C.warn : C.blue;
+            return (
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "76px 1fr", gap: 11, alignItems: "start",
+                padding: "10px 13px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, borderLeft: `3px solid ${pc}` }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                  <span className="mono" style={{ fontSize: 9, fontWeight: 800, letterSpacing: 0.5, color: pc, textTransform: "uppercase" }}>{t.prio}</span>
+                  <span style={{ fontSize: 10.5, color: C.steel }}>{t.area}</span>
+                </div>
+                <div style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.45 }}>{t.text}</div>
+              </div>
+            );
+          }) : <div style={{ fontSize: 12, color: C.steel }}>Brak wyraźnych wskazań — profil i wyniki blisko średniej ligi.</div>}
+        </div>
+        <div style={{ fontSize: 10, color: C.steel, marginTop: 8 }}>
+          Wskazówki generowane automatycznie z metryk (profil vs Ekstraklasa + wyniki). To hipotezy do weryfikacji na boisku, nie gotowe decyzje.
+        </div>
+      </div>
+
+      {chartMatches.length >= 3 && (
+        <div style={{ marginTop: 22 }}>
+          <SectionLabel>Wykresy trendów</SectionLabel>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(330px,1fr))", gap: 18 }}>
+            <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
+              <div style={{ fontSize: 12.5, color: C.bone, fontWeight: 700, marginBottom: 2 }}>Bramki na mecz</div>
+              <ChartLegend series={goalSeries} />
+              <TrendChart series={goalSeries} xLabels={xLabels} yStep={1} />
+            </div>
+            <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
+              <div style={{ fontSize: 12.5, color: C.bone, fontWeight: 700, marginBottom: 10 }}>Forma — punkty na mecz (okno 5)</div>
+              <TrendChart series={formSeries} xLabels={xLabels} yStep={0.5} />
+            </div>
+          </div>
+          <div style={{ fontSize: 10, color: C.steel, marginTop: 8 }}>
+            {isSeason ? "Kolejki Ekstraklasy, od najstarszej. " : "Ostatnie mecze, od najstarszego. "}Najedź kursorem, by zobaczyć konkretny mecz. PPG = średnia punktów z 5 ostatnich meczów (3 = komplet).
+          </div>
+        </div>
+      )}
+
       <div style={{ fontSize: 10.5, color: C.steel, marginTop: 16, lineHeight: 1.5 }}>
         Jak czytać: {isSeason
           ? `bilans bramkowy, forma, punkty i „gole/stracone na mecz" obejmują cały sezon Ekstraklasy (${n} kolejek, bez pucharów; źródło: ${recent.source || "—"}). Statystyki zawodników i strzelcy liczone są z okna ostatnich ${winN} meczów (liga + puchary).`
@@ -5705,11 +5886,93 @@ function ProblemsView({ data }) {
   );
 }
 
+// Indywidualny plan pracy dla każdego zawodnika — z profilu vs Ekstraklasa (atrybuty).
+function WorkPlanView({ data }) {
+  const squad = data.squad || [];
+  const labs = (data.meta && data.meta.style_labels) || {};
+  const ORDER = ["Bramka", "Obrona", "Pomoc", "Atak"];
+  const LBL = { Bramka: "Bramkarze", Obrona: "Obrona", Pomoc: "Pomoc", Atak: "Atak" };
+
+  const planOf = (p) => {
+    const L = labs[p.line];
+    if (!Array.isArray(p.profile_pos) || !L || p.profile_pos.length !== L.length) return null;
+    const rows = [];
+    p.profile_pos.forEach((z, i) => { if (typeof z === "number") rows.push({ label: L[i], z }); });
+    if (!rows.length) return null;
+    const weak = rows.slice().sort((a, b) => a.z - b.z).filter((r) => r.z < -0.15).slice(0, 3);
+    const weakFallback = weak.length ? weak : rows.slice().sort((a, b) => a.z - b.z).slice(0, 2);
+    const strong = rows.slice().sort((a, b) => b.z - a.z).filter((r) => r.z > 0.3).slice(0, 2);
+    return { weak: weakFallback, strong };
+  };
+
+  const withPlan = [], noData = [];
+  squad.forEach((p) => {
+    const pl = planOf(p);
+    if (pl && !p.rc_estimated) withPlan.push({ p, pl }); else noData.push(p);
+  });
+  const grouped = ORDER.map((ln) => ({ ln, items: withPlan.filter((x) => x.p.line === ln)
+    .sort((a, b) => (Number(b.p.minutes_total) || 0) - (Number(a.p.minutes_total) || 0)) })).filter((g) => g.items.length);
+
+  if (!withPlan.length) return <Empty>Brak zawodników z pełnym profilem — plany pojawią się po zebraniu próbki meczowej.</Empty>;
+
+  const Card = ({ p, pl }) => (
+    <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "13px 15px" }}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8, marginBottom: 2 }}>
+        <span style={{ fontSize: 13.5, color: C.bone, fontWeight: 700 }}>{p.name}</span>
+        {typeof p.rc === "number" && <span className="disp" style={{ fontSize: 15, color: tierColor(p.rc) }}>{p.rc}<span style={{ fontSize: 9, color: C.steel }}> RC</span></span>}
+      </div>
+      <div style={{ fontSize: 10.5, color: C.steel, marginBottom: 9 }}>{roleName(p) || p.pos}{p.minutes_total ? ` · ${Math.round(p.minutes_total)} min` : ""}</div>
+
+      <div className="mono" style={{ fontSize: 9.5, letterSpacing: 1, color: C.bad, fontWeight: 700, marginBottom: 5 }}>DO PRACY</div>
+      <div style={{ display: "grid", gap: 7, marginBottom: pl.strong.length ? 10 : 2 }}>
+        {pl.weak.map((w) => (
+          <div key={w.label}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+              <span style={{ fontSize: 12, color: C.bone }}>{w.label}</span>
+              <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: w.z < -0.15 ? C.bad : C.warn }}>{_zPct(w.z)}%</span>
+            </div>
+            <div style={{ fontSize: 10.5, color: C.steel, marginTop: 1, lineHeight: 1.35 }}>→ {_cue(w.label)}</div>
+          </div>
+        ))}
+      </div>
+
+      {pl.strong.length > 0 && (
+        <div>
+          <div className="mono" style={{ fontSize: 9.5, letterSpacing: 1, color: C.good, fontWeight: 700, marginBottom: 4 }}>ATUT — WYKORZYSTAJ</div>
+          <div style={{ fontSize: 11.5, color: C.steelHi, lineHeight: 1.4 }}>
+            {pl.strong.map((s) => `${s.label.toLowerCase()} (${_zPct(s.z)}%)`).join(", ")}.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div>
+      <Lead>Indywidualny plan pracy dla każdego zawodnika z profilem — na podstawie atrybutów względem Ekstraklasy (percentyl; &lt; 50% = poniżej średniej ligi). „Do pracy" to 2–3 najsłabsze elementy z konkretną wskazówką treningową; „Atut" to elementy do wykorzystania w grze. To punkt wyjścia do rozmowy trenera z zawodnikiem, nie ocena ostateczna.</Lead>
+      {grouped.map((g) => (
+        <div key={g.ln} style={{ marginTop: 18 }}>
+          <SectionLabel>{LBL[g.ln] || g.ln}</SectionLabel>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(290px,1fr))", gap: 14 }}>
+            {g.items.map(({ p, pl }) => <Card key={p.id || p.name} p={p} pl={pl} />)}
+          </div>
+        </div>
+      ))}
+      {noData.length > 0 && (
+        <div style={{ fontSize: 11, color: C.steel, marginTop: 18, lineHeight: 1.5 }}>
+          Za mało danych na plan (zbyt mała próbka / brak profilu): {noData.map((p) => p.name).join(", ")}.
+        </div>
+      )}
+    </div>
+  );
+}
+
 const NAV_SVG = {
   twin: (<><circle cx="9" cy="8" r="3.3"/><path d="M3.5 20v-1a5 5 0 0 1 5-5h1a5 5 0 0 1 5 5v1"/><path d="M16 5.4a3 3 0 0 1 0 5.6"/><path d="M20.5 20v-1a4 4 0 0 0-2.6-3.7"/></>),
   digest: (<><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></>),
   squadprofile: (<><rect x="3.5" y="11" width="3.6" height="9" rx="1"/><rect x="10.2" y="5" width="3.6" height="15" rx="1"/><rect x="16.9" y="14" width="3.6" height="6" rx="1"/></>),
   problems: (<><path d="M12 3 2 20h20L12 3z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="17" x2="12" y2="17"/></>),
+  planpracy: (<><rect x="5" y="3.5" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="3.2" rx="1"/><path d="M8.5 11l2 2 4-4.5"/><line x1="8.5" y1="16.5" x2="15.5" y2="16.5"/></>),
   contracts: (<><rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9.2" x2="21" y2="9.2"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/></>),
   values: (<><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></>),
   eval: (<><rect x="6" y="4" width="12" height="16.5" rx="2"/><rect x="9" y="2.4" width="6" height="3.2" rx="1"/><path d="M9.3 13l2 2 3.6-3.8"/></>),
