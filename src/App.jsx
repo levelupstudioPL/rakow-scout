@@ -169,7 +169,7 @@ const STYLE_LABELS = [
 // ============================ LOGOWANIE / OCENY ============================
 // Wspólne hasło do aplikacji (NAMIASTKA — kod jest w bundlu, więc to miękka bramka,
 // nie realna ochrona; dane chroni dopiero hasło na poziomie Netlify). ZMIEŃ na własne.
-const ACCESS_CODE = "rakow2026";
+const ACCESS_CODE = "*-a8*PPUVWkRTh4m";
 const AUTH_KEY = "rk_auth_v1";
 const EVAL_KEY = "rk_eval_v1";
 const EXPECT_KEY = "rk_expect_v1";   // oczekiwanie trenera per zawodnik (mocna/słaba strona okiem trenera)
