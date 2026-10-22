@@ -45,6 +45,10 @@ jobs:
           SB_USERNAME: ${{ secrets.SB_USERNAME }}
           SB_PASSWORD: ${{ secrets.SB_PASSWORD }}
           SCOUTASTIC_TOKEN: ${{ secrets.SCOUTASTIC_TOKEN }}
+          # Wyższy limit zapytań Scoutastica na turę: pierwszy przebieg po utrwaleniu
+          # cache pokryje cały „ogon" (np. van Overeem). Kolejne przebiegi są szybkie —
+          # cache (scripts/scoutastic_cache.json) odsiewa już pobranych.
+          SCOUTASTIC_MAX: "6000"
           TM_ENRICH: ${{ github.event.inputs.tm_enrich == 'true' && '1' || '' }}
           TM_ENRICH_TOP: ${{ github.event.inputs.tm_top }}
         run: python scripts/fetch_statsbomb.py
@@ -55,8 +59,12 @@ jobs:
       - name: Zapisz zmiany
         run: |
           git add public/data.json public/value_history.json public/squad.json
+          # Utrwalamy cache wycen Scoutastica, żeby pokrycie kumulowało się między
+          # przebiegami (limit zapytań na turę) — inaczej „ogon" (np. van Overeem)
+          # nigdy nie dostaje świeżej wyceny z Transfermarktu.
+          [ -f scripts/scoutastic_cache.json ] && git add scripts/scoutastic_cache.json || true
           if git diff --cached --quiet; then
-            echo "Brak zmian w data.json / value_history.json / squad.json."
+            echo "Brak zmian w danych / cache."
           else
             git config user.name "rakow-scout-bot"
             git config user.email "actions@github.com"
