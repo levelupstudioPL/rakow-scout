@@ -36,7 +36,25 @@ export function currentYear(data) {
   const y = g && /^\d{4}/.test(g) ? parseInt(g.slice(0, 4), 10) : NaN;
   return Number.isFinite(y) ? y : 2026;
 }
- 
+
+// Data odniesienia = meta.generated (migawka danych), inaczej dziś.
+function asOfDate(data) {
+  const g = data && data.meta && data.meta.generated;
+  const d = g ? new Date(g) : new Date();
+  return isNaN(d) ? new Date() : d;
+}
+// Przybliżona liczba miesięcy do końca kontraktu. Kontrakt mamy jako ROK wygaśnięcia;
+// zakładamy koniec sezonu = 30 czerwca tego roku (standard TM). Może być ujemna (po terminie).
+export function contractMonthsLeft(contractYear, data) {
+  if (!contractYear) return null;
+  const end = new Date(contractYear, 5, 30);   // miesiąc 5 = czerwiec
+  const ms = end - asOfDate(data);
+  return Math.round(ms / (1000 * 60 * 60 * 24 * 30.44));
+}
+// Okazja kontraktowa = ostatnie 9 miesięcy umowy (można negocjować tanio/pre-contract).
+// „Wolny" = kontrakt już po terminie (miesiące <= 0).
+export const OKAZJA_WINDOW_M = 9;
+
 // Indeks handicapów lig → { [lg]: {Bramka,Obrona,Pomoc,Atak} }
 function leaguesIndex(leagues) {
   const idx = {};
@@ -209,7 +227,8 @@ export function computeOkazje(data, opts = {}) {
         coherence: num(p.coherence), coherence_ref: p.coherence_ref || null,
         qPct: Math.round(qPct), pPct: Math.round(pPct), okazja,
         vfm: num(p.mv) > 0 ? adj / num(p.mv) : 0,
-        expiring: !!(p.contract && p.contract <= cur + 1),
+        monthsLeft: contractMonthsLeft(p.contract, data),
+        expiring: (() => { const m = contractMonthsLeft(p.contract, data); return m != null && m <= OKAZJA_WINDOW_M; })(),
       });
     }
   }
@@ -225,15 +244,21 @@ export function computeExpiring(data, opts = {}) {
   const cur = currentYear(data);
   const minLevel = opts.minLevel || 0;
   return pool
-    .filter((p) => p.contract && p.contract <= cur + 1 && !p.level_estimated
-      && p.name && p.name !== "?")
-    .map((p) => ({
-      id: p.id, name: p.name, lg: p.lg, pos: p.pos, age: p.age || null,
-      mv: num(p.mv), contract: p.contract,
-      adj: Math.round(adjLevel(p, lgIdx)), raw: num(p.raw),
-      free: p.contract <= cur, // kończy się w tym roku → potencjalnie wolny transfer
-    }))
-    .filter((r) => r.adj >= minLevel)
+    .filter((p) => p.contract && !p.level_estimated && p.name && p.name !== "?")
+    .map((p) => {
+      const m = contractMonthsLeft(p.contract, data);
+      return {
+        id: p.id, name: p.name, lg: p.lg, pos: p.pos, age: p.age || null,
+        mv: num(p.mv), contract: p.contract,
+        adj: Math.round(adjLevel(p, lgIdx)), raw: num(p.raw),
+        monthsLeft: m,
+        // okno okazji = ostatnie 9 miesięcy; „wolny" tylko gdy rok wygaśnięcia już minął
+        // (umowa w roku bieżącym = jeszcze pod kontraktem — unikamy fałszywego „wolny").
+        expiring: m != null && m <= OKAZJA_WINDOW_M && m > -18,
+        free: !!(p.contract && p.contract < cur),
+      };
+    })
+    .filter((r) => r.expiring && r.adj >= minLevel)
     .sort((a, b) => b.adj - a.adj);
 }
  
@@ -277,10 +302,14 @@ export function computeRedFlags(data, opts = {}) {
     const flags = [];
     const line = s.line || lineOfPos(s.pos);
  
-    if (s.contract && s.contract <= cur + 1) {
-      flags.push({ code: "contract", sev: s.contract <= cur ? "high" : "med",
-        label: "Wygasający kontrakt",
-        detail: `Umowa do ${s.contract}${s.contract <= cur ? " — ostatni rok, decyzja pilna" : ""}` });
+    const cm = contractMonthsLeft(s.contract, data);
+    if (cm != null && cm <= OKAZJA_WINDOW_M && cm > -18) {
+      const past = !!(s.contract && s.contract < cur);   // rok wygaśnięcia już minął
+      flags.push({ code: "contract", sev: past ? "high" : "med",
+        label: past ? "Kontrakt po terminie" : "Wygasający kontrakt",
+        detail: past
+          ? `Umowa do ${s.contract} — wg TM już po terminie, decyzja pilna`
+          : `Umowa do ${s.contract} (~${Math.max(0, cm)} mies. do końca)` });
     }
     if (s.age && s.age >= (AGE_DECLINE[line] || 31)) {
       flags.push({ code: "age", sev: s.age >= (AGE_DECLINE[line] || 31) + 2 ? "high" : "med",
