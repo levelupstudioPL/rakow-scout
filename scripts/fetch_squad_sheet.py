@@ -98,7 +98,9 @@ def parse_first_team(xlsx_bytes):
                 return hdr.index(n)
         return None
     ci = {"team": col("drużyna", "druzyna", "team"), "im": col("imię", "imie", "first name"),
-          "nz": col("nazwisko", "last name"), "poz": col("pozycja", "position")}
+          "nz": col("nazwisko", "last name"), "poz": col("pozycja", "position"),
+          # „W klubie" == „Poza Klubem" → zawodnik wypożyczony / poza klubem (osobna zakładka).
+          "wk": col("w klubie", "w_klubie", "status")}
     if ci["team"] is None or ci["nz"] is None:
         raise ValueError(f"Nie rozpoznano kolumn w arkuszu (nagłówki: {hdr[:12]})")
     out = []
@@ -111,7 +113,10 @@ def parse_first_team(xlsx_bytes):
         if not nm:
             continue
         poz = str(r[ci["poz"]] or "").strip().lower().replace(" ", "") if ci["poz"] is not None else ""
-        out.append({"name": nm, "poz_raw": poz})
+        wk = str(r[ci["wk"]] or "").strip() if ci["wk"] is not None else ""
+        # „poza klub" (Poza Klubem / poza klubem) = wypożyczony / nie w klubie.
+        loaned = "poza klub" in fold(wk)
+        out.append({"name": nm, "poz_raw": poz, "loaned": loaned, "loan_status": wk})
     return out
 
 def main():
@@ -165,6 +170,11 @@ def main():
                 continue
             entry = {"id": slug(pl["name"]), "name": pl["name"], "pos": pm[0], "line": pm[1]}
             added.append(pl["name"])
+        # Znacznik wypożyczenia / „poza klubem" z arkusza (kolumna „W klubie").
+        if pl.get("loaned"):
+            entry["loaned"] = True
+            if pl.get("loan_status"):
+                entry["loan_status"] = pl["loan_status"]
         squad.append(entry)
 
     for x in existing:
