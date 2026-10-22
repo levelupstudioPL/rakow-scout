@@ -246,6 +246,7 @@ export default function App() {
     levelMin: 0,           // minimalny poziom
     onlyReliable: false,   // ukryj kandydatów z niepełnymi danymi
     leagues: [],           // [] = wszystkie
+    heightTol: 0,          // maks. różnica wzrostu (cm); 0 = bez limitu
   };
   // Filtry aplikowane na przycisk „Szukaj": draft = edycja, filters = zastosowane.
   const [filters, setFilters] = useState(FILTERS_DEFAULT);
@@ -390,10 +391,14 @@ export default function App() {
   const candidates = useMemo(() => {
     if (!data || !effSel) return [];
     let rows = data.pool.filter((p) => !p.provisional).map((p) => ({ p, m: matchScore(effSel, p) }))
-      .filter((x) => x.m).map((x) => ({ ...x, price: estimatePrice(effSel, x.p), form: formIndex[x.p.id] || null }));
+      .filter((x) => x.m).map((x) => ({
+        ...x, price: estimatePrice(effSel, x.p), form: formIndex[x.p.id] || null,
+        heightDelta: (Number(effSel.height) && Number(x.p.height)) ? Number(x.p.height) - Number(effSel.height) : null,
+        hPen: heightPenalty(effSel, x.p),
+      }));
     // --- filtrowanie ---
     const F = filters;
-    rows = rows.filter(({ p, m, price }) => {
+    rows = rows.filter(({ p, m, price, heightDelta }) => {
       const age = Number(p.age) || 0;
       if (age > 0 && (age < F.ageMin || age > F.ageMax)) return false;
       // Cena: kandydaci BEZ wyceny (mv=0) traktowani osobno — wariant C.
@@ -404,11 +409,15 @@ export default function App() {
       if (m.level < F.levelMin) return false;
       if (F.onlyReliable && p.level_estimated) return false;
       if (F.leagues.length > 0 && !F.leagues.includes(p.lg)) return false;
+      // Tolerancja wzrostu (gdy znamy oba) — np. nie proponuj 180 cm dla wysokiego profilu.
+      if (F.heightTol > 0 && heightDelta != null && Math.abs(heightDelta) > F.heightTol) return false;
       return true;
     });
     const fpct = (r) => (r.form ? r.form.pct : -1);   // bez formy = na koniec
-    const s = { fit: (a, b) => b.m.coherence - a.m.coherence,
-      coherence: (a, b) => b.m.coherence - a.m.coherence,
+    // „Dopasowanie" = koherencja stylu skorygowana o różnicę wzrostu (kara wg roli).
+    const fitScore = (r) => r.m.coherence - (r.hPen || 0);
+    const s = { fit: (a, b) => fitScore(b) - fitScore(a),
+      coherence: (a, b) => fitScore(b) - fitScore(a),
       price: (a, b) => (Number(a.p.mv) || 1e9) - (Number(b.p.mv) || 1e9),
       price_desc: (a, b) => (Number(b.p.mv) || 0) - (Number(a.p.mv) || 0),
       form: (a, b) => fpct(b) - fpct(a),
@@ -1080,9 +1089,10 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
       )}
 
       <div className="hscroll"><div style={{ display: "grid", gap: 9, minWidth: 680 }}>
-        {viewCands.map(({ p, m, price, form, tw }) => {
+        {viewCands.map(({ p, m, price, form, tw, heightDelta }) => {
           const a = adjusted(p);
           const open = openCmp === p.id;
+          const hGap = heightDelta != null && Math.abs(heightDelta) >= 6;   // istotna różnica wzrostu
           const cs = (tuned && tw != null) ? tw : m.coherence;   // dostrojony styl lub koherencja modelu
           return (
            <div key={p.id} style={{ background: C.panel, border: `1px solid ${open ? `${C.redHi}88` : C.line}`,
@@ -1094,7 +1104,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                   <Crest id={data.meta && data.meta.ekstra_crests && p.team_now ? data.meta.ekstra_crests[p.team_now] : null} size={18} />
                   <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name && p.name !== "?" ? p.name : p.lg}</span>
                 </div>
-                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{p.side ? `·${p.side}` : ""}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
+                <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{p.lg} · {p.pos}{p.side ? `·${p.side}` : ""}{roleName(p) ? ` · ${roleName(p)}` : ""} · {p.age} lat · do {p.contract}{p.height ? <>{" · "}<span style={{ color: hGap ? C.warn : C.steel }} title={heightDelta != null ? `Różnica wzrostu vs ${sel.name}: ${heightDelta > 0 ? "+" : ""}${heightDelta} cm` : undefined}>{p.height} cm{heightDelta != null && heightDelta !== 0 ? ` (${heightDelta > 0 ? "+" : ""}${heightDelta})` : ""}</span></> : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}</div>
                 {p.name && p.name !== "?" && (
                   <a href={tmLink(p)} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>
@@ -2049,6 +2059,16 @@ const monthsLabel = (monthsLeft, free) => {
   if (monthsLeft <= 0) return "ostatnie miesiące";
   return `~${monthsLeft} mies. do końca`;
 };
+// Waga wzrostu w dopasowaniu wg roli — wysoki dla GK/ŚO/napastnika (gra głową, krycie),
+// niski dla skrzydła/ofensywnej pomocy. Służy do kary za różnicę wzrostu kandydata.
+const HEIGHT_W = { "Bramka": 1.0, "ŚO": 1.0, "10-9": 0.8, "Boczny": 0.5, "6-8": 0.5, "Skrzydłowy": 0.3 };
+const heightWeight = (p) => { const w = HEIGHT_W[roleKey(p)]; return w == null ? 0.5 : w; };
+// Kara do koherencji za różnicę wzrostu (≈1 pkt/cm × waga roli, maks. 15).
+const heightPenalty = (target, cand) => {
+  const ht = Number(target && target.height) || 0, hc = Number(cand && cand.height) || 0;
+  if (!ht || !hc) return 0;
+  return Math.min(15, Math.abs(hc - ht) * heightWeight(target));
+};
 // Noga (z Transfermarktu) — skrót do wyświetlenia: L / P / L+P. null gdy brak danych.
 const FOOT_SHORT = { lewa: "L", prawa: "P", "obunożny": "L+P" };
 const footLabel = (p) => (p && p.foot ? (FOOT_SHORT[p.foot] || p.foot) : null);
@@ -2301,6 +2321,8 @@ function computeTeamProfile(players, labelsFor) {
   const weakest = rankByRC[0] || null;
   const strongest = rankByRC[rankByRC.length - 1] || null;
   const overallRC = Math.round(_mean(players.map((p) => p.raw)));
+  const nPlayers = players.length;
+  const squadMv = Math.round(players.reduce((s, p) => s + (Number(p.mv) > 0 ? Number(p.mv) : 0), 0) * 10) / 10;
   const lineStyle = Object.entries(byLine).map(([line, ps]) => {
     const labs = labelsFor(line);
     const vecs = ps.map((x) => x.profile_pos).filter((v) => Array.isArray(v) && labs && v.length === labs.length);
@@ -2330,7 +2352,7 @@ function computeTeamProfile(players, labelsFor) {
       tips.push({ k: "przewidywalnosc", t: `${ls.line} bardzo jednorodna (podobieństwo ${Math.round(ls.predict * 100)}%) — styl przewidywalny, łatwiejszy do rozpracowania.` });
     }
   });
-  return { roleRC, weakest, strongest, overallRC, lineStyle, predictability, tips };
+  return { roleRC, weakest, strongest, overallRC, nPlayers, squadMv, lineStyle, predictability, tips };
 }
 
 // Mapa opozycji na boisku: rola rywala -> rola Rakowa, która się z nią mierzy.
@@ -2479,7 +2501,12 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
         <>
           {/* Kafle podsumowania */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 6px" }}>
-            <Tile label="Średnie RC drużyny" val={an.overallRC} color={tierColor(an.overallRC)} />
+            <Tile label="Średnie RC drużyny" val={an.overallRC} color={tierColor(an.overallRC)}
+              sub={`z ${an.nPlayers} zaw. z danymi`}
+              hint="Średni percentyl zawodników z danymi StatsBomb. UWAGA: przy małej/nierównej próbce drużyny Ekstraklasy skupiają się blisko siebie — to zgrubny wskaźnik, nie precyzyjny ranking. Realną siłę składu lepiej oddaje wartość rynkowa (obok)." />
+            <Tile label="Wartość składu (TM)" val={an.squadMv > 0 ? `€${an.squadMv}M` : "—"} color={C.proxy}
+              sub={`${an.nPlayers} zaw. z wyceną`}
+              hint="Suma wartości rynkowych (Transfermarkt) zawodników z danymi. Lepszy separator siły zespołów niż percentylowe RC." />
             <Tile label="Przewidywalność stylu" val={an.predictability != null ? `${Math.round(an.predictability * 100)}%` : "—"}
               color={an.predictability != null && an.predictability > 0.6 ? C.blueHi : C.steelHi}
               hint="Podobieństwo stylu w liniach — wysokie = jednorodni, przewidywalni." />
@@ -2906,12 +2933,13 @@ function CompareView({ data }) {
         <>
           {/* Podsumowanie */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 6 }}>
-            <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} />
-            <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} />
-            <Tile label="Przewidywalność" val={profA.predictability != null ? `${Math.round(profA.predictability * 100)}%` : "—"}
-              color={C.steelHi} sub={teamA} />
-            <Tile label="Przewidywalność" val={profB.predictability != null ? `${Math.round(profB.predictability * 100)}%` : "—"}
-              color={C.steelHi} sub={teamB} />
+            <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} sub={`z ${profA.nPlayers} zaw.`} />
+            <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} sub={`z ${profB.nPlayers} zaw.`} />
+            <Tile label={`Wartość składu — ${teamA}`} val={profA.squadMv > 0 ? `€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} />
+            <Tile label={`Wartość składu — ${teamB}`} val={profB.squadMv > 0 ? `€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} />
+          </div>
+          <div style={{ fontSize: 10.5, color: C.steel, marginBottom: 10 }}>
+            Śr. RC = średni percentyl zawodników z danymi StatsBomb — przy małej/nierównej próbce w Ekstraklasie drużyny skupiają się blisko siebie, więc to zgrubny wskaźnik. Wartość składu (TM) lepiej oddaje różnicę siły zespołów.
           </div>
 
           {/* Jakość per rola — lustrzane słupki (A w lewo, B w prawo) */}
@@ -3336,6 +3364,10 @@ function FilterPanel({ data, filters, setF, applyFilters, resetFilters, filtersD
             <FLabel>Min. poziom: <b style={{ color: C.bone }}>{F.levelMin}</b></FLabel>
             <input type="range" min={0} max={100} value={F.levelMin}
               onChange={(e) => setF({ levelMin: +e.target.value })}
+              style={{ width: "100%", accentColor: C.red, marginBottom: 12 }} />
+            <FLabel>Maks. różnica wzrostu: <b style={{ color: C.bone }}>{F.heightTol > 0 ? `±${F.heightTol} cm` : "bez limitu"}</b></FLabel>
+            <input type="range" min={0} max={20} value={F.heightTol}
+              onChange={(e) => setF({ heightTol: +e.target.value })}
               style={{ width: "100%", accentColor: C.red }} />
           </div>
 
