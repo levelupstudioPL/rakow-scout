@@ -1140,8 +1140,9 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
               <div style={{ textAlign: "right" }}>
                 {Number(p.mv) > 0 ? (
                   <>
-                    <div className="disp" style={{ fontSize: 22, color: C.proxy, lineHeight: 0.9 }}>{fmt(Number(p.mv))}</div>
-                    <div style={{ fontSize: 10, color: C.steel }}>Transfermarkt</div>
+                    <div className="disp" style={{ fontSize: 22, color: mvStale(p.mv_src) ? C.steelHi : C.proxy, lineHeight: 0.9 }}
+                      title={mvStale(p.mv_src) ? STALE_MV_TITLE : undefined}>{mvStale(p.mv_src) ? "≈" : ""}{fmt(Number(p.mv))}</div>
+                    <div style={{ fontSize: 10, color: mvStale(p.mv_src) ? C.warn : C.steel }}>{mvSrcLabel(p.mv_src)}</div>
                   </>
                 ) : (
                   <>
@@ -1193,7 +1194,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
         </div>
       )}
 
-      <Note>Cena = oficjalna wartość rynkowa z <b>Transfermarktu</b> (przez Scoutastic), bez estymacji. „brak wyceny" = zawodnika nie ma jeszcze w Transfermarkt/Scoutastic albo dociągniemy go w kolejnym odświeżeniu (pokrycie rośnie z każdym runem). Wzrost ze StatsBomb; noga z Transfermarktu, gdy dostępna.</Note>
+      <Note>Cena = oficjalna wartość rynkowa z <b>Transfermarktu</b> (przez Scoutastic). Wartości oznaczone <b>≈ (wyc. archiwalna)</b> pochodzą z zapasowego, starszego zrzutu (Kaggle) — dla lig spoza zasięgu Scoutastica — i mogą być nieaktualne (np. z poprzedniego sezonu); traktuj je orientacyjnie. „brak wyceny" = zawodnika nie ma w żadnym źródle (pokrycie Transfermarktu rośnie z każdym odświeżeniem). Wzrost ze StatsBomb; noga z Transfermarktu, gdy dostępna.</Note>
     </div>
   );
 }
@@ -2059,6 +2060,11 @@ const monthsLabel = (monthsLeft, free) => {
   if (monthsLeft <= 0) return "ostatnie miesiące";
   return `~${monthsLeft} mies. do końca`;
 };
+// Wycena z archiwalnego zrzutu Kaggle (nie bieżący Transfermarkt) → oznaczamy jako możliwą
+// nieaktualną. Dotyczy głównie kandydatów z lig spoza zasięgu Scoutastica.
+const mvStale = (src) => /^kaggle/i.test(src || "");
+const mvSrcLabel = (src) => (src === "transfermarkt" ? "Transfermarkt" : mvStale(src) ? "wycena archiwalna (Kaggle)" : "wartość rynkowa");
+const STALE_MV_TITLE = "Wycena z archiwalnego źródła (Kaggle) — może być nieaktualna (np. z poprzedniego sezonu). Świeże wyceny pochodzą z Transfermarktu i rosną z pokryciem.";
 // Waga wzrostu w dopasowaniu wg roli — wysoki dla GK/ŚO/napastnika (gra głową, krycie),
 // niski dla skrzydła/ofensywnej pomocy. Służy do kary za różnicę wzrostu kandydata.
 const HEIGHT_W = { "Bramka": 1.0, "ŚO": 1.0, "10-9": 0.8, "Boczny": 0.5, "6-8": 0.5, "Skrzydłowy": 0.3 };
@@ -4068,8 +4074,9 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
               <div style={{ fontSize: 10, color: C.steel }}>poziom</div>
             </div>
             <div style={{ textAlign: "right" }}>
-              <div className="disp" style={{ fontSize: 19, color: C.proxy, lineHeight: 0.9 }}>{r.mv > 0 ? fmt(r.mv) : "—"}</div>
-              <div style={{ fontSize: 10, color: C.steel }}>wartość</div>
+              <div className="disp" style={{ fontSize: 19, color: r.mv > 0 && mvStale(r.mv_src) ? C.steelHi : C.proxy, lineHeight: 0.9 }}
+                title={r.mv > 0 && mvStale(r.mv_src) ? STALE_MV_TITLE : undefined}>{r.mv > 0 ? `${mvStale(r.mv_src) ? "≈" : ""}${fmt(r.mv)}` : "—"}</div>
+              <div style={{ fontSize: 10, color: r.mv > 0 && mvStale(r.mv_src) ? C.warn : C.steel }}>{r.mv > 0 ? (mvStale(r.mv_src) ? "wyc. archiwalna" : "wartość") : "wartość"}</div>
             </div>
             {tab === "okazje" ? (
               <div>
