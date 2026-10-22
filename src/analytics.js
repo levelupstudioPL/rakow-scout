@@ -159,7 +159,7 @@ export function computePriorities(data, opts = {}) {
       .slice(0, maxTargets)
       .map(({ p, adj }) => ({
         id: p.id, name: p.name, lg: p.lg, pos: p.pos, age: p.age || null,
-        mv: num(p.mv), contract: p.contract || null, adj, coherence: num(p.coherence),
+        mv: num(p.mv), mv_src: p.mv_src || null, contract: p.contract || null, adj, coherence: num(p.coherence),
       }));
  
     return {
@@ -225,7 +225,7 @@ export function computeOkazje(data, opts = {}) {
         mv: num(p.mv), contract: p.contract || null,
         raw: num(p.raw), adj: Math.round(adj),
         coherence: num(p.coherence), coherence_ref: p.coherence_ref || null,
-        qPct: Math.round(qPct), pPct: Math.round(pPct), okazja,
+        qPct: Math.round(qPct), pPct: Math.round(pPct), okazja, mv_src: p.mv_src || null,
         vfm: num(p.mv) > 0 ? adj / num(p.mv) : 0,
         monthsLeft: contractMonthsLeft(p.contract, data),
         expiring: (() => { const m = contractMonthsLeft(p.contract, data); return m != null && m <= OKAZJA_WINDOW_M; })(),
@@ -249,7 +249,7 @@ export function computeExpiring(data, opts = {}) {
       const m = contractMonthsLeft(p.contract, data);
       return {
         id: p.id, name: p.name, lg: p.lg, pos: p.pos, age: p.age || null,
-        mv: num(p.mv), contract: p.contract,
+        mv: num(p.mv), mv_src: p.mv_src || null, contract: p.contract,
         adj: Math.round(adjLevel(p, lgIdx)), raw: num(p.raw),
         monthsLeft: m,
         // okno okazji = ostatnie 9 miesięcy; „wolny" tylko gdy rok wygaśnięcia już minął
