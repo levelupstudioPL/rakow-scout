@@ -460,7 +460,7 @@ export default function App() {
   const squadValue = squadPriced.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   // Nawigacja jak na rakow.com: 4 sekcje w górnym pasku, szczegóły w „pigułkach".
   const SECTIONS = [
-    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["problems", "Problemy zespołu"], ["planpracy", "Plan pracy"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
+    { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["problems", "Problemy zespołu"], ["planpracy", "Plan pracy"], ["wypozyczeni", "Wypożyczeni"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
     { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
@@ -626,6 +626,7 @@ export default function App() {
             {view === "squadprofile" && "Profil kadry"}
             {view === "problems" && "Problemy zespołu"}
             {view === "planpracy" && "Plan pracy zawodników"}
+            {view === "wypozyczeni" && "Wypożyczeni zawodnicy"}
             {view === "contracts" && "Kalendarz kontraktów"}
             {view === "values" && "Monitoring wartości"}
             {view === "eval" && "Ocena trenera"}
@@ -673,6 +674,7 @@ export default function App() {
           {view === "squadprofile" && <SquadProfileView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "problems" && <ProblemsView data={data} />}
           {view === "planpracy" && <WorkPlanView data={data} />}
+          {view === "wypozyczeni" && <LoanedView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "contracts" && <ContractsView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "values" && <ValuesView data={data} fmt={fmt} setSel={setSel} setView={setView} />}
           {view === "eval" && <EvalView data={data} evaluator={auth.evaluator} />}
@@ -707,7 +709,8 @@ export default function App() {
 // ============================ SUBVIEWS ============================
 function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
   const byLine = { Bramka: [], Obrona: [], Pomoc: [], Atak: [] };
-  data.squad.forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
+  // Wypożyczonych („poza klubem") NIE pokazujemy w obecnym składzie — mają osobną zakładkę.
+  data.squad.filter((p) => !p.loaned).forEach((p) => { (byLine[p.line || lineOfPos(p.pos)] || byLine.Pomoc).push(p); });
   // Sortowanie wg RC malejąco (jak tabela składu w FM). „b.d." na dół.
   Object.values(byLine).forEach((arr) => arr.sort((a, b) =>
     (a.rc_estimated - b.rc_estimated) || ((Number(b.rc) || 0) - (Number(a.rc) || 0))));
@@ -6073,12 +6076,77 @@ function WorkPlanView({ data }) {
   );
 }
 
+// Wypożyczeni / „poza klubem" — zawodnicy z kontraktem Rakowa grający gdzie indziej.
+function LoanedView({ data, fmt, setSel, setView }) {
+  const squad = data.squad || [];
+  const loaned = squad.filter((p) => p.loaned)
+    .slice().sort((a, b) => (a.rc_estimated - b.rc_estimated) || ((Number(b.rc) || 0) - (Number(a.rc) || 0)));
+
+  if (!loaned.length) {
+    return (
+      <div>
+        <Lead>Wypożyczeni / poza klubem — zawodnicy z kontraktem Rakowa grający w innym klubie, z ich poziomem RC i podstawowym kontekstem. Oznaczani w arkuszu klubu kolumną „W klubie" = „Poza Klubem".</Lead>
+        <Empty>Brak oznaczonych wypożyczonych w arkuszu. Zaznacz zawodnika „Poza Klubem" w kolumnie „W klubie" i odśwież dane — pojawi się tutaj z RC i kontekstem.</Empty>
+      </div>
+    );
+  }
+
+  const seasonCtx = (p) => p.rc_season || (data.meta && data.meta.base_season) || "sezon bazowy (2025/26)";
+  const Row = ({ p }) => {
+    const est = p.rc_estimated;
+    const m = contractMonthsLeft(p.contract, data);
+    return (
+      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "13px 16px",
+        display: "grid", gridTemplateColumns: "1fr auto", gap: 14, alignItems: "center" }}>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: C.bone }}>{p.name}</span>
+            <span className="cond" style={{ fontSize: 10, fontWeight: 700, color: "#fff", background: C.warn, borderRadius: 4, padding: "1px 6px" }}>POZA KLUBEM</span>
+            {roleName(p) && <span style={{ fontSize: 11, color: C.steelHi }}>· {roleName(p)}</span>}
+          </div>
+          <div style={{ fontSize: 11, color: C.steel, marginTop: 3 }}>
+            {p.pos}{p.age ? ` · ${p.age} lat` : ""}{p.height ? ` · ${p.height} cm` : ""}{footLabel(p) ? ` · noga ${footLabel(p)}` : ""}
+            {p.contract ? ` · kontrakt do ${p.contract}${m != null ? ` (${m > 0 ? `~${m} mies.` : "ostatnie miesiące"})` : ""}` : ""}
+          </div>
+          <div style={{ fontSize: 10.5, color: C.steel, marginTop: 3 }}>
+            {Number(p.minutes_total) > 0 ? `${Math.round(p.minutes_total)} min (${seasonCtx(p)})` : `RC z: ${seasonCtx(p)}`}
+            {Number(p.mv) > 0 ? <> · wartość {mvStale(p.mv_src) ? "≈" : ""}{fmt(Number(p.mv))}</> : ""}
+          </div>
+          <a href={tmLink(p)} target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          {est
+            ? <span className="mono" title="Brak dostatecznej próbki — poziomu nie da się policzyć" style={{ fontSize: 13, color: C.warn, fontWeight: 700 }}>b.d.</span>
+            : <div className="disp" style={{ fontSize: 26, color: tierColor(p.rc), lineHeight: 0.9 }}>{p.rc}<span style={{ fontSize: 10, color: C.steel }}> RC</span></div>}
+          <button onClick={() => { setSel(p); setView("match"); }} title="Profil / odpowiednicy"
+            style={{ marginTop: 6, background: "transparent", color: C.steel, border: `1px solid ${C.line}`, borderRadius: 7, padding: "3px 9px", cursor: "pointer", fontSize: 11 }}>profil →</button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <Lead>Wypożyczeni / poza klubem — zawodnicy z kontraktem Rakowa grający gdzie indziej, z poziomem RC i kontekstem. Nie liczą się do obecnego składu. RC liczone z dostępnej próbki StatsBomb (sezon bazowy / bieżący / I liga, jeśli tam grają).</Lead>
+      <div style={{ fontSize: 12, color: C.steel, margin: "6px 0 12px" }}>{loaned.length} zawodnik(ów) poza klubem.</div>
+      <div style={{ display: "grid", gap: 10 }}>
+        {loaned.map((p) => <Row key={p.id || p.name} p={p} />)}
+      </div>
+      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 14, lineHeight: 1.5 }}>
+        Źródło listy: kolumna „W klubie" = „Poza Klubem" w arkuszu klubu. „b.d." = StatsBomb nie ma jeszcze wystarczającej próbki (nowe wypożyczenie / liga poza pipeline). I liga (2. poziom) jest dociągana, więc wypożyczeni tam dostają realne RC.
+      </div>
+    </div>
+  );
+}
+
 const NAV_SVG = {
   twin: (<><circle cx="9" cy="8" r="3.3"/><path d="M3.5 20v-1a5 5 0 0 1 5-5h1a5 5 0 0 1 5 5v1"/><path d="M16 5.4a3 3 0 0 1 0 5.6"/><path d="M20.5 20v-1a4 4 0 0 0-2.6-3.7"/></>),
   digest: (<><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></>),
   squadprofile: (<><rect x="3.5" y="11" width="3.6" height="9" rx="1"/><rect x="10.2" y="5" width="3.6" height="15" rx="1"/><rect x="16.9" y="14" width="3.6" height="6" rx="1"/></>),
   problems: (<><path d="M12 3 2 20h20L12 3z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="17" x2="12" y2="17"/></>),
   planpracy: (<><rect x="5" y="3.5" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="3.2" rx="1"/><path d="M8.5 11l2 2 4-4.5"/><line x1="8.5" y1="16.5" x2="15.5" y2="16.5"/></>),
+  wypozyczeni: (<><path d="M10 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-5"/><path d="M14 4h6v6"/><path d="M20 4l-9 9"/></>),
   contracts: (<><rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9.2" x2="21" y2="9.2"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/></>),
   values: (<><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></>),
   eval: (<><rect x="6" y="4" width="12" height="16.5" rx="2"/><rect x="9" y="2.4" width="6" height="3.2" rx="1"/><path d="M9.3 13l2 2 3.6-3.8"/></>),
