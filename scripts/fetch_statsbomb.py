@@ -2320,26 +2320,25 @@ def build_dataset(sb, creds):
             v = _match_by_tokens(c["name"], values_sur, lambda x: round(x["mv"], 1))
             if v:
                 matched_tok += 1
-        if v:
-            c["mv"] = v["mv"]           # wartość w mln EUR
-            # Rozróżniamy trafienie DOKŁADNE (po pełnym nazwisku) od ROZMYTEGO (tokeny).
-            # Dokładne = wiarygodna wartość z Transfermarktu (Kaggle to zrzut TM) i zostaje
-            # jako fallback, gdy Scoutastic jeszcze nie pobrał live. Rozmyte bywało źródłem
-            # „cen z dupy" (złe dopasowanie) — te zdejmujemy w trybie TM-only.
-            c["mv_src"] = "kaggle_exact" if _exact else "kaggle_fuzzy"
+        # Stosujemy TYLKO trafienie DOKŁADNE (pełne nazwisko). Rozmyte (po tokenach,
+        # bez daty ur.) bywało źródłem błędnych cen (cudzy zawodnik), więc wartości z
+        # niego NIE bierzemy — wolimy brak ceny niż cudzą; Scoutastic dociągnie właściwą
+        # po nazwisku + dacie urodzenia.
+        if v and _exact:
+            c["mv"] = v["mv"]           # wartość w mln EUR (Kaggle = zrzut TM, bywa nieaktualny)
+            c["mv_src"] = "kaggle_exact"
             if v.get("age"):
                 c["age"] = v["age"]
             if v.get("contract"):
                 c["contract"] = v["contract"]
-            # Ubogacenie: szczyt wartości + output (gole/asysty/minuty) sezonu.
             if v.get("peak"):
                 c["peak"] = v["peak"]
             for k in ("goals", "assists", "minutes"):
                 if v.get(k):
                     c[k] = v[k]
             matched += 1
-    print(f"Wartości rynkowe: dopasowano {matched}/{len(pool)} kandydatów "
-          f"(w tym {matched_tok} dopasowaniem po nazwisku) z player_values.csv")
+    print(f"Wartości rynkowe: zastosowano {matched}/{len(pool)} kandydatów "
+          f"(tylko dokładne trafienia; {matched_tok} rozmytych pominięto jako niepewne) z player_values.csv")
  
     # Wzbogacenie SKŁADU o wiek/wartość/kontrakt (Kaggle + Scoutastic) — zasila
     # moduły „Priorytety transferowe" i „Czerwone flagi" na froncie.
@@ -2926,7 +2925,10 @@ def _enrich_values_scoutastic(pool):
     for c in pool:
         if _pid(c) in cache or not _is_valid_name(c.get("name")):
             continue
-        if only_unpriced and float(c.get("mv") or 0) > 0:
+        # „tylko bez ceny", ALE wartości z Kaggle traktujemy jako NIEaktualne i też
+        # odświeżamy przez Scoutastic (świeże TM nadpisze stary zrzut) — inaczej stara
+        # cena z Kaggle blokowała pobranie bieżącej (np. Joris van Overeem 0.3 vs 1.5M).
+        if only_unpriced and float(c.get("mv") or 0) > 0 and not str(c.get("mv_src") or "").startswith("kaggle"):
             continue
         targets.append(c)
     # PRIORYTET: najpierw najbardziej istotni kandydaci — o najwyższej koherencji z kimś
