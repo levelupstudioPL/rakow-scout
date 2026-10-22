@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations, computeRecentValidation, adjLevel } from "./analytics.js";
+import { computePriorities, computeOkazje, computeExpiring, computeRedFlags, computeStyleCorrelations, computeRecentValidation, adjLevel, contractMonthsLeft } from "./analytics.js";
 
 // ============================ TOKENS ============================
 // Paleta „Apple clean" w barwach Rakowa — błękit wiodący + czerwień jako drugi
@@ -287,6 +287,14 @@ export default function App() {
           if (better) seen.set(p.id, p);
         }
         const dd = { ...d, pool: [...seen.values()] };
+        // Ujednolicenie nazwisk zawodników Rakowa między źródłami (recent/StatsBomb
+        // używa dłuższych wariantów niż kanon ze składu) — spójne w każdej zakładce.
+        try {
+          const toCanon = makeCanonName(dd.squad);
+          if (dd.recent && Array.isArray(dd.recent.players)) {
+            dd.recent = { ...dd.recent, players: dd.recent.players.map((p) => ({ ...p, name: toCanon(p.name) })) };
+          }
+        } catch { /* nie blokuj danych */ }
         setData(dd);
         setSel(dd.squad.find((p) => p.real) || dd.squad[0]);
         // Zdjęcia kadry (wolne licencyjnie, Wikimedia) — best-effort, nie blokują danych.
@@ -632,18 +640,20 @@ export default function App() {
             {view === "raport" && "Raport skautingowy"}
             {view === "help" && "Jak korzystać"}
           </h1>
-          <div style={{ display: "flex", gap: 22, marginTop: 14, flexWrap: "wrap" }}>
-            <Stat n={data.squad.length} l="zawodników" />
-            <Stat n={realCount} l="realnych profili" accent />
-            <Stat n={data.leagues.length} l="lig w puli" />
-            <Stat n={data.pool.length} l="kandydatów" />
-            {squadValue > 0 && (
-              <Stat n={`~€${squadValue.toFixed(1)}M`}
-                l={squadPriced.length < data.squad.length
-                  ? `wartość kadry (${squadPriced.length}/${data.squad.length})`
-                  : "wartość kadry"} />
-            )}
-          </div>
+          {view === "digest" && (
+            <div style={{ display: "flex", gap: 22, marginTop: 14, flexWrap: "wrap" }}>
+              <Stat n={data.squad.length} l="zawodników" />
+              <Stat n={realCount} l="realnych profili" accent />
+              <Stat n={data.leagues.length} l="lig w puli" />
+              <Stat n={data.pool.length} l="kandydatów" />
+              {squadValue > 0 && (
+                <Stat n={`~€${squadValue.toFixed(1)}M`}
+                  l={squadPriced.length < data.squad.length
+                    ? `wartość kadry (${squadPriced.length}/${data.squad.length})`
+                    : "wartość kadry"} />
+              )}
+            </div>
+          )}
         </div>
 
         {err && <div style={{ margin: "16px 34px 0", fontSize: 12.5, color: C.warn }}>{err}</div>}
@@ -914,6 +924,9 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
             <HistBadge p={sel} fontSize={10} />
             <ForecastBadge p={sel} fontSize={10} ml={2} />
             <PartialBadge p={sel} fontSize={10} ml={2} />
+          </div>
+          <div style={{ fontSize: 11.5, color: C.steel, marginTop: 4 }}>
+            {(Number(sel.age) > 0 ? `${sel.age} lat` : "wiek —")} · wzrost {sel.height ? `${sel.height} cm` : "—"} · noga {footLabel(sel) || "—"} · {sel.contract ? (() => { const m = contractMonthsLeft(sel.contract, data); const lab = m != null ? (m > 0 ? `~${m} mies.` : "ostatnie miesiące") : null; return `kontrakt do ${sel.contract}${lab ? ` (${lab})` : ""}`; })() : "kontrakt —"}
           </div>
         </div>
       </div>
@@ -2029,6 +2042,13 @@ const ROLE_OF_POS = { GK: "Bramka", CB: "ŚO", WB: "Boczny", W: "Skrzydłowy", W
   DM: "6-8", CM: "6-8", AM: "10-9", ST: "10-9" };
 const roleKey = (p) => (p && p.role) || (p && ROLE_OF_POS[p.pos]) || null;
 const roleName = (p) => { const k = roleKey(p); return k ? (ROLE_LABEL[k] || k) : null; };
+// Czytelna etykieta „ile do końca kontraktu" (miesiące mogą być ujemne gdy rok wygaśnięcia minął).
+const monthsLabel = (monthsLeft, free) => {
+  if (free) return "po terminie";
+  if (monthsLeft == null) return null;
+  if (monthsLeft <= 0) return "ostatnie miesiące";
+  return `~${monthsLeft} mies. do końca`;
+};
 // Noga (z Transfermarktu) — skrót do wyświetlenia: L / P / L+P. null gdy brak danych.
 const FOOT_SHORT = { lewa: "L", prawa: "P", "obunożny": "L+P" };
 const footLabel = (p) => (p && p.foot ? (FOOT_SHORT[p.foot] || p.foot) : null);
@@ -3952,7 +3972,7 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
 
   return (
     <div>
-      <Lead>Zawodnicy, których model ceni wyżej, niż wskazywałaby ich cena. „Okazja" = percentyl jakości minus percentyl ceny w obrębie pozycji. Zakładka „Wygasające" to potencjalnie tani lub wolni zawodnicy w ostatnim roku kontraktu.</Lead>
+      <Lead>Zawodnicy, których model ceni wyżej, niż wskazywałaby ich cena. „Okazja" = percentyl jakości minus percentyl ceny w obrębie pozycji. Zakładka „Wygasające" to zawodnicy w ostatnich 9 miesiącach kontraktu (okno okazji) — z liczbą miesięcy do końca umowy.</Lead>
       <div className="mono" style={{ marginTop: 8, fontSize: 10.5, color: C.steel, lineHeight: 1.5, maxWidth: 720 }}>
         Wartości rynkowe pochodzą wyłącznie z <b>Transfermarktu</b> (przez Scoutastic) — snapshot z ostatniego odświeżenia, nie live. Zawodnicy bez wyceny w Transfermarkt nie wchodzą do „okazji". Link „Transfermarkt ↗" prowadzi do wersji live.
       </div>
@@ -4005,9 +4025,8 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
             <div style={{ minWidth: 0 }}>
               <div style={{ fontSize: 13.5, fontWeight: 600 }}>{r.name}</div>
               <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>
-                {r.lg} · {r.pos}{r.age ? ` · ${r.age} lat` : ""} · do {r.contract || "?"}
-                {r.expiring && <span style={{ color: C.warn }}> · wygasa</span>}
-                {r.free && <span style={{ color: C.good }}> · wolny</span>}
+                {r.lg} · {r.pos}{r.age ? ` · ${r.age} lat` : ""} · do {r.contract || "?"}{monthsLabel(r.monthsLeft, r.free) ? ` · ${monthsLabel(r.monthsLeft, r.free)}` : ""}
+                {r.free ? <span style={{ color: C.good }}> · wolny</span> : (r.expiring && <span style={{ color: C.warn }}> · wygasa</span>)}
               </div>
               <a href={tmLink(r)} target="_blank" rel="noopener noreferrer"
                 style={{ fontSize: 10.5, color: C.steelHi, textDecoration: "none", marginTop: 3, display: "inline-block" }}>Transfermarkt ↗</a>
@@ -4034,8 +4053,8 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
               </div>
             ) : (
               <div style={{ textAlign: "center" }}>
-                <div className="disp" style={{ fontSize: 17, color: r.free ? C.good : C.warn }}>{r.contract}</div>
-                <div style={{ fontSize: 10, color: C.steel }}>{r.free ? "wolny" : "ost. rok"}</div>
+                <div className="disp" style={{ fontSize: 17, color: r.free ? C.good : C.warn }}>{r.free ? "wolny" : (r.monthsLeft != null && r.monthsLeft > 0 ? `${r.monthsLeft} mies.` : r.contract)}</div>
+                <div style={{ fontSize: 10, color: C.steel }}>{r.free ? "po terminie" : (r.monthsLeft != null && r.monthsLeft <= 0 ? "ostatnie miesiące" : "do końca umowy")}</div>
               </div>
             )}
             <button onClick={() => toggleShort(r)} title="Lista obserwowanych"
@@ -4050,7 +4069,7 @@ function OkazjeView({ data, fmt, short, toggleShort, setSel, setView }) {
 
       <Note>{tab === "okazje"
         ? "Okazja (−100…+100) = percentyl skorygowanego poziomu minus percentyl wartości rynkowej, liczony w obrębie pozycji. Dodatni = zawodnik gra powyżej swojej ceny. Bardzo niska cena przy wysokim poziomie bywa też sygnałem małej próbki — zweryfikuj minuty."
-        : "Wygasające = kontrakt kończy się w tym lub przyszłym roku (potencjalnie tani lub wolny transfer). Sortowane po skorygowanym poziomie. Wolny = umowa do bieżącego roku."}</Note>
+        : "Wygasające = okno okazji, czyli ostatnie 9 miesięcy umowy (można negocjować tanio / pre-contract). Pokazujemy ile miesięcy do końca (koniec sezonu = 30.06 roku wygaśnięcia). Wolny = kontrakt już po terminie, a nie tylko kończący się w tym roku. Sortowane po skorygowanym poziomie."}</Note>
     </div>
   );
 }
@@ -4518,7 +4537,7 @@ function ContractsView({ data, fmt, setSel, setView }) {
                 </div>
                 <div style={{ fontSize: 11, color: C.steel, marginTop: 2 }}>{t.pos} · {t.lg} · {t.age || "?"} lat</div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontSize: 11.5 }}>
-                  <span style={{ color: t.free ? C.bad : C.warn, fontWeight: 600 }}>{t.free ? "wolny (do " + t.contract + ")" : "ostatni rok (" + t.contract + ")"}</span>
+                  <span style={{ color: t.free ? C.bad : C.warn, fontWeight: 600 }}>{(monthsLabel(t.monthsLeft, t.free) || "ostatni rok") + " (do " + t.contract + ")"}</span>
                   <span style={{ color: C.proxy }}>{Number(t.mv) > 0 ? fmt(Number(t.mv)) : "—"}</span>
                 </div>
               </div>
@@ -4539,8 +4558,13 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
   const ages = squad.map((p) => p.age).filter((a) => a > 0);
   const avgAge = ages.length ? (ages.reduce((s, a) => s + a, 0) / ages.length) : null;
   const AGE_BUCKETS = [["≤ 20", (a) => a <= 20], ["21–23", (a) => a >= 21 && a <= 23], ["24–26", (a) => a >= 24 && a <= 26], ["27–29", (a) => a >= 27 && a <= 29], ["30+", (a) => a >= 30]];
-  const ageDist = AGE_BUCKETS.map(([lab, f]) => ({ lab, n: ages.filter(f).length }));
+  const ageDist = AGE_BUCKETS.map(([lab, f]) => {
+    const ps = squad.filter((p) => Number(p.age) > 0 && f(Number(p.age)));
+    const mins = ps.reduce((s, p) => s + (Number(p.minutes_total) || 0), 0);
+    return { lab, n: ps.length, mins: Math.round(mins), avgMin: ps.length ? Math.round(mins / ps.length) : 0 };
+  });
   const ageMax = Math.max(1, ...ageDist.map((b) => b.n));
+  const ageMinsTotal = ageDist.reduce((s, b) => s + b.mins, 0);
 
   const ROLES = ["Bramka", "ŚO", "Boczny", "6-8", "Skrzydłowy", "10-9"];
   const depth = ROLES.map((r) => {
@@ -4586,12 +4610,19 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
           <SectionLabel>Piramida wieku</SectionLabel>
           <div style={{ display: "grid", gap: 8 }}>
             {ageDist.map((b) => (
-              <div key={b.lab} style={{ display: "grid", gridTemplateColumns: "54px 1fr 28px", alignItems: "center", gap: 10 }}>
+              <div key={b.lab} style={{ display: "grid", gridTemplateColumns: "54px 1fr 34px 96px", alignItems: "center", gap: 10 }}>
                 <span style={{ fontSize: 12.5, color: C.steelHi, textAlign: "right" }}>{b.lab}</span>
                 <Bar w={(b.n / ageMax) * 100} color={C.blue} />
                 <span className="disp" style={{ fontSize: 14, textAlign: "right" }}>{b.n}</span>
+                <span className="mono" style={{ fontSize: 10.5, color: C.steel, textAlign: "right" }}
+                  title="Łączne minuty w tym przedziale wieku w bieżącym sezonie (liga + puchary)">
+                  {b.mins ? `${b.mins.toLocaleString("pl-PL")}′` : "—"}{b.n ? <span style={{ opacity: 0.7 }}> · ⌀{b.avgMin}′</span> : null}
+                </span>
               </div>
             ))}
+          </div>
+          <div style={{ fontSize: 10, color: C.steel, marginTop: 6 }}>
+            Prawa kolumna: łączne minuty w przedziale w bieżącym sezonie (liga + puchary) oraz średnia na zawodnika (⌀). Razem {ageMinsTotal.toLocaleString("pl-PL")}′.
           </div>
         </div>
         <div>
@@ -4869,10 +4900,19 @@ function ValuesView({ data, fmt, setSel, setView }) {
   const enough = snaps.length >= 2;
   const first = snaps[0], last = snaps[snaps.length - 1];
 
-  const squadTrend = useMemo(() => snaps.map((s) => {
-    let sum = 0; (data.squad || []).forEach((p) => { const v = s.values[p.id]; if (v > 0) sum += v; });
-    return { date: s.date, sum: Math.round(sum * 10) / 10 };
-  }), [snaps, data]);
+  const squadTrend = useMemo(() => {
+    const t = snaps.map((s) => {
+      let sum = 0; (data.squad || []).forEach((p) => { const v = s.values[p.id]; if (v > 0) sum += v; });
+      return { date: s.date, sum: Math.round(sum * 10) / 10 };
+    });
+    // Ostatni punkt = BIEŻĄCA wartość z data.json, żeby liczba zgadzała się z Dashboardem
+    // (migawki w value_history.json bywają o run starsze → stąd rozjazd 30,6 vs 30,7).
+    if (t.length) {
+      const cur = (data.squad || []).reduce((s, p) => s + (Number(p.mv) > 0 ? Number(p.mv) : 0), 0);
+      t[t.length - 1] = { ...t[t.length - 1], sum: Math.round(cur * 10) / 10 };
+    }
+    return t;
+  }, [snaps, data]);
 
   const changes = useMemo(() => {
     if (!enough) return [];
@@ -5302,6 +5342,26 @@ const _CUE_MAP = [
 ];
 const _cue = (label) => { for (const [re, c] of _CUE_MAP) if (re.test(label)) return c; return "praca indywidualna nad tym elementem"; };
 
+// Ujednolicenie nazwisk: źródła meczowe/pula bywają dłuższe niż kanon ze składu
+// (np. "Mohamed Lamine Diaby Fadiga" → "Lamine Diaby-Fadiga").
+function _nameToks(s) {
+  return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/gi, "l")
+    .toLowerCase().replace(/[-.]/g, " ").split(/\s+/).filter(Boolean);
+}
+function makeCanonName(squad) {
+  const idx = (squad || []).map((p) => ({ name: p.name, toks: new Set(_nameToks(p.name)) }));
+  return (name) => {
+    const t = _nameToks(name); if (!t.length) return name;
+    let best = null, bestC = 0;
+    for (const e of idx) {
+      let c = 0; for (const x of t) if (e.toks.has(x)) c++;
+      const subset = c === t.length || c === e.toks.size;   // jeden zbiór zawiera się w drugim
+      if (c >= 2 && (subset || c > bestC) && c > bestC) { best = e.name; bestC = c; }
+    }
+    return best || name;
+  };
+}
+
 // Lekki wykres liniowy (inline SVG, 1–2 serie) — trend w czasie. Reaguje na motyw przez C.
 function TrendChart({ series, xLabels, height = 190, yStep = 1, yMin = 0, baseline0 = true }) {
   const [hover, setHover] = useState(null);
@@ -5382,6 +5442,7 @@ function ChartLegend({ series }) {
 
 function ProblemsView({ data }) {
   const squad = data.squad || [];
+  const canon = makeCanonName(squad);
   const labs = (data.meta && data.meta.style_labels) || {};
   const recent = data.recent || {};
   const team = recent.team || {};
@@ -5448,9 +5509,10 @@ function ProblemsView({ data }) {
       .sort((a, b) => a.avg - b.avg);
   })();
 
-  // Strzelcy/kreatorzy z ostatnich meczów.
-  const rpl = (recent.players || []).map((p) => ({ ...p, ga: (p.stats && (Number(p.stats.goals) || 0) + (Number(p.stats.assists) || 0)) || 0 }))
+  // Strzelcy/kreatorzy z ostatnich meczów (nazwiska ujednolicone do kanonu ze składu).
+  const rpl = (recent.players || []).map((p) => ({ ...p, name: canon(p.name), ga: (p.stats && (Number(p.stats.goals) || 0) + (Number(p.stats.assists) || 0)) || 0 }))
     .filter((p) => p.ga > 0).sort((a, b) => b.ga - a.ga).slice(0, 6);
+  const recentContribNames = new Set(rpl.slice(0, 3).map((p) => p.name));
 
   // --- Intuicyjne wskaźniki fazowe: średni z-score składowych → percentyl vs Ekstraklasa ---
   const gaugeZ = (specs) => {
@@ -5531,13 +5593,17 @@ function ProblemsView({ data }) {
       const bits = [], low = _gLow(attGauges), high = _gHigh(attGauges);
       if (low.length) bits.push(`najniżej wypada ${_joinPl(low.map(_gName))} — poniżej średniej ligi`);
       if (attProblems.length) bits.push(`w profilu najmocniej ciągną w dół: ${_joinPl(attProblems.slice(0, 2).map((a) => a.label.toLowerCase()))}`);
-      if (attBadPlayers.length) bits.push(`indywidualnie profil najbardziej obniżają ${_joinPl(attBadPlayers.slice(0, 2).map((x) => x.p.name))}`);
+      // „Obniżają profil" liczy styl (vs liga), NIE bramki — więc wyłączamy aktualnych strzelców,
+      // żeby ten sam zawodnik nie był naraz problemem i motorem ofensywy.
+      const attBadNoScorers = attBadPlayers.filter((x) => !recentContribNames.has(x.p.name));
+      if (attBadNoScorers.length) bits.push(`słaby profil stylu ofensywnego (mimo bramek zespołu) mają zwłaszcza ${_joinPl(attBadNoScorers.slice(0, 2).map((x) => x.p.name))}`);
       let body = bits.length
         ? `W fazie ataku ${bits.join("; ")}.`
         : "W fazie ataku kadra nie wykazuje wyraźnych luk profilowych względem Ekstraklasy.";
       if (high.length) body += ` Mocną stroną pozostaje ${_joinPl(high.map(_gName))}.`;
       else if (attStrong.length) body += ` Atutem jest ${_joinPl(attStrong.slice(0, 2).map((a) => a.label.toLowerCase()))}.`;
       if (rpl.length) body += ` Ofensywę w ostatnich meczach napędzają głównie ${_joinPl(rpl.slice(0, 2).map((p) => p.name))}.`;
+      body += " (Profil = styl gry vs liga; strzelcy mogą mieć niższy profil, a i tak zdobywać bramki.)";
       paras.push({ t: "⚔ Atak", c: C.good, body });
     }
 
@@ -5769,6 +5835,7 @@ function ProblemsView({ data }) {
                 <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}> · {roleName(x.p) || x.p.pos} · {Math.round(x.p.minutes_total || 0)} min</span>
               </div>
               {x.worst && <div style={{ fontSize: 10.5, color: C.steel, marginTop: 1 }}>najsłabszy atrybut: {x.worst.label}</div>}
+              {recentContribNames.has(x.p.name) && <div style={{ fontSize: 10, color: C.good, marginTop: 1 }}>tworzy ofensywę mimo słabszego profilu stylu</div>}
             </div>
             <span className="mono" style={{ fontSize: 11.5, fontWeight: 700, color: C.bad, whiteSpace: "nowrap" }}>
               {x.z > 0 ? "+" : ""}{x.z.toFixed(1)} SD
