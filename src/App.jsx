@@ -2512,10 +2512,10 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, margin: "16px 0 6px" }}>
             <Tile label="Średnie RC drużyny" val={an.overallRC} color={tierColor(an.overallRC)}
               sub={`z ${an.nPlayers} zaw. z danymi`}
-              hint="Średni percentyl zawodników z danymi StatsBomb. UWAGA: przy małej/nierównej próbce drużyny Ekstraklasy skupiają się blisko siebie — to zgrubny wskaźnik, nie precyzyjny ranking. Realną siłę składu lepiej oddaje wartość rynkowa (obok)." />
-            <Tile label="Wartość składu (TM)" val={an.squadMv > 0 ? `€${an.squadMv}M` : "—"} color={C.proxy}
-              sub={`${an.nPlayers} zaw. z wyceną`}
-              hint="Suma wartości rynkowych (Transfermarkt) zawodników z danymi. Lepszy separator siły zespołów niż percentylowe RC." />
+              hint="Średni percentyl zawodników z danymi StatsBomb. UWAGA: przy małej/nierównej próbce drużyny Ekstraklasy skupiają się blisko siebie — to zgrubny wskaźnik, nie precyzyjny ranking." />
+            <Tile label="Wartość próbki (TM)" val={an.squadMv > 0 ? `≈€${an.squadMv}M` : "—"} color={C.steelHi}
+              sub={`tylko ${an.nPlayers} zaw. z danymi`}
+              hint="UWAGA: to NIE jest pełna wartość klubu z Transfermarktu — to suma wartości TYLKO tych zawodników, których mamy w danych StatsBomb (zwykle kilkunastu z ~25). Realna wartość całego składu na TM jest WYŻSZA. Służy jako zgrubne porównanie między drużynami, nie jako oficjalna liczba." />
             <Tile label="Przewidywalność stylu" val={an.predictability != null ? `${Math.round(an.predictability * 100)}%` : "—"}
               color={an.predictability != null && an.predictability > 0.6 ? C.blueHi : C.steelHi}
               hint="Podobieństwo stylu w liniach — wysokie = jednorodni, przewidywalni." />
@@ -2944,11 +2944,11 @@ function CompareView({ data }) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 6 }}>
             <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} sub={`z ${profA.nPlayers} zaw.`} />
             <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} sub={`z ${profB.nPlayers} zaw.`} />
-            <Tile label={`Wartość składu — ${teamA}`} val={profA.squadMv > 0 ? `€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} />
-            <Tile label={`Wartość składu — ${teamB}`} val={profB.squadMv > 0 ? `€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} />
+            <Tile label={`Wartość próbki — ${teamA}`} val={profA.squadMv > 0 ? `≈€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} sub={`${profA.nPlayers} zaw.`} />
+            <Tile label={`Wartość próbki — ${teamB}`} val={profB.squadMv > 0 ? `≈€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} sub={`${profB.nPlayers} zaw.`} />
           </div>
           <div style={{ fontSize: 10.5, color: C.steel, marginBottom: 10 }}>
-            Śr. RC = średni percentyl zawodników z danymi StatsBomb — przy małej/nierównej próbce w Ekstraklasie drużyny skupiają się blisko siebie, więc to zgrubny wskaźnik. Wartość składu (TM) lepiej oddaje różnicę siły zespołów.
+            Śr. RC = średni percentyl zawodników z danymi StatsBomb — przy małej/nierównej próbce w Ekstraklasie drużyny skupiają się blisko siebie, więc to zgrubny wskaźnik. „Wartość próbki" to suma wartości TYLKO zawodników, których mamy w danych (nie cały skład) — realna wartość klubu na TM jest wyższa; to zgrubne porównanie, nie oficjalna liczba.
           </div>
 
           {/* Jakość per rola — lustrzane słupki (A w lewo, B w prawo) */}
@@ -4592,6 +4592,66 @@ function ContractsView({ data, fmt, setSel, setView }) {
   );
 }
 
+// Scatter wiek × minuty — jeden punkt = zawodnik; kolor = poziom RC; etykieta na kluczowych.
+function AgeMinutesScatter({ players, onPick }) {
+  const [hover, setHover] = useState(null);
+  const pts = players.filter((p) => Number(p.age) > 0 && Number(p.minutes_total) >= 0)
+    .map((p) => ({ p, age: Number(p.age), min: Number(p.minutes_total) || 0 }));
+  if (pts.length < 2) return <Empty>Za mało danych (wiek + minuty) do wykresu.</Empty>;
+  const W = 660, H = 320, padL = 46, padR = 16, padT = 14, padB = 34;
+  const ages = pts.map((d) => d.age), mins = pts.map((d) => d.min);
+  const aMin = Math.min(16, ...ages), aMax = Math.max(...ages) + 1;
+  const mMax = Math.max(900, ...mins) * 1.05;
+  const x = (a) => padL + ((a - aMin) / (aMax - aMin || 1)) * (W - padL - padR);
+  const y = (m) => padT + (1 - m / (mMax || 1)) * (H - padT - padB);
+  const xticks = []; for (let a = Math.ceil(aMin / 2) * 2; a <= aMax; a += 2) xticks.push(a);
+  const ystep = mMax > 2500 ? 500 : 250; const yticks = []; for (let m = 0; m <= mMax; m += ystep) yticks.push(m);
+  // etykiety: najwięcej minut + najmłodszy z dużą liczbą minut
+  const byMin = [...pts].sort((a, b) => b.min - a.min);
+  const labelSet = new Set();
+  byMin.slice(0, 2).forEach((d) => labelSet.add(d.p.id || d.p.name));
+  const young = [...pts].filter((d) => d.age <= 21).sort((a, b) => b.min - a.min)[0];
+  if (young) labelSet.add(young.p.id || young.p.name);
+  const dotCol = (p) => (p.rc_estimated ? C.steel : tierColor(p.rc));
+  return (
+    <div style={{ position: "relative", width: "100%" }} onMouseLeave={() => setHover(null)}>
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", overflow: "visible" }} aria-hidden="true">
+        {yticks.map((m) => (
+          <g key={"y" + m}>
+            <line x1={padL} x2={W - padR} y1={y(m)} y2={y(m)} stroke={C.line} strokeWidth="1" />
+            <text x={padL - 6} y={y(m) + 3} textAnchor="end" fontSize="9.5" fill={C.steel}>{m}</text>
+          </g>
+        ))}
+        {xticks.map((a) => (
+          <text key={"x" + a} x={x(a)} y={H - padB + 15} textAnchor="middle" fontSize="9.5" fill={C.steel}>{a}</text>
+        ))}
+        <text x={(padL + W - padR) / 2} y={H - 3} textAnchor="middle" fontSize="10" fill={C.steelHi}>Wiek (lata)</text>
+        <text x={12} y={(padT + H - padB) / 2} textAnchor="middle" fontSize="10" fill={C.steelHi} transform={`rotate(-90 12 ${(padT + H - padB) / 2})`}>Minuty w sezonie</text>
+        {pts.map((d, i) => {
+          const on = hover === i; const lab = labelSet.has(d.p.id || d.p.name);
+          return (
+            <g key={i}>
+              <circle cx={x(d.age)} cy={y(d.min)} r={on ? 6 : 4.2} fill={dotCol(d.p)} stroke={C.panel} strokeWidth="1.5"
+                style={{ cursor: "pointer" }} onMouseEnter={() => setHover(i)} onClick={() => onPick && onPick(d.p)} />
+              {lab && !on && (
+                <text x={x(d.age) + 7} y={y(d.min) + 3} fontSize="9.5" fill={C.steelHi}>{(d.p.name || "").split(" ").slice(-1)[0]}</text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+      {hover != null && (() => { const d = pts[hover]; return (
+        <div style={{ position: "absolute", left: `${(x(d.age) / W) * 100}%`, top: `${(y(d.min) / H) * 100}%`,
+          transform: "translate(-50%,-115%)", background: C.panelHi, border: `1px solid ${C.line}`, borderRadius: 8,
+          padding: "5px 9px", pointerEvents: "none", fontSize: 11, color: C.bone, whiteSpace: "nowrap", zIndex: 2,
+          boxShadow: "0 4px 14px -6px rgba(10,20,50,.4)" }}>
+          <b>{d.p.name}</b><br />{d.age} lat · {Math.round(d.min)} min{d.p.rc_estimated ? " · RC b.d." : ` · RC ${d.p.rc}`}
+        </div>
+      ); })()}
+    </div>
+  );
+}
+
 // ------------------------------- PROFIL KADRY -------------------------------
 function SquadProfileView({ data, fmt, setSel, setView }) {
   const cur = curYearOf(data);
@@ -4647,7 +4707,17 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
         <Tile label="Cienkie pozycje" val={depth.filter((d) => d.thin).length} color={depth.some((d) => d.thin) ? C.warn : C.good} hint="Role z mniej niż 2 zawodnikami w kadrze." />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 18, marginTop: 8 }}>
+      <div style={{ marginTop: 16 }}>
+        <SectionLabel>Wiek × minuty</SectionLabel>
+        <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px" }}>
+          <AgeMinutesScatter players={squad.filter((p) => !p.loaned)} onPick={(p) => { setSel(p); setView("match"); }} />
+          <div style={{ fontSize: 10.5, color: C.steel, marginTop: 8 }}>
+            Jeden punkt = zawodnik. Kolor = poziom RC (zielony wyższy, czerwony niższy, szary = b.d.). Prawy-górny róg = filary (dużo minut); lewy-górny = młodzi już grający; prawy-dolny przy starszych = zmiennicy/schyłek. Najedź po nazwisko, kliknij po profil.
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 18, marginTop: 18 }}>
         <div>
           <SectionLabel>Piramida wieku</SectionLabel>
           <div style={{ display: "grid", gap: 8 }}>
