@@ -510,6 +510,18 @@ export default function App() {
         @media print {
           .rail, .mobabar, .pagehead, .bgwall, .noprint { display:none !important; }
           .printonly { display:block !important; }
+          /* Białe tło na WSZYSTKICH warstwach (inaczej ciemny wrapper appki przebija na nadmiarowej stronie). */
+          html, body, #root, body > div { background:#fff !important; }
+          /* Raport meczowy: jasny dokument zamiast ciemnego motywu. */
+          .mreport { background:#fff !important; color:#14202f !important; }
+          .mreport .rp-card { background:#fff !important; border:1px solid #d4d9e2 !important; break-inside:avoid; }
+          .mreport .rp-section { break-inside:avoid; }
+          .mreport .rp-ink { color:#14202f !important; }
+          .mreport .rp-dim { color:#5a6578 !important; }
+          .mreport .rp-link { color:#1a4fd0 !important; }
+          .mreport .rp-track { background:#e4e8ef !important; }
+          .mreport .rp-head { border-bottom-color:#bcc4d2 !important; }
+          .mreport .rp-foot { border-top-color:#bcc4d2 !important; }
           .shell, .content, main { display:block !important; padding:0 !important; margin:0 !important; background:#fff !important; }
           .report-print { color:#111 !important; }
           .report-print .rp-muted { color:#444 !important; }
@@ -1856,12 +1868,18 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
 
       <div style={{ overflowX: "auto" }}>
         <div style={{ position: "relative", width: "100%", minWidth: 660, maxWidth: 940, margin: "0 auto",
-          aspectRatio: "10 / 12", background: "linear-gradient(180deg,#0f2018,#0a140e)",
-          border: `1px solid ${C.line}`, borderRadius: 16, overflow: "hidden" }}>
-          <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 1, background: `${C.bone}16` }} />
-          <div style={{ position: "absolute", left: "50%", top: "50%", width: 120, height: 120, marginLeft: -60, marginTop: -60, border: `1px solid ${C.bone}12`, borderRadius: "50%" }} />
-          <div style={{ position: "absolute", left: "26%", right: "26%", top: 0, height: "13%", border: `1px solid ${C.bone}12`, borderTop: "none" }} />
-          <div style={{ position: "absolute", left: "26%", right: "26%", bottom: 0, height: "13%", border: `1px solid ${C.bone}12`, borderBottom: "none" }} />
+          aspectRatio: "10 / 12",
+          background: "repeating-linear-gradient(180deg,#1f8a47 0,#1f8a47 8.33%,#1a7d3f 8.33%,#1a7d3f 16.66%)",
+          border: `2px solid rgba(255,255,255,0.45)`, borderRadius: 16, overflow: "hidden",
+          boxShadow: "inset 0 0 60px rgba(0,0,0,0.35)" }}>
+          {/* linie boiska */}
+          <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 2, background: "rgba(255,255,255,0.55)" }} />
+          <div style={{ position: "absolute", left: "50%", top: "50%", width: 130, height: 130, marginLeft: -65, marginTop: -65, border: "2px solid rgba(255,255,255,0.5)", borderRadius: "50%" }} />
+          <div style={{ position: "absolute", left: "50%", top: "50%", width: 7, height: 7, marginLeft: -3.5, marginTop: -3.5, background: "rgba(255,255,255,0.6)", borderRadius: "50%" }} />
+          <div style={{ position: "absolute", left: "24%", right: "24%", top: 0, height: "15%", border: "2px solid rgba(255,255,255,0.5)", borderTop: "none" }} />
+          <div style={{ position: "absolute", left: "38%", right: "38%", top: 0, height: "6.5%", border: "2px solid rgba(255,255,255,0.45)", borderTop: "none" }} />
+          <div style={{ position: "absolute", left: "24%", right: "24%", bottom: 0, height: "15%", border: "2px solid rgba(255,255,255,0.5)", borderBottom: "none" }} />
+          <div style={{ position: "absolute", left: "38%", right: "38%", bottom: 0, height: "6.5%", border: "2px solid rgba(255,255,255,0.45)", borderBottom: "none" }} />
 
           {xi.map(({ slot, starter, shadow, price, ins }) => {
             const effCand = ins && shadow;   // po „wstaw" na karcie widać KANDYDATA, nie naszego
@@ -2333,7 +2351,12 @@ function computeTeamProfile(players, labelsFor) {
   const rankByRC = [...roleRC].filter((r) => r.n >= 1).sort((a, b) => a.rc - b.rc);
   const weakest = rankByRC[0] || null;
   const strongest = rankByRC[rankByRC.length - 1] || null;
-  const overallRC = Math.round(_mean(players.map((p) => p.raw)));
+  // RC drużyny = średnia z NAJLEPSZEJ jedenastki (top-11 wg RC), nie z całej próbki.
+  // Inaczej silne kluby (Lech) spadały do poziomu słabych (Wisła Płock), bo próbka
+  // mieszała gwiazdy z rezerwowymi. Top-11 ≈ realna wyjściowa jakość pierwszego składu.
+  const rawsSorted = players.map((p) => Number(p.raw)).filter(Number.isFinite).sort((a, b) => b - a);
+  const topXI = rawsSorted.slice(0, Math.min(11, rawsSorted.length));
+  const overallRC = topXI.length ? Math.round(_mean(topXI)) : Math.round(_mean(players.map((p) => p.raw)));
   const nPlayers = players.length;
   const squadMv = Math.round(players.reduce((s, p) => s + (Number(p.mv) > 0 ? Number(p.mv) : 0), 0) * 10) / 10;
   const lineStyle = Object.entries(byLine).map(([line, ps]) => {
@@ -3905,6 +3928,8 @@ const sevColor = (s) => (s === "high" ? C.redHi : s === "med" ? C.warn : C.steel
 // ============================ PRIORYTETY TRANSFEROWE ============================
 function PrioritiesView({ data, setSel, setView, fmt }) {
   const { rows, hasContract, hasAge } = useMemo(() => computePriorities(data), [data]);
+  const [maxBudget, setMaxBudget] = useState(50);   // 50 = bez limitu (jak budżet cienia)
+  const inBudget = (t) => maxBudget >= 50 || !(Number(t.mv) > 0) || Number(t.mv) <= maxBudget;
   const jump = (squadId) => { const s = data.squad.find((x) => x.id === squadId); if (s) { setSel(s); setView("match"); } };
   const uColor = (u) => (u >= 30 ? C.redHi : u >= 15 ? C.warn : C.steel);
   const uLabel = (u) => (u >= 30 ? "pilne" : u >= 15 ? "warto" : "spokojnie");
@@ -3924,6 +3949,20 @@ function PrioritiesView({ data, setSel, setView, fmt }) {
         <Kpi l="Pozycji pilnych" v={urgent} c={urgent > 0 ? C.redHi : C.good} />
         <Kpi l="Najpilniejsza" v={rows[0] ? rows[0].label : "—"} c={C.redHi} />
         <Kpi l="Analizowane pozycje" v={rows.length} />
+      </div>
+
+      {/* Filtr budżetu — ogranicza propozycje z puli do zawodników w zasięgu kwoty (jak Fragmentator). */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", margin: "0 0 18px",
+        background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "11px 16px" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12, color: C.steelHi }}>
+          <span className="mono" style={{ fontSize: 11, letterSpacing: 1, color: C.steel }}>BUDŻET TRANSFERU</span>
+          <input type="range" min={0} max={50} step={0.5} value={maxBudget}
+            onChange={(e) => setMaxBudget(+e.target.value)} style={{ width: 160 }} />
+          <b style={{ color: C.proxy, minWidth: 74 }}>{maxBudget >= 50 ? "bez limitu" : `≤ €${maxBudget}M`}</b>
+        </label>
+        <span style={{ fontSize: 11.5, color: C.steel }}>
+          Ogranicza „Propozycje z puli" do zawodników w zasięgu kwoty (wyceny TM). Bez ceny w bazie — pokazywani zawsze.
+        </span>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -3959,13 +3998,13 @@ function PrioritiesView({ data, setSel, setView, fmt }) {
               </div>
             )}
 
-            {r.targets.length > 0 && (
+            {(() => { const tgts = r.targets.filter(inBudget); return tgts.length > 0 && (
               <div style={{ marginTop: 14, borderTop: `1px solid ${C.line}`, paddingTop: 12 }}>
                 <div className="mono" style={{ fontSize: 9.5, letterSpacing: 1, color: C.steel, textTransform: "uppercase", marginBottom: 8 }}>
-                  Propozycje z puli
+                  Propozycje z puli{maxBudget < 50 ? ` · w budżecie ≤ €${maxBudget}M` : ""}
                 </div>
                 <div style={{ display: "grid", gap: 6 }}>
-                  {r.targets.map((t) => (
+                  {tgts.map((t) => (
                     <div key={t.id} style={{ display: "grid", gridTemplateColumns: "1.4fr 0.6fr 0.7fr auto", gap: 10,
                       alignItems: "center", fontSize: 12.5 }}>
                       <div style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -3987,7 +4026,7 @@ function PrioritiesView({ data, setSel, setView, fmt }) {
                   </button>
                 )}
               </div>
-            )}
+            ); })()}
           </div>
         ))}
       </div>
@@ -6261,8 +6300,10 @@ function MatchReportView({ data, fmt, setSel, setView }) {
     const o = {}; Object.entries(by).forEach(([r, vs]) => { o[r] = mean(vs); }); return o;
   }, [squad]);
   const oppRCd = useMemo(() => { const o = {}; (oppProfile ? oppProfile.roleRC : []).forEach((r) => { if (r && r.n >= 1) o[r.role] = r.rc; }); return o; }, [oppProfile]);
+  // Nasze RC drużyny liczone tak samo jak rywala: top-11 wg RC (najlepsza jedenastka).
   const ourReal = squad.filter((p) => !p.rc_estimated && Number.isFinite(Number(p.rc)));
-  const ourOverall = ourReal.length ? Math.round(ourReal.reduce((s, p) => s + Number(p.rc), 0) / ourReal.length) : null;
+  const ourTopXI = ourReal.map((p) => Number(p.rc)).sort((a, b) => b - a).slice(0, 11);
+  const ourOverall = ourTopXI.length ? Math.round(ourTopXI.reduce((s, v) => s + v, 0) / ourTopXI.length) : null;
 
   // Fazy GRY (modelowe, nie minutowe): każda liczona z RC ról, które w niej dominują.
   const PHASES = [
@@ -6377,9 +6418,9 @@ function MatchReportView({ data, fmt, setSel, setView }) {
   const lineCol = (p) => LINE_COL[p && p.line] || C.steel;
 
   const Sec = ({ title, note, children }) => (
-    <div style={{ marginTop: 20 }}>
+    <div style={{ marginTop: 20 }} className="rp-section">
       <SectionLabel>{title}</SectionLabel>
-      {note && <div style={{ fontSize: 11.5, color: C.steel, margin: "2px 0 8px", lineHeight: 1.4 }}>{note}</div>}
+      {note && <div className="rp-dim" style={{ fontSize: 11.5, color: C.steel, margin: "2px 0 8px", lineHeight: 1.4 }}>{note}</div>}
       {children}
     </div>
   );
@@ -6388,27 +6429,27 @@ function MatchReportView({ data, fmt, setSel, setView }) {
 
   const RcBar = ({ who, val, col }) => (
     <div style={{ display: "grid", gridTemplateColumns: "52px 1fr 30px", gap: 8, alignItems: "center" }}>
-      <span style={{ fontSize: 10.5, color: C.steel, textTransform: "uppercase", letterSpacing: 0.4 }}>{who}</span>
-      <div style={{ height: 9, background: C.line, borderRadius: 5, overflow: "hidden" }}>
+      <span className="rp-dim" style={{ fontSize: 10.5, color: C.steel, textTransform: "uppercase", letterSpacing: 0.4 }}>{who}</span>
+      <div className="rp-track" style={{ height: 9, background: C.line, borderRadius: 5, overflow: "hidden" }}>
         <div style={{ height: "100%", width: `${Math.max(0, Math.min(100, val || 0))}%`, background: col, borderRadius: 5 }} />
       </div>
-      <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: C.bone, textAlign: "right" }}>{val != null ? val : "—"}</span>
+      <span className="mono rp-ink" style={{ fontSize: 12, fontWeight: 700, color: C.bone, textAlign: "right" }}>{val != null ? val : "—"}</span>
     </div>
   );
 
   const RoleRow = ({ r }) => (
-    <div style={{ padding: "10px 13px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, borderLeft: `3px solid ${r.kind === "atak" ? C.good : r.kind === "uwaga" ? C.bad : C.warn}` }}>
+    <div className="rp-card" style={{ padding: "10px 13px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, borderLeft: `3px solid ${r.kind === "atak" ? C.good : r.kind === "uwaga" ? C.bad : C.warn}` }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
         <span style={{ fontSize: 12.5, color: r.kind === "atak" ? C.good : r.kind === "uwaga" ? C.bad : C.warn, fontWeight: 700 }}>{r.headline}</span>
-        <span className="mono" style={{ fontSize: 11, color: C.steel, whiteSpace: "nowrap" }}>Δ {r.delta >= 0 ? "+" : ""}{r.delta}</span>
+        <span className="mono rp-dim" style={{ fontSize: 11, color: C.steel, whiteSpace: "nowrap" }}>Δ {r.delta >= 0 ? "+" : ""}{r.delta}</span>
       </div>
-      <div style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.45, marginTop: 4 }}>{r.why}</div>
+      <div className="rp-dim" style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.45, marginTop: 4 }}>{r.why}</div>
       {r.players && r.players.length > 0 && (
-        <div style={{ fontSize: 11, color: C.steelHi, marginTop: 6 }}>
+        <div className="rp-dim" style={{ fontSize: 11, color: C.steelHi, marginTop: 6 }}>
           Nasi: {r.players.map((p, i) => (
             <span key={p.id || i}>
-              <span onClick={() => { setSel(p); setView("match"); }} style={{ cursor: "pointer", color: C.blueHi, borderBottom: `1px dotted ${C.blueHi}` }}>{p.name}</span>
-              <span style={{ color: C.steel }}> (RC {p.rc})</span>{i < r.players.length - 1 ? ", " : ""}
+              <span className="rp-link" onClick={() => { setSel(p); setView("match"); }} style={{ cursor: "pointer", color: C.blueHi, borderBottom: `1px dotted ${C.blueHi}` }}>{p.name}</span>
+              <span className="rp-dim" style={{ color: C.steel }}> (RC {p.rc})</span>{i < r.players.length - 1 ? ", " : ""}
             </span>
           ))}
         </div>
@@ -6416,8 +6457,10 @@ function MatchReportView({ data, fmt, setSel, setView }) {
     </div>
   );
 
+  const rakowCrest = crestOf("Raków Częstochowa");
+
   return (
-    <div>
+    <div className="mreport">
       <div className="noprint" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
         <span style={{ fontSize: 12, color: C.steel }}>mecz</span>
         <select value={idx} onChange={(e) => setIdx(+e.target.value)}
@@ -6431,11 +6474,11 @@ function MatchReportView({ data, fmt, setSel, setView }) {
       </div>
 
       {/* Nagłówek raportu */}
-      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", borderBottom: `2px solid ${C.line}`, paddingBottom: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", borderBottom: `2px solid ${C.line}`, paddingBottom: 12 }} className="rp-head">
         {crestOf(M.opponent) && <Crest id={crestOf(M.opponent)} size={34} />}
         <div>
-          <div className="disp" style={{ fontSize: 22, fontWeight: 800 }}>{M.opponent} <span style={{ color: C.steel }}>vs</span> Raków Częstochowa</div>
-          <div style={{ fontSize: 12.5, color: C.steel, marginTop: 2 }}>{M.comp}{M.week ? ` · ${M.week}. kolejka` : ""} · {M.date}{M.home ? " · u siebie" : " · wyjazd"}</div>
+          <div className="disp rp-ink" style={{ fontSize: 22, fontWeight: 800 }}>{M.opponent} <span className="rp-dim" style={{ color: C.steel }}>vs</span> Raków Częstochowa</div>
+          <div className="rp-dim" style={{ fontSize: 12.5, color: C.steel, marginTop: 2 }}>{M.comp}{M.week ? ` · ${M.week}. kolejka` : ""} · {M.date}{M.home ? " · u siebie" : " · wyjazd"}</div>
         </div>
         {played && (
           <div className="disp" style={{ marginLeft: "auto", fontSize: 30, fontWeight: 800, color: resCol }}>
@@ -6447,7 +6490,7 @@ function MatchReportView({ data, fmt, setSel, setView }) {
       <Sec title="Opis spotkania">
         <div style={{ display: "grid", gap: 9 }}>
           {narrative.map((c, i) => (
-            <p key={i} style={{ margin: 0, fontSize: 13, color: C.steelHi, lineHeight: 1.6,
+            <p key={i} className={i === 0 ? "rp-card rp-ink" : "rp-ink"} style={{ margin: 0, fontSize: 13, color: C.steelHi, lineHeight: 1.6,
               padding: i === 0 ? "11px 14px" : 0, background: i === 0 ? C.panel : "transparent",
               border: i === 0 ? `1px solid ${C.line}` : "none", borderRadius: i === 0 ? 10 : 0,
               borderLeft: i === 0 ? `3px solid ${resCol}` : "none", fontWeight: i === 0 ? 600 : 400 }}>{c}</p>
@@ -6460,16 +6503,16 @@ function MatchReportView({ data, fmt, setSel, setView }) {
           {flow.length > 0 && (
             <div style={{ display: "grid", gap: 8, marginBottom: 12 }}>
               {flow.map((c, i) => (
-                <p key={i} style={{ margin: 0, fontSize: 13, color: C.steelHi, lineHeight: 1.6 }}>{c}</p>
+                <p key={i} className="rp-ink" style={{ margin: 0, fontSize: 13, color: C.steelHi, lineHeight: 1.6 }}>{c}</p>
               ))}
             </div>
           )}
-          <div style={{ fontSize: 11, color: C.steel, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Notatka trenera</div>
+          <div className="rp-dim" style={{ fontSize: 11, color: C.steel, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Notatka trenera</div>
           <textarea className="noprint" value={note} onChange={(e) => saveNote(e.target.value)}
             placeholder="Wpisz własny komentarz do przebiegu meczu (np. kluczowe momenty, zmiany, dyspozycja) — pojawi się w eksporcie PDF. Zapisywane automatycznie w tej przeglądarce."
             style={{ width: "100%", minHeight: 96, boxSizing: "border-box", background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 12px", fontSize: 13, lineHeight: 1.5, fontFamily: "inherit", resize: "vertical", outline: "none" }} />
           {note.trim() && (
-            <div className="printonly" style={{ whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.6, padding: "10px 12px", border: `1px solid ${C.line}`, borderRadius: 10 }}>{note}</div>
+            <div className="printonly rp-card rp-ink" style={{ whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.6, padding: "10px 12px", border: `1px solid ${C.line}`, borderRadius: 10 }}>{note}</div>
           )}
         </Sec>
       )}
@@ -6478,14 +6521,14 @@ function MatchReportView({ data, fmt, setSel, setView }) {
         <Sec title="Analiza faz gry" note="Fazy modelowe (nie minutowe): każda liczona z RC ról, które w niej decydują — nasza wartość vs rywal. Przewaga od 4 pkt RC.">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 10 }}>
             {phases.map((ph) => (
-              <div key={ph.key} style={{ padding: "12px 14px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, borderLeft: `3px solid ${edgeCol(ph.edge)}` }}>
+              <div key={ph.key} className="rp-card" style={{ padding: "12px 14px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, borderLeft: `3px solid ${edgeCol(ph.edge)}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 2 }}>
-                  <span style={{ fontSize: 13.5, fontWeight: 700, color: C.bone }}>{ph.name}</span>
+                  <span className="rp-ink" style={{ fontSize: 13.5, fontWeight: 700, color: C.bone }}>{ph.name}</span>
                   <span style={{ fontSize: 10, fontWeight: 800, color: edgeCol(ph.edge), border: `1px solid ${edgeCol(ph.edge)}`, borderRadius: 6, padding: "2px 7px", whiteSpace: "nowrap" }}>
                     {edgeLbl(ph.edge)}{ph.delta != null ? ` ${ph.delta >= 0 ? "+" : ""}${ph.delta}` : ""}
                   </span>
                 </div>
-                <div style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.4, marginBottom: 9 }}>{ph.desc}</div>
+                <div className="rp-dim" style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.4, marginBottom: 9 }}>{ph.desc}</div>
                 <div style={{ display: "grid", gap: 6 }}>
                   <RcBar who="Raków" val={ph.ov} col={C.blueHi} />
                   <RcBar who="Rywal" val={ph.pv} col={C.steel} />
@@ -6520,13 +6563,13 @@ function MatchReportView({ data, fmt, setSel, setView }) {
               {ourKey.map((p) => {
                 const sp = squadById[p.id];
                 return (
-                  <div key={p.id || p.name} style={{ display: "grid", gridTemplateColumns: "10px 1fr auto auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${lineCol(p)}`, borderRadius: 9 }}>
+                  <div key={p.id || p.name} className="rp-card" style={{ display: "grid", gridTemplateColumns: "10px 1fr auto auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${lineCol(p)}`, borderRadius: 9 }}>
                     <span style={{ width: 8, height: 8, borderRadius: 2, background: lineCol(p) }} title={p.line} />
-                    <span style={{ fontSize: 12.5, fontWeight: 600, color: sp ? C.blueHi : C.bone, cursor: sp ? "pointer" : "default", borderBottom: sp ? `1px dotted ${C.blueHi}` : "none" }}
+                    <span className={sp ? "rp-link" : "rp-ink"} style={{ fontSize: 12.5, fontWeight: 600, color: sp ? C.blueHi : C.bone, cursor: sp ? "pointer" : "default", borderBottom: sp ? `1px dotted ${C.blueHi}` : "none" }}
                       onClick={() => { if (sp) { setSel(sp); setView("match"); } }}>
-                      {p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
+                      {p.name} <span className="rp-dim" style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
                     </span>
-                    <span style={{ fontSize: 11, color: C.steel }}>{Math.round(p.minutes || 0)}′</span>
+                    <span className="rp-dim" style={{ fontSize: 11, color: C.steel }}>{Math.round(p.minutes || 0)}′</span>
                     <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: C.good }}>{Math.round((p.stats && p.stats.goals) || 0)}G/{Math.round((p.stats && p.stats.assists) || 0)}A</span>
                   </div>
                 );
@@ -6540,10 +6583,10 @@ function MatchReportView({ data, fmt, setSel, setView }) {
               {theirKey.map((p, i) => {
                 const tc = tierColor(Number(p.raw));
                 return (
-                  <div key={p.id || i} style={{ display: "grid", gridTemplateColumns: "10px 1fr auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${lineCol(p)}`, borderRadius: 9 }}>
+                  <div key={p.id || i} className="rp-card" style={{ display: "grid", gridTemplateColumns: "10px 1fr auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${lineCol(p)}`, borderRadius: 9 }}>
                     <span style={{ width: 8, height: 8, borderRadius: 2, background: lineCol(p) }} title={p.line} />
-                    <span style={{ fontSize: 12.5, fontWeight: 600, color: C.bone }}>
-                      {p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
+                    <span className="rp-ink" style={{ fontSize: 12.5, fontWeight: 600, color: C.bone }}>
+                      {p.name} <span className="rp-dim" style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
                       {i === 0 && <span style={{ marginLeft: 6, fontSize: 9.5, fontWeight: 800, color: C.bad, border: `1px solid ${C.bad}`, borderRadius: 5, padding: "1px 5px", verticalAlign: "middle" }}>GŁÓWNE</span>}
                     </span>
                     <span className="mono" style={{ fontSize: 12, fontWeight: 800, color: tc, background: `${tc}22`, border: `1px solid ${tc}55`, borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap" }}>RC {Number(p.raw)}</span>
@@ -6555,7 +6598,15 @@ function MatchReportView({ data, fmt, setSel, setView }) {
         )}
       </div>
 
-      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 20, lineHeight: 1.55 }}>
+      {/* Stopka z herbem klubu */}
+      <div className="rp-foot" style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 24, paddingTop: 12, borderTop: `1px solid ${C.line}` }}>
+        {rakowCrest && <Crest id={rakowCrest} size={26} />}
+        <span className="rp-ink" style={{ fontSize: 12, fontWeight: 800, color: C.bone }}>Raków Częstochowa</span>
+        <span className="rp-dim" style={{ fontSize: 11, color: C.steel }}>· Cyfrowy Bliźniak — raport meczowy</span>
+        <span className="rp-dim" style={{ marginLeft: "auto", fontSize: 11, color: C.steel }}>{M.date}</span>
+      </div>
+
+      <div className="rp-dim" style={{ fontSize: 10.5, color: C.steel, marginTop: 10, lineHeight: 1.55 }}>
         Raport analityczny post factum na danych StatsBomb (profil stylu + RC vs Ekstraklasa) i wynikach ({recent.source || "—"}). „Analiza faz gry" to fazy MODELOWE liczone z jakości (RC) ról, które w danej fazie decydują — nie minutowy przebieg meczu. Dane zdarzeniowe (xG po minutach, mapa strzałów, momentum) nie wchodzą w ten wariant. Profil fazowy rywala liczony z zawodników rywala obecnych w StatsBomb (próbka {oppPlayers.length} zaw.), nie z całego składu. Eksport: „Eksport PDF" → w oknie druku wybierz „Zapisz jako PDF".
       </div>
     </div>
