@@ -52,7 +52,17 @@ jobs:
           TM_ENRICH: ${{ github.event.inputs.tm_enrich == 'true' && '1' || '' }}
           TM_ENRICH_TOP: ${{ github.event.inputs.tm_top }}
         run: python scripts/fetch_statsbomb.py
- 
+
+      - name: Dolicz realną wartość całych składów (Transfermarkt)
+        # Pełna wartość rynkowa klubów (suma składu z TM) do kafla „Wartość rynkowa"
+        # na Przeciwniku/Porównaniu. Źródło TM jest nieoficjalne i bywa limitowane,
+        # więc krok NIE może wywalić pipeline (continue-on-error) — brak danych = kafel
+        # spada do „Wartość próbki". Własny egzemplarz API: ustaw zmienną TM_API_BASE.
+        continue-on-error: true
+        env:
+          TM_API_BASE: ${{ vars.TM_API_BASE }}
+        run: python scripts/fetch_team_values.py
+
       - name: Zarchiwizuj wyceny (historia wartości)
         run: python scripts/archive_values.py
 
