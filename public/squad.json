@@ -69,7 +69,9 @@
     "id": "rk-adriano",
     "name": "Adriano",
     "pos": "WM",
-    "line": "Pomoc"
+    "line": "Pomoc",
+    "loaned": true,
+    "loan_status": "Poza Klubem"
   },
   {
     "id": "rk-bogdan-mirčetić",
