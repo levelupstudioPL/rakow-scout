@@ -34891,5 +34891,64 @@
   "contract": 2029,
   "age": 27,
   "foot": "obunożny"
+ },
+ "33615": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "203362": {
+  "mv": 0.65,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "404790": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "156772": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "29513": {
+  "mv": 0.6,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "558988": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 18,
+  "foot": null
+ },
+ "27571": {
+  "mv": 0.45,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "9464": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 33,
+  "foot": "prawa"
+ },
+ "400183": {
+  "miss": true
  }
 }
