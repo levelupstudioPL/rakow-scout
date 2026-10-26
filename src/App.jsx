@@ -462,7 +462,7 @@ export default function App() {
   const SECTIONS = [
     { id: "kadra",    label: "Kadra",    views: [["twin", "Skład"], ["digest", "Podsumowanie"], ["squadprofile", "Profil kadry"], ["problems", "Problemy zespołu"], ["planpracy", "Plan pracy"], ["wypozyczeni", "Wypożyczeni"], ["contracts", "Kontrakty"], ["values", "Wartości"], ["eval", "Ocena trenera"], ["mecze", "Ostatnie mecze"], ["flags", "Czerwone flagi"]] },
     { id: "skauting", label: "Skauting", views: [["match", "Odpowiednicy"], ["priorities", "Priorytety"], ["okazje", "Okazje"], ["shortlist", "Shortlista"], ["search", "Szukaj"], ["watch", "Watchlista"], ["raport", "Raport / PDF"]] },
-    { id: "taktyka",  label: "Taktyka",  views: [["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
+    { id: "taktyka",  label: "Taktyka",  views: [["raportmeczu", "Raport meczowy"], ["shadow", "Drużyna cieni"], ["corr", "Zależności"], ["opponent", "Przeciwnik"], ["compare", "Porównanie"], ["fixtures", "Terminarz"]] },
     { id: "model",    label: "Model",    views: [["events", "Dane eventowe"], ["leagues", "Handicapy lig"], ["metrics", "Multikolinearność"], ["stability", "Stabilność metryk"], ["help", "Jak to działa"]] },
   ];
   const curSection = SECTIONS.find((s) => s.views.some(([k]) => k === view)) || SECTIONS[0];
@@ -644,6 +644,7 @@ export default function App() {
             {view === "opponent" && "Analiza przeciwnika"}
             {view === "compare" && "Porównanie zespołów"}
             {view === "events" && "Dane eventowe (Faza 2)"}
+            {view === "raportmeczu" && "Raport meczowy"}
             {view === "shadow" && "Drużyna cieni · 3-4-3"}
             {view === "search" && "Wyszukiwarka zawodników"}
             {view === "watch" && "Watchlista skauta"}
@@ -691,6 +692,7 @@ export default function App() {
           {view === "search" && <SearchView {...{ data, query, setQuery, searchResults, short, toggleShort, fmt }} />}
           {view === "watch" && <WatchlistView {...{ data, wl, setStatus, setNote, setSel, setView, fmt }} />}
           {view === "raport" && <ReportView {...{ data, wl, fmt }} />}
+          {view === "raportmeczu" && <MatchReportView {...{ data, fmt, setSel, setView }} />}
           {view === "shadow" && <ShadowView {...{ data, photoOf, fmt, estimatePrice, matchScore, adjusted, filters, setSel, setView, oppTeam, setOppTeam, short }} />}
           {view === "leagues" && <LeaguesView data={data} />}
           {view === "metrics" && <MetricsView data={data} />}
@@ -6210,6 +6212,162 @@ function LoanedView({ data, fmt, setSel, setView }) {
   );
 }
 
+// Raport meczowy dla trenera — składa z naszych danych: wynik + kontekst sezonu,
+// profil rywala (RC/styl), starcie ról, nasza ofensywa, wnioski. Eksport przez druk → PDF.
+function MatchReportView({ data, fmt, setSel, setView }) {
+  const recent = data.recent || {};
+  const ls = recent.league_season || {};
+  const squad = (data.squad || []).filter((p) => !p.loaned);
+  const labelsFor = (line) => (data.meta && data.meta.style_labels ? data.meta.style_labels[line] : null);
+  const crestOf = (t) => (data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[t] : null);
+  const foldT = (t) => _rn(t);
+
+  const matches = useMemo(() => {
+    const lg = (ls.matches || []).map((m) => ({ ...m, comp: "Ekstraklasa", cup: false }));
+    const cup = (recent.cup_history || []).map((m) => ({ ...m, comp: m.comp || "Puchar", cup: true }));
+    return [...lg, ...cup].filter((m) => m.opponent)
+      .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+  }, [data]);
+  const [idx, setIdx] = useState(0);
+  const M = matches[idx] || null;
+
+  const oppProfile = useMemo(() => {
+    if (!M) return null;
+    const pool = (data.pool || []).filter((p) => (p.lg || "").startsWith("Ekstraklasa"));
+    const teamOf = (p) => p.team_now || p.team;
+    const tgt = foldT(M.opponent);
+    const players = pool.filter((p) => { const t = foldT(teamOf(p)); return t && (t === tgt || t.includes(tgt) || tgt.includes(t)); });
+    return players.length >= 3 ? computeTeamProfile(players, labelsFor) : null;
+  }, [M, data]);
+  const rec = useMemo(() => (oppProfile ? computeOpponentRecommendations(squad, oppProfile) : null), [oppProfile, squad]);
+
+  const rpl = (recent.players || []).map((p) => ({ ...p, ga: ((p.stats && (Number(p.stats.goals) || 0) + (Number(p.stats.assists) || 0)) || 0) }))
+    .filter((p) => p.ga > 0).sort((a, b) => b.ga - a.ga).slice(0, 5);
+
+  if (!matches.length) return <Empty>Brak meczów w danych. Raport pojawi się po najbliższym odświeżeniu (recent/league_season).</Empty>;
+
+  const played = M && M.result;
+  const resWord = M && (M.result === "W" ? "wygrał" : M.result === "D" ? "zremisował z" : M.result === "L" ? "przegrał z" : "zagrał z");
+  const resCol = M && (M.result === "W" ? C.good : M.result === "D" ? C.warn : C.bad);
+  const advs = rec ? rec.recs.filter((r) => r.kind === "atak").slice(0, 3) : [];
+  const risks = rec ? rec.recs.filter((r) => r.kind === "uwaga").slice(0, 3) : [];
+
+  const conclusions = (() => {
+    if (!M) return [];
+    const out = [];
+    if (played) out.push(`Raków ${resWord} ${M.opponent} ${M.gf}:${M.ga}${M.home ? " (u siebie)" : " (na wyjeździe)"}, ${M.comp}.`);
+    else out.push(`Mecz z ${M.opponent} (${M.comp}) — raport przedmeczowy (brak wyniku w danych).`);
+    if (ls && ls.rounds) out.push(`Kontekst sezonu Ekstraklasy: bilans ${ls.w}-${ls.d}-${ls.l}, ${ls.gf}:${ls.ga}, forma ${ls.form || "—"}.`);
+    if (oppProfile) {
+      const wk = oppProfile.weakest, st = oppProfile.strongest;
+      out.push(`Rywal (próbka ${oppProfile.nPlayers} zaw., śr. RC ${oppProfile.overallRC})${wk ? ` najsłabszy w roli „${roleName({ role: wk.role }) || wk.role}" (RC ${wk.rc})` : ""}${st ? `, najmocniejszy „${roleName({ role: st.role }) || st.role}" (RC ${st.rc})` : ""}. Styl ${oppProfile.predictability != null && oppProfile.predictability > 0.6 ? "przewidywalny" : "zróżnicowany"}.`);
+      if (advs.length) out.push(`Przewaga w pojedynkach ról: ${advs.map((a) => a.ourLabel).join(", ")} — tam była przestrzeń.`);
+      if (risks.length) out.push(`Ryzyko: ${risks.map((a) => a.oppLabel).join(", ")} — tu rywal mocniejszy.`);
+      if (played && M.result === "L" && Number(M.ga) >= 2 && risks.length) out.push(`Strata ${M.ga} bramek pokrywa się z ryzykiem w strefie ${risks[0].line} — to kierunek do pracy w obronie.`);
+      if (played && M.result === "W" && advs.length) out.push(`Wygrana zgodna z przewagą profilową w ${advs[0].ourLabel} — warto to utrwalać w planie gry.`);
+    } else {
+      out.push(`Brak wystarczającego profilu rywala w danych (mało zawodników ${M.opponent} ze StatsBomb) — analiza oparta na wyniku i naszym kontekście.`);
+    }
+    return out;
+  })();
+
+  const Sec = ({ title, children }) => (
+    <div style={{ marginTop: 16 }}>
+      <SectionLabel>{title}</SectionLabel>
+      {children}
+    </div>
+  );
+
+  return (
+    <div>
+      <div className="noprint" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+        <span style={{ fontSize: 12, color: C.steel }}>mecz</span>
+        <select value={idx} onChange={(e) => setIdx(+e.target.value)}
+          style={{ background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 9, padding: "9px 12px", fontSize: 13, fontWeight: 600 }}>
+          {matches.map((m, i) => <option key={i} value={i}>{m.opponent} {m.result ? `${m.gf}:${m.ga}` : "(nierozegrany)"} · {m.date} · {m.comp}</option>)}
+        </select>
+        <button onClick={() => window.print()}
+          style={{ background: C.red, color: "#fff", border: "none", borderRadius: 9, padding: "9px 15px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          Eksport PDF
+        </button>
+      </div>
+
+      {/* Nagłówek raportu */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", borderBottom: `2px solid ${C.line}`, paddingBottom: 12 }}>
+        {crestOf(M.opponent) && <Crest id={crestOf(M.opponent)} size={34} />}
+        <div>
+          <div className="disp" style={{ fontSize: 22, fontWeight: 800 }}>{M.opponent} <span style={{ color: C.steel }}>vs</span> Raków Częstochowa</div>
+          <div style={{ fontSize: 12.5, color: C.steel, marginTop: 2 }}>{M.comp} · {M.date}{M.home ? " · u siebie" : " · wyjazd"}</div>
+        </div>
+        {played && (
+          <div className="disp" style={{ marginLeft: "auto", fontSize: 30, fontWeight: 800, color: resCol }}>
+            {M.gf}:{M.ga} <span style={{ fontSize: 14 }}>{M.result === "W" ? "WYGRANA" : M.result === "D" ? "REMIS" : "PORAŻKA"}</span>
+          </div>
+        )}
+      </div>
+
+      <Sec title="Wnioski analityczne">
+        <div style={{ display: "grid", gap: 7 }}>
+          {conclusions.map((c, i) => (
+            <div key={i} style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 9, alignItems: "start",
+              padding: "9px 12px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9, borderLeft: `3px solid ${i === 0 ? resCol || C.blue : C.blue}` }}>
+              <span style={{ color: C.blue, fontWeight: 800 }}>▸</span>
+              <span style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.45 }}>{c}</span>
+            </div>
+          ))}
+        </div>
+      </Sec>
+
+      {oppProfile && (
+        <Sec title="Profil rywala">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 10, marginBottom: 8 }}>
+            <Tile label="Śr. RC (próbka)" val={oppProfile.overallRC} color={tierColor(oppProfile.overallRC)} sub={`${oppProfile.nPlayers} zaw.`} />
+            <Tile label="Najsłabsza rola" val={oppProfile.weakest ? (roleName({ role: oppProfile.weakest.role }) || oppProfile.weakest.role) : "—"} sub={oppProfile.weakest ? `RC ${oppProfile.weakest.rc}` : ""} color={C.good} />
+            <Tile label="Najmocniejsza rola" val={oppProfile.strongest ? (roleName({ role: oppProfile.strongest.role }) || oppProfile.strongest.role) : "—"} sub={oppProfile.strongest ? `RC ${oppProfile.strongest.rc}` : ""} color={C.warn} />
+            <Tile label="Przewidywalność" val={oppProfile.predictability != null ? `${Math.round(oppProfile.predictability * 100)}%` : "—"} color={C.blueHi} />
+          </div>
+          <div style={{ display: "grid", gap: 5 }}>
+            {(oppProfile.tips || []).slice(0, 4).map((t, i) => (
+              <div key={i} style={{ fontSize: 12, color: C.steelHi, padding: "6px 10px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8 }}>{t.t}</div>
+            ))}
+          </div>
+        </Sec>
+      )}
+
+      {(advs.length > 0 || risks.length > 0) && (
+        <Sec title="Starcie ról — gdzie przewaga, gdzie ryzyko">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10 }}>
+            {[...advs, ...risks].map((r, i) => (
+              <div key={i} style={{ padding: "10px 13px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, borderLeft: `3px solid ${r.kind === "atak" ? C.good : C.bad}` }}>
+                <div style={{ fontSize: 12.5, color: r.kind === "atak" ? C.good : C.bad, fontWeight: 700, marginBottom: 3 }}>{r.headline}</div>
+                <div style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.4 }}>{r.why}</div>
+              </div>
+            ))}
+          </div>
+        </Sec>
+      )}
+
+      {rpl.length > 0 && (
+        <Sec title="Nasza ofensywa (ostatnie mecze: gole + asysty)">
+          <div style={{ display: "grid", gap: 6 }}>
+            {rpl.map((p) => (
+              <div key={p.id || p.name} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 12, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9 }}>
+                <span style={{ fontSize: 13, color: C.bone, fontWeight: 600 }}>{p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {roleName(p) || p.pos}</span></span>
+                <span style={{ fontSize: 11.5, color: C.steel }}>{Math.round(p.minutes || 0)} min</span>
+                <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: C.good }}>{Math.round((p.stats && p.stats.goals) || 0)}G / {Math.round((p.stats && p.stats.assists) || 0)}A</span>
+              </div>
+            ))}
+          </div>
+        </Sec>
+      )}
+
+      <div style={{ fontSize: 10.5, color: C.steel, marginTop: 16, lineHeight: 1.5 }}>
+        Raport z danych StatsBomb (profil/RC vs Ekstraklasa) i wyników ({recent.source || "—"}). „Profil rywala" i „starcie ról" liczone z zawodników rywala dostępnych w StatsBomb (próbka, nie cały skład). To analityczne wnioski wspierające ocenę trenera, nie zapis przebiegu meczu (dane eventowe/zdarzeniowe nie wchodzą). Eksport: „Eksport PDF" → Zapisz jako PDF.
+      </div>
+    </div>
+  );
+}
+
 const NAV_SVG = {
   twin: (<><circle cx="9" cy="8" r="3.3"/><path d="M3.5 20v-1a5 5 0 0 1 5-5h1a5 5 0 0 1 5 5v1"/><path d="M16 5.4a3 3 0 0 1 0 5.6"/><path d="M20.5 20v-1a4 4 0 0 0-2.6-3.7"/></>),
   digest: (<><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></>),
@@ -6230,6 +6388,7 @@ const NAV_SVG = {
   search: (<><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.3" y2="16.3"/></>),
   watch: (<><path d="M2.2 12S6 5.5 12 5.5 21.8 12 21.8 12 18 18.5 12 18.5 2.2 12 2.2 12z"/><circle cx="12" cy="12" r="3"/></>),
   raport: (<><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="16.5" x2="15" y2="16.5"/></>),
+  raportmeczu: (<><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5"/><circle cx="12" cy="15" r="3.1"/><path d="M12 11.9l2.95 2.14-1.13 3.46h-3.64L9.05 14.04z"/></>),
   shadow: (<><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.4"/></>),
   corr: (<><circle cx="6" cy="6" r="2.3"/><circle cx="18" cy="7" r="2.3"/><circle cx="12" cy="18" r="2.3"/><line x1="7.6" y1="7.6" x2="10.6" y2="15.8"/><line x1="16.4" y1="8.8" x2="13.2" y2="16.2"/><line x1="8.2" y1="6.2" x2="15.7" y2="6.8"/></>),
   opponent: (<path d="M12 3l8 3v5c0 5-3.4 8-8 10-4.6-2-8-5-8-10V6z"/>),
