@@ -53,7 +53,9 @@ OUT = Path(__file__).resolve().parent.parent / "public" / "data.json"
 LEAGUE_CONFIG = [
     {"name": "Ekstraklasa (PL)",        "competition_id": 38,  "season_id": 318, "base": True},
     # I Liga (PL, 2. poziom) — dla kontekstu wypożyczonych grających na zapleczu Ekstraklasy.
-    {"name": "I Liga (PL)",             "competition_id": 1848, "season_id": 318, "base": False},
+    # Sezon 351 = BIEŻĄCY (2026/2027): wypożyczeni grają TAM teraz. Sezon 318 (2025/26)
+    # to zeszły sezon — dla aktualnych wypożyczeń był pusty, dlatego bieżący.
+    {"name": "I Liga (PL)",             "competition_id": 1848, "season_id": 351, "base": False},
     {"name": "Jupiler Pro League (BE)", "competition_id": 46,  "season_id": 318, "base": False},
     {"name": "Eredivisie (NL)",         "competition_id": 6,   "season_id": 318, "base": False},
     {"name": "Primeira Liga (PT)",      "competition_id": 13,  "season_id": 318, "base": False},
