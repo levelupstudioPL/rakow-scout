@@ -52,6 +52,8 @@ OUT = Path(__file__).resolve().parent.parent / "public" / "data.json"
 # Zbiór lig dobrany pod poziom Rakowa; analityk może dodać/odjąć wpisy.
 LEAGUE_CONFIG = [
     {"name": "Ekstraklasa (PL)",        "competition_id": 38,  "season_id": 318, "base": True},
+    # I Liga (PL, 2. poziom) — dla kontekstu wypożyczonych grających na zapleczu Ekstraklasy.
+    {"name": "I Liga (PL)",             "competition_id": 1848, "season_id": 318, "base": False},
     {"name": "Jupiler Pro League (BE)", "competition_id": 46,  "season_id": 318, "base": False},
     {"name": "Eredivisie (NL)",         "competition_id": 6,   "season_id": 318, "base": False},
     {"name": "Primeira Liga (PT)",      "competition_id": 13,  "season_id": 318, "base": False},
@@ -468,6 +470,11 @@ def build_squad_from_file(squad_path, base_by_name, base_stats_by_role, universa
                              manual_alt=pl.get("alt_pos"))
         if pl.get("id"):
             entry["id"] = pl["id"]
+        # Znacznik wypożyczenia/„poza klubem" z arkusza → osobna zakładka na froncie.
+        if pl.get("loaned"):
+            entry["loaned"] = True
+            if pl.get("loan_status"):
+                entry["loan_status"] = pl["loan_status"]
         squad.append(entry)
     return squad, rc_from_model
  
