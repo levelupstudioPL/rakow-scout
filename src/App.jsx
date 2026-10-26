@@ -2489,6 +2489,8 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
 
   const an = useMemo(() => computeTeamProfile(players, labelsFor), [players]);
   const rec = useMemo(() => computeOpponentRecommendations(data.squad, an), [data.squad, an]);
+  // Realna wartość CAŁEGO składu z Transfermarktu (pipeline: fetch_team_values.py) — gdy jest, bije próbkę.
+  const realVal = (data.meta && data.meta.team_values && data.meta.team_values[team]) || null;
 
   const tipColor = (k) => (k === "luka" ? C.good : k === "uwaga" ? C.warn : k === "przewidywalnosc" ? C.blueHi : C.steelHi);
   const barRC = (rc) => `${Math.max(4, Math.min(100, rc))}%`;
@@ -2540,9 +2542,15 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
             <Tile label="Średnie RC drużyny" val={an.overallRC} color={tierColor(an.overallRC)}
               sub={`z ${an.nPlayers} zaw. z danymi`}
               hint="Średni percentyl zawodników z danymi StatsBomb. UWAGA: przy małej/nierównej próbce drużyny Ekstraklasy skupiają się blisko siebie — to zgrubny wskaźnik, nie precyzyjny ranking." />
-            <Tile label="Wartość próbki (TM)" val={an.squadMv > 0 ? `≈€${an.squadMv}M` : "—"} color={C.steelHi}
-              sub={`tylko ${an.nPlayers} zaw. z danymi`}
-              hint="UWAGA: to NIE jest pełna wartość klubu z Transfermarktu — to suma wartości TYLKO tych zawodników, których mamy w danych StatsBomb (zwykle kilkunastu z ~25). Realna wartość całego składu na TM jest WYŻSZA. Służy jako zgrubne porównanie między drużynami, nie jako oficjalna liczba." />
+            {realVal && Number(realVal.total) > 0 ? (
+              <Tile label="Wartość rynkowa (TM)" val={`€${realVal.total}M`} color={C.proxy}
+                sub={`cały skład · ${realVal.n} zaw.`}
+                hint="Łączna wartość rynkowa CAŁEGO składu klubu z Transfermarktu (suma wycen wszystkich zawodników klubu), nie tylko próbki z danymi StatsBomb. Źródło: Transfermarkt przez pipeline." />
+            ) : (
+              <Tile label="Wartość próbki (TM)" val={an.squadMv > 0 ? `≈€${an.squadMv}M` : "—"} color={C.steelHi}
+                sub={`tylko ${an.nPlayers} zaw. z danymi`}
+                hint="UWAGA: to NIE jest pełna wartość klubu z Transfermarktu — to suma wartości TYLKO tych zawodników, których mamy w danych StatsBomb (zwykle kilkunastu z ~25). Realna wartość całego składu na TM jest WYŻSZA. Pełna wartość dołączy po najbliższym odświeżeniu (pipeline dociąga ją z Transfermarktu)." />
+            )}
             <Tile label="Przewidywalność stylu" val={an.predictability != null ? `${Math.round(an.predictability * 100)}%` : "—"}
               color={an.predictability != null && an.predictability > 0.6 ? C.blueHi : C.steelHi}
               hint="Podobieństwo stylu w liniach — wysokie = jednorodni, przewidywalni." />
@@ -2924,6 +2932,8 @@ function CompareView({ data }) {
   const nB = useMemo(() => playersOf(teamB).length, [teamB, pool, squad]);
   const profA = useMemo(() => computeTeamProfile(playersOf(teamA), labelsFor), [teamA, pool, squad]);
   const profB = useMemo(() => computeTeamProfile(playersOf(teamB), labelsFor), [teamB, pool, squad]);
+  const tvOf = (t) => (data.meta && data.meta.team_values && data.meta.team_values[t]) || null;
+  const realA = tvOf(teamA), realB = tvOf(teamB);
 
   const pick = (t, set, other) => (
     <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
@@ -2971,11 +2981,15 @@ function CompareView({ data }) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 6 }}>
             <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} sub={`z ${profA.nPlayers} zaw.`} />
             <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} sub={`z ${profB.nPlayers} zaw.`} />
-            <Tile label={`Wartość próbki — ${teamA}`} val={profA.squadMv > 0 ? `≈€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} sub={`${profA.nPlayers} zaw.`} />
-            <Tile label={`Wartość próbki — ${teamB}`} val={profB.squadMv > 0 ? `≈€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} sub={`${profB.nPlayers} zaw.`} />
+            {realA && Number(realA.total) > 0
+              ? <Tile label={`Wartość rynkowa — ${teamA}`} val={`€${realA.total}M`} color={cmp(realA.total, realB ? realB.total : 0)} sub={`cały skład · ${realA.n} zaw.`} />
+              : <Tile label={`Wartość próbki — ${teamA}`} val={profA.squadMv > 0 ? `≈€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} sub={`${profA.nPlayers} zaw.`} />}
+            {realB && Number(realB.total) > 0
+              ? <Tile label={`Wartość rynkowa — ${teamB}`} val={`€${realB.total}M`} color={cmp(realB.total, realA ? realA.total : 0)} sub={`cały skład · ${realB.n} zaw.`} />
+              : <Tile label={`Wartość próbki — ${teamB}`} val={profB.squadMv > 0 ? `≈€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} sub={`${profB.nPlayers} zaw.`} />}
           </div>
           <div style={{ fontSize: 10.5, color: C.steel, marginBottom: 10 }}>
-            Śr. RC = średni percentyl zawodników z danymi StatsBomb — przy małej/nierównej próbce w Ekstraklasie drużyny skupiają się blisko siebie, więc to zgrubny wskaźnik. „Wartość próbki" to suma wartości TYLKO zawodników, których mamy w danych (nie cały skład) — realna wartość klubu na TM jest wyższa; to zgrubne porównanie, nie oficjalna liczba.
+            Śr. RC = średni percentyl zawodników z danymi StatsBomb — przy małej/nierównej próbce w Ekstraklasie drużyny skupiają się blisko siebie, więc to zgrubny wskaźnik. „Wartość rynkowa" (gdy dostępna) to łączna wartość całego składu klubu z Transfermarktu; „Wartość próbki" (fallback) to suma wartości tylko zawodników z danymi — niższa niż realna wartość klubu.
           </div>
 
           {/* Jakość per rola — lustrzane słupki (A w lewo, B w prawo) */}
