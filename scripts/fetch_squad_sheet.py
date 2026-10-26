@@ -104,16 +104,22 @@ def parse_first_team(xlsx_bytes):
     if ci["team"] is None or ci["nz"] is None:
         raise ValueError(f"Nie rozpoznano kolumn w arkuszu (nagłówki: {hdr[:12]})")
     out = []
+    # W trybie read_only openpyxl ucina końcowe puste komórki → wiersz bywa krótszy
+    # niż nagłówek. Bezpieczny odczyt po indeksie (None, gdy kolumny brak w tym wierszu).
+    def cell(r, i):
+        if i is None or i >= len(r):
+            return ""
+        return r[i]
     for r in rows[1:]:
-        team = str(r[ci["team"]] or "").strip()
+        team = str(cell(r, ci["team"]) or "").strip()
         if fold(team) != fold(FIRST_TEAM):
             continue
-        nm = " ".join(x for x in [str(r[ci["im"]] or "").strip() if ci["im"] is not None else "",
-                                   str(r[ci["nz"]] or "").strip()] if x).strip()
+        nm = " ".join(x for x in [str(cell(r, ci["im"]) or "").strip(),
+                                   str(cell(r, ci["nz"]) or "").strip()] if x).strip()
         if not nm:
             continue
-        poz = str(r[ci["poz"]] or "").strip().lower().replace(" ", "") if ci["poz"] is not None else ""
-        wk = str(r[ci["wk"]] or "").strip() if ci["wk"] is not None else ""
+        poz = str(cell(r, ci["poz"]) or "").strip().lower().replace(" ", "")
+        wk = str(cell(r, ci["wk"]) or "").strip()
         # „poza klub" (Poza Klubem / poza klubem) = wypożyczony / nie w klubie.
         loaned = "poza klub" in fold(wk)
         out.append({"name": nm, "poz_raw": poz, "loaned": loaned, "loan_status": wk})
