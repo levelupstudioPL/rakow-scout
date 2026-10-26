@@ -20,8 +20,8 @@ import urllib.parse
 import json
  
 # Publiczny egzemplarz. Podmień na własny (np. https://twoj-egzemplarz.onrender.com)
-# gdy publiczny zacznie limitować.
-BASE_URL = "https://transfermarkt-api.fly.dev"
+# gdy publiczny zacznie limitować — wystarczy ustawić zmienną TM_API_BASE (bez zmian w kodzie).
+BASE_URL = os.getenv("TM_API_BASE", "https://transfermarkt-api.fly.dev")
  
 # ID klubu Raków Częstochowa na Transfermarkcie: 9644
 # (z profilu klubu: /rakow-czestochowa/startseite/verein/9644).
