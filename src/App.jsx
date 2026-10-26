@@ -505,9 +505,11 @@ export default function App() {
           h1.disp{font-size:26px!important;}
         }
         @media(max-width:480px){ .content{padding:14px 14px 0!important;} }
+        .printonly { display:none; }
         /* DRUK / EKSPORT PDF: chowamy chrome aplikacji, zostaje sam raport. */
         @media print {
           .rail, .mobabar, .pagehead, .bgwall, .noprint { display:none !important; }
+          .printonly { display:block !important; }
           .shell, .content, main { display:block !important; padding:0 !important; margin:0 !important; background:#fff !important; }
           .report-print { color:#111 !important; }
           .report-print .rp-muted { color:#444 !important; }
@@ -6232,6 +6234,15 @@ function MatchReportView({ data, fmt, setSel, setView }) {
   const [idx, setIdx] = useState(0);
   const M = matches[idx] || null;
 
+  // Notatka trenera do przebiegu meczu — zapisywana per mecz (localStorage), trafia do PDF.
+  const noteKey = M ? `rk_mnote_${M.date}_${foldT(M.opponent)}` : "";
+  const [note, setNote] = useState("");
+  useEffect(() => {
+    if (!noteKey) { setNote(""); return; }
+    try { setNote(localStorage.getItem(noteKey) || ""); } catch (e) { setNote(""); }
+  }, [noteKey]);
+  const saveNote = (v) => { setNote(v); try { if (noteKey) localStorage.setItem(noteKey, v); } catch (e) {} };
+
   const oppPlayers = useMemo(() => {
     if (!M) return [];
     const pool = (data.pool || []).filter((p) => (p.lg || "").startsWith("Ekstraklasa"));
@@ -6330,10 +6341,40 @@ function MatchReportView({ data, fmt, setSel, setView }) {
     return out;
   })();
 
+  // KOMENTARZ DO PRZEBIEGU — rekonstrukcja z wyniku + wzorca sezonu + faz (brak danych minutowych).
+  const flow = (() => {
+    if (!M || !played) return [];
+    const out = [];
+    const host = M.home ? "Raków" : M.opponent;
+    const guest = M.home ? M.opponent : "Raków";
+    const inityBy = oppProfile && ourOverall != null
+      ? (oppProfile.overallRC - ourOverall >= 3 ? M.opponent : ourOverall - oppProfile.overallRC >= 3 ? "Raków" : null)
+      : null;
+    const strongOpp = oppProfile && oppProfile.strongest ? `${ROLE_LABEL[oppProfile.strongest.role] || oppProfile.strongest.role} (RC ${oppProfile.strongest.rc})` : null;
+    let a = `Mecz rozegrany ${M.home ? "u siebie" : "na wyjeździe"} (gospodarz: ${host}).`;
+    if (inityBy) a += ` Wg profilu inicjatywa była najpewniej po stronie ${inityBy === "Raków" ? "Rakowa" : inityBy}${strongOpp && inityBy === M.opponent ? `, który budował przewagę przez ${strongOpp}` : ""}.`;
+    else a += " Profile zespołów zbliżone — o przebiegu decydowały detale i dyspozycja dnia.";
+    out.push(a);
+
+    const avgGf = ls && ls.rounds ? ls.gf / ls.rounds : null, avgGa = ls && ls.rounds ? ls.ga / ls.rounds : null;
+    if (avgGf != null) {
+      const cmp = (v, avg) => (v > avg + 0.3 ? "powyżej" : v < avg - 0.3 ? "poniżej" : "na poziomie");
+      out.push(`Bilans bramkowy ${gf}:${ga} wpisuje się w sezonowy wzorzec (średnio zdobywamy ${avgGf.toFixed(1)}, tracimy ${avgGa.toFixed(1)} na mecz): strata ${ga} ${cmp(ga, avgGa)} normy, a ${gf} strzelona ${cmp(gf, avgGf)} średniej.`);
+    }
+    let c = "";
+    if (worst) c += `Najwięcej problemów sprawiała faza „${worst.name}"${worst.delta < 0 ? ` (−${Math.abs(worst.delta)} RC)` : ""}.`;
+    if (ourKey[0]) c += ` Punktem zaczepienia w ofensywie pozostawał ${ourKey[0].name} (${Math.round((ourKey[0].stats && ourKey[0].stats.goals) || 0)}G/${Math.round((ourKey[0].stats && ourKey[0].stats.assists) || 0)}A w sezonie).`;
+    if (theirKey[0]) c += ` Po drugiej stronie największe zagrożenie to ${theirKey[0].name} (${ROLE_LABEL[theirKey[0].role] || theirKey[0].pos}, RC ${Number(theirKey[0].raw)}).`;
+    if (c) out.push(c.trim());
+    return out;
+  })();
+
   const recsAll = rec ? rec.recs : [];
   const advs = recsAll.filter((r) => r.kind === "atak");
   const risks = recsAll.filter((r) => r.kind === "uwaga");
   const evens = recsAll.filter((r) => r.kind === "rowno");
+  const LINE_COL = { Bramka: C.blue, Obrona: C.good, Pomoc: C.warn, Atak: C.bad };
+  const lineCol = (p) => LINE_COL[p && p.line] || C.steel;
 
   const Sec = ({ title, note, children }) => (
     <div style={{ marginTop: 20 }}>
@@ -6414,6 +6455,25 @@ function MatchReportView({ data, fmt, setSel, setView }) {
         </div>
       </Sec>
 
+      {(flow.length > 0 || played) && (
+        <Sec title="Komentarz do przebiegu" note="Rekonstrukcja z wyniku, wzorca sezonu i faz gry (brak danych minutowych). Poniżej miejsce na własny komentarz trenera — trafia do PDF.">
+          {flow.length > 0 && (
+            <div style={{ display: "grid", gap: 8, marginBottom: 12 }}>
+              {flow.map((c, i) => (
+                <p key={i} style={{ margin: 0, fontSize: 13, color: C.steelHi, lineHeight: 1.6 }}>{c}</p>
+              ))}
+            </div>
+          )}
+          <div style={{ fontSize: 11, color: C.steel, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Notatka trenera</div>
+          <textarea className="noprint" value={note} onChange={(e) => saveNote(e.target.value)}
+            placeholder="Wpisz własny komentarz do przebiegu meczu (np. kluczowe momenty, zmiany, dyspozycja) — pojawi się w eksporcie PDF. Zapisywane automatycznie w tej przeglądarce."
+            style={{ width: "100%", minHeight: 96, boxSizing: "border-box", background: C.panel, color: C.bone, border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 12px", fontSize: 13, lineHeight: 1.5, fontFamily: "inherit", resize: "vertical", outline: "none" }} />
+          {note.trim() && (
+            <div className="printonly" style={{ whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.6, padding: "10px 12px", border: `1px solid ${C.line}`, borderRadius: 10 }}>{note}</div>
+          )}
+        </Sec>
+      )}
+
       {scored.length > 0 && (
         <Sec title="Analiza faz gry" note="Fazy modelowe (nie minutowe): każda liczona z RC ról, które w niej decydują — nasza wartość vs rywal. Przewaga od 4 pkt RC.">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 10 }}>
@@ -6460,7 +6520,8 @@ function MatchReportView({ data, fmt, setSel, setView }) {
               {ourKey.map((p) => {
                 const sp = squadById[p.id];
                 return (
-                  <div key={p.id || p.name} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9 }}>
+                  <div key={p.id || p.name} style={{ display: "grid", gridTemplateColumns: "10px 1fr auto auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${lineCol(p)}`, borderRadius: 9 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 2, background: lineCol(p) }} title={p.line} />
                     <span style={{ fontSize: 12.5, fontWeight: 600, color: sp ? C.blueHi : C.bone, cursor: sp ? "pointer" : "default", borderBottom: sp ? `1px dotted ${C.blueHi}` : "none" }}
                       onClick={() => { if (sp) { setSel(sp); setView("match"); } }}>
                       {p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
@@ -6476,14 +6537,19 @@ function MatchReportView({ data, fmt, setSel, setView }) {
         {theirKey.length > 0 && (
           <Sec title="Ich zagrożenia (do pilnowania)" note="Najwyżej oceniani zawodnicy rywala wg RC — newralgiczne punkty do neutralizacji.">
             <div style={{ display: "grid", gap: 6 }}>
-              {theirKey.map((p, i) => (
-                <div key={p.id || i} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9 }}>
-                  <span style={{ fontSize: 12.5, fontWeight: 600, color: C.bone }}>
-                    {p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
-                  </span>
-                  <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: tierColor(Number(p.raw)) }}>RC {Number(p.raw)}</span>
-                </div>
-              ))}
+              {theirKey.map((p, i) => {
+                const tc = tierColor(Number(p.raw));
+                return (
+                  <div key={p.id || i} style={{ display: "grid", gridTemplateColumns: "10px 1fr auto", gap: 10, alignItems: "center", padding: "7px 12px", background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${lineCol(p)}`, borderRadius: 9 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 2, background: lineCol(p) }} title={p.line} />
+                    <span style={{ fontSize: 12.5, fontWeight: 600, color: C.bone }}>
+                      {p.name} <span style={{ color: C.steel, fontWeight: 400, fontSize: 11 }}>· {ROLE_LABEL[p.role] || p.pos}</span>
+                      {i === 0 && <span style={{ marginLeft: 6, fontSize: 9.5, fontWeight: 800, color: C.bad, border: `1px solid ${C.bad}`, borderRadius: 5, padding: "1px 5px", verticalAlign: "middle" }}>GŁÓWNE</span>}
+                    </span>
+                    <span className="mono" style={{ fontSize: 12, fontWeight: 800, color: tc, background: `${tc}22`, border: `1px solid ${tc}55`, borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap" }}>RC {Number(p.raw)}</span>
+                  </div>
+                );
+              })}
             </div>
           </Sec>
         )}
