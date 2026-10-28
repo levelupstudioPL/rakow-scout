@@ -1,44 +1,66 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-fetch_team_values.py — dolicza REALNĄ wartość CAŁEGO składu każdej drużyny
-Ekstraklasy z Transfermarktu i zapisuje ją do public/data.json jako
-meta.team_values = { "<nazwa drużyny>": {"total": <mln €>, "n": <zaw. z ceną>,
-"n_all": <wszyscy>, "src": "transfermarkt"} }.
+fetch_team_values.py — REALNA wartość CAŁEGO składu każdej drużyny Ekstraklasy do
+public/data.json jako meta.team_values = { "<drużyna>": {"total": <mln €>, "n": <zaw.>,
+"src": "manual"|"transfermarkt-web"|"transfermarkt-api"} }.
 
-PO CO: na zakładce „Przeciwnik"/„Porównanie" wartość liczona z próbki (~10–15
-zawodników z danymi StatsBomb) jest MOCNO zaniżona. Tu bierzemy pełny skład
-klubu z Transfermarktu (przez felipeall/transfermarkt-api) i sumujemy wyceny.
+ŹRÓDŁA (w tej kolejności):
+  1) RĘCZNE: scripts/team_values.csv (team, club_id, value_mln, squad). Automatyczny
+     scraping TM jest blokowany przez anti-bot (AWS WAF), a publiczne API felipeall bywa
+     niedostępne — dlatego główną, PEWNĄ ścieżką jest ten plik wypełniany ręcznie
+     (wartość zmienia się rzadko). Czytamy go NAJPIERW.
+  2) Best-effort fallback dla klubów bez wpisu w CSV: strona klubu na TM, a potem
+     felipeall API. Gdy oba padną — klub po prostu zostaje bez wartości (kafel spada do
+     „Wartości próbki"), nic się nie psuje.
 
-JAK dopasowujemy klub: id klubu na TM = id herbu, który trzymamy już w
-meta.ekstra_crests (np. Raków = 9644, Wisła Kraków = 422). Iterujemy po tej
-mapie: nazwa drużyny -> club_id.
-
-BEZPIECZEŃSTWO (żeby zły/limitowany przebieg nie zepsuł danych):
-  • uruchamiane PO fetch_statsbomb.py — tylko DOPISUJE meta.team_values,
-    niczego innego nie rusza;
-  • błąd pojedynczego klubu = pomijamy ten klub (zostaje poprzednia wartość,
-    jeśli była); cały skrypt nigdy nie wyrzuca wyjątku na zewnątrz;
-  • wynik MERGE'owany ze starym meta.team_values — częściowy sukces się kumuluje
-    między przebiegami (jak cache Scoutastica);
-  • gdy API nie zwróci nic dla ŻADNEGO klubu, zostawiamy data.json bez zmian.
-
-Źródło TM jest nieoficjalne (web scraping przez cudze API) i bywa limitowane —
-gdy publiczny egzemplarz pada, ustaw TM_API_BASE na własny (patrz transfermarkt.py).
+BEZPIECZEŃSTWO: uruchamiane PO fetch_statsbomb.py; tylko DOPISUJE meta.team_values
+(merge ze starymi); przy zerze wyników zostawia data.json bez zmian; żaden wyjątek nie
+wycieka na zewnątrz (pipeline leci dalej).
 
 Użycie:
   python scripts/fetch_team_values.py            # public/data.json
-  python scripts/fetch_team_values.py plik.json  # inny plik (test)
+  python scripts/fetch_team_values.py plik.json  # test
 """
+import csv
 import json
 import os
 import sys
 
-# transfermarkt.py leży obok — dołóż katalog skryptu do ścieżki importów.
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _HERE)
 
-OUT = sys.argv[1] if len(sys.argv) > 1 else (
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "data.json"))
+OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(_HERE, "..", "public", "data.json")
+CSV_PATH = os.path.join(_HERE, "team_values.csv")
+
+
+def load_manual():
+    """scripts/team_values.csv -> {team: {total, n?}} (tylko wiersze z liczbą)."""
+    out = {}
+    if not os.path.exists(CSV_PATH):
+        return out
+    try:
+        with open(CSV_PATH, encoding="utf-8") as f:
+            rows = [ln for ln in f if ln.strip() and not ln.lstrip().startswith("#")]
+        for r in csv.DictReader(rows):
+            team = (r.get("team") or "").strip()
+            raw = (r.get("value_mln") or "").strip().replace(",", ".")
+            if not team or not raw:
+                continue
+            try:
+                total = round(float(raw), 1)
+            except ValueError:
+                continue
+            if total <= 0:
+                continue
+            rec = {"total": total, "src": "manual"}
+            sq = (r.get("squad") or "").strip()
+            if sq.isdigit():
+                rec["n"] = int(sq)
+            out[team] = rec
+    except Exception as e:  # noqa: BLE001
+        print(f"[team-values] Nie mogę odczytać {CSV_PATH} ({e}). Pomijam ręczne.", file=sys.stderr)
+    return out
 
 
 def main():
@@ -46,8 +68,9 @@ def main():
         import time
         from transfermarkt import fetch_club_total_value, fetch_club_market_values, TM_WEB_DELAY_S
     except Exception as e:  # noqa: BLE001
-        print(f"[team-values] Nie mogę zaimportować transfermarkt.py ({e}). Pomijam.", file=sys.stderr)
-        return 0
+        fetch_club_total_value = fetch_club_market_values = None
+        TM_WEB_DELAY_S = 0.0
+        print(f"[team-values] transfermarkt.py niedostępny ({e}) — tylko ręczny CSV.", file=sys.stderr)
 
     try:
         data = json.load(open(OUT, encoding="utf-8"))
@@ -58,17 +81,28 @@ def main():
     meta = data.get("meta") or {}
     crests = meta.get("ekstra_crests") or {}
     if not crests:
-        print("[team-values] Brak meta.ekstra_crests (nazwa->id klubu TM). Pomijam.", file=sys.stderr)
+        print("[team-values] Brak meta.ekstra_crests. Pomijam.", file=sys.stderr)
         return 0
 
-    existing = dict(meta.get("team_values") or {})   # MERGE: zachowaj poprzednie wartości
+    manual = load_manual()
+    if manual:
+        print(f"[team-values] Z pliku ręcznego (team_values.csv): {len(manual)} drużyn.")
+
+    existing = dict(meta.get("team_values") or {})   # MERGE ze starymi
     ok, fail = 0, 0
     for team, cid in crests.items():
         cid = str(cid or "").strip()
-        if not cid:
+        # 1) RĘCZNE — pewne, wygrywa.
+        if team in manual:
+            existing[team] = manual[team]
+            ok += 1
+            print(f"[team-values] {team}: €{manual[team]['total']}M (ręczne).")
+            continue
+        if not cid or not fetch_club_total_value:
+            fail += 1
             continue
         got = None
-        # 1) GŁÓWNE: łączna wartość WPROST ze strony klubu na TM (Gesamtmarktwert).
+        # 2) Strona klubu TM (bywa blokowana przez WAF).
         try:
             res = fetch_club_total_value(cid)
         except Exception as e:  # noqa: BLE001
@@ -78,10 +112,9 @@ def main():
             got = {"total": round(float(res["total"]), 1), "src": "transfermarkt-web"}
             if res.get("squad"):
                 got["n"] = int(res["squad"])
-            print(f"[team-values] {team}: €{got['total']}M"
-                  f"{(' · ' + str(got['n']) + ' zaw.') if got.get('n') else ''} (strona klubu TM).")
+            print(f"[team-values] {team}: €{got['total']}M (strona TM).")
         else:
-            # 2) FALLBACK: suma per-zawodnik z felipeall API (gdy skonfigurowany/dostępny).
+            # 3) Fallback felipeall API.
             try:
                 vals = fetch_club_market_values(cid)
             except Exception as e:  # noqa: BLE001
@@ -89,25 +122,26 @@ def main():
                 vals = {}
             priced = [v for v in (vals or {}).values() if isinstance(v, (int, float)) and v > 0]
             if priced:
-                got = {"total": round(sum(priced), 1), "n": len(priced), "n_all": len(vals), "src": "transfermarkt-api"}
-                print(f"[team-values] {team}: €{got['total']}M z {len(priced)}/{len(vals)} zaw. (fallback API).")
+                got = {"total": round(sum(priced), 1), "n": len(priced), "src": "transfermarkt-api"}
+                print(f"[team-values] {team}: €{got['total']}M z {len(priced)} zaw. (API).")
 
         if got:
             existing[team] = got
             ok += 1
         else:
-            print(f"[team-values] {team} (id {cid}): brak wartości z TM — pomijam.", file=sys.stderr)
+            print(f"[team-values] {team} (id {cid}): brak wartości — pomijam.", file=sys.stderr)
             fail += 1
-        time.sleep(TM_WEB_DELAY_S)   # grzeczny odstęp między stronami klubów
+        try:
+            time.sleep(TM_WEB_DELAY_S)
+        except Exception:  # noqa: BLE001
+            pass
 
     if ok == 0:
-        print(f"[team-values] Żaden klub nie zwrócił danych ({fail} prób). "
-              f"Zostawiam data.json bez zmian.", file=sys.stderr)
+        print(f"[team-values] Żadnej wartości ({fail} prób). Zostawiam data.json bez zmian.", file=sys.stderr)
         return 0
 
     meta["team_values"] = existing
     data["meta"] = meta
-    # Ten sam format co fetch_statsbomb.py (indent=2), żeby diff w repo był czysty.
     json.dump(data, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     print(f"[team-values] Zapisano wartości dla {ok} drużyn (pominięto {fail}) do {OUT}.")
     return 0
@@ -118,6 +152,6 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except SystemExit:
         raise
-    except Exception as e:  # noqa: BLE001 — nic nie może wyciec na zewnątrz i wywalić pipeline
-        print(f"[team-values] Nieoczekiwany błąd ({e}). Pomijam, pipeline leci dalej.", file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[team-values] Nieoczekiwany błąd ({e}). Pomijam.", file=sys.stderr)
         raise SystemExit(0)
