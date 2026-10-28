@@ -60,6 +60,10 @@ jobs:
         # spada do „Wartość próbki". Własny egzemplarz API: ustaw zmienną TM_API_BASE.
         continue-on-error: true
         env:
+          # Główne źródło: strona klubu na TM (Gesamtmarktwert). TM_WEB_BASE pozwala
+          # podmienić domenę (np. https://www.transfermarkt.pl). TM_API_BASE to tylko
+          # fallback przez felipeall API, gdy strona zawiedzie.
+          TM_WEB_BASE: ${{ vars.TM_WEB_BASE }}
           TM_API_BASE: ${{ vars.TM_API_BASE }}
         run: python scripts/fetch_team_values.py
 
