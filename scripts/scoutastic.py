@@ -223,14 +223,27 @@ def peak_from_history(hist):
     return to_millions(best)
  
  
-def contract_year(player):
-    for k in ("contractExpires", "contractThereExpires"):
-        v = player.get(k)
-        if isinstance(v, str) and len(v) >= 4 and v[:4].isdigit():
-            return int(v[:4])
-        if isinstance(v, (int, float)) and v > 1900:
-            return int(v)
+def _year_of(v):
+    if isinstance(v, str) and len(v) >= 4 and v[:4].isdigit():
+        return int(v[:4])
+    if isinstance(v, (int, float)) and v > 1900:
+        return int(v)
     return 0
+
+
+def contract_year(player):
+    ce = _year_of(player.get("contractExpires"))
+    ct = _year_of(player.get("contractThereExpires"))
+    # DIAGNOSTYKA wypożyczonych: gdy są DWIE różne daty, zawodnik jest wypożyczony
+    # (jedna = klub-matka, druga = pobyt w Rakowie). Logujemy, żeby ustalić KTÓRE
+    # pole to data w Rakowie (loan end) i poprawić wybór w pipeline. Na razie
+    # zachowanie bez zmian: pierwszeństwo contractExpires (jak dotąd).
+    if ce and ct and ce != ct:
+        nm = player.get("name") or player.get("fullName") or player.get("shortName") or "?"
+        print(f"[contract-diag] {nm}: contractExpires={player.get('contractExpires')!r} "
+              f"contractThereExpires={player.get('contractThereExpires')!r} "
+              f"contractOption={player.get('contractOption')!r}", file=sys.stderr)
+    return ce or ct
  
  
 def age_from_dob(player):
