@@ -43,7 +43,8 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else (
 
 def main():
     try:
-        from transfermarkt import fetch_club_market_values
+        import time
+        from transfermarkt import fetch_club_total_value, fetch_club_market_values, TM_WEB_DELAY_S
     except Exception as e:  # noqa: BLE001
         print(f"[team-values] Nie mogę zaimportować transfermarkt.py ({e}). Pomijam.", file=sys.stderr)
         return 0
@@ -66,21 +67,38 @@ def main():
         cid = str(cid or "").strip()
         if not cid:
             continue
+        got = None
+        # 1) GŁÓWNE: łączna wartość WPROST ze strony klubu na TM (Gesamtmarktwert).
         try:
-            vals = fetch_club_market_values(cid)   # {nazwa: mln €}
+            res = fetch_club_total_value(cid)
         except Exception as e:  # noqa: BLE001
-            print(f"[team-values] {team} (id {cid}): błąd pobrania ({e}) — pomijam.", file=sys.stderr)
+            print(f"[team-values] {team} (id {cid}): błąd strony TM ({e}).", file=sys.stderr)
+            res = None
+        if res and res.get("total", 0) > 0:
+            got = {"total": round(float(res["total"]), 1), "src": "transfermarkt-web"}
+            if res.get("squad"):
+                got["n"] = int(res["squad"])
+            print(f"[team-values] {team}: €{got['total']}M"
+                  f"{(' · ' + str(got['n']) + ' zaw.') if got.get('n') else ''} (strona klubu TM).")
+        else:
+            # 2) FALLBACK: suma per-zawodnik z felipeall API (gdy skonfigurowany/dostępny).
+            try:
+                vals = fetch_club_market_values(cid)
+            except Exception as e:  # noqa: BLE001
+                print(f"[team-values] {team} (id {cid}): fallback API błąd ({e}).", file=sys.stderr)
+                vals = {}
+            priced = [v for v in (vals or {}).values() if isinstance(v, (int, float)) and v > 0]
+            if priced:
+                got = {"total": round(sum(priced), 1), "n": len(priced), "n_all": len(vals), "src": "transfermarkt-api"}
+                print(f"[team-values] {team}: €{got['total']}M z {len(priced)}/{len(vals)} zaw. (fallback API).")
+
+        if got:
+            existing[team] = got
+            ok += 1
+        else:
+            print(f"[team-values] {team} (id {cid}): brak wartości z TM — pomijam.", file=sys.stderr)
             fail += 1
-            continue
-        if not vals:
-            print(f"[team-values] {team} (id {cid}): brak danych z TM — pomijam.", file=sys.stderr)
-            fail += 1
-            continue
-        priced = [v for v in vals.values() if isinstance(v, (int, float)) and v > 0]
-        total = round(sum(priced), 1)
-        existing[team] = {"total": total, "n": len(priced), "n_all": len(vals), "src": "transfermarkt"}
-        ok += 1
-        print(f"[team-values] {team}: €{total}M z {len(priced)}/{len(vals)} zawodników.")
+        time.sleep(TM_WEB_DELAY_S)   # grzeczny odstęp między stronami klubów
 
     if ok == 0:
         print(f"[team-values] Żaden klub nie zwrócił danych ({fail} prób). "
