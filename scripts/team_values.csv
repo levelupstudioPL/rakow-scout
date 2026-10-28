@@ -1,0 +1,32 @@
+# Wartości rynkowe CAŁYCH składów (łączna wartość klubu z Transfermarktu) — źródło ręczne.
+# Automatyczne pobieranie z TM jest blokowane (anti-bot AWS WAF), więc wartości wpisujemy tu.
+# Pipeline czyta ten plik PRZED próbą pobrania ze strony. Zmienia się rzadko (okienka transferowe).
+#
+# WYPEŁNIONE: ranking Transfermarkt wg Goal.pl, sezon 2025/26 (16 klubów).
+#   Śląsk Wrocław = stan 2024/25 (brak nowszego w rankingu) — zweryfikuj.
+#   Wisła Kraków i Wieczysta Kraków = brak wiarygodnego źródła, zostawione puste
+#   (kafel spada do „Wartości próbki") — wpisz z TM albo podaj mi liczby, uzupełnię.
+#
+# Aktualizacja: wejdź na stronę klubu na TM i przepisz „Wartość rynkowa / Total market value".
+#   Link: https://www.transfermarkt.pl/-/startseite/verein/<club_id>
+# value_mln = liczba w mln € (np. 42.5). squad = liczba zawodników (opcjonalnie).
+# Nazwa w kolumnie team MUSI być dokładnie taka jak niżej (klucz herbu w aplikacji).
+team,club_id,value_mln,squad
+Lech Poznan,238,44.5,
+Legia Warszawa,255,46.5,
+Raków Częstochowa,9644,38.2,
+Jagiellonia Bialystok,2300,30.4,
+Pogon Szczecin,324,22.75,
+Górnik Zabrze,428,16.53,
+Widzew Lodz,88,28.83,
+Cracovia,5689,24.7,
+GKS Katowice,6456,11.35,
+Zaglebie Lubin,168,13.45,
+Korona Kielce,6110,11.63,
+Piast Gliwice,6112,9.18,
+Radomiak Radom,7154,14.75,
+Motor Lublin,3527,13.65,
+Slask Wroclaw,759,13.13,
+Wisla Plock,2118,8.5,
+Wisla Kraków,422,,
+Wieczysta Krakow,30974,,
