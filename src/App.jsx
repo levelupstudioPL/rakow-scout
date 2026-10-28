@@ -2544,7 +2544,7 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
               hint="Średni percentyl zawodników z danymi StatsBomb. UWAGA: przy małej/nierównej próbce drużyny Ekstraklasy skupiają się blisko siebie — to zgrubny wskaźnik, nie precyzyjny ranking." />
             {realVal && Number(realVal.total) > 0 ? (
               <Tile label="Wartość rynkowa (TM)" val={`€${realVal.total}M`} color={C.proxy}
-                sub={`cały skład · ${realVal.n} zaw.`}
+                sub={`cały skład${realVal.n ? ` · ${realVal.n} zaw.` : ""}`}
                 hint="Łączna wartość rynkowa CAŁEGO składu klubu z Transfermarktu (suma wycen wszystkich zawodników klubu), nie tylko próbki z danymi StatsBomb. Źródło: Transfermarkt przez pipeline." />
             ) : (
               <Tile label="Wartość próbki (TM)" val={an.squadMv > 0 ? `≈€${an.squadMv}M` : "—"} color={C.steelHi}
@@ -2982,10 +2982,10 @@ function CompareView({ data }) {
             <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} sub={`z ${profA.nPlayers} zaw.`} />
             <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} sub={`z ${profB.nPlayers} zaw.`} />
             {realA && Number(realA.total) > 0
-              ? <Tile label={`Wartość rynkowa — ${teamA}`} val={`€${realA.total}M`} color={cmp(realA.total, realB ? realB.total : 0)} sub={`cały skład · ${realA.n} zaw.`} />
+              ? <Tile label={`Wartość rynkowa — ${teamA}`} val={`€${realA.total}M`} color={cmp(realA.total, realB ? realB.total : 0)} sub={`cały skład${realA.n ? ` · ${realA.n} zaw.` : ""}`} />
               : <Tile label={`Wartość próbki — ${teamA}`} val={profA.squadMv > 0 ? `≈€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} sub={`${profA.nPlayers} zaw.`} />}
             {realB && Number(realB.total) > 0
-              ? <Tile label={`Wartość rynkowa — ${teamB}`} val={`€${realB.total}M`} color={cmp(realB.total, realA ? realA.total : 0)} sub={`cały skład · ${realB.n} zaw.`} />
+              ? <Tile label={`Wartość rynkowa — ${teamB}`} val={`€${realB.total}M`} color={cmp(realB.total, realA ? realA.total : 0)} sub={`cały skład${realB.n ? ` · ${realB.n} zaw.` : ""}`} />
               : <Tile label={`Wartość próbki — ${teamB}`} val={profB.squadMv > 0 ? `≈€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} sub={`${profB.nPlayers} zaw.`} />}
           </div>
           <div style={{ fontSize: 10.5, color: C.steel, marginBottom: 10 }}>
@@ -3974,6 +3974,13 @@ function PrioritiesView({ data, setSel, setView, fmt }) {
             onChange={(e) => setMaxBudget(+e.target.value)} style={{ width: 160 }} />
           <b style={{ color: C.proxy, minWidth: 74 }}>{maxBudget >= 50 ? "bez limitu" : `≤ €${maxBudget}M`}</b>
         </label>
+        {/* Preset Fragmentator — spójny z zakładką „Odpowiednicy". */}
+        <button onClick={() => setMaxBudget(maxBudget === 3 ? 50 : 3)}
+          style={{ background: maxBudget === 3 ? C.red : "transparent", color: maxBudget === 3 ? "#fff" : C.steelHi,
+            border: `1px solid ${maxBudget === 3 ? C.red : C.line}`, borderRadius: 8, padding: "6px 12px",
+            fontSize: 12, cursor: "pointer", fontWeight: 700 }}>
+          Fragmentator · ≤3 mln €
+        </button>
         <span style={{ fontSize: 11.5, color: C.steel }}>
           Ogranicza „Propozycje z puli" do zawodników w zasięgu kwoty (wyceny TM). Bez ceny w bazie — pokazywani zawsze.
         </span>
