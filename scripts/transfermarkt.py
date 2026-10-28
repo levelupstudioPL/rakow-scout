@@ -14,6 +14,7 @@
  
 import time
 import os
+import re
 import sys
 import urllib.request
 import urllib.parse
@@ -21,7 +22,19 @@ import json
  
 # Publiczny egzemplarz. Podmień na własny (np. https://twoj-egzemplarz.onrender.com)
 # gdy publiczny zacznie limitować — wystarczy ustawić zmienną TM_API_BASE (bez zmian w kodzie).
-BASE_URL = os.getenv("TM_API_BASE", "https://transfermarkt-api.fly.dev")
+BASE_URL = os.getenv("TM_API_BASE") or "https://transfermarkt-api.fly.dev"
+
+# Bezpośredni odczyt ze strony klubu na Transfermarkcie (łączna wartość składu =
+# „Total market value" / „Gesamtmarktwert"). Omija pośrednika (felipeall API).
+# Można nadpisać domenę (np. transfermarkt.pl / .de) zmienną TM_WEB_BASE.
+TM_WEB_BASE = os.getenv("TM_WEB_BASE") or "https://www.transfermarkt.com"
+TM_WEB_DELAY_S = float(os.getenv("TM_WEB_DELAY_S") or "2.0")
+_BROWSER_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                   "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9,pl;q=0.8",
+}
  
 # ID klubu Raków Częstochowa na Transfermarkcie: 9644
 # (z profilu klubu: /rakow-czestochowa/startseite/verein/9644).
@@ -76,11 +89,14 @@ def _parse_mv_to_millions(mv):
         return round(v / 1_000_000, 2) if v > 10000 else round(v, 2)
     s = str(mv).strip().lower()
     s = s.replace("€", "").replace("\u20ac", "").replace("eur", "")
+    s = s.replace("mrd.", "b").replace("mrd", "b").replace("mld", "b").replace("bn", "b")
     s = s.replace("mio.", "m").replace("mio", "m").replace("tsd.", "k").replace("tsd", "k")
     s = s.replace(",", ".").replace(" ", "").strip()
     if not s:
         return 0.0
     try:
+        if s.endswith("b"):   # miliardy -> mln
+            return round(float(s[:-1]) * 1000, 2)
         if s.endswith("m"):
             return round(float(s[:-1]), 2)
         if s.endswith("k"):
@@ -91,6 +107,79 @@ def _parse_mv_to_millions(mv):
         return 0.0
  
  
+def _get_html(url: str, retries: int = 3):
+    """Surowy HTML strony (z nagłówkami przeglądarki — TM odrzuca gołe python-urllib)."""
+    for attempt in range(1, retries + 1):
+        try:
+            req = urllib.request.Request(url, headers=_BROWSER_HEADERS)
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                raw = resp.read()
+            try:
+                return raw.decode("utf-8")
+            except UnicodeDecodeError:
+                return raw.decode("latin-1", "ignore")
+        except Exception as e:  # noqa: BLE001
+            wait = TM_WEB_DELAY_S * attempt
+            print(f"[TM-web] próba {attempt}/{retries} nieudana ({e}). Czekam {wait:.0f}s…", file=sys.stderr)
+            time.sleep(wait)
+    print(f"[TM-web] Nie udało się pobrać {url} po {retries} próbach.", file=sys.stderr)
+    return None
+
+
+def _money_from_text(text: str):
+    """Pierwszy token walutowy w tekście -> mln EUR (0.0 gdy brak).
+    Obsługuje: '€45.30m', '€1.25bn', '45,30 Mio. €', '1,25 Mrd. €', '45.30m €'."""
+    if not text:
+        return 0.0
+    t = re.sub(r"\s+", " ", text)
+    pats = [
+        r"€\s*[\d.,]+\s*(?:bn|mrd|mld|mio|m|k|tsd)?",          # €45.30m / €1.25bn
+        r"[\d.,]+\s*(?:bn|mrd|mld|mio|m|k|tsd)\.?\s*€",        # 45,30 Mio. € / 45.30m €
+    ]
+    for p in pats:
+        mm = re.search(p, t, re.I)
+        if mm:
+            v = _parse_mv_to_millions(mm.group(0))
+            if v and v > 0:
+                return v
+    return 0.0
+
+
+def fetch_club_total_value(club_id: str):
+    """Łączna wartość rynkowa składu klubu WPROST ze strony TM (/verein/{id}).
+    Zwraca {'total': mln EUR, 'squad': liczba_zawodników|None} albo None.
+    Nie weryfikowane na żywo przy pisaniu (sandbox blokuje TM) — wzorce są
+    defensywne, a przy porażce logujemy fragment strony do przeglądu."""
+    url = f"{TM_WEB_BASE}/-/startseite/verein/{urllib.parse.quote(str(club_id))}"
+    html = _get_html(url)
+    if not html:
+        return None
+    val = 0.0
+    # 1) Nagłówkowy „market-value-wrapper" — wartość jest tam pierwsza.
+    m = re.search(r'data-header__market-value-wrapper[^>]*>(.*?)</a>', html, re.S | re.I)
+    if m:
+        val = _money_from_text(re.sub(r"<[^>]+>", " ", m.group(1)))
+    # 2) Fallback: okno PRZED etykietą „Total market value"/„Gesamtmarktwert".
+    if not val:
+        m2 = re.search(r'(.{0,160})(?:total market value|gesamtmarktwert)', html, re.S | re.I)
+        if m2:
+            val = _money_from_text(re.sub(r"<[^>]+>", " ", m2.group(1)))
+    if not val or val <= 0:
+        snippet = re.sub(r"<[^>]+>", " ", (m.group(1) if m else html[:400]))
+        print(f"[TM-web] klub {club_id}: nie wyłuskałem wartości. Fragment: "
+              f"{re.sub(r' +', ' ', snippet)[:160]!r}", file=sys.stderr)
+        return None
+    # Liczebność kadry (opcjonalnie) — „Squad size"/„Kadergröße".
+    squad = None
+    ms = re.search(r'(?:squad size|kadergr[oö]ße|kadergroesse)\D{0,40}?(\d{1,2})', html, re.I)
+    if ms:
+        try:
+            squad = int(ms.group(1))
+        except ValueError:
+            squad = None
+    return {"total": round(val, 1), "squad": squad}
+
+
 def fetch_rakow_squad():
     """
     Zwraca listę zawodników Rakowa z Transfermarktu:
