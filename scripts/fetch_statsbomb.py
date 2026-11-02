@@ -1091,6 +1091,88 @@ def _statsbomb_cup_rows_all_by_id(sb, creds):
     return out
 
 
+def _augment_squad_current_minutes(sb, creds, squad):
+    """Dolicza minuty z BIEŻĄCEGO sezonu Ekstraklasy (comp 38, sezon nowszy niż bazowy)
+    do każdego zawodnika składu jako s["minutes_current"]. Minuty w minutes_league/
+    minutes_cup/minutes_total pochodzą z sezonu BAZOWEGO (2025/26); to osobne pole zasila
+    na froncie przełącznik „bieżący sezon / poprzedni sezon". Fail-safe: każdy błąd →
+    zawodnicy zostają bez minutes_current (front chowa wtedy przełącznik), nic się nie psuje."""
+    if os.getenv("SQUAD_CURRENT_MIN", "1") in ("0", "false", "False"):
+        return 0
+    sid = _ekstraklasa_current_season_id(sb, creds)
+    if not sid:
+        print("[skład] Minuty bieżącego sezonu pominięte: brak nowszego sezonu comp 38.",
+              file=sys.stderr)
+        return 0
+    try:
+        rows = sb.player_season_stats(competition_id=38, season_id=sid, creds=creds).to_dict("records")
+    except Exception as e:  # noqa: BLE001
+        print(f"[skład] Minuty bieżącego sezonu pominięte: brak danych sezonu {sid} ({e}).",
+              file=sys.stderr)
+        return 0
+    # Tylko wiersze Rakowa — żeby imiennik z innej drużyny nie podmienił minut.
+    rk_rows = [r for r in rows if _is_rakow_row(r)]
+    if not rk_rows:
+        print(f"[skład] Minuty bieżącego sezonu: sezon {sid} nie ma jeszcze wierszy Rakowa.",
+              file=sys.stderr)
+        return 0
+    by_id = {r.get("player_id"): r for r in rk_rows if r.get("player_id") is not None}
+    by_name = {_norm_ascii(r.get("player_name") or ""): r for r in rk_rows}
+    sur = _surname_index([(r.get("player_name") or "", r) for r in rk_rows])
+    matched = 0
+    for s in squad:
+        base_row = s.get("_sb") if isinstance(s.get("_sb"), dict) else None
+        pid = base_row.get("player_id") if base_row else None
+        row = (by_id.get(pid) if pid is not None else None) \
+            or by_name.get(_norm_ascii(s.get("name", ""))) \
+            or _match_by_tokens(s.get("name", ""), sur, lambda r: r.get("player_id") or id(r))
+        mins = _player_minutes(row) if isinstance(row, dict) else 0
+        s["minutes_current"] = round(mins, 1)
+        if mins > 0:
+            matched += 1
+    print(f"[skład] Minuty bieżącego sezonu (comp 38 / sezon {sid}): "
+          f"{matched}/{len(squad)} zawodników z rozegranymi minutami.")
+    return matched
+
+
+def _apply_contract_overrides(squad):
+    """Ręczne nadpisanie daty końca kontraktu z scripts/contract_overrides.csv
+    (kolumny: name, contract_year, note). Dla zawodników wypożyczonych DO Rakowa
+    Scoutastic/Transfermarkt zwraca datę kontraktu w klubie-MACIERZYSTYM, a nie datę
+    pobytu w Rakowie („Umowa do") — ten plik pozwala poprawić punktowo. Dopasowanie po
+    znormalizowanym nazwisku. Uruchamiane PO _enrich_squad, więc wygrywa z automatem.
+    Fail-safe: brak pliku / błędny wiersz → pomijamy, nic się nie psuje."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "contract_overrides.csv")
+    if not os.path.exists(path):
+        return 0
+    overrides = {}
+    try:
+        import csv as _csv
+        with open(path, encoding="utf-8") as f:
+            rows = [ln for ln in f if ln.strip() and not ln.lstrip().startswith("#")]
+        for r in _csv.DictReader(rows):
+            nm = _norm_ascii(r.get("name") or "")
+            yr = (r.get("contract_year") or "").strip()
+            if nm and yr.isdigit():
+                overrides[nm] = int(yr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[skład] Nie mogę odczytać contract_overrides.csv ({e}). Pomijam.", file=sys.stderr)
+        return 0
+    if not overrides:
+        return 0
+    applied = 0
+    for s in squad:
+        yr = overrides.get(_norm_ascii(s.get("name", "")))
+        if yr:
+            s["contract"] = yr
+            s["contract_src"] = "override"
+            applied += 1
+            print(f"[skład] Kontrakt nadpisany ręcznie: {s.get('name')} → {yr}.")
+    if applied:
+        print(f"[skład] Zastosowano {applied} ręcznych nadpisań kontraktu (contract_overrides.csv).")
+    return applied
+
+
 def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_stats, pos_style_stats):
     """Dolicza minuty i metryki PUCHAROWE (Liga Konferencji + eliminacje) do RC
     zawodników składu, którzy w samej lidze mają za małą próbę (rc_estimated).
@@ -2352,7 +2434,21 @@ def build_dataset(sb, creds):
     # Wzbogacenie SKŁADU o wiek/wartość/kontrakt (Kaggle + Scoutastic) — zasila
     # moduły „Priorytety transferowe" i „Czerwone flagi" na froncie.
     _enrich_squad(squad, values_by_name, values_sur)
- 
+
+    # Ręczne nadpisanie dat kontraktu (wypożyczeni DO Rakowa — data pobytu, nie klubu
+    # macierzystego). PO _enrich_squad, żeby wygrać z Kaggle/Scoutastic. Fail-safe.
+    try:
+        _apply_contract_overrides(squad)
+    except Exception as e:  # noqa: BLE001
+        print(f"[skład] Ręczne nadpisania kontraktu pominięte: {e}", file=sys.stderr)
+
+    # Minuty z BIEŻĄCEGO sezonu Ekstraklasy (osobne pole minutes_current) — zasila
+    # przełącznik sezonu w „Profilu kadry". Fail-safe (brak danych → brak pola).
+    try:
+        _augment_squad_current_minutes(sb, creds, squad)
+    except Exception as e:  # noqa: BLE001
+        print(f"[skład] Minuty bieżącego sezonu pominięte: {e}", file=sys.stderr)
+
     # --- SCOUTASTIC: oficjalne wartości z Transfermarktu (przez API instancji) ---
     # Włączane obecnością sekretu SCOUTASTIC_TOKEN. Dopasowuje pulę do Scoutastic
     # przez /players/matching/statsbomb (po ID/nazwisku/dacie ur.), potem dociąga

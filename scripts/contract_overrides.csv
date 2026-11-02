@@ -1,0 +1,15 @@
+# Ręczne nadpisanie daty końca kontraktu (rok) dla zawodników składu.
+# PO CO: zawodnicy WYPOŻYCZENI DO Rakowa mają w Transfermarkcie/Scoutastic datę
+#   kontraktu z klubu MACIERZYSTEGO, a nas interesuje data pobytu w Rakowie
+#   („Umowa do"). Pipeline czyta ten plik PO automatycznym wzbogaceniu, więc te
+#   wartości wygrywają. Dopasowanie po nazwisku (bez znaków diakrytycznych).
+#
+# Kolumny: name, contract_year, note
+#   name          — nazwisko jak w aplikacji (np. „Mahir Emreli")
+#   contract_year — rok końca umowy w Rakowie (np. 2027)
+#   note          — opcjonalny komentarz (źródło/uwaga)
+#
+# Zmienia się rzadko. Dopisz kolejne wiersze w miarę potrzeb.
+name,contract_year,note
+Mahir Emreli,2027,wypożyczenie do Rakowa; TM „Umowa do: 30 cze 2027"
+Nils Zätterström,2027,wypożyczenie z Sheffield United (opcja); pobyt w Rakowie do 2027
