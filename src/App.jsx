@@ -4720,6 +4720,10 @@ function AgeMinutesScatter({ players, onPick }) {
 function SquadProfileView({ data, fmt, setSel, setView }) {
   const cur = curYearOf(data);
   const squad = data.squad || [];
+  const hasCurrentMin = squad.some((p) => Number(p.minutes_current) > 0);
+  const [minPeriod, setMinPeriod] = useState("current");
+  const minField = (minPeriod === "current" && hasCurrentMin) ? "minutes_current" : "minutes_total";
+  const minOf = (p) => Number(p[minField]) || 0;
   const real = squad.filter((p) => !p.rc_estimated);
   const ages = squad.map((p) => p.age).filter((a) => a > 0);
   const avgAge = ages.length ? (ages.reduce((s, a) => s + a, 0) / ages.length) : null;
@@ -4739,8 +4743,8 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
     return { role: r, label: ROLE_LABEL[r] || r, n: ps.length, realN, thin: ps.length < 2 };
   });
 
-  const withMin = squad.filter((p) => Number(p.minutes_total) > 0).slice().sort((a, b) => (b.minutes_total || 0) - (a.minutes_total || 0));
-  const minMax = Math.max(1, ...withMin.map((p) => p.minutes_total || 0));
+  const withMin = squad.filter((p) => minOf(p) > 0).slice().sort((a, b) => minOf(b) - minOf(a));
+  const minMax = Math.max(1, ...withMin.map(minOf));
 
   const feet = { lewa: 0, prawa: 0, "obunożny": 0, brak: 0 };
   squad.forEach((p) => { const f = p.foot; if (f === "lewa" || f === "prawa" || f === "obunożny") feet[f]++; else feet.brak++; });
@@ -4818,18 +4822,31 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
         </div>
       </div>
 
-      <SectionLabel>Obciążenie minutami (bieżący sezon)</SectionLabel>
+      <SectionLabel>Obciążenie minutami{minField === "minutes_current" ? " (bieżący sezon 2026/27)" : " (sezon 2025/26)"}</SectionLabel>
+      {hasCurrentMin && (
+        <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+          {[["current", "Bieżący sezon (2026/27)"], ["prev", "Poprzedni sezon (2025/26)"]].map(([key, lab]) => {
+            const on = minPeriod === key;
+            return (
+              <button key={key} onClick={() => setMinPeriod(key)}
+                style={{ cursor: "pointer", border: `1px solid ${on ? C.rcMid : C.line}`, background: on ? C.rcMid : "transparent", color: on ? "#0b1220" : C.steelHi, borderRadius: 999, padding: "5px 12px", fontSize: 11.5, fontWeight: on ? 600 : 500, letterSpacing: 0.2 }}>
+                {lab}
+              </button>
+            );
+          })}
+        </div>
+      )}
       <div style={{ display: "grid", gap: 6 }}>
         {withMin.slice(0, 16).map((p) => (
           <div key={p.id} style={{ display: "grid", gridTemplateColumns: "170px 1fr 96px", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 12.5, color: C.bone, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               <span style={{ color: C.steel }}>{p.pos}</span> {p.name}</span>
-            <Bar w={(p.minutes_total / minMax) * 100} color={C.rcMid} />
+            <Bar w={(minOf(p) / minMax) * 100} color={C.rcMid} />
             <span className="mono" style={{ fontSize: 11.5, textAlign: "right", color: C.steelHi }}>
-              {Math.round(p.minutes_total)}′{p.minutes_cup > 0 ? <span style={{ color: C.steel }}> (+{Math.round(p.minutes_cup)} puch.)</span> : null}</span>
+              {Math.round(minOf(p))}′{minField === "minutes_total" && p.minutes_cup > 0 ? <span style={{ color: C.steel }}> (+{Math.round(p.minutes_cup)} puch.)</span> : null}</span>
           </div>
         ))}
-        {!withMin.length && <Empty>Brak danych o minutach w tym zestawie.</Empty>}
+        {!withMin.length && <Empty>{minField === "minutes_current" ? "Brak rozegranych minut w bieżącym sezonie (dane spłyną po odświeżeniu)." : "Brak danych o minutach w tym zestawie."}</Empty>}
       </div>
 
       <SectionLabel>Profil fizyczny</SectionLabel>
