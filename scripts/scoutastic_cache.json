@@ -35036,5 +35036,22 @@
   "contract": 2029,
   "age": 21,
   "foot": "lewa"
+ },
+ "29216": {
+  "mv": 0.45,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "531423": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 19,
+  "foot": null
+ },
+ "131241": {
+  "miss": true
  }
 }
