@@ -2543,9 +2543,9 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
               sub={`z ${an.nPlayers} zaw. z danymi`}
               hint="Średni percentyl zawodników z danymi StatsBomb. UWAGA: przy małej/nierównej próbce drużyny Ekstraklasy skupiają się blisko siebie — to zgrubny wskaźnik, nie precyzyjny ranking." />
             {realVal && Number(realVal.total) > 0 ? (
-              <Tile label="Wartość rynkowa (TM)" val={`€${realVal.total}M`} color={C.proxy}
-                sub={`cały skład${realVal.n ? ` · ${realVal.n} zaw.` : ""}`}
-                hint="Łączna wartość rynkowa CAŁEGO składu klubu z Transfermarktu (suma wycen wszystkich zawodników klubu), nie tylko próbki z danymi StatsBomb. Źródło: Transfermarkt przez pipeline." />
+              <Tile label={realVal.src === "estimate" ? "Wartość rynkowa (szac.)" : "Wartość rynkowa (TM)"} val={`${realVal.src === "estimate" ? "≈" : ""}€${realVal.total}M`} color={C.proxy}
+                sub={`cały skład${realVal.src === "estimate" ? " · szacunek" : ""}${realVal.n ? ` · ${realVal.n} zaw.` : ""}`}
+                hint={realVal.src === "estimate" ? "Szacunkowa łączna wartość składu (brak pewnego źródła z Transfermarktu — klub beniaminek). Przybliżenie na bazie rankingu wartości Ekstraklasy; podaj dokładną liczbę z TM, a wpiszę ją na sztywno." : "Łączna wartość rynkowa CAŁEGO składu klubu z Transfermarktu (suma wycen wszystkich zawodników klubu), nie tylko próbki z danymi StatsBomb. Źródło: Transfermarkt przez pipeline."} />
             ) : (
               <Tile label="Wartość próbki (TM)" val={an.squadMv > 0 ? `≈€${an.squadMv}M` : "—"} color={C.steelHi}
                 sub={`tylko ${an.nPlayers} zaw. z danymi`}
@@ -2982,10 +2982,10 @@ function CompareView({ data }) {
             <Tile label={`Śr. RC — ${teamA}`} val={profA.overallRC} color={cmp(profA.overallRC, profB.overallRC)} sub={`z ${profA.nPlayers} zaw.`} />
             <Tile label={`Śr. RC — ${teamB}`} val={profB.overallRC} color={cmp(profB.overallRC, profA.overallRC)} sub={`z ${profB.nPlayers} zaw.`} />
             {realA && Number(realA.total) > 0
-              ? <Tile label={`Wartość rynkowa — ${teamA}`} val={`€${realA.total}M`} color={cmp(realA.total, realB ? realB.total : 0)} sub={`cały skład${realA.n ? ` · ${realA.n} zaw.` : ""}`} />
+              ? <Tile label={`Wartość ${realA.src === "estimate" ? "(szac.)" : "rynkowa"} — ${teamA}`} val={`${realA.src === "estimate" ? "≈" : ""}€${realA.total}M`} color={cmp(realA.total, realB ? realB.total : 0)} sub={`cały skład${realA.src === "estimate" ? " · szacunek" : ""}${realA.n ? ` · ${realA.n} zaw.` : ""}`} />
               : <Tile label={`Wartość próbki — ${teamA}`} val={profA.squadMv > 0 ? `≈€${profA.squadMv}M` : "—"} color={cmp(profA.squadMv, profB.squadMv)} sub={`${profA.nPlayers} zaw.`} />}
             {realB && Number(realB.total) > 0
-              ? <Tile label={`Wartość rynkowa — ${teamB}`} val={`€${realB.total}M`} color={cmp(realB.total, realA ? realA.total : 0)} sub={`cały skład${realB.n ? ` · ${realB.n} zaw.` : ""}`} />
+              ? <Tile label={`Wartość ${realB.src === "estimate" ? "(szac.)" : "rynkowa"} — ${teamB}`} val={`${realB.src === "estimate" ? "≈" : ""}€${realB.total}M`} color={cmp(realB.total, realA ? realA.total : 0)} sub={`cały skład${realB.src === "estimate" ? " · szacunek" : ""}${realB.n ? ` · ${realB.n} zaw.` : ""}`} />
               : <Tile label={`Wartość próbki — ${teamB}`} val={profB.squadMv > 0 ? `≈€${profB.squadMv}M` : "—"} color={cmp(profB.squadMv, profA.squadMv)} sub={`${profB.nPlayers} zaw.`} />}
           </div>
           <div style={{ fontSize: 10.5, color: C.steel, marginBottom: 10 }}>
@@ -5211,6 +5211,7 @@ function ValuesView({ data, fmt, setSel, setView }) {
 // rywala. Zawsze dostępny „szybki wybór rywala", nawet bez wypełnionego terminarza.
 function _normTeam(s) {
   return String(s || "").toLowerCase()
+    .replace(/ł/g, "l").replace(/đ/g, "d")
     .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/\b(rks|ks|mks|gks|ks\.|sa|s\.a\.|fc|sc)\b/g, " ")
     .replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
