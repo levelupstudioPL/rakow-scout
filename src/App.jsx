@@ -176,7 +176,7 @@ const EXPECT_KEY = "rk_expect_v1";   // oczekiwanie trenera per zawodnik (mocna/
 // Lista sztabu do podpisania ocen. Uzupełnij/popraw wg realnych trenerów.
 const STAFF = [
   "Igor Rybiński", "Robert Chwastek", "Marek", "Filip", "Michał Dziwniel",
-  "Tomasz Kaczmarek", "Serdal Güvenç", "Dawid Szulczek",
+  "Tomasz Kaczmarek", "Serdal Güvenç", "Dawid Szulczek", "Dawid Szwarga",
 ];
 
 // Formacja 3-4-3. Kolejność = priorytet obsadzania (najpierw najwęższe pule:
