@@ -53,7 +53,8 @@ def load_manual():
                 continue
             if total <= 0:
                 continue
-            rec = {"total": total, "src": "manual"}
+            est = (r.get("est") or "").strip().lower()
+            rec = {"total": total, "src": "estimate" if est in ("1", "true", "tak", "y", "yes") else "manual"}
             sq = (r.get("squad") or "").strip()
             if sq.isdigit():
                 rec["n"] = int(sq)
@@ -96,7 +97,8 @@ def main():
         if team in manual:
             existing[team] = manual[team]
             ok += 1
-            print(f"[team-values] {team}: €{manual[team]['total']}M (ręczne).")
+            _tag = "szacunek" if manual[team].get("src") == "estimate" else "ręczne"
+            print(f"[team-values] {team}: €{manual[team]['total']}M ({_tag}).")
             continue
         if not cid or not fetch_club_total_value:
             fail += 1
