@@ -2,9 +2,11 @@
 # Automatyczne pobieranie z TM jest blokowane (anti-bot AWS WAF), więc wartości wpisujemy tu.
 # Pipeline czyta ten plik PRZED próbą pobrania ze strony. Zmienia się rzadko (okienka transferowe).
 #
-# WYPEŁNIONE: ranking Transfermarkt wg Goal.pl, sezon 2025/26 (16 klubów).
+# BAZA: ranking Transfermarkt wg Goal.pl, sezon 2025/26 (większość klubów).
 #   Śląsk Wrocław = stan 2024/25 (brak nowszego w rankingu) — zweryfikuj.
-#   Wieczysta Kraków = 18,1 mln € (ranking „Najdroższe kluby Ekstraklasy 2026", dziennikbaltycki/TM).
+# ZAKTUALIZOWANE do bieżącego rankingu „Najdroższe kluby Ekstraklasy 2026" (dziennikbaltycki/TM):
+#   Raków 39,2 · Zagłębie Lubin 18,85 · Wisła Płock 10,4 · Wieczysta Kraków 18,1.
+#   (pozostałe kluby wciąż z 2025/26 — pełny spójny refresh wymaga tabeli z TM, która blokuje automat).
 #   Wisła Kraków = 10,0 mln € SZACUNEK (est=1) — TM zablokowany dla automatu; podaj dokładną liczbę,
 #   wpiszę na sztywno i zdejmę flagę szacunku.
 #
@@ -16,19 +18,19 @@
 team,club_id,value_mln,squad,est
 Lech Poznan,238,44.5,
 Legia Warszawa,255,46.5,
-Raków Częstochowa,9644,38.2,
+Raków Częstochowa,9644,39.2,
 Jagiellonia Bialystok,2300,30.4,
 Pogon Szczecin,324,22.75,
 Górnik Zabrze,428,16.53,
 Widzew Lodz,88,28.83,
 Cracovia,5689,24.7,
 GKS Katowice,6456,11.35,
-Zaglebie Lubin,168,13.45,
+Zaglebie Lubin,168,18.85,
 Korona Kielce,6110,11.63,
 Piast Gliwice,6112,9.18,
 Radomiak Radom,7154,14.75,
 Motor Lublin,3527,13.65,
 Slask Wroclaw,759,13.13,
-Wisla Plock,2118,8.5,
+Wisla Plock,2118,10.4,
 Wisla Kraków,422,10.0,,1
 Wieczysta Krakow,30974,18.1,,
