@@ -70,9 +70,16 @@ jobs:
       - name: Zarchiwizuj wyceny (historia wartości)
         run: python scripts/archive_values.py
 
+      - name: Odśwież terminarz (TheSportsDB)
+        # Nakłada utwardzone daty i wyniki na ręczny public/fixtures.json (TheSportsDB,
+        # darmowe API). FAIL-SAFE: brak danych / błąd = plik bez zmian, nigdy pusty ani
+        # krótszy. Krok nie może wywalić pipeline (continue-on-error).
+        continue-on-error: true
+        run: python scripts/fetch_fixtures.py
+
       - name: Zapisz zmiany
         run: |
-          git add public/data.json public/value_history.json public/squad.json
+          git add public/data.json public/value_history.json public/squad.json public/fixtures.json
           # Utrwalamy cache wycen Scoutastica, żeby pokrycie kumulowało się między
           # przebiegami (limit zapytań na turę) — inaczej „ogon" (np. van Overeem)
           # nigdy nie dostaje świeżej wyceny z Transfermarktu.
