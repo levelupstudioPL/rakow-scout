@@ -5269,6 +5269,11 @@ function FixturesView({ data, oppTeam, setOppTeam, setView }) {
         <b style={{ fontSize: 14, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{m.team || m.opp}</b>
         {!m.team && <span style={{ fontSize: 10.5, color: C.warn }}>(brak dopasowania)</span>}
       </div>
+      {m.score ? (
+        <span className="mono" title="Wynik (Raków : rywal)" style={{ fontSize: 13, fontWeight: 700, flexShrink: 0, padding: "2px 8px", borderRadius: 6,
+          color: m.res === "W" ? C.good : m.res === "L" ? C.warn : C.steelHi,
+          border: `1px solid ${(m.res === "W" ? C.good : m.res === "L" ? C.warn : C.steel)}55` }}>{m.score}</span>
+      ) : null}
       {m.team ? (
         <button onClick={() => pickOpp(m.team)} style={{ flexShrink: 0, background: next ? C.blue : "transparent", color: next ? "#fff" : C.blue,
           border: `1px solid ${C.blue}${next ? "" : "66"}`, borderRadius: 8, padding: "6px 13px", fontSize: 12.5, cursor: "pointer", fontWeight: 600 }}>
