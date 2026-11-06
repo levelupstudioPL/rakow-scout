@@ -4429,7 +4429,7 @@ function RecentView({ data, setSel, setView }) {
       {/* Tabela zawodników: minuty vs RC */}
       <SectionLabel>Zawodnicy · minuty vs RC</SectionLabel>
       <div style={{ display: "grid", gap: 7 }}>
-        {V.players.map((p) => {
+        {V.players.filter((p) => p.inSquad).map((p) => {
           const vm = VERDICT_META[p.verdict] || VERDICT_META.neutral;
           const rm = ROLE_META[p.role] || ROLE_META.rezerwa;
           const pct = Math.round(Math.min(1, p.share) * 100);
@@ -4478,6 +4478,15 @@ function RecentView({ data, setSel, setView }) {
           );
         })}
       </div>
+      {(() => {
+        const gone = V.players.filter((p) => !p.inSquad).sort((a, b) => b.minutes - a.minutes);
+        return gone.length ? (
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.steel, lineHeight: 1.6 }}>
+            Pominięto <b style={{ color: C.steelHi }}>{gone.length}</b> zawodników, którzy grali w tych meczach, ale nie ma ich już w aktualnej kadrze (odeszli / poza składem):{" "}
+            {gone.map((p) => `${p.name} (${p.minutes}′)`).join(", ")}.
+          </div>
+        ) : null;
+      })()}
 
       <Note>Źródło danych meczowych: <b>{V.source === "scoutastic" ? "Scoutastic / Transfermarkt" : "StatsBomb"}</b>{V.source === "scoutastic" ? " (minuty, gole, asysty — bez xG/xA)" : ""}; RC i koherencja liczone ze StatsBomb. Walidator opiera się na tym, co odporne: <b>minuty</b> (ujawniona preferencja trenera) i <b>realny output</b> (miękko, bo próba {V.nMatches} meczów jest mała — traktujemy jako sygnał, nie wyrok). <b>Koherencji ten ekran nie waliduje wprost</b> — koherencja to podobieństwo stylu między zawodnikami, nie wielkość meczowa; walidujemy ją pośrednio przez to, że XI realnie wystawiane przez trenera to zestaw opisywany przez ekran „Zależności formacji". Output ofensywny komentujemy dopiero od ~180 minut.</Note>
 
@@ -4659,8 +4668,11 @@ function ContractsView({ data, fmt, setSel, setView }) {
 // Scatter wiek × minuty — jeden punkt = zawodnik; kolor = poziom RC; etykieta na kluczowych.
 function AgeMinutesScatter({ players, onPick }) {
   const [hover, setHover] = useState(null);
-  const pts = players.filter((p) => Number(p.age) > 0 && Number(p.minutes_total) >= 0)
-    .map((p) => ({ p, age: Number(p.age), min: Number(p.minutes_total) || 0 }));
+  // Minuty z bieżącego sezonu, gdy są dane (spójnie z przełącznikiem); inaczej poprzedni.
+  const useCur = players.some((p) => Number(p.minutes_current) > 0);
+  const minOf = (p) => Number(useCur ? p.minutes_current : p.minutes_total) || 0;
+  const pts = players.filter((p) => Number(p.age) > 0)
+    .map((p) => ({ p, age: Number(p.age), min: minOf(p) }));
   if (pts.length < 2) return <Empty>Za mało danych (wiek + minuty) do wykresu.</Empty>;
   const W = 660, H = 320, padL = 46, padR = 16, padT = 14, padB = 34;
   const ages = pts.map((d) => d.age), mins = pts.map((d) => d.min);
@@ -4690,7 +4702,7 @@ function AgeMinutesScatter({ players, onPick }) {
           <text key={"x" + a} x={x(a)} y={H - padB + 15} textAnchor="middle" fontSize="9.5" fill={C.steel}>{a}</text>
         ))}
         <text x={(padL + W - padR) / 2} y={H - 3} textAnchor="middle" fontSize="10" fill={C.steelHi}>Wiek (lata)</text>
-        <text x={12} y={(padT + H - padB) / 2} textAnchor="middle" fontSize="10" fill={C.steelHi} transform={`rotate(-90 12 ${(padT + H - padB) / 2})`}>Minuty w sezonie</text>
+        <text x={12} y={(padT + H - padB) / 2} textAnchor="middle" fontSize="10" fill={C.steelHi} transform={`rotate(-90 12 ${(padT + H - padB) / 2})`}>{useCur ? "Minuty (bieżący sezon)" : "Minuty (poprzedni sezon)"}</text>
         {pts.map((d, i) => {
           const on = hover === i; const lab = labelSet.has(d.p.id || d.p.name);
           return (
@@ -4721,6 +4733,7 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
   const cur = curYearOf(data);
   const squad = data.squad || [];
   const hasCurrentMin = squad.some((p) => Number(p.minutes_current) > 0);
+  const curMin = (p) => Number(hasCurrentMin ? p.minutes_current : p.minutes_total) || 0;
   const [minPeriod, setMinPeriod] = useState("current");
   const minField = (minPeriod === "current" && hasCurrentMin) ? "minutes_current" : "minutes_total";
   const minOf = (p) => Number(p[minField]) || 0;
@@ -4730,7 +4743,7 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
   const AGE_BUCKETS = [["≤ 20", (a) => a <= 20], ["21–23", (a) => a >= 21 && a <= 23], ["24–26", (a) => a >= 24 && a <= 26], ["27–29", (a) => a >= 27 && a <= 29], ["30+", (a) => a >= 30]];
   const ageDist = AGE_BUCKETS.map(([lab, f]) => {
     const ps = squad.filter((p) => Number(p.age) > 0 && f(Number(p.age)));
-    const mins = ps.reduce((s, p) => s + (Number(p.minutes_total) || 0), 0);
+    const mins = ps.reduce((s, p) => s + curMin(p), 0);
     return { lab, n: ps.length, mins: Math.round(mins), avgMin: ps.length ? Math.round(mins / ps.length) : 0 };
   });
   const ageMax = Math.max(1, ...ageDist.map((b) => b.n));
@@ -4802,7 +4815,7 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
             ))}
           </div>
           <div style={{ fontSize: 10, color: C.steel, marginTop: 6 }}>
-            Prawa kolumna: łączne minuty w przedziale w bieżącym sezonie (liga + puchary) oraz średnia na zawodnika (⌀). Razem {ageMinsTotal.toLocaleString("pl-PL")}′.
+            Prawa kolumna: łączne minuty w przedziale ({hasCurrentMin ? "bieżący sezon, liga" : "poprzedni sezon, liga + puchary"}) oraz średnia na zawodnika (⌀). Razem {ageMinsTotal.toLocaleString("pl-PL")}′.
           </div>
         </div>
         <div>
@@ -4837,7 +4850,7 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
         </div>
       )}
       <div style={{ display: "grid", gap: 6 }}>
-        {withMin.slice(0, 16).map((p) => (
+        {withMin.map((p) => (
           <div key={p.id} style={{ display: "grid", gridTemplateColumns: "170px 1fr 96px", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 12.5, color: C.bone, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               <span style={{ color: C.steel }}>{p.pos}</span> {p.name}</span>

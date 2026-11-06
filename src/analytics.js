@@ -425,6 +425,14 @@ const RC_WEAK = 55;       // "niski RC"
  
 function _sig(type, sev, text) { return { type, sev, text }; }
  
+// Normalizacja nazwiska do dopasowania (diakrytyki, ł, myślniki, nadmiarowe spacje).
+function _normName(s) {
+  return String(s || "")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase().replace(/ł/g, "l").replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/).filter(Boolean).join(" ");
+}
+
 export function computeRecentValidation(data, opts = {}) {
   const rec = data && data.recent;
   if (!rec || rec.available === false || !Array.isArray(rec.players) || !rec.players.length) {
@@ -444,14 +452,34 @@ export function computeRecentValidation(data, opts = {}) {
  
   // Indeks składu po id/nazwie — dołączamy RC/wiek/pozycję, gdyby pipeline nie dołączył.
   const squad = Array.isArray(data.squad) ? data.squad : [];
-  const byId = {}, byName = {};
+  const byId = {}, byName = {}, byNorm = {};
+  const squadNorm = [];
   for (const s of squad) {
     if (s.id) byId[s.id] = s;
     byName[(s.name || "").toLowerCase()] = s;
+    const n = _normName(s.name); if (n) byNorm[n] = s;
+    squadNorm.push({ s, toks: new Set(n.split(" ").filter((t) => t.length > 1)) });
   }
- 
+  // Dopasowanie rozmyte: różnice zapisu nazwisk między „Ostatnimi meczami" a arkuszem
+  // składu (drugie imię, myślniki, diakrytyki, kolejność) gubiły ~połowę zawodników —
+  // pokazywali się jako RC 0 i fałszywie jako „trener ufa mimo niskiego RC". Dopasowujemy,
+  // gdy zbiór tokenów jednej nazwy zawiera się w drugiej i dzielą realne nazwisko (≥4 znaki).
+  const _fuzzySquad = (name) => {
+    const qt = new Set(_normName(name).split(" ").filter((t) => t.length > 1));
+    if (!qt.size) return null;
+    let best = null, bestN = 0;
+    for (const { s, toks } of squadNorm) {
+      let inter = 0, longShared = false;
+      qt.forEach((t) => { if (toks.has(t)) { inter++; if (t.length >= 4) longShared = true; } });
+      const subset = inter > 0 && (inter === qt.size || inter === toks.size);
+      if (subset && longShared && inter > bestN) { best = s; bestN = inter; }
+    }
+    return best;
+  };
+
   const players = rec.players.map((p) => {
-    const s = (p.id && byId[p.id]) || byName[(p.name || "").toLowerCase()] || null;
+    const s = (p.id && byId[p.id]) || byName[(p.name || "").toLowerCase()]
+      || byNorm[_normName(p.name)] || _fuzzySquad(p.name) || null;
     const rc = num(p.rc != null ? p.rc : (s ? s.rc : 0));
     const rcEst = p.rc_estimated != null ? p.rc_estimated : (s ? !!s.rc_estimated : false);
     const line = p.line || (s ? s.line : lineOfPos(p.pos));
@@ -514,7 +542,7 @@ export function computeRecentValidation(data, opts = {}) {
       minutes: Math.round(mins), matchesPlayed: p.matches_played || 0,
       starts: p.starts || 0, share, role,
       gc: Math.round(gc), gc90: +gc90.toFixed(2), xgi90: +xgi90.toFixed(2),
-      def90: +def90.toFixed(2), stats: st, inSquad: p.in_squad !== false && !!s,
+      def90: +def90.toFixed(2), stats: st, inSquad: !!s,
       signals, verdict,
     };
   });
@@ -524,6 +552,7 @@ export function computeRecentValidation(data, opts = {}) {
   // --- Rekomendacje: rotacje (obciążenie) + obserwacje (rozjazd model↔trener) ---
   const rotate = [], observe = [];
   for (const pl of players) {
+    if (!pl.inSquad) continue;   // zawodnik spoza aktualnej kadry (odszedł) — bez rekomendacji
     const s = (pl.id && byId[pl.id]) || byName[(pl.name || "").toLowerCase()];
     const age = s && s.age ? num(s.age) : 0;
     // Rotacja: pełne obciążenie we WSZYSTKICH meczach (>=90% minut, komplet startów).
