@@ -3808,39 +3808,40 @@ const surnameU = (nm) => { const t = String(nm || "").trim().split(" "); return 
 // wartość = skill / pierwiastek z ceny (kara za cenę maleje przy droższych).
 // Bramka jakości (skill>=62, luzowana), żeby nie promować taniej przypadkowości.
 function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
-  // Domyślny profil obserwacji: młodzi (≤25 lat) i tani (≤3 mln €).
-  const AGE_CAP = 25, PRICE_CAP = 3;
+  // Ranking: jakość (poziom) + dopasowanie stylu (koherencja) — tak samo jak propozycje
+  // przy „Priorytetach", żeby najlepszy proponowany zawodnik był tu #1 (bez twardego limitu
+  // ceny, który wcześniej ukrywał droższe, mocne propozycje). Stosunek jakość/cena ma
+  // osobną zakładkę „Okazje". Profil: młodzi (≤27 lat) z wyceną.
+  const AGE_CAP = 27;
   const scored = candidates
     .filter((c) => !c.p.level_estimated && (Number(c.p.mv) || 0) > 0
-      && (Number(c.p.mv) || 0) <= PRICE_CAP && (Number(c.p.age) || 99) <= AGE_CAP)
+      && (Number(c.p.age) || 99) <= AGE_CAP)
     .map((c) => {
-      const mv = Number(c.p.mv) || 0;
       const skill = 0.45 * (Number(c.m.level) || 0) + 0.55 * (Number(c.m.coherence) || 0);
-      const value = skill / Math.sqrt(Math.max(mv, 0.5));
-      return { ...c, skill, value };
+      return { ...c, skill };
     });
   if (!scored.length) return (
     <div style={{ margin: "4px 0 20px", background: `linear-gradient(120deg, ${C.panel}, ${C.ink})`,
       border: `1px solid ${C.proxy}66`, borderRadius: 14, padding: "16px 18px" }}>
       <span className="disp" style={{ fontSize: 17, color: C.proxy }}>◆ TOP 5 DO OBSERWACJI</span>
       <div style={{ fontSize: 12.5, color: C.steel, marginTop: 8 }}>
-        Brak kandydatów na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b> spełniających profil obserwacji (do {AGE_CAP} lat, do €{PRICE_CAP}M z wyceną). Poszerz kryteria w filtrach powyżej.
+        Brak kandydatów na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b> spełniających profil obserwacji (do {AGE_CAP} lat, z wyceną). Poszerz kryteria w filtrach powyżej.
       </div>
     </div>
   );
-  const gate = (f) => scored.filter((c) => c.skill >= f).sort((a, b) => b.value - a.value);
+  const gate = (f) => scored.filter((c) => c.skill >= f).sort((a, b) => b.skill - a.skill);
   let ranked = gate(62);
   if (ranked.length < 5) ranked = gate(52);
-  if (ranked.length < 3) ranked = [...scored].sort((a, b) => b.value - a.value);
+  if (ranked.length < 3) ranked = [...scored].sort((a, b) => b.skill - a.skill);
   const top = ranked.slice(0, 5);
-  const maxV = Math.max(...top.map((c) => c.value)) || 1;
+  const maxV = Math.max(...top.map((c) => c.skill)) || 1;
   const cohCol = (v) => (v > 70 ? C.good : v > 45 ? C.warn : C.bad);
   return (
     <div style={{ margin: "4px 0 20px", background: `linear-gradient(120deg, ${C.panel}, ${C.ink})`,
       border: `1px solid ${C.proxy}66`, borderRadius: 14, padding: "16px 18px" }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
         <span className="disp" style={{ fontSize: 17, color: C.proxy }}>◆ TOP 5 DO OBSERWACJI</span>
-        <span style={{ fontSize: 12, color: C.steel }}>kompromis jakość / cena na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b> · profil: <b style={{ color: C.steelHi }}>do 25 lat, do €3M</b></span>
+        <span style={{ fontSize: 12, color: C.steel }}>najlepsi kandydaci na pozycji <b className="mono" style={{ color: C.steelHi }}>{sel.pos}</b> · ranking: <b style={{ color: C.steelHi }}>jakość + dopasowanie stylu</b> (do 27 lat)</span>
       </div>
       <div className="hscroll"><div style={{ display: "grid", gap: 7, minWidth: 600 }}>
         {top.map((c, i) => (
@@ -3869,11 +3870,11 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
               <div className="disp" style={{ fontSize: 16, color: C.proxy, lineHeight: 0.9 }}>{fmt(Number(c.p.mv))}</div>
               <div style={{ fontSize: 9, color: C.steel }}>Transfermarkt</div>
             </div>
-            <div title="Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena">
+            <div title="Jakość + dopasowanie stylu = 0,45·poziom + 0,55·koherencja">
               <div style={{ height: 6, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
-                <div style={{ width: `${(c.value / maxV) * 100}%`, height: "100%", background: C.proxy }} />
+                <div style={{ width: `${(c.skill / maxV) * 100}%`, height: "100%", background: C.proxy }} />
               </div>
-              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>wsk. obs.</div>
+              <div style={{ fontSize: 9, color: C.steel, marginTop: 3 }}>jakość+styl</div>
             </div>
             <button onClick={() => toggleShort(c.p)} title="Lista obserwowanych"
               style={{ background: short.includes(c.p.id) ? C.red : "transparent",
@@ -3885,7 +3886,7 @@ function Top5Panel({ candidates, sel, short, toggleShort, fmt }) {
         ))}
       </div></div>
       <div style={{ fontSize: 10.5, color: C.steel, marginTop: 10 }}>
-        Wskaźnik obserwacji = (0,45·poziom + 0,55·koherencja) / √cena — łączy jakość i dopasowanie stylu, karząc za cenę. To NIE to samo co „Okazja" (percentyl jakości minus percentyl ceny, w zakładce Okazje) ani „wycena" (wartość rynkowa). Podpowiedź do obserwacji, nie ostateczny ranking.
+        Ranking = jakość (poziom) + dopasowanie stylu (0,45·poziom + 0,55·koherencja) — ta sama logika, co propozycje przy „Priorytetach", więc najlepszy proponowany zawodnik jest tu #1 (bez ukrywania droższych). Cena pokazana obok; stosunek jakość/cena ma osobną zakładkę „Okazje". Podpowiedź do obserwacji, nie ostateczny ranking.
       </div>
     </div>
   );
