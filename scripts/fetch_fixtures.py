@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-fetch_fixtures.py — odświeża public/fixtures.json terminarzem Rakowa z TheSportsDB.
+fetch_fixtures.py — odświeża public/fixtures.json terminarzem Rakowa.
 
 FILOZOFIA (fail-safe, jak reszta pipeline):
   • BAZA = ręczny public/fixtures.json (pełny sezon 2026/27, 34 mecze). On jest źródłem
     prawdy o rozpisce (rywal + dom/wyjazd). Ten skrypt go NIE zastępuje.
-  • TheSportsDB (darmowe API, klucz '3') dokłada tylko: UTWARDZONE daty (gdy liga
-    potwierdzi dokładny dzień) oraz WYNIKI rozegranych meczów. Nakłada je na istniejące
-    wpisy po dopasowaniu rywala + strony boiska.
+  • Źródło danych dokłada tylko: UTWARDZONE daty (gdy liga potwierdzi dokładny dzień)
+    oraz WYNIKI rozegranych meczów. Nakłada je na istniejące wpisy po dopasowaniu
+    rywala + strony boiska.
+  • ŹRÓDŁA (po kolei, pierwsze działające wygrywa):
+      1) Sofascore (api.sofascore.com, team 35268) — terminarz + wyniki, czysty JSON.
+      2) TheSportsDB (darmowe API, team 137670) — fallback.
+    fotmob celowo pominięty: jego /api/ jest zabroniony w robots.txt.
   • BEZPIECZNIKI: błąd sieci / brak danych / 0 dopasowań → plik zostaje bez zmian.
     Nigdy nie zapisujemy pustego pliku ani mniejszej liczby meczów niż w bazie.
     Żaden wyjątek nie wywala pipeline (krok i tak jest continue-on-error).
 
-Źródło: https://www.thesportsdb.com/api/v1/json/3/eventslast.php?id=137670 (+ eventsnext).
-Env: SPORTSDB_TEAM_ID (domyślnie 137670 = Raków), SPORTSDB_KEY (domyślnie '3').
+Env: SOFASCORE_TEAM_ID (domyślnie 35268 = Raków), SPORTSDB_TEAM_ID (137670), SPORTSDB_KEY ('3').
 
 Użycie:
   python scripts/fetch_fixtures.py            # public/fixtures.json
@@ -25,13 +28,15 @@ import os
 import sys
 import unicodedata
 import urllib.request
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(_HERE, "..", "public", "fixtures.json")
-TEAM_ID = os.getenv("SPORTSDB_TEAM_ID", "137670")   # Raków Częstochowa na TheSportsDB
-KEY = os.getenv("SPORTSDB_KEY", "3")                 # darmowy publiczny klucz
-BASE = f"https://www.thesportsdb.com/api/v1/json/{KEY}"
+TEAM_SOFA = os.getenv("SOFASCORE_TEAM_ID", "35268")   # Raków na Sofascore
+TEAM_SDB = os.getenv("SPORTSDB_TEAM_ID", "137670")    # Raków na TheSportsDB
+SDB_KEY = os.getenv("SPORTSDB_KEY", "3")
+_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+       "(KHTML, like Gecko) Chrome/122.0 Safari/537.36")
 _FINISHED = {"match finished", "ft", "aet", "after extra time", "pen", "finished"}
 
 
@@ -45,8 +50,7 @@ def _toks(s):
 
 
 def _is_rakow(name):
-    # Dopasowanie po CAŁYM słowie — „rakow" jest podciągiem „krakow" (Kraków!),
-    # więc substring myliłby Wieczystą/Wisłę Kraków z Rakowem. Token = całe słowo.
+    # Całe słowo — „rakow" jest podciągiem „krakow" (Kraków!).
     return "rakow" in _toks(name)
 
 
@@ -57,10 +61,74 @@ def _daynum(d):
         return 0
 
 
-def _get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (rakow-scout fixtures)"})
+def _get(url, headers=None):
+    hdr = {"User-Agent": _UA, "Accept": "application/json"}
+    if headers:
+        hdr.update(headers)
+    req = urllib.request.Request(url, headers=hdr)
     with urllib.request.urlopen(req, timeout=25) as r:
         return json.loads(r.read().decode("utf-8"))
+
+
+# Ujednolicony event: {league, home, away, date 'YYYY-MM-DD', hs, as, finished}
+
+def _events_sofascore():
+    out = []
+    got_any = False
+    for path in ("events/last/0", "events/next/0"):
+        try:
+            d = _get(f"https://api.sofascore.com/api/v1/team/{TEAM_SOFA}/{path}",
+                     headers={"Referer": "https://www.sofascore.com/"})
+            got_any = True
+        except Exception as e:  # noqa: BLE001
+            print(f"[terminarz] Sofascore {path} nieosiągalne ({e}).", file=sys.stderr)
+            continue
+        for e in (d or {}).get("events", []) or []:
+            trn = e.get("tournament") or {}
+            league = (trn.get("uniqueTournament") or {}).get("name") or trn.get("name") or ""
+            ts = e.get("startTimestamp")
+            dt = ""
+            if ts:
+                try:
+                    dt = datetime.fromtimestamp(int(ts), timezone.utc).strftime("%Y-%m-%d")
+                except Exception:  # noqa: BLE001
+                    dt = ""
+            status = ((e.get("status") or {}).get("type") or "")
+            out.append({
+                "league": league,
+                "home": (e.get("homeTeam") or {}).get("name"),
+                "away": (e.get("awayTeam") or {}).get("name"),
+                "date": dt,
+                "hs": (e.get("homeScore") or {}).get("current"),
+                "as": (e.get("awayScore") or {}).get("current"),
+                "finished": status == "finished",
+            })
+    return out if got_any else None
+
+
+def _events_thesportsdb():
+    base = f"https://www.thesportsdb.com/api/v1/json/{SDB_KEY}"
+    out = []
+    got_any = False
+    for ep in (f"eventslast.php?id={TEAM_SDB}", f"eventsnext.php?id={TEAM_SDB}"):
+        try:
+            d = _get(f"{base}/{ep}")
+            got_any = True
+        except Exception as e:  # noqa: BLE001
+            print(f"[terminarz] TheSportsDB {ep} nieosiągalne ({e}).", file=sys.stderr)
+            continue
+        for e in ((d or {}).get("results") or (d or {}).get("events") or []) or []:
+            status = _norm(e.get("strStatus"))
+            out.append({
+                "league": e.get("strLeague"),
+                "home": e.get("strHomeTeam"),
+                "away": e.get("strAwayTeam"),
+                "date": (e.get("dateEvent") or "")[:10],
+                "hs": e.get("intHomeScore"),
+                "as": e.get("intAwayScore"),
+                "finished": status in _FINISHED,
+            })
+    return out if got_any else None
 
 
 def main():
@@ -75,18 +143,12 @@ def main():
         print("[terminarz] Baseline pusty/niepoprawny; nic nie nadpisuję.", file=sys.stderr)
         return 0
 
-    # 2) Pobierz ostatnie + najbliższe mecze.
-    events = []
-    for ep in (f"eventslast.php?id={TEAM_ID}", f"eventsnext.php?id={TEAM_ID}"):
-        try:
-            d = _get(f"{BASE}/{ep}")
-            ev = (d or {}).get("results") or (d or {}).get("events") or []
-            if isinstance(ev, list):
-                events += ev
-        except Exception as e:  # noqa: BLE001
-            print(f"[terminarz] {ep} nieosiągalne ({e}).", file=sys.stderr)
+    # 2) Pobierz eventy: Sofascore → fallback TheSportsDB.
+    events, src = _events_sofascore(), "sofascore"
     if not events:
-        print("[terminarz] Brak eventów z TheSportsDB; zostawiam ręczny terminarz.", file=sys.stderr)
+        events, src = _events_thesportsdb(), "thesportsdb"
+    if not events:
+        print("[terminarz] Żadne źródło nie oddało eventów; zostawiam ręczny terminarz.", file=sys.stderr)
         return 0
 
     # 3) Indeks bazy po (tokeny-rywala, dom/wyjazd) — każdy z 34 meczów jest unikalny.
@@ -100,18 +162,17 @@ def main():
     today = date.today().toordinal()
     date_upd = score_upd = 0
     for e in events:
-        if "ekstraklasa" not in _norm(e.get("strLeague")):
+        if "ekstraklasa" not in _norm(e.get("league")):
             continue
-        home_t, away_t = e.get("strHomeTeam"), e.get("strAwayTeam")
+        home_t, away_t = e.get("home"), e.get("away")
         if not (_is_rakow(home_t) or _is_rakow(away_t)):
             continue
         rk_home = _is_rakow(home_t)
         opp = away_t if rk_home else home_t
-        ev_date = (e.get("dateEvent") or "")[:10]
+        ev_date = (e.get("date") or "")[:10]
         if not ev_date:
             continue
 
-        # Dopasuj do bazy: najpierw dokładny klucz, potem przecięcie tokenów (ta sama strona).
         cands = idx.get(key_of(opp, rk_home)) or []
         if not cands:
             ot = _toks(opp)
@@ -123,15 +184,12 @@ def main():
             continue
         m = min(cands, key=lambda x: abs(_daynum(x.get("date")) - _daynum(ev_date)))
 
-        # Utwardzona data.
         if ev_date and m.get("date") != ev_date:
             m["date"] = ev_date
             date_upd += 1
 
-        # Wynik tylko dla faktycznie rozegranych (status FT albo data w przeszłości).
-        status = _norm(e.get("strStatus"))
-        hs, as_ = e.get("intHomeScore"), e.get("intAwayScore")
-        played = (status in _FINISHED) or (_daynum(ev_date) < today)
+        hs, as_ = e.get("hs"), e.get("as")
+        played = e.get("finished") or (_daynum(ev_date) < today)
         if played and hs not in (None, "") and as_ not in (None, ""):
             try:
                 rk_g = int(hs) if rk_home else int(as_)
@@ -145,15 +203,15 @@ def main():
                 score_upd += 1
 
     if date_upd == 0 and score_upd == 0:
-        print("[terminarz] 0 dopasowań/zmian; zostawiam bez zmian.", file=sys.stderr)
+        print(f"[terminarz] Źródło {src}: 0 dopasowań/zmian; zostawiam bez zmian.", file=sys.stderr)
         return 0
 
     # 4) Bezpiecznik: liczba meczów się nie zmienia (nakładamy in-place na bazę).
     base["fixtures"] = bf
     base["updated"] = date.today().isoformat()
-    base["auto_source"] = "thesportsdb"
+    base["auto_source"] = src
     json.dump(base, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-    print(f"[terminarz] TheSportsDB: utwardzono {date_upd} dat, {score_upd} wyników; "
+    print(f"[terminarz] Źródło {src}: utwardzono {date_upd} dat, {score_upd} wyników; "
           f"{len(bf)} meczów w terminarzu.")
     return 0
 
