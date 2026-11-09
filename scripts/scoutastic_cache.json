@@ -35053,5 +35053,1373 @@
  },
  "131241": {
   "miss": true
+ },
+ "41164": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "433701": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 19,
+  "foot": "prawa"
+ },
+ "22136": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 30,
+  "foot": "lewa"
+ },
+ "25820": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "8039": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "23348": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "prawa"
+ },
+ "133034": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 0,
+  "age": 26,
+  "foot": "obunożny"
+ },
+ "558299": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "480607": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "480684": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 21,
+  "foot": "lewa"
+ },
+ "49019": {
+  "mv": 0.7,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 27,
+  "foot": "lewa"
+ },
+ "418901": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "558298": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "lewa"
+ },
+ "30505": {
+  "miss": true
+ },
+ "36746": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 35,
+  "foot": "prawa"
+ },
+ "481757": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "49844": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "80411": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 34,
+  "foot": "prawa"
+ },
+ "558307": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 32,
+  "foot": "prawa"
+ },
+ "31774": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 24,
+  "foot": "obunożny"
+ },
+ "27686": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": "obunożny"
+ },
+ "558300": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "68427": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "63164": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "obunożny"
+ },
+ "482610": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 19,
+  "foot": "prawa"
+ },
+ "280217": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "22135": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "483275": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "438458": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2031,
+  "age": 19,
+  "foot": "lewa"
+ },
+ "42926": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "lewa"
+ },
+ "45001": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "lewa"
+ },
+ "481544": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "134411": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "482210": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "56443": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "480886": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "44330": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": null
+ },
+ "27130": {
+  "miss": true
+ },
+ "406531": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 19,
+  "foot": "obunożny"
+ },
+ "41601": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "483425": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "28605": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 34,
+  "foot": "prawa"
+ },
+ "483419": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "478338": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 22,
+  "foot": "obunożny"
+ },
+ "402130": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "lewa"
+ },
+ "449108": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "lewa"
+ },
+ "50297": {
+  "mv": 0.35,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "7987": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "prawa"
+ },
+ "132334": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "402854": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "172441": {
+  "miss": true
+ },
+ "28132": {
+  "miss": true
+ },
+ "65933": {
+  "mv": 1.0,
+  "peak": 0.0,
+  "contract": 2031,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "484187": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 36,
+  "foot": "prawa"
+ },
+ "431683": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 20,
+  "foot": "obunożny"
+ },
+ "40820": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "482520": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 18,
+  "foot": "lewa"
+ },
+ "396462": {
+  "mv": 0.5,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 20,
+  "foot": null
+ },
+ "483574": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "obunożny"
+ },
+ "482911": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 34,
+  "foot": "prawa"
+ },
+ "480612": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "482280": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "299063": {
+  "miss": true
+ },
+ "480701": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 26,
+  "foot": "obunożny"
+ },
+ "566354": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 18,
+  "foot": null
+ },
+ "45225": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "32663": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "32264": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "391919": {
+  "mv": 0.45,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "90168": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 28,
+  "foot": "lewa"
+ },
+ "29326": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 27,
+  "foot": null
+ },
+ "348794": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 30,
+  "foot": "lewa"
+ },
+ "566384": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "lewa"
+ },
+ "92906": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "23511": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "50713": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "480692": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "482910": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "lewa"
+ },
+ "45000": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "lewa"
+ },
+ "402231": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "425718": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "403757": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "23630": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "obunożny"
+ },
+ "137569": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "8974": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "278767": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "lewa"
+ },
+ "480661": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "483572": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "410934": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 18,
+  "foot": null
+ },
+ "483435": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "480671": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 34,
+  "foot": "prawa"
+ },
+ "9881": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "480683": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "lewa"
+ },
+ "483007": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "obunożny"
+ },
+ "439265": {
+  "mv": 0.7,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "437889": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "8159": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 38,
+  "foot": "obunożny"
+ },
+ "401865": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "122700.99999999999": {
+  "mv": 3.0,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "482005": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": null
+ },
+ "402233": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "130939": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "lewa"
+ },
+ "48742": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "256703": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "lewa"
+ },
+ "8691": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 28,
+  "foot": "obunożny"
+ },
+ "133760": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "41101": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "563697": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "566396": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "466279": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "35293": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "obunożny"
+ },
+ "32291": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 35,
+  "foot": "prawa"
+ },
+ "7992": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 37,
+  "foot": "prawa"
+ },
+ "483277": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "431704": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "410930": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "23377": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "lewa"
+ },
+ "131997": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "16780": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": "obunożny"
+ },
+ "45256": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 38,
+  "foot": "lewa"
+ },
+ "483440": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": "obunożny"
+ },
+ "410926": {
+  "miss": true
+ },
+ "48955": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "obunożny"
+ },
+ "558303": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "obunożny"
+ },
+ "49608": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 23,
+  "foot": "obunożny"
+ },
+ "480669": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 37,
+  "foot": "obunożny"
+ },
+ "7653": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "483438": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "23495.0": {
+  "mv": 0.6,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "405803": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "48866": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "obunożny"
+ },
+ "448896": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 19,
+  "foot": "prawa"
+ },
+ "480676": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "470072": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "26996": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "483421": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 26,
+  "foot": "obunożny"
+ },
+ "451829": {
+  "mv": 0.7,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 18,
+  "foot": "lewa"
+ },
+ "13251": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "lewa"
+ },
+ "482673": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 18,
+  "foot": "prawa"
+ },
+ "482920": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "483503": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "490344": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 21,
+  "foot": "lewa"
+ },
+ "145066": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "396464": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "286534": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "483570": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "407324": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 33,
+  "foot": "prawa"
+ },
+ "131097": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "44225.0": {
+  "mv": 2.5,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "437888": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "135076": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 0,
+  "age": 25,
+  "foot": null
+ },
+ "49701": {
+  "miss": true
+ },
+ "8158": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "obunożny"
+ },
+ "548123": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 16,
+  "foot": null
+ },
+ "4671": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 39,
+  "foot": "prawa"
+ },
+ "402850": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 33,
+  "foot": "prawa"
+ },
+ "480686": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "131103": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "432517": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 19,
+  "foot": "obunożny"
+ },
+ "45258": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "144096": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 0,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "447715": {
+  "miss": true
+ },
+ "27694": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "426711": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 22,
+  "foot": "lewa"
+ },
+ "386023": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "28841": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "prawa"
+ },
+ "558304": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "558311": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 23,
+  "foot": "lewa"
+ },
+ "403237": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 19,
+  "foot": "obunożny"
+ },
+ "366858": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "obunożny"
+ },
+ "281359": {
+  "mv": 1.5,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "409383": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 20,
+  "foot": null
+ },
+ "483587": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "448182": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "lewa"
+ },
+ "566391": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 26,
+  "foot": "lewa"
+ },
+ "485321": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
+ },
+ "483294": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "431701": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 0,
+  "age": 19,
+  "foot": null
+ },
+ "51152": {
+  "mv": 0.7,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 24,
+  "foot": "lewa"
+ },
+ "45228": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "42706": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "438075": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "lewa"
+ },
+ "558281": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 19,
+  "foot": "prawa"
+ },
+ "400546": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "432782": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 25,
+  "foot": null
+ },
+ "566456": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 19,
+  "foot": "prawa"
+ },
+ "31081": {
+  "mv": 0.17,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "obunożny"
+ },
+ "480885": {
+  "mv": 0.12,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "28454": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "47207": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "566376": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 19,
+  "foot": "obunożny"
+ },
+ "566481": {
+  "mv": 0.0,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 19,
+  "foot": "prawa"
+ },
+ "535940": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "130936": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "484826": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "431702": {
+  "mv": 0.2,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 18,
+  "foot": null
+ },
+ "293377": {
+  "mv": 0.8,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 26,
+  "foot": "lewa"
+ },
+ "8154": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 36,
+  "foot": "lewa"
+ },
+ "425256": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "prawa"
+ },
+ "279687": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 28,
+  "foot": "prawa"
  }
 }
