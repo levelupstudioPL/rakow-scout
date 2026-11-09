@@ -70,11 +70,14 @@ jobs:
       - name: Zarchiwizuj wyceny (historia wartości)
         run: python scripts/archive_values.py
 
-      - name: Odśwież terminarz (TheSportsDB)
-        # Nakłada utwardzone daty i wyniki na ręczny public/fixtures.json (TheSportsDB,
-        # darmowe API). FAIL-SAFE: brak danych / błąd = plik bez zmian, nigdy pusty ani
-        # krótszy. Krok nie może wywalić pipeline (continue-on-error).
+      - name: Odśwież terminarz (API-Football / Sofascore)
+        # Nakłada utwardzone daty i wyniki na ręczny public/fixtures.json. Główne źródło:
+        # API-Football (przez sekret API_FOOTBALL_KEY — jedyne, które działa z Actions);
+        # Sofascore/TheSportsDB jako fallback (blokują IP serwerowni). FAIL-SAFE: brak
+        # danych / błąd / brak klucza = plik bez zmian, nigdy pusty ani krótszy.
         continue-on-error: true
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: python scripts/fetch_fixtures.py
 
       - name: Zapisz zmiany
