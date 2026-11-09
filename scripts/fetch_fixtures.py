@@ -10,8 +10,11 @@ FILOZOFIA (fail-safe, jak reszta pipeline):
     oraz WYNIKI rozegranych meczów. Nakłada je na istniejące wpisy po dopasowaniu
     rywala + strony boiska.
   • ŹRÓDŁA (po kolei, pierwsze działające wygrywa):
-      1) Sofascore (api.sofascore.com, team 35268) — terminarz + wyniki, czysty JSON.
-      2) TheSportsDB (darmowe API, team 137670) — fallback.
+      1) API-Football (api-sports.io) — przez KLUCZ (sekret API_FOOTBALL_KEY); jedyne
+         źródło, które realnie działa z GitHub Actions (Sofascore/TheSportsDB zwracają
+         403 z adresów serwerowni). Darmowy plan ~100 zapytań/dzień.
+      2) Sofascore (api.sofascore.com, team 35268) — fallback (działa tylko spoza Actions).
+      3) TheSportsDB (team 137670) — fallback.
     fotmob celowo pominięty: jego /api/ jest zabroniony w robots.txt.
   • BEZPIECZNIKI: błąd sieci / brak danych / 0 dopasowań → plik zostaje bez zmian.
     Nigdy nie zapisujemy pustego pliku ani mniejszej liczby meczów niż w bazie.
@@ -35,6 +38,10 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(_HERE, "..", "public", 
 TEAM_SOFA = os.getenv("SOFASCORE_TEAM_ID", "35268")   # Raków na Sofascore
 TEAM_SDB = os.getenv("SPORTSDB_TEAM_ID", "137670")    # Raków na TheSportsDB
 SDB_KEY = os.getenv("SPORTSDB_KEY", "3")
+# API-Football (api-sports.io) — źródło przez KLUCZ (działa z serwerów, w tym Actions).
+# Klucz z sekretu API_FOOTBALL_KEY. Ligę i sezon skrypt rozwiązuje sam (bez twardego ID).
+APIF_KEY = os.getenv("API_FOOTBALL_KEY") or ""
+APIF_BASE = os.getenv("API_FOOTBALL_BASE", "https://v3.football.api-sports.io")
 _UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/122.0 Safari/537.36")
 _FINISHED = {"match finished", "ft", "aet", "after extra time", "pen", "finished"}
@@ -71,6 +78,69 @@ def _get(url, headers=None):
 
 
 # Ujednolicony event: {league, home, away, date 'YYYY-MM-DD', hs, as, finished}
+
+def _events_apifootball():
+    """API-Football (api-sports.io). Wymaga sekretu API_FOOTBALL_KEY. Samo rozwiązuje
+    ID ligi Ekstraklasy i bieżący sezon (/leagues?search=Ekstraklasa, kraj Poland),
+    potem pobiera mecze ligi (/fixtures?league&season). Env APIFOOTBALL_LEAGUE /
+    APIFOOTBALL_SEASON mogą nadpisać. Brak klucza → None (skrypt próbuje dalej)."""
+    if not APIF_KEY:
+        print("[terminarz] API-Football: brak sekretu API_FOOTBALL_KEY — pomijam to źródło.",
+              file=sys.stderr)
+        return None
+
+    def _apif(path):
+        return _get(f"{APIF_BASE}{path}", headers={"x-apisports-key": APIF_KEY})
+
+    league_id = os.getenv("APIFOOTBALL_LEAGUE")
+    season = os.getenv("APIFOOTBALL_SEASON")
+    league_id = int(league_id) if (league_id or "").isdigit() else None
+    season = int(season) if (season or "").isdigit() else None
+    if not league_id or not season:
+        try:
+            lg = _apif("/leagues?search=Ekstraklasa")
+        except Exception as e:  # noqa: BLE001
+            print(f"[terminarz] API-Football /leagues nieosiągalne ({e}).", file=sys.stderr)
+            return None
+        for item in (lg or {}).get("response", []) or []:
+            country = ((item.get("country") or {}).get("name") or "").lower()
+            if "poland" not in country and "polska" not in country:
+                continue
+            if not league_id:
+                league_id = (item.get("league") or {}).get("id")
+            if not season:
+                seasons = item.get("seasons") or []
+                cur = [s.get("year") for s in seasons if s.get("current")]
+                season = cur[0] if cur else (seasons[-1].get("year") if seasons else None)
+            break
+    if not league_id or not season:
+        print(f"[terminarz] API-Football: nie rozwiązałem ligi/sezonu "
+              f"(id={league_id}, sezon={season}).", file=sys.stderr)
+        return None
+    try:
+        fx = _apif(f"/fixtures?league={league_id}&season={season}")
+    except Exception as e:  # noqa: BLE001
+        print(f"[terminarz] API-Football /fixtures nieosiągalne ({e}).", file=sys.stderr)
+        return None
+    out = []
+    for e in (fx or {}).get("response", []) or []:
+        teams = e.get("teams") or {}
+        goals = e.get("goals") or {}
+        fixt = e.get("fixture") or {}
+        st = ((fixt.get("status") or {}).get("short") or "")
+        out.append({
+            "league": (e.get("league") or {}).get("name") or "Ekstraklasa",
+            "home": (teams.get("home") or {}).get("name"),
+            "away": (teams.get("away") or {}).get("name"),
+            "date": (fixt.get("date") or "")[:10],
+            "hs": goals.get("home"),
+            "as": goals.get("away"),
+            "finished": st in ("FT", "AET", "PEN"),
+        })
+    print(f"[terminarz] API-Football: liga {league_id} sezon {season}, "
+          f"{len(out)} meczów ligi pobranych.")
+    return out or None
+
 
 def _events_sofascore():
     out = []
@@ -143,8 +213,10 @@ def main():
         print("[terminarz] Baseline pusty/niepoprawny; nic nie nadpisuję.", file=sys.stderr)
         return 0
 
-    # 2) Pobierz eventy: Sofascore → fallback TheSportsDB.
-    events, src = _events_sofascore(), "sofascore"
+    # 2) Pobierz eventy: API-Football (klucz, działa z Actions) → Sofascore → TheSportsDB.
+    events, src = _events_apifootball(), "api-football"
+    if not events:
+        events, src = _events_sofascore(), "sofascore"
     if not events:
         events, src = _events_thesportsdb(), "thesportsdb"
     if not events:
