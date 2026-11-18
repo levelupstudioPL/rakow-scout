@@ -36421,5 +36421,54 @@
   "contract": 2027,
   "age": 28,
   "foot": "prawa"
+ },
+ "31694": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 38,
+  "foot": "prawa"
+ },
+ "226203": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 23,
+  "foot": "prawa"
+ },
+ "565695": {
+  "mv": 0.07,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 22,
+  "foot": null
+ },
+ "29847": {
+  "mv": 1.0,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 30,
+  "foot": "prawa"
+ },
+ "45224": {
+  "mv": 0.05,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": null
+ },
+ "144875": {
+  "mv": 0.35,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "549804": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 19,
+  "foot": "prawa"
  }
 }
