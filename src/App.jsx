@@ -2601,8 +2601,10 @@ function computeOpponentRecommendations(squad, an, labelsFor, leagueCtx) {
     if (rs && Array.isArray(rs.all)) {
       const theirLo = rs.all.filter((x) => x.z < -0.25).sort((a, b) => a.z - b.z).slice(0, 4);
       const theirHi = rs.all.filter((x) => x.z > 0.4).sort((a, b) => b.z - a.z).slice(0, 4);
+      // Nasi ŚO i bramkarz nie „atakują" słabości rywala — dla nich tylko ostrzeżenia.
+      const canExploit = !["ŚO", "Bramka"].includes(m.oursRole);
       theirLo.forEach((w) => {
-        if (hints.filter((h) => h.k === "exploit").length >= 2) return;
+        if (!canExploit || hints.filter((h) => h.k === "exploit").length >= 2) return;
         const ex = EXPLOIT[w.l]; if (!ex) return;
         let best = null;
         ours.forEach((p) => ex[0].forEach((lab) => {
