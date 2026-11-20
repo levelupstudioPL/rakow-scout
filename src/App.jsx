@@ -166,6 +166,44 @@ const STYLE_LABELS = [
   "Śr. długość podania", "Zaangażowanie z piłką",
 ];
 
+// Grupy PROFILU STYLU (od 11.2026): profil pozycyjny (profile_pos) liczony per grupa ról
+// zamiast per linia — p.sline (Bramka / ŚO / Wahadła / 6-8 / 10-9). Starsze dane mają tylko
+// p.line (Bramka/Obrona/Pomoc/Atak) — styleKey() obsługuje oba warianty.
+const styleKey = (p) => (p && (p.sline || p.line)) || null;
+const STYLE_ORDER = ["Bramka", "ŚO", "Wahadła", "6-8", "10-9", "Obrona", "Pomoc", "Atak"];
+const STYLE_GROUP_LABEL = {
+  Bramka: "Bramkarze", "ŚO": "Środkowi obrońcy", "Wahadła": "Wahadła / skrzydłowi",
+  "6-8": "Środek pola (6/8)", "10-9": "Ofensywa (10/9)", Obrona: "Obrona", Pomoc: "Pomoc", Atak: "Atak",
+};
+const STYLE_OF_ROLE = { Bramka: "Bramka", "ŚO": "ŚO", Boczny: "Wahadła", "Skrzydłowy": "Wahadła", "6-8": "6-8", "10-9": "10-9" };
+// Wskaźniki fazowe pisane „per linia" → grupy, które tę linię dziś tworzą.
+const LEGACY_LINE_GROUPS = { Bramka: ["Bramka"], Obrona: ["Obrona", "ŚO", "Wahadła"], Pomoc: ["Pomoc", "6-8"], Atak: ["Atak", "10-9", "Wahadła"] };
+
+// Definicje atrybutów (uwaga sztabu: „czym różnią się odbiory i przechwyty od odzysków?").
+// Pokazywane jako podpowiedź (title) przy etykietach profilu.
+const ATTR_DEF = {
+  "Odbiory i przechwyty": "Udane odbiory + przechwycenia podań rywala na 90 min, skorygowane o posiadanie (PAdj). Akcja wprost przeciw zawodnikowi z piłką lub podaniu.",
+  "Odzyski piłki": "Każde przejęcie wolnej / niczyjej piłki (zbieranie odbić, drugie piłki) na 90 min. Nie wymaga odbioru — mierzy czytanie gry i reakcję.",
+  "Pressing (PAdj)": "Akcje pressingowe (doskok do zawodnika z piłką) na 90 min, skorygowane o posiadanie — drużyny długo przy piłce nie są karane za mniej okazji do pressingu.",
+  "Pressing (liczba)": "Surowa liczba akcji pressingowych na 90 min (bez korekty o posiadanie).",
+  "Pressing na połowie rywala": "Akcje pressingowe na połowie przeciwnika na 90 min — wysoki pressing.",
+  "Kontrpressing": "Pressing w ciągu 5 s od straty piłki na 90 min.",
+  "Skuteczność odbioru": "Odsetek wygranych prób odbioru (pojedynków na ziemi).",
+  "Celność podań pod presją": "Celność podań zagrywanych, gdy rywal naciska zawodnika.",
+  "Podania łamiące linie": "Podania, które mijają linię zawodników rywala (line-breaking passes) na 90 min.",
+  "Progresja piłki": "Podania i prowadzenia piłki w tercję ataku na 90 min.",
+  "Biegi za plecy obrony": "Biegi bez piłki za linię obrony (SkillCorner) na mecz.",
+  "Dośrodkowania": "Udane dośrodkowania na 90 min.",
+  "Celność dośrodkowań": "Odsetek celnych dośrodkowań.",
+  "Asysty oczekiwane (xA)": "Suma xG strzałów oddanych po podaniach zawodnika na 90 min.",
+  "Udział w akcjach (xGChain)": "xG akcji, w których zawodnik brał udział (podanie, strzał) na 90 min.",
+  "Budowanie akcji (xGBuildup)": "xGChain bez podań kluczowych i strzałów — udział w budowie akcji.",
+  "Wartość działań (OBV)": "On-Ball Value: o ile działania z piłką zwiększają szansę na gola drużyny (minus szanse rywala).",
+  "Groźność pod bramką (xG)": "Oczekiwane gole bez karnych na 90 min.",
+  "Jakość strzałów (xG/strzał)": "Średnie xG jednego strzału — z jak dobrych pozycji zawodnik strzela.",
+};
+const attrTitle = (label) => ATTR_DEF[label] || undefined;
+
 // ============================ LOGOWANIE / OCENY ============================
 // Wspólne hasło do aplikacji (NAMIASTKA — kod jest w bundlu, więc to miękka bramka,
 // nie realna ochrona; dane chroni dopiero hasło na poziomie Netlify). ZMIEŃ na własne.
@@ -733,7 +771,7 @@ function TwinView({ data, photoOf = () => null, sel, setSel, setView }) {
   const order = ["Bramka", "Obrona", "Pomoc", "Atak"];
   // Atrybut, w którym zawodnik najbardziej wyróżnia się nad średnią Ekstraklasy.
   const topStrength = (p) => {
-    const labs = data.meta && data.meta.style_labels ? data.meta.style_labels[p.line] : null;
+    const labs = data.meta && data.meta.style_labels ? data.meta.style_labels[styleKey(p)] : null;
     const usePos = labs && labs.length && Array.isArray(p.profile_pos);
     const vec = usePos ? p.profile_pos : p.profile;
     const L = usePos ? labs : STYLE_LABELS;
@@ -906,13 +944,14 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
   const activeCount = countActiveFilters(applied, FILTERS_DEFAULT);
   // Etykiety atrybutów dopasowanych do pozycji (z data.json). Wektor profile_pos
   // ma tę samą kolejność. Brak (stare dane) → panele użyją profilu uniwersalnego.
-  const posLabels = data.meta && data.meta.style_labels ? data.meta.style_labels[sel.line] : null;
+  const posLabels = data.meta && data.meta.style_labels ? data.meta.style_labels[styleKey(sel)] : null;
   const selVec = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? sel.profile_pos : sel.profile;
   const selLabs = (Array.isArray(sel.profile_pos) && posLabels && posLabels.length) ? posLabels : STYLE_LABELS;
   // --- Dostrojenie profilu (uwaga #1 Igora) ---
   const wArr = (Array.isArray(selVec) ? selVec : []).map((_, i) => (profW[i] == null ? 1 : profW[i]));
   const tuned = wArr.some((w) => w !== 1);
-  const alignVec = (p) => (Array.isArray(p.profile_pos) && Array.isArray(selVec) && p.profile_pos.length === selVec.length)
+  // profile_pos porównujemy tylko w obrębie tej samej grupy stylu (różne grupy = różne atrybuty).
+  const alignVec = (p) => (selVec === sel.profile_pos && Array.isArray(p.profile_pos) && styleKey(p) === styleKey(sel) && p.profile_pos.length === selVec.length)
     ? p.profile_pos : (Array.isArray(p.profile) && Array.isArray(selVec) && p.profile.length === selVec.length ? p.profile : null);
   const tunedScore = (p) => wcosStyle(selVec, alignVec(p), wArr);
   const viewCands = tuned
@@ -922,7 +961,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
   const resetTuner = () => setProfW({});
   return (
     <div>
-      <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{activePos}</b>. Poziom = surowy + handicap ligi. Cena z Transfermarktu.</Lead>
+      <Lead>Kandydaci z lig europejskich na pozycji <b className="mono" style={{ color: C.redHi }}>{activePos}</b>. Poziom = surowy + handicap ligi. Cena z Transfermarktu. <b>Koherencja</b> odpowiada na pytanie „czy gra TAK SAMO jak nasz zawodnik?" (podobieństwo stylu: sposób podawania, aktywność defensywna, fizyka) — nie mówi, czy jest LEPSZY. Jakość mierzy RC/poziom. Szukamy obu naraz: wysokiej koherencji (wpasuje się w system bez przebudowy) i wysokiego poziomu.</Lead>
       <RcExplainer compact />
 
       {/* Wybrany zawodnik — twarz + tożsamość (dla kogo szukamy następcy) */}
@@ -1040,7 +1079,7 @@ function MatchView({ data, photoOf = () => null, sel, setSel, candidates, sortBy
                   return (
                     <label key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 11.5 }}>
                       <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                        color: w === 1 ? C.steelHi : (w > 1 ? C.good : C.bad) }} title={lab}>{lab}</span>
+                        color: w === 1 ? C.steelHi : (w > 1 ? C.good : C.bad) }} title={attrTitle(lab) ? `${lab} — ${attrTitle(lab)}` : lab}>{lab}</span>
                       <input type="range" min={0} max={2} step={0.1} value={w}
                         onChange={(e) => { const v = +e.target.value; setProfW((m) => ({ ...m, [i]: v })); }}
                         style={{ width: 96 }} />
@@ -1604,7 +1643,8 @@ function ShadowView({ data, photoOf = () => null, fmt, estimatePrice, matchScore
   }, [pool, useNow, data]);
   const oppPlayers = useMemo(() => (oppTeam ? pool.filter((p) => p.lg === BASE && teamOf(p) === oppTeam) : []), [pool, oppTeam, useNow]);
   const oppAn = useMemo(() => (oppPlayers.length ? computeTeamProfile(oppPlayers, labelsFor) : null), [oppPlayers]);
-  const oppRec = useMemo(() => computeOpponentRecommendations(squad, oppAn), [squad, oppAn]);
+  const leagueCtx = useMemo(() => computeLeagueRoleRC(pool.filter((p) => p.lg === BASE), teamOf), [pool, useNow]);
+  const oppRec = useMemo(() => computeOpponentRecommendations(squad, oppAn, labelsFor, leagueCtx), [squad, oppAn, leagueCtx]);
   const roleRec = (p) => (oppRec && p ? oppRec.byOurRole[roleKey(p)] : null);
   const recTint = (r) => (!r ? C.steel : r.kind === "atak" ? C.good : r.kind === "uwaga" ? C.warn : C.steel);
   const crestOf = (t) => (data.meta && data.meta.ekstra_crests ? data.meta.ekstra_crests[t] : null);
@@ -2342,7 +2382,7 @@ function computeTeamProfile(players, labelsFor) {
   if (!players || !players.length) return null;
   const byLine = {}, byRole = {};
   players.forEach((p) => {
-    (byLine[p.line] = byLine[p.line] || []).push(p);
+    const sk = styleKey(p); (byLine[sk] = byLine[sk] || []).push(p);
     const r = p.role || p.line; (byRole[r] = byRole[r] || []).push(p);
   });
   const roleRC = Object.entries(byRole).map(([role, ps]) => ({
@@ -2361,8 +2401,9 @@ function computeTeamProfile(players, labelsFor) {
   const squadMv = Math.round(players.reduce((s, p) => s + (Number(p.mv) > 0 ? Number(p.mv) : 0), 0) * 10) / 10;
   const lineStyle = Object.entries(byLine).map(([line, ps]) => {
     const labs = labelsFor(line);
+    const label = STYLE_GROUP_LABEL[line] || line;
     const vecs = ps.map((x) => x.profile_pos).filter((v) => Array.isArray(v) && labs && v.length === labs.length);
-    if (!labs || !vecs.length) return { line, n: ps.length, hi: [], lo: [], predict: null };
+    if (!labs || !vecs.length) return { line, label, n: ps.length, hi: [], lo: [], predict: null };
     const avg = labs.map((_, i) => _mean(vecs.map((v) => v[i])));
     const ranked = labs.map((l, i) => ({ l, z: avg[i] })).sort((a, b) => b.z - a.z);
     const hi = ranked.filter((x) => x.z > 0.3).slice(0, 3);
@@ -2373,8 +2414,18 @@ function computeTeamProfile(players, labelsFor) {
       for (let i = 0; i < vecs.length; i++) for (let j = i + 1; j < vecs.length; j++) ps2.push(_cos(vecs[i], vecs[j]));
       sim = _mean(ps2);
     }
-    return { line, n: ps.length, hi, lo, predict: sim };
-  }).sort((a, b) => (["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(a.line) - ["Bramka", "Obrona", "Pomoc", "Atak"].indexOf(b.line)));
+    return { line, label, n: ps.length, hi, lo, all: ranked, predict: sim };
+  }).sort((a, b) => (STYLE_ORDER.indexOf(a.line) - STYLE_ORDER.indexOf(b.line)));
+  // Styl per ROLA (do konkretnych wskazówek 1v1): średni profil zawodników danej roli.
+  const roleStyle = {};
+  Object.entries(byRole).forEach(([role, ps]) => {
+    const sk = styleKey(ps[0]); const labs = labelsFor(sk);
+    const vecs = ps.filter((x) => styleKey(x) === sk).map((x) => x.profile_pos)
+      .filter((v) => Array.isArray(v) && labs && v.length === labs.length);
+    if (!labs || !vecs.length) return;
+    const avg = labs.map((_, i) => _mean(vecs.map((v) => v[i])));
+    roleStyle[role] = { role, n: vecs.length, all: labs.map((l, i) => ({ l, z: avg[i] })) };
+  });
   const predVals = lineStyle.map((l) => l.predict).filter((v) => v != null);
   const predictability = predVals.length ? _mean(predVals) : null;
   const tips = [];
@@ -2382,13 +2433,13 @@ function computeTeamProfile(players, labelsFor) {
   if (strongest && strongest.rc - (weakest ? weakest.rc : 0) >= 6) tips.push({ k: "uwaga", t: `Najmocniejsza rola: ${roleName({ role: strongest.role }) || strongest.role} (RC ${strongest.rc}) — tu unikać strat i pojedynków 1v1.` });
   lineStyle.forEach((ls) => {
     if (ls.hi.length && ls.lo.length) {
-      tips.push({ k: "tendencja", t: `${ls.line}: dużo „${ls.hi.map((h) => h.l).join(", ")}", mało „${ls.lo.map((h) => h.l).join(", ")}" — przestrzeń tam, gdzie robią mało.` });
+      tips.push({ k: "tendencja", t: `${ls.label}: dużo „${ls.hi.map((h) => h.l).join(", ")}", mało „${ls.lo.map((h) => h.l).join(", ")}" — przestrzeń tam, gdzie robią mało.` });
     }
     if (ls.predict != null && ls.predict > 0.6 && ls.n >= 2) {
-      tips.push({ k: "przewidywalnosc", t: `${ls.line} bardzo jednorodna (podobieństwo ${Math.round(ls.predict * 100)}%) — styl przewidywalny, łatwiejszy do rozpracowania.` });
+      tips.push({ k: "przewidywalnosc", t: `${ls.label}: grupa bardzo jednorodna (podobieństwo ${Math.round(ls.predict * 100)}%) — styl przewidywalny, łatwiejszy do rozpracowania.` });
     }
   });
-  return { roleRC, weakest, strongest, overallRC, nPlayers, squadMv, lineStyle, predictability, tips };
+  return { roleRC, weakest, strongest, overallRC, nPlayers, squadMv, lineStyle, roleStyle, predictability, tips };
 }
 
 // Mapa opozycji na boisku: rola rywala -> rola Rakowa, która się z nią mierzy.
@@ -2396,11 +2447,111 @@ function computeTeamProfile(players, labelsFor) {
 const OPP_OPPOSE = { "Skrzydłowy": "Boczny", "Boczny": "Skrzydłowy", "10-9": "ŚO", "ŚO": "10-9", "6-8": "6-8", "Bramka": "Bramka" };
 const OPP_LINE_OF_ROLE = { "Bramka": "Bramka", "ŚO": "Obrona", "Boczny": "Obrona", "6-8": "Pomoc", "Skrzydłowy": "Pomoc", "10-9": "Atak" };
 
+// --- Konkretne wskazówki 1v1 (uwagi sztabu, D1) ---
+// Słabość rywala → nasze atrybuty, które ją wykorzystują (+ co z tym zrobić).
+const EXPLOIT = {
+  "Odbiory i przechwyty": [["Drybling", "Skuteczność dryblingu", "Prowadzenia piłki"], "szukaj 1v1 i wejść z piłką"],
+  "Skuteczność odbioru": [["Drybling", "Skuteczność dryblingu"], "atakuj dryblingiem, przegrywają pojedynki"],
+  "Pojedynki powietrzne": [["Pojedynki powietrzne", "Dośrodkowania", "Skuteczność w powietrzu"], "graj na wrzutki i stałe fragmenty"],
+  "Skuteczność w powietrzu": [["Pojedynki powietrzne", "Dośrodkowania"], "dośrodkowania i długa piłka na wygranie główki"],
+  "Pressing (PAdj)": [["Podania (wolumen)", "Progresja piłki", "Podania łamiące linie", "Celność podań"], "spokojna budowa: mało nacisku, jest czas na rozegranie"],
+  "Pressing na połowie rywala": [["Progresja piłki", "Podania łamiące linie"], "wyprowadzaj piłkę krótko, nie wybijaj"],
+  "Celność podań pod presją": [["Pressing (PAdj)", "Pressing na połowie rywala", "Kontrpressing"], "naciskaj wysoko, gubią piłkę pod presją"],
+  "Celność podań": [["Pressing (PAdj)", "Pressing na połowie rywala", "Kontrpressing", "Odbiory i przechwyty"], "pressing: wymuszaj błędy w rozegraniu"],
+  "Prędkość maksymalna": [["Biegi za plecy obrony", "Prędkość maksymalna", "Liczba sprintów"], "piłki za plecy, gra na szybkość"],
+  "Liczba sprintów": [["Biegi za plecy obrony", "Liczba sprintów"], "wymuszaj sprinty, dużo biegów w głąb"],
+  "Dystans / intensywność": [["Dystans / intensywność", "Biegi za plecy obrony"], "wysokie tempo, szczególnie po przerwie"],
+  "Wybicia (PAdj)": [["Dośrodkowania", "Podania w pole karne"], "dużo piłek w pole karne"],
+  "Bloki strzałów": [["Strzały", "Groźność pod bramką (xG)"], "strzały z dystansu / z drugiej linii"],
+  "Odzyski piłki": [["Drybling", "Prowadzenia piłki", "Podania (wolumen)"], "utrzymuj się przy piłce, słabo zbierają drugie piłki"],
+};
+// Siła rywala → nasze atrybuty potrzebne do jej neutralizacji.
+const THREAT = {
+  "Drybling": ["Odbiory i przechwyty", "Skuteczność odbioru"],
+  "Skuteczność dryblingu": ["Odbiory i przechwyty", "Skuteczność odbioru"],
+  "Pojedynki powietrzne": ["Pojedynki powietrzne", "Skuteczność w powietrzu"],
+  "Dośrodkowania": ["Pojedynki powietrzne", "Skuteczność w powietrzu"],
+  "Biegi za plecy obrony": ["Prędkość maksymalna", "Liczba sprintów"],
+  "Prędkość maksymalna": ["Prędkość maksymalna"],
+  "Pressing (PAdj)": ["Celność podań pod presją", "Podania łamiące linie"],
+  "Pressing na połowie rywala": ["Celność podań pod presją"],
+  "Podania prostopadłe": ["Odbiory i przechwyty", "Prędkość maksymalna"],
+  "Podania łamiące linie": ["Odbiory i przechwyty", "Pressing (PAdj)"],
+  "Groźność pod bramką (xG)": ["Bloki strzałów", "Odbiory i przechwyty"],
+};
+const _pctS = (z) => `${_zPct(z)}%`;
+// z-score atrybutu `lab` u zawodnika (profil jego grupy stylu) lub null.
+const _attrZ = (p, lab, labelsFor) => {
+  const L = labelsFor(styleKey(p));
+  if (!L || !Array.isArray(p.profile_pos) || p.profile_pos.length !== L.length) return null;
+  const i = L.indexOf(lab); const z = i >= 0 ? p.profile_pos[i] : null;
+  return typeof z === "number" ? z : null;
+};
+// RC per rola dla każdej drużyny ligi (kontekst „które miejsce w lidze").
+function computeLeagueRoleRC(players, teamOf) {
+  const by = {};
+  (players || []).forEach((p) => {
+    const t = teamOf(p); const r = p.role; const v = Number(p.raw);
+    if (!t || !r || !Number.isFinite(v)) return;
+    ((by[r] = by[r] || {})[t] = by[r][t] || []).push(v);
+  });
+  const out = {};
+  Object.entries(by).forEach(([r, teams]) => { out[r] = Object.values(teams).map((xs) => _mean(xs)).sort((a, b) => a - b); });
+  return out;
+}
+const _leagueRank = (ctx, role, rc) => {
+  const xs = ctx && ctx[role]; if (!xs || xs.length < 4 || rc == null) return null;
+  const worse = xs.filter((v) => v < rc - 0.5).length;   // ile drużyn ma słabiej
+  return { pos: xs.length - worse, n: xs.length };        // 1 = najlepsze w lidze
+};
+
+const HINT_COL = (k) => (k === "exploit" ? C.good : k === "threat" ? C.bad : C.steel);
+function HintList({ hints, size = 12 }) {
+  if (!hints || !hints.length) return null;
+  return (
+    <div style={{ display: "grid", gap: 4, marginTop: 6 }}>
+      {hints.map((h, i) => (
+        <div key={i} style={{ display: "flex", gap: 7, fontSize: size, lineHeight: 1.45, color: C.steelHi }}>
+          <span style={{ color: HINT_COL(h.k), flexShrink: 0 }}>{h.k === "threat" ? "!" : "→"}</span><span>{h.t}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+function LinkCards({ rec, team }) {
+  if (!rec || (!rec.weakLink && !rec.strongLink)) return null;
+  const Card = ({ l, kind }) => {
+    if (!l) return null;
+    const col = kind === "weak" ? C.good : C.bad;
+    const attrs = kind === "weak" ? l.lo : l.hi;
+    return (
+      <div className="rp-card" style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${col}`, borderRadius: 11, padding: "12px 14px" }}>
+        <div className="cond" style={{ fontSize: 10.5, letterSpacing: ".06em", color: col, fontWeight: 700 }}>{kind === "weak" ? "NAJSŁABSZE OGNIWO" : "NAJMOCNIEJSZE OGNIWO"}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: C.bone, margin: "3px 0 4px" }}>{l.label} <span className="disp" style={{ color: tierColor(l.rc), fontSize: 15 }}>RC {l.rc}</span></div>
+        <div style={{ fontSize: 12, color: C.steelHi, lineHeight: 1.5 }}>
+          {l.rank ? <>W lidze: <b>{l.rank.pos}. miejsce na {l.rank.n}</b> w tej roli. </> : null}
+          {attrs && attrs.length
+            ? <>Powód: {kind === "weak" ? "mało" : "dużo"} {attrs.map((a) => `„${a.l}" (${_zPct(a.z)}%)`).join(", ")}.</>
+            : <>Profil stylu zbliżony do średniej ligi — różnicę robi jakość (RC).</>}
+          {kind === "weak" ? " Naturalny kierunek naszej gry." : " Tu unikać strat i pojedynków 1v1."}
+        </div>
+      </div>
+    );
+  };
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10, margin: "4px 0 12px" }}>
+      <Card l={rec.weakLink} kind="weak" />
+      <Card l={rec.strongLink} kind="strong" />
+    </div>
+  );
+}
+
 // Rekomendacje pod KONKRETNEGO przeciwnika: profil rywala (an z computeTeamProfile)
 // przełożony na decyzje składowe Rakowa — wskazówki per strefa, konkretni zawodnicy,
 // dopasowania ról 1v1. TYLKO ODCZYT policzonych RC/stylu (nie dotyka modelu RC).
-function computeOpponentRecommendations(squad, an) {
+function computeOpponentRecommendations(squad, an, labelsFor, leagueCtx) {
   if (!an || !Array.isArray(squad) || !squad.length) return null;
+  const LF = labelsFor || (() => null);
   const byRole = {};
   squad.forEach((p) => { const k = roleKey(p); if (k) (byRole[k] = byRole[k] || []).push(p); });
   const realIn = (k) => (byRole[k] || []).filter((p) => !p.rc_estimated && Number.isFinite(Number(p.rc)));
@@ -2424,7 +2575,7 @@ function computeOpponentRecommendations(squad, an) {
     const ourLabel = ROLE_LABEL[m.oursRole] || m.oursRole;
     const oppLabel = ROLE_LABEL[m.oppRole] || m.oppRole;
     const players = bestIn(m.oursRole, 2);
-    const ls = styleByLine[m.line];
+    const ls = styleByLine[STYLE_OF_ROLE[m.oppRole]] || styleByLine[m.line];
     const lo = ls && ls.lo && ls.lo.length ? ls.lo.map((x) => x.l).join(", ") : "";
     const predHi = ls && ls.predict != null && ls.predict > 0.6 && ls.n >= 2;
     let kind, headline, why;
@@ -2432,7 +2583,7 @@ function computeOpponentRecommendations(squad, an) {
       kind = "atak";
       headline = `Obciążaj: ich ${oppLabel} (RC ${m.oppRC}) — nasze ${ourLabel} ma RC ${m.oursRC} (+${m.delta})`;
       why = `Przewaga ${m.delta} pkt RC w tym pojedynku${m.oppRole === weakRole ? " — to ich najsłabsze ogniwo" : ""}. Kieruj grę w tę strefę.`
-        + (lo ? ` W linii ${m.line} robią mało: „${lo}" — jest tam wolna przestrzeń.` : "")
+        + (lo ? ` W strefie „${(ls && ls.label) || m.line}" robią mało: „${lo}" — jest tam wolna przestrzeń.` : "")
         + (predHi ? ` Linia bardzo jednorodna (podob. ${Math.round(ls.predict * 100)}%) — styl przewidywalny.` : "");
     } else if (m.delta <= -4) {
       kind = "uwaga";
@@ -2443,8 +2594,44 @@ function computeOpponentRecommendations(squad, an) {
       headline = `Wyrównanie: nasze ${ourLabel} (RC ${m.oursRC}) vs ich ${oppLabel} (RC ${m.oppRC})`;
       why = `Różnica ${m.delta >= 0 ? "+" : ""}${m.delta} pkt RC — strefa neutralna, zdecydują detale i forma dnia.`;
     }
-    return { ...m, kind, ourLabel, oppLabel, players, headline, why };
+    // Konkretne wskazówki: słabe atrybuty TEJ roli rywala ↔ mocne atrybuty naszych w tej strefie.
+    const hints = [];
+    const rs = (an.roleStyle && an.roleStyle[m.oppRole]) || ls;
+    const ours = bestIn(m.oursRole, 3);
+    if (rs && Array.isArray(rs.all)) {
+      const theirLo = rs.all.filter((x) => x.z < -0.25).sort((a, b) => a.z - b.z).slice(0, 4);
+      const theirHi = rs.all.filter((x) => x.z > 0.4).sort((a, b) => b.z - a.z).slice(0, 4);
+      theirLo.forEach((w) => {
+        if (hints.filter((h) => h.k === "exploit").length >= 2) return;
+        const ex = EXPLOIT[w.l]; if (!ex) return;
+        let best = null;
+        ours.forEach((p) => ex[0].forEach((lab) => {
+          const z = _attrZ(p, lab, LF); if (z != null && z > 0.25 && (!best || z > best.z)) best = { p, lab, z };
+        }));
+        if (best) hints.push({ k: "exploit", t: `Ich ${oppLabel.toLowerCase()} słabo: „${w.l}" (${_pctS(w.z)} ligi) → ${best.p.name} mocny w „${best.lab}" (${_pctS(best.z)}) — ${ex[1]}.` });
+      });
+      theirHi.forEach((h) => {
+        if (hints.filter((x) => x.k === "threat").length >= 1) return;
+        const need = THREAT[h.l]; if (!need) return;
+        let worst = null;
+        ours.forEach((p) => need.forEach((lab) => {
+          const z = _attrZ(p, lab, LF); if (z != null && z < -0.25 && (!worst || z < worst.z)) worst = { p, lab, z };
+        }));
+        if (worst) hints.push({ k: "threat", t: `Uwaga: ich ${oppLabel.toLowerCase()} mocni w „${h.l}" (${_pctS(h.z)}), a ${worst.p.name} słabiej w „${worst.lab}" (${_pctS(worst.z)}) — asekuracja / podwojenie.` });
+      });
+      if (!hints.length && theirLo.length) hints.push({ k: "info", t: `Najsłabszy element ich roli „${oppLabel}": „${theirLo[0].l}" (${_pctS(theirLo[0].z)} ligi).` });
+    }
+    return { ...m, kind, ourLabel, oppLabel, players, headline, why, hints };
   });
+
+  // Najsłabsze / najmocniejsze ogniwo rywala z POWODEM i kontekstem ligi.
+  const linkOf = (r) => {
+    if (!r) return null;
+    const rs = an.roleStyle && an.roleStyle[r.role];
+    const lo = rs ? rs.all.filter((x) => x.z < -0.25).sort((a, b) => a.z - b.z).slice(0, 2) : [];
+    const hi = rs ? rs.all.filter((x) => x.z > 0.4).sort((a, b) => b.z - a.z).slice(0, 2) : [];
+    return { role: r.role, label: ROLE_LABEL[r.role] || r.role, rc: r.rc, n: r.n, lo, hi, rank: _leagueRank(leagueCtx, r.role, r.rc) };
+  };
 
   const byOurRole = {};
   recs.forEach((r) => { byOurRole[r.oursRole] = r; });
@@ -2453,6 +2640,7 @@ function computeOpponentRecommendations(squad, an) {
     attack: recs.filter((r) => r.kind === "atak"),
     caution: recs.filter((r) => r.kind === "uwaga"),
     matchups, byOurRole, hasData: recs.length > 0,
+    weakLink: linkOf(an.weakest), strongLink: linkOf(an.strongest),
   };
 }
 
@@ -2488,7 +2676,8 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
   const provisional = useMemo(() => players.length > 0 && players.every((p) => p.provisional), [players]);
 
   const an = useMemo(() => computeTeamProfile(players, labelsFor), [players]);
-  const rec = useMemo(() => computeOpponentRecommendations(data.squad, an), [data.squad, an]);
+  const leagueCtx = useMemo(() => computeLeagueRoleRC(pool.filter((p) => p.lg === BASE), teamOf), [pool, useNow]);
+  const rec = useMemo(() => computeOpponentRecommendations(data.squad, an, labelsFor, leagueCtx), [data.squad, an, leagueCtx]);
   // Realna wartość CAŁEGO składu z Transfermarktu (pipeline: fetch_team_values.py) — gdy jest, bije próbkę.
   const realVal = (data.meta && data.meta.team_values && data.meta.team_values[team]) || null;
 
@@ -2579,7 +2768,7 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
             {an.lineStyle.map((ls) => (
               <div key={ls.line} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "13px 15px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-                  <b style={{ fontSize: 13.5, color: C.bone }}>{ls.line}</b>
+                  <b style={{ fontSize: 13.5, color: C.bone }}>{ls.label || ls.line}</b>
                   {ls.predict != null && (
                     <span className="mono" style={{ fontSize: 10.5, color: ls.predict > 0.6 ? C.blueHi : C.steel }}>
                       przewid. {Math.round(ls.predict * 100)}%</span>
@@ -2619,6 +2808,7 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
               <div style={{ fontSize: 12.5, color: C.steel, marginBottom: 10, maxWidth: 820, lineHeight: 1.5 }}>
                 Profil rywala przełożony na decyzje składowe: gdzie mamy przewagę (obciążać), gdzie rywal jest mocniejszy (asekuracja) i kogo wystawić w danej strefie. Aktualizuje się z wyborem przeciwnika. To wsparcie z danych — decyzja zostaje przy trenerze.
               </div>
+              <div style={{ maxWidth: 820 }}><LinkCards rec={rec} team={team} /></div>
               <div style={{ display: "grid", gap: 10, maxWidth: 820 }}>
                 {[...rec.attack, ...rec.caution].map((r, i) => (
                   <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`,
@@ -2628,7 +2818,7 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
                         color: r.kind === "atak" ? C.good : C.warn, flexShrink: 0 }}>{r.kind === "atak" ? "Obciążaj" : "Uważaj"}</span>
                       <span style={{ fontSize: 14, fontWeight: 600, color: C.bone, lineHeight: 1.35 }}>{r.headline}</span>
                     </div>
-                    <div style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.55, marginBottom: r.players.length ? 9 : 0 }}>{r.why}</div>
+                    <div style={{ fontSize: 12.5, color: C.steelHi, lineHeight: 1.55, marginBottom: r.players.length ? 9 : 0 }}>{r.why}<HintList hints={r.hints} /></div>
                     {r.players.length > 0 && (
                       <div style={{ display: "flex", gap: 7, flexWrap: "wrap", alignItems: "center" }}>
                         <span style={{ fontSize: 11, color: C.steel }}>{r.kind === "atak" ? "Wystaw:" : "Zabezpiecz:"}</span>
@@ -2647,12 +2837,23 @@ function OpponentView({ data, oppTeam, setOppTeam }) {
                 {!rec.attack.length && !rec.caution.length && (
                   <Empty>Brak wyraźnych przewag/luk strefowych — pojedynki wyrównane (zob. dopasowania 1v1 niżej).</Empty>
                 )}
+                {rec.recs.filter((r) => r.kind === "rowno" && r.hints && r.hints.some((h) => h.k !== "info")).length > 0 && (
+                  <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, padding: "12px 15px" }}>
+                    <div className="cond" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".06em", color: C.warn, marginBottom: 4 }}>Strefy wyrównane — gdzie szukać detalu</div>
+                    {rec.recs.filter((r) => r.kind === "rowno" && r.hints && r.hints.some((h) => h.k !== "info")).map((r, i) => (
+                      <div key={i} style={{ marginTop: 6 }}>
+                        <div style={{ fontSize: 12.5, color: C.bone, fontWeight: 600 }}>{r.ourLabel} vs {r.oppLabel}</div>
+                        <HintList hints={r.hints.filter((h) => h.k !== "info")} />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div style={{ marginTop: 14, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", maxWidth: 820 }}>
                 <div className="cond" style={{ fontSize: 11, letterSpacing: ".05em", color: C.steel, fontWeight: 640, marginBottom: 12 }}>Dopasowania ról 1v1 — Raków vs {team}</div>
                 <div style={{ display: "grid", gap: 9 }}>
-                  {rec.matchups.map((m, i) => {
+                  {rec.recs.map((m, i) => {
                     const adv = m.delta >= 0, strong = Math.abs(m.delta) >= 4;
                     return (
                       <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 74px 1fr", alignItems: "center", gap: 12 }}>
@@ -2755,7 +2956,7 @@ function OpponentReportDoc({ team, an, nPlayers, generated }) {
           <tbody>
             {an.lineStyle.map((ls) => (
               <tr key={ls.line} style={{ borderTop: "1px solid #f0f0f0" }}>
-                <td style={{ padding: "4px 6px", fontWeight: 700 }}>{ls.line}</td>
+                <td style={{ padding: "4px 6px", fontWeight: 700 }}>{ls.label || ls.line}</td>
                 <td style={{ padding: "4px 6px" }}>{ls.hi.length ? ls.hi.map((h) => h.l).join(", ") : "—"}</td>
                 <td style={{ padding: "4px 6px" }}>{ls.lo.length ? ls.lo.map((h) => h.l).join(", ") : "—"}</td>
                 <td className="rp-muted" style={{ padding: "4px 6px" }}>{ls.predict != null ? `${Math.round(ls.predict * 100)}%` : "—"}</td>
@@ -2951,7 +3152,7 @@ function CompareView({ data }) {
   const aMap = rcMap(profA), bMap = rcMap(profB);
   const lineMap = (prof) => Object.fromEntries((prof ? prof.lineStyle : []).map((l) => [l.line, l]));
   const alA = lineMap(profA), alB = lineMap(profB);
-  const LINES = ["Bramka", "Obrona", "Pomoc", "Atak"];
+  const LINES = STYLE_ORDER;
   const cmp = (a, b) => (a == null || b == null) ? C.steel : (a > b ? C.good : a < b ? C.bad : C.steelHi);
 
   return (
@@ -3031,7 +3232,7 @@ function CompareView({ data }) {
                 {LINES.filter((ln) => lm[ln]).map((ln) => { const ls = lm[ln]; return (
                   <div key={ln} style={{ marginBottom: 8 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                      <b style={{ fontSize: 12, color: C.steelHi }}>{ln}</b>
+                      <b style={{ fontSize: 12, color: C.steelHi }}>{STYLE_GROUP_LABEL[ln] || ln}</b>
                       {ls.predict != null && <span className="mono" style={{ fontSize: 10, color: ls.predict > 0.6 ? C.blueHi : C.steel }}>przewid. {Math.round(ls.predict * 100)}%</span>}
                     </div>
                     {ls.hi.length ? <div style={{ fontSize: 11.5, color: C.steelHi }}><span style={{ color: C.good, fontWeight: 700 }}>dużo:</span> {ls.hi.map((h) => h.l).join(", ")}</div> : null}
@@ -4750,11 +4951,19 @@ function SquadProfileView({ data, fmt, setSel, setView }) {
   const ageMax = Math.max(1, ...ageDist.map((b) => b.n));
   const ageMinsTotal = ageDist.reduce((s, b) => s + b.mins, 0);
 
-  const ROLES = ["Bramka", "ŚO", "Boczny", "6-8", "Skrzydłowy", "10-9"];
-  const depth = ROLES.map((r) => {
-    const ps = squad.filter((p) => roleKey(p) === r);
+  // W 3-4-3 wahadłowi są w danych zapisani jako skrzydłowi (pozycja WM), więc osobna
+  // grupa „Boczny / wahadło" pokazywała 0. Łączymy obie w jedną — zgodnie z podziałem sztabu.
+  const DEPTH_GROUPS = [
+    { role: "Bramka", keys: ["Bramka"] },
+    { role: "ŚO", keys: ["ŚO"] },
+    { role: "Wahadła", label: "Wahadła / skrzydłowi", keys: ["Boczny", "Skrzydłowy"] },
+    { role: "6-8", keys: ["6-8"] },
+    { role: "10-9", keys: ["10-9"] },
+  ];
+  const depth = DEPTH_GROUPS.map((g) => {
+    const ps = squad.filter((p) => g.keys.includes(roleKey(p)));
     const realN = ps.filter((p) => !p.rc_estimated).length;
-    return { role: r, label: ROLE_LABEL[r] || r, n: ps.length, realN, thin: ps.length < 2 };
+    return { role: g.role, label: g.label || ROLE_LABEL[g.role] || g.role, n: ps.length, realN, thin: ps.length < 2 };
   });
 
   const withMin = squad.filter((p) => minOf(p) > 0).slice().sort((a, b) => minOf(b) - minOf(a));
@@ -5017,8 +5226,8 @@ function DigestView({ data, fmt, setSel, setView }) {
   const expiring = squad.filter((p) => p.contract && p.contract <= cur + 1).sort((a, b) => a.contract - b.contract);
   const okazje = useMemo(() => { try { return computeOkazje(data, { minLevel: 60 }).slice(0, 6); } catch { return []; } }, [data]);
   const flags = useMemo(() => { try { return computeRedFlags(data); } catch { return { players: [], counts: {} }; } }, [data]);
-  const ROLES = ["Bramka", "ŚO", "Boczny", "6-8", "Skrzydłowy", "10-9"];
-  const thin = ROLES.map((r) => ({ role: r, label: ROLE_LABEL[r] || r, n: squad.filter((p) => roleKey(p) === r).length })).filter((d) => d.n < 2);
+  const DG = [["Bramka", ["Bramka"]], ["ŚO", ["ŚO"]], ["Wahadła / skrzydłowi", ["Boczny", "Skrzydłowy"]], ["6-8", ["6-8"]], ["10-9", ["10-9"]]];
+  const thin = DG.map(([r, keys]) => ({ role: r, label: ROLE_LABEL[r] || r, n: squad.filter((p) => keys.includes(roleKey(p))).length })).filter((d) => d.n < 2);
   const sqVal = squad.reduce((s, p) => s + (Number(p.mv) || 0), 0);
   const ages = squad.map((p) => p.age).filter((a) => a > 0);
   const avgAge = ages.length ? (ages.reduce((s, a) => s + a, 0) / ages.length).toFixed(1) : "—";
@@ -5516,7 +5725,7 @@ function EvalView({ data, evaluator }) {
 // i wskazuje główne słabości w ataku i obronie. Wszystko z danych, które już mamy
 // (recent + squad.profile_pos + style_labels). Nie dotyka RC.
 const _DEF_RE = /obron|przechwyt|odbior|odbiór|powietrz|wybici|blok|odzysk|pressing|interwencj|gsaa/i;
-const _ATT_RE = /xg|xa|gol|strza|wykończ|wykoncz|pole karn|asyst|drybling|kluczow|xgchain|xgbuildup|wymuszone|do przodu|progresj|tercji ataku/i;
+const _ATT_RE = /xg|xa|gol|strza|wykończ|wykoncz|pole karn|asyst|drybling|kluczow|xgchain|xgbuildup|wymuszone|do przodu|progresj|tercji ataku|dośrodk|dosrodk|łamiąc|prostopadł|za plecy/i;
 function _phaseOf(label) {
   if (_DEF_RE.test(label)) return "def";   // obrona najpierw (np. „Bloki strzałów")
   if (_ATT_RE.test(label)) return "att";
@@ -5696,7 +5905,7 @@ function ProblemsView({ data }) {
   Object.keys(labs).forEach((line) => {
     const L = labs[line] || []; const d = L.length;
     const sz = new Array(d).fill(0), w = new Array(d).fill(0);
-    squad.filter((p) => p.line === line && !p.rc_estimated && Array.isArray(p.profile_pos) && p.profile_pos.length === d)
+    squad.filter((p) => styleKey(p) === line && !p.rc_estimated && Array.isArray(p.profile_pos) && p.profile_pos.length === d)
       .forEach((p) => {
         const mw = Math.max(1, Number(p.minutes_total) || 0);
         p.profile_pos.forEach((z, i) => { if (typeof z === "number") { sz[i] += z * mw; w[i] += mw; } });
@@ -5729,8 +5938,11 @@ function ProblemsView({ data }) {
 
   // --- Intuicyjne wskaźniki fazowe: średni z-score składowych → percentyl vs Ekstraklasa ---
   const gaugeZ = (specs) => {
-    const zs = [];
-    specs.forEach(([line, re]) => (lineAgg[line] || []).forEach((a) => { if (a.z != null && re.test(a.label)) zs.push(a.z); }));
+    const zs = [], seen = new Set();
+    specs.forEach(([line, re]) => (LEGACY_LINE_GROUPS[line] || [line]).forEach((g) => (lineAgg[g] || []).forEach((a) => {
+      const k = `${g}|${a.label}`;
+      if (a.z != null && re.test(a.label) && !seen.has(k)) { seen.add(k); zs.push(a.z); }
+    })));
     return zs.length ? zs.reduce((s, x) => s + x, 0) / zs.length : null;
   };
   const defGauges = [
@@ -5745,18 +5957,18 @@ function ProblemsView({ data }) {
     { name: "Panowanie nad środkiem: xGChain/Buildup, progresja", z: gaugeZ([["Pomoc", /xgchain|xgbuildup|progresj|prowadzen/i]]) },
   ].filter((g) => g.z != null);
 
-  // --- Najbardziej problematyczni zawodnicy per faza (realny profil, ≥300 min) ---
+  // --- Najbardziej problematyczni zawodnicy per faza (realny profil, ≥600 min — próg podniesiony na prośbę sztabu) ---
   const playerPhaseZ = (p, phase) => {
-    const L = labs[p.line]; if (!Array.isArray(p.profile_pos) || !L || p.profile_pos.length !== L.length) return null;
+    const L = labs[styleKey(p)]; if (!Array.isArray(p.profile_pos) || !L || p.profile_pos.length !== L.length) return null;
     const zs = []; p.profile_pos.forEach((z, i) => { if (typeof z === "number" && _phaseOf(L[i]) === phase) zs.push(z); });
     return zs.length ? zs.reduce((s, x) => s + x, 0) / zs.length : null;
   };
   const problemPlayers = (phase, roles) => squad
-    .filter((p) => !p.rc_estimated && Array.isArray(p.profile_pos) && roles.has(roleKey(p)) && (Number(p.minutes_total) || 0) >= 300)
+    .filter((p) => !p.rc_estimated && Array.isArray(p.profile_pos) && roles.has(roleKey(p)) && (Number(p.minutes_total) || 0) >= 600)
     .map((p) => ({ p, z: playerPhaseZ(p, phase) }))
     .filter((x) => x.z != null).sort((a, b) => a.z - b.z).slice(0, 3)
     .map((x) => {
-      const L = labs[x.p.line]; let worst = null;
+      const L = labs[styleKey(x.p)]; let worst = null;
       x.p.profile_pos.forEach((z, i) => { if (typeof z === "number" && _phaseOf(L[i]) === phase && (worst == null || z < worst.z)) worst = { label: L[i], z }; });
       return { ...x, worst };
     });
@@ -5856,8 +6068,8 @@ function ProblemsView({ data }) {
   const Problem = ({ a }) => (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 72px", alignItems: "center", gap: 10, padding: "7px 0", borderBottom: `1px solid ${C.line}` }}>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 12.5, color: C.bone, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.label}</div>
-        <div style={{ fontSize: 10, color: C.steel, marginTop: 1 }}>{LINE_SHORT[a.line] || a.line}</div>
+        <div style={{ fontSize: 12.5, color: C.bone, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", cursor: attrTitle(a.label) ? "help" : undefined }} title={attrTitle(a.label)}>{a.label}</div>
+        <div style={{ fontSize: 10, color: C.steel, marginTop: 1 }}>{LINE_SHORT[a.line] || (STYLE_GROUP_LABEL[a.line] || a.line).toLowerCase()}</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
         <div style={{ flex: 1, height: 5, background: C.panel2, borderRadius: 3, overflow: "hidden" }}>
@@ -6004,8 +6216,16 @@ function ProblemsView({ data }) {
               </div>
             </div>
             <div style={{ fontSize: 10.5, color: C.steel, marginTop: 8 }}>
-              Percentyl = pozycja Rakowa wśród zawodników Ekstraklasy dla składowych danego wskaźnika (minuto-ważony profil). 50% = średnia ligi; poniżej 45% (czerwone) = realna słabość.
+              Percentyl = pozycja Rakowa wśród zawodników Ekstraklasy dla składowych danego wskaźnika (minuto-ważony profil). 50% = średnia ligi; poniżej 45% (czerwone) = realna słabość. To <b>profil sezonowy</b> (cały sezon StatsBomb), nie forma z ostatnich meczów — np. „Zaangażowanie" opisuje, jak często drużyna pressuje i odzyskuje w sezonie, a nie w konkretnym spotkaniu.
             </div>
+            <details style={{ marginTop: 10, fontSize: 11.5, color: C.steelHi }}>
+              <summary style={{ cursor: "pointer", color: C.bone, fontWeight: 600 }}>Słowniczek atrybutów (co dokładnie mierzymy)</summary>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "6px 18px", marginTop: 8 }}>
+                {Object.entries(ATTR_DEF).map(([k, v]) => (
+                  <div key={k} style={{ lineHeight: 1.45 }}><b style={{ color: C.bone }}>{k}</b> — {v}</div>
+                ))}
+              </div>
+            </details>
           </div>
         );
       })()}
@@ -6057,7 +6277,7 @@ function ProblemsView({ data }) {
         );
         return (
           <div style={{ marginTop: 20 }}>
-            <SectionLabel>Najbardziej problematyczni zawodnicy (profil vs Ekstraklasa, ≥300 min)</SectionLabel>
+            <SectionLabel>Najbardziej problematyczni zawodnicy (profil vs Ekstraklasa, ≥600 min)</SectionLabel>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16 }}>
               <div>
                 <div className="mono" style={{ fontSize: 10.5, letterSpacing: 1.3, color: C.good, fontWeight: 700, marginBottom: 6 }}>W ATAKU</div>
@@ -6170,11 +6390,11 @@ function ProblemsView({ data }) {
 function WorkPlanView({ data }) {
   const squad = data.squad || [];
   const labs = (data.meta && data.meta.style_labels) || {};
-  const ORDER = ["Bramka", "Obrona", "Pomoc", "Atak"];
-  const LBL = { Bramka: "Bramkarze", Obrona: "Obrona", Pomoc: "Pomoc", Atak: "Atak" };
+  const ORDER = STYLE_ORDER;
+  const LBL = STYLE_GROUP_LABEL;
 
   const planOf = (p) => {
-    const L = labs[p.line];
+    const L = labs[styleKey(p)];
     if (!Array.isArray(p.profile_pos) || !L || p.profile_pos.length !== L.length) return null;
     const rows = [];
     p.profile_pos.forEach((z, i) => { if (typeof z === "number") rows.push({ label: L[i], z }); });
@@ -6190,7 +6410,7 @@ function WorkPlanView({ data }) {
     const pl = planOf(p);
     if (pl && !p.rc_estimated) withPlan.push({ p, pl }); else noData.push(p);
   });
-  const grouped = ORDER.map((ln) => ({ ln, items: withPlan.filter((x) => x.p.line === ln)
+  const grouped = ORDER.map((ln) => ({ ln, items: withPlan.filter((x) => styleKey(x.p) === ln)
     .sort((a, b) => (Number(b.p.minutes_total) || 0) - (Number(a.p.minutes_total) || 0)) })).filter((g) => g.items.length);
 
   if (!withPlan.length) return <Empty>Brak zawodników z pełnym profilem — plany pojawią się po zebraniu próbki meczowej.</Empty>;
@@ -6208,7 +6428,7 @@ function WorkPlanView({ data }) {
         {pl.weak.map((w) => (
           <div key={w.label}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-              <span style={{ fontSize: 12, color: C.bone }}>{w.label}</span>
+              <span style={{ fontSize: 12, color: C.bone, cursor: attrTitle(w.label) ? "help" : undefined }} title={attrTitle(w.label)}>{w.label}</span>
               <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: w.z < -0.15 ? C.bad : C.warn }}>{_zPct(w.z)}%</span>
             </div>
             <div style={{ fontSize: 10.5, color: C.steel, marginTop: 1, lineHeight: 1.35 }}>→ {_cue(w.label)}</div>
@@ -6343,13 +6563,21 @@ function MatchReportView({ data, fmt, setSel, setView }) {
   const oppPlayers = useMemo(() => {
     if (!M) return [];
     const pool = (data.pool || []).filter((p) => (p.lg || "").startsWith("Ekstraklasa"));
-    const teamOf = (p) => p.team_now || p.team;
+    // Ta sama logika co na zakładce Przeciwnik: gdy pula ma bieżące kluby (team_now),
+    // liczymy WYŁĄCZNIE po nich — inaczej do rywala wpadali zawodnicy, którzy już odeszli.
+    const useNow = pool.some((p) => p.team_now);
+    const teamOf = (p) => (useNow ? p.team_now : p.team);
     const tgt = foldT(M.opponent);
     return pool.filter((p) => { const t = foldT(teamOf(p)); return t && (t === tgt || t.includes(tgt) || tgt.includes(t)); });
   }, [M, data]);
 
   const oppProfile = useMemo(() => (oppPlayers.length >= 3 ? computeTeamProfile(oppPlayers, labelsFor) : null), [oppPlayers]);
-  const rec = useMemo(() => (oppProfile ? computeOpponentRecommendations(squad, oppProfile) : null), [oppProfile, squad]);
+  const leagueCtx = useMemo(() => {
+    const pool = (data.pool || []).filter((p) => (p.lg || "").startsWith("Ekstraklasa"));
+    const useNow = pool.some((p) => p.team_now);
+    return computeLeagueRoleRC(pool, (p) => (useNow ? p.team_now : p.team));
+  }, [data]);
+  const rec = useMemo(() => (oppProfile ? computeOpponentRecommendations(squad, oppProfile, labelsFor, leagueCtx) : null), [oppProfile, squad, leagueCtx]);
 
   // Nasze RC per rola (z p.rc, tylko realne — squad nie ma p.raw jak pula).
   const oursRCd = useMemo(() => {
@@ -6502,6 +6730,7 @@ function MatchReportView({ data, fmt, setSel, setView }) {
         <span className="mono rp-dim" style={{ fontSize: 11, color: C.steel, whiteSpace: "nowrap" }}>Δ {r.delta >= 0 ? "+" : ""}{r.delta}</span>
       </div>
       <div className="rp-dim" style={{ fontSize: 11.5, color: C.steel, lineHeight: 1.45, marginTop: 4 }}>{r.why}</div>
+      <HintList hints={r.hints} size={11.5} />
       {r.players && r.players.length > 0 && (
         <div className="rp-dim" style={{ fontSize: 11, color: C.steelHi, marginTop: 6 }}>
           Nasi: {r.players.map((p, i) => (
@@ -6576,7 +6805,7 @@ function MatchReportView({ data, fmt, setSel, setView }) {
       )}
 
       {scored.length > 0 && (
-        <Sec title="Analiza faz gry" note="Fazy modelowe (nie minutowe): każda liczona z RC ról, które w niej decydują — nasza wartość vs rywal. Przewaga od 4 pkt RC.">
+        <Sec title="Analiza faz gry — oczekiwany obraz z profili (przed meczem)" note="To nie jest zapis przebiegu meczu: fazy są modelowe, liczone z RC ról, które w danej fazie decydują — nasza wartość vs rywal, tak jak wyglądało to PRZED spotkaniem. Przewaga od 4 pkt RC.">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 10 }}>
             {phases.map((ph) => (
               <div key={ph.key} className="rp-card" style={{ padding: "12px 14px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 11, borderLeft: `3px solid ${edgeCol(ph.edge)}` }}>
@@ -6598,7 +6827,8 @@ function MatchReportView({ data, fmt, setSel, setView }) {
       )}
 
       {recsAll.length > 0 && (
-        <Sec title="Pojedynki ról — szczegółowo" note="Zestawienie 1v1 po rolach: nasza rola vs rola rywala, różnica RC i konkretni zawodnicy w strefie.">
+        <Sec title="Pojedynki ról — szczegółowo" note="Zestawienie 1v1 po rolach: nasza rola vs rola rywala, różnica RC, konkretni zawodnicy w strefie i wskazówki z profili (słabość rywala ↔ nasza mocna strona). Procent = pozycja vs zawodnicy tej samej grupy w Ekstraklasie.">
+          <LinkCards rec={rec} />
           {advs.length > 0 && <div style={{ fontSize: 11.5, color: C.good, fontWeight: 700, margin: "4px 0 6px" }}>Przewagi</div>}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 9 }}>
             {advs.map((r, i) => <RoleRow key={`a${i}`} r={r} />)}
