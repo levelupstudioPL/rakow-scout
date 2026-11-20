@@ -373,7 +373,9 @@ def _squad_entry(name, sb_row, pos, line, rc, est, universal_stats, pos_style_st
         "height": _height_cm(sb_row),
         "foot": None,
         "profile": coh.style_profile(sb_row, universal_stats) if sb_row else None,
-        "profile_pos": coh.pos_style_profile(sb_row, line, pos_style_stats[line]) if sb_row else None,
+        "sline": coh.style_group(coh.role_of(pos, line)),
+        "profile_pos": coh.pos_style_profile(sb_row, coh.style_group(coh.role_of(pos, line)),
+                                             pos_style_stats[coh.style_group(coh.role_of(pos, line))]) if sb_row else None,
         "_sb": sb_row,
         "_bd": (sb_row.get("birth_date") or "")[:10]
                if sb_row and isinstance(sb_row.get("birth_date"), str) else "",
@@ -559,7 +561,8 @@ def _apply_historical_fallback(sb, creds, squad, base_stats_by_role,
             e["rc_source"] = "historical"
             e["rc_season"] = label
             e["profile"] = coh.style_profile(row, universal_stats)
-            e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
+            e["sline"] = coh.style_group(role)
+            e["profile_pos"] = coh.pos_style_profile(row, e["sline"], pos_style_stats[e["sline"]])
             e["_sb"] = row          # staje się też referencją koherencji dla puli
             e["alt_pos"] = _alt_positions(row, e.get("alt_pos"), e["pos"])
             recovered += 1
@@ -620,7 +623,8 @@ def _apply_other_league_fallback(squad, league_rows, base_name, base_stats_by_ro
         e["rc_source"] = "other_league"
         e["rc_league"] = lg_label
         e["profile"] = coh.style_profile(row, universal_stats)
-        e["profile_pos"] = coh.pos_style_profile(row, line, pos_style_stats[line])
+        e["sline"] = coh.style_group(role)
+        e["profile_pos"] = coh.pos_style_profile(row, e["sline"], pos_style_stats[e["sline"]])
         e["_sb"] = row
         e["alt_pos"] = _alt_positions(row, e.get("alt_pos"), pos)
         recovered += 1
@@ -817,6 +821,7 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
             "rk_id": team_ext,
         })
         side = (m.get("homeTeamPlayers") if rk_home else m.get("awayTeamPlayers")) or []
+        pm_list = []   # zawodnicy TEGO meczu — do okna ostatnich meczów i suwaka na froncie
         for p in side:
             nm = f"{p.get('firstName','')} {p.get('lastName','')}".strip()
             if not _is_valid_name(nm):
@@ -827,15 +832,22 @@ def _fetch_recent_scoutastic(squad, n_matches=5):
                 "goals": 0.0, "assists": 0.0})
             mins = p.get("minutesPlayed")
             mins = float(mins) if isinstance(mins, (int, float)) else 0.0
+            started = bool(p.get("inLineup")) or mins >= 60
             if mins > 0:
                 agg["matches_played"] += 1
                 agg["minutes"] += mins
-                if p.get("inLineup") or mins >= 60:
+                if started:
                     agg["starts"] += 1
+            g_a = {}
             for k in ("goals", "assists"):
                 v = p.get(k)
                 if isinstance(v, (int, float)):
                     agg[k] += float(v)
+                    g_a[k] = float(v)
+            if mins > 0:
+                pm_list.append({"k": key, "name": nm, "min": round(mins, 1), "st": 1 if started else 0,
+                                "g": g_a.get("goals", 0.0), "a": g_a.get("assists", 0.0)})
+        matches_out[-1]["players"] = pm_list
  
     minutes_available = float(len(matches_out) * 90) or 90.0
     players_out = []
@@ -938,6 +950,8 @@ def _statsbomb_cup_recent(sb, creds, squad):
                     pms = sb.player_match_stats(m.get("match_id"), creds=creds).to_dict("records")
                 except Exception:  # noqa: BLE001
                     pms = []
+                pm_list = []   # zawodnicy TEGO meczu (do okna ostatnich meczów)
+                matches_out[-1]["players"] = pm_list
                 for pr in pms:
                     if not _is_rakow_name(str(pr.get("team_name") or pr.get("team") or "")):
                         continue
@@ -954,12 +968,16 @@ def _statsbomb_cup_recent(sb, creds, squad):
                         except (TypeError, ValueError):
                             return 0.0
                     mins = _num(_first_col(pr, RECENT_STAT_COLS["minutes"]))
+                    g = _num(_first_col(pr, RECENT_STAT_COLS["goals"]))
+                    ast = _num(_first_col(pr, RECENT_STAT_COLS["assists"]))
                     if mins > 0:
                         a["matches_played"] += 1; a["minutes"] += mins
                         if mins >= 60:
                             a["starts"] += 1
-                    a["goals"] += _num(_first_col(pr, RECENT_STAT_COLS["goals"]))
-                    a["assists"] += _num(_first_col(pr, RECENT_STAT_COLS["assists"]))
+                        pm_list.append({"k": key, "name": pname, "min": round(mins, 1),
+                                        "st": 1 if mins >= 60 else 0, "g": g, "a": ast})
+                    a["goals"] += g
+                    a["assists"] += ast
     if not matches_out:
         print("[mecze] StatsBomb puchary: brak rozegranych meczów Rakowa w LK/kwalifikacjach.", file=sys.stderr)
         return None
@@ -1261,7 +1279,8 @@ def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_sta
         s["rc"] = rc
         s["_sb"] = combined  # profil/koherencja z połączonej próby
         s["profile"] = coh.style_profile(combined, universal_stats)
-        s["profile_pos"] = coh.pos_style_profile(combined, s["line"], pos_style_stats[s["line"]])
+        s["sline"] = coh.style_group(role)
+        s["profile_pos"] = coh.pos_style_profile(combined, s["sline"], pos_style_stats[s["sline"]])
         s["cup_counted"] = cup_min > 0
         if total_min >= MIN_MINUTES:
             s["rc_estimated"], s["rc_partial"], s["data_tier"] = False, False, "full"
@@ -1279,23 +1298,73 @@ def _augment_squad_with_cups(sb, creds, squad, base_stats_by_role, universal_sta
     return improved
 
 
-def _merge_cup_into_recent(base, cup, squad, cap=12):
-    """Wmerguj mecze pucharowe (StatsBomb) w wynik recent (Scoutastic-liga). In-place."""
-    if not cup:
-        return base
-    cup_matches, cup_players = cup
+def _season_start_of(matches):
+    """Początek bieżącego sezonu (1 lipca) z daty najnowszego meczu ligowego."""
+    dates = sorted(str(m.get("date") or "") for m in matches if m.get("date"))
+    if not dates:
+        return ""
+    y, mth = int(dates[-1][:4]), int(dates[-1][5:7])
+    return f"{y if mth >= 7 else y - 1}-07-01"
+
+
+def _merge_cup_into_recent(base, cup, squad, cap=None):
+    """Okno „ostatnich meczów": liga + puchary z BIEŻĄCEGO sezonu, chronologicznie,
+    ostatnie `cap` (env RECENT_WINDOW, domyślnie 12). Statystyki zawodników liczone
+    WYŁĄCZNIE z meczów w oknie (per mecz). Cały sezon z per-meczowymi zawodnikami
+    trafia do `season_matches` (pod suwak na froncie). In-place."""
+    if cap is None:
+        cap = int(os.getenv("RECENT_WINDOW", "12") or 12)
+    cup_matches = list(cup[0]) if cup else []
     squad_by_norm = {_norm_ascii(s.get("name", "")): s for s in squad}
-    # 1) mecze: liga + puchary, dedupe po (data, przeciwnik), sort po dacie, cap
-    seen, combined = set(), []
-    for m in (base.get("matches", []) + cup_matches):
+    league = list(base.get("matches", []))
+    season_start = os.getenv("RECENT_SEASON_START") or _season_start_of(league or cup_matches)
+    # Puchar z poprzedniego sezonu (np. Fiorentina z marca) NIE wchodzi do okna bieżącego.
+    cur_cup = [m for m in cup_matches if not season_start or str(m.get("date") or "") >= season_start]
+    # 1) cały sezon: liga + puchar, dedupe po (data, przeciwnik), sort po dacie
+    seen, season_all = set(), []
+    for m in (league + cur_cup):
         k = (m.get("date"), _norm_ascii(str(m.get("opponent") or "")))
         if k in seen:
             continue
-        seen.add(k); combined.append(m)
-    combined.sort(key=lambda m: m.get("date") or "")
-    combined = combined[-cap:]
-    base["matches"] = combined
+        seen.add(k); season_all.append(m)
+    season_all.sort(key=lambda m: m.get("date") or "")
+    combined = season_all[-cap:]
+    per_match_ok = all(isinstance(m.get("players"), list) for m in combined)
+    # Mecze do UI bez listy zawodników (lżejszy JSON); pełne dane per mecz w season_matches.
+    base["matches"] = [{k: v for k, v in m.items() if k != "players"} for m in combined]
+    base["season_matches"] = [
+        {"date": m.get("date"), "opponent": m.get("opponent"), "home": m.get("home"),
+         "gf": m.get("gf"), "ga": m.get("ga"), "result": m.get("result"),
+         "comp": m.get("comp"), "cup": bool(m.get("cup")), "opp_id": m.get("opp_id", ""),
+         "players": [{"name": p["name"], "min": p["min"], "st": p["st"], "g": p["g"], "a": p["a"]}
+                     for p in (m.get("players") or [])]}
+        for m in season_all]
+    base["season_start"] = season_start
     base["n_matches"] = len(combined)
+    if per_match_ok:
+        # Zawodnicy WYŁĄCZNIE z meczów w oknie (wcześniej: liga z okna + puchar z całej historii).
+        agg = {}
+        for m in combined:
+            for p in m.get("players") or []:
+                a = agg.setdefault(p["k"], {"name": p["name"], "minutes": 0.0, "matches_played": 0,
+                                            "starts": 0, "goals": 0.0, "assists": 0.0})
+                a["minutes"] += p["min"]; a["matches_played"] += 1; a["starts"] += p["st"]
+                a["goals"] += p["g"]; a["assists"] += p["a"]
+        players = []
+        for key, a in agg.items():
+            s = squad_by_norm.get(key)
+            players.append({
+                "name": a["name"], "id": s.get("id") if s else None,
+                "pos": s.get("pos") if s else None, "line": s.get("line") if s else None,
+                "role": s.get("role") if s else None, "rc": s.get("rc") if s else None,
+                "rc_estimated": s.get("rc_estimated") if s else None, "in_squad": s is not None,
+                "minutes": round(a["minutes"], 1), "matches_played": a["matches_played"],
+                "starts": a["starts"], "share": 0.0,
+                "stats": {"goals": a["goals"], "assists": a["assists"]}})
+        base["players"] = players
+        cup_players = {}   # już policzone per mecz — nie doliczamy ponownie
+    else:
+        cup_players = cup[1] if cup else {}
     # 2) bilans drużyny z wyświetlanych meczów
     gf = ga = pts = 0; form = []
     for m in combined:
@@ -1330,8 +1399,15 @@ def _merge_cup_into_recent(base, cup, squad, cap=12):
         base["newest_date"] = combined[-1].get("date")
     base["available"] = bool(base.get("matches")) and bool(base.get("players"))
     # Pełna historia europejska (wszystkie mecze pucharowe, bez cap-a okna) — osobny blok w UI.
-    base["cup_history"] = sorted(cup_matches, key=lambda m: m.get("date") or "", reverse=True)
-    base["note"] = (base.get("note", "") + " Doliczono mecze pucharowe (Liga Konferencji + eliminacje, StatsBomb).").strip()
+    base["cup_history"] = sorted(({k: v for k, v in m.items() if k != "players"} for m in cup_matches),
+                                 key=lambda m: m.get("date") or "", reverse=True)
+    if cup_matches:
+        base["note"] = (base.get("note", "") + " Okno: ostatnie mecze bieżącego sezonu (liga + "
+                        "Liga Konferencji/eliminacje), minuty tylko z meczów w oknie.").strip()
+    print(f"[mecze] Okno ostatnich meczów: {len(combined)} z {len(season_all)} w sezonie "
+          f"(od {season_start}; puchar bieżący: {len(cur_cup)}, pominięte starsze: "
+          f"{len(cup_matches) - len(cur_cup)}). Zawodników: {len(base.get('players', []))}.",
+          file=sys.stderr)
     return base
 
 
@@ -1477,7 +1553,8 @@ def _supplement_provisional_teams(sb, creds, pool, rostermap, crests,
             "age": _age(r.get("birth_date")), "mv": 0.0, "contract": 0,
             "height": _height_cm(r), "foot": None,
             "profile": coh.style_profile(r, universal_stats),
-            "profile_pos": coh.pos_style_profile(r, line, pos_style_stats[line]),
+            "sline": coh.style_group(role),
+            "profile_pos": coh.pos_style_profile(r, coh.style_group(role), pos_style_stats[coh.style_group(role)]),
         })
         added[tn] += 1
         existing.add(f"pl-{pid}")
@@ -1554,9 +1631,11 @@ def _fetch_recent_matches(sb, creds, squad, n_matches=5):
 
     source = os.getenv("RECENT_SOURCE", "scoutastic").lower()
     if source == "scoutastic":
-        out = _fetch_recent_scoutastic(squad, n_matches=n_matches)
+        # Cały bieżący sezon ligowy — okno „ostatnich N" tnie dopiero _merge_cup_into_recent,
+        # RAZEM z pucharami, chronologicznie (wcześniej: 5 ligowych + WSZYSTKIE pucharowe).
+        out = _fetch_recent_scoutastic(squad, n_matches=500)
         if out.get("available"):
-            return _merge_cup_into_recent(out, cup, squad) if cup else out
+            return _merge_cup_into_recent(out, cup, squad)
         print(f"[mecze] Scoutastic niedostępne ({out.get('reason')}) — "
               f"fallback do StatsBomb.", file=sys.stderr)
     sb_out = _fetch_recent_statsbomb(sb, creds, squad, n_matches=n_matches)
@@ -2157,13 +2236,17 @@ def build_dataset(sb, creds):
     # Profil DOPASOWANY DO POZYCJI (panel „mocne strony"): populacja bazowa podzielona
     # wg 4 LINII TAKTYCZNYCH (kontrakt frontu: meta.style_labels[line] + profile_pos).
     # To jest oś WYŚWIETLANIA — celowo pozostaje 4-liniowa, niezależnie od ról modelu.
-    LINES = ("Bramka", "Obrona", "Pomoc", "Atak")
+    # Od 11.2026: populacja dzielona wg 5 GRUP RÓL (Bramka/ŚO/Wahadła/6-8/10-9) zamiast
+    # 4 linii — klucz profilu to player.sline (front: meta.style_labels[sline || line]).
+    LINES = coh.STYLE_GROUPS
     base_pop_by_line = {ln: [] for ln in LINES}
     for r in base_pop:
         _mp = POS_TO_LINE.get(r.get("primary_position") or r.get("position"))
         if _mp:
-            base_pop_by_line[_mp[1]].append(r)
+            base_pop_by_line[coh.style_group(coh.role_of(_mp[0], _mp[1]))].append(r)
     pos_style_stats = {ln: coh.build_pos_style_stats(base_pop_by_line[ln], ln) for ln in LINES}
+    print("[profil stylu] Populacja grup: " + ", ".join(f"{ln}={len(base_pop_by_line[ln])}" for ln in LINES),
+          file=sys.stderr)
  
     # --- Handicapy lig (bez zmian, realna metoda) ---
     leagues = []
@@ -2363,7 +2446,8 @@ def build_dataset(sb, creds):
                 # Profile stylu: uniwersalny (cross-position) + dopasowany do
                 # pozycji (bogatszy) — pod „w czym kandydat lepszy od naszego".
                 "profile": coh.style_profile(row, universal_stats),
-                "profile_pos": coh.pos_style_profile(row, line, pos_style_stats[line]),
+                "sline": coh.style_group(role),
+                "profile_pos": coh.pos_style_profile(row, coh.style_group(role), pos_style_stats[coh.style_group(role)]),
             })
  
     if _pool_cup_added:
@@ -2559,6 +2643,12 @@ def build_dataset(sb, creds):
     except Exception as e:  # noqa: BLE001
         print(f"[przeciwnik] Diagnostyka drużyn pominięta: {e}", file=sys.stderr)
 
+    # Grupa profilu stylu dla KAŻDEGO wpisu (także bez profilu) — front grupuje po
+    # sline (fallback: line). Nie nadpisujemy już ustawionej przy liczeniu profile_pos.
+    for _e in list(squad) + list(pool):
+        if isinstance(_e, dict) and not _e.get("sline"):
+            _e["sline"] = coh.style_group(_e.get("role") or coh.role_of(_e.get("pos"), _e.get("line")))
+
     return {
         "meta": {
             "source": "statsbomb+kaggle-values",
@@ -2569,7 +2659,8 @@ def build_dataset(sb, creds):
                      "pasujących wg modelu (koherencja >= 70%). Dane: StatsBomb + Transfermarkt."),
             # Etykiety atrybutów profilu pozycyjnego (profile_pos) — front czyta
             # je stąd, żeby nie powielać listy. Kolejność == wektor profile_pos.
-            "style_labels": {ln: coh.pos_style_labels(ln) for ln in ("Bramka", "Obrona", "Pomoc", "Atak")},
+            "style_labels": {ln: coh.pos_style_labels(ln) for ln in coh.STYLE_GROUPS},
+            "style_groups": list(coh.STYLE_GROUPS),
             "price_calibration": price_calibration,
             # Herby klubów Ekstraklasy (nazwa aktualnego klubu -> id Transfermarkt) do modułu „Przeciwnik".
             "ekstra_crests": _ekstra_crests,

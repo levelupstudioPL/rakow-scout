@@ -688,6 +688,104 @@ POS_STYLE = {
 }
  
  
+# ---------------------------------------------------------------------
+#  PROFIL STYLU PER GRUPA RÓL (od 11.2026, uwagi sztabu „BLIŹNIAK")
+#  Wcześniej profil liczony był per LINIA, więc np. Makuch (rola 10-9, pozycja AM)
+#  dostawał atrybuty pomocnika (odbiory, pressing), a skrzydłowi/wahadłowi nie mieli
+#  dośrodkowań ani biegów za plecy. Teraz 5 grup zgodnych z podziałem sztabu:
+#  Bramka / ŚO / Wahadła (boczni + skrzydłowi) / 6-8 / 10-9. Z-score liczony względem
+#  zawodników TEJ SAMEJ GRUPY w Ekstraklasie. Dotyczy WYŁĄCZNIE profilu wyświetlania
+#  (profile_pos) — RC i koherencja bez zmian. Pressing w wersji PAdj (skorygowany
+#  o posiadanie), żeby drużyny długo przy piłce nie wyglądały na „mało pressujące".
+# ---------------------------------------------------------------------
+STYLE_GROUP_OF_ROLE = {
+    "Bramka": "Bramka", "ŚO": "ŚO", "Boczny": "Wahadła", "Skrzydłowy": "Wahadła",
+    "6-8": "6-8", "10-9": "10-9",
+}
+STYLE_GROUPS = ("Bramka", "ŚO", "Wahadła", "6-8", "10-9")
+
+
+def style_group(role):
+    """Grupa profilu stylu (oś wyświetlania) z roli modelu."""
+    return STYLE_GROUP_OF_ROLE.get(role, "6-8")
+
+
+POS_STYLE["ŚO"] = [
+    ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
+    ("player_season_challenge_ratio", "Skuteczność odbioru"),
+    ("player_season_aerial_wins_90", "Pojedynki powietrzne"),
+    ("player_season_aerial_ratio", "Skuteczność w powietrzu"),
+    ("player_season_padj_clearances_90", "Wybicia (PAdj)"),
+    ("player_season_blocks_per_shot", "Bloki strzałów"),
+    ("player_season_ball_recoveries_90", "Odzyski piłki"),
+    ("player_season_padj_pressures_90", "Pressing (PAdj)"),
+    ("player_season_op_passes_90", "Podania (wolumen)"),
+    ("player_season_passing_ratio", "Celność podań"),
+    ("player_season_pressured_passing_ratio", "Celność podań pod presją"),
+    ("player_season_lbp_90", "Podania łamiące linie"),
+    ("player_season_deep_progressions_90", "Progresja piłki"),
+    ("player_season_carries_90", "Prowadzenia piłki"),
+    ("player_season_obv_90", "Wartość działań (OBV)"),
+] + _PHYS_LABELED
+POS_STYLE["Wahadła"] = [
+    ("player_season_crosses_90", "Dośrodkowania"),
+    ("player_season_crossing_ratio", "Celność dośrodkowań"),
+    ("player_season_xa_90", "Asysty oczekiwane (xA)"),
+    ("player_season_key_passes_90", "Podania kluczowe"),
+    ("player_season_passes_into_box_90", "Podania w pole karne"),
+    ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
+    ("player_season_dribbles_90", "Drybling"),
+    ("player_season_dribble_ratio", "Skuteczność dryblingu"),
+    ("player_season_carries_90", "Prowadzenia piłki"),
+    ("player_season_deep_progressions_90", "Progresja piłki"),
+    ("runtype_run_in_behind", "Biegi za plecy obrony"),
+    ("player_season_np_xg_90", "Groźność pod bramką (xG)"),
+    ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
+    ("player_season_padj_pressures_90", "Pressing (PAdj)"),
+    ("player_season_ball_recoveries_90", "Odzyski piłki"),
+    ("player_season_obv_90", "Wartość działań (OBV)"),
+] + _PHYS_LABELED
+POS_STYLE["6-8"] = [
+    ("player_season_op_xgchain_90", "Udział w akcjach (xGChain)"),
+    ("player_season_op_xgbuildup_90", "Budowanie akcji (xGBuildup)"),
+    ("player_season_op_passes_90", "Podania (wolumen)"),
+    ("player_season_passing_ratio", "Celność podań"),
+    ("player_season_pressured_passing_ratio", "Celność podań pod presją"),
+    ("player_season_forward_pass_proportion", "Podania do przodu"),
+    ("player_season_lbp_90", "Podania łamiące linie"),
+    ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
+    ("player_season_deep_progressions_90", "Progresja piłki"),
+    ("player_season_key_passes_90", "Podania kluczowe"),
+    ("player_season_xa_90", "Asysty oczekiwane (xA)"),
+    ("player_season_carries_90", "Prowadzenia piłki"),
+    ("player_season_padj_tackles_and_interceptions_90", "Odbiory i przechwyty"),
+    ("player_season_padj_pressures_90", "Pressing (PAdj)"),
+    ("player_season_counterpressures_90", "Kontrpressing"),
+    ("player_season_ball_recoveries_90", "Odzyski piłki"),
+    ("player_season_obv_90", "Wartość działań (OBV)"),
+] + _PHYS_LABELED
+POS_STYLE["10-9"] = [
+    ("player_season_np_xg_90", "Groźność pod bramką (xG)"),
+    ("player_season_npg_90", "Gole (bez karnych)"),
+    ("player_season_np_shots_90", "Strzały"),
+    ("player_season_np_xg_per_shot", "Jakość strzałów (xG/strzał)"),
+    ("player_season_conversion_ratio", "Skuteczność wykończenia"),
+    ("player_season_touches_inside_box_90", "Kontakty w polu karnym"),
+    ("player_season_xa_90", "Asysty oczekiwane (xA)"),
+    ("player_season_key_passes_90", "Podania kluczowe"),
+    ("player_season_through_balls_90", "Podania prostopadłe"),
+    ("player_season_op_f3_passes_90", "Podania w tercji ataku"),
+    ("player_season_dribbles_90", "Drybling"),
+    ("player_season_dribble_ratio", "Skuteczność dryblingu"),
+    ("runtype_run_in_behind", "Biegi za plecy obrony"),
+    ("player_season_aerial_wins_90", "Pojedynki powietrzne"),
+    ("player_season_fouls_won_90", "Wymuszone faule"),
+    ("player_season_fhalf_pressures_90", "Pressing na połowie rywala"),
+    ("player_season_op_xgchain_90", "Udział w akcjach (xGChain)"),
+    ("player_season_obv_90", "Wartość działań (OBV)"),
+] + _PHYS_LABELED
+
+
 def pos_style_labels(line):
     """Etykiety (po polsku) profilu pozycyjnego — do meta.style_labels."""
     return [lab for _, lab in POS_STYLE.get(line, [])]
