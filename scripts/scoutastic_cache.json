@@ -36470,5 +36470,117 @@
   "contract": 2028,
   "age": 19,
   "foot": "prawa"
+ },
+ "227012": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 34,
+  "foot": "prawa"
+ },
+ "21442": {
+  "mv": 0.75,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "576550": {
+  "mv": 0.03,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 20,
+  "foot": "lewa"
+ },
+ "480659": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 26,
+  "foot": null
+ },
+ "391828": {
+  "mv": 0.35,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 25,
+  "foot": "prawa"
+ },
+ "544595": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 0,
+  "age": 27,
+  "foot": "lewa"
+ },
+ "58704": {
+  "mv": 0.1,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 29,
+  "foot": "prawa"
+ },
+ "133778": {
+  "mv": 0.6,
+  "peak": 0.0,
+  "contract": 2030,
+  "age": 22,
+  "foot": "prawa"
+ },
+ "169242": {
+  "mv": 0.25,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 24,
+  "foot": "prawa"
+ },
+ "89876": {
+  "mv": 0.15,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 26,
+  "foot": "prawa"
+ },
+ "31360": {
+  "mv": 0.4,
+  "peak": 0.0,
+  "contract": 2027,
+  "age": 32,
+  "foot": "prawa"
+ },
+ "472761": {
+  "mv": 0.6,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 21,
+  "foot": "prawa"
+ },
+ "228155": {
+  "mv": 0.8,
+  "peak": 0.0,
+  "contract": 0,
+  "age": 31,
+  "foot": "prawa"
+ },
+ "396396": {
+  "mv": 0.3,
+  "peak": 0.0,
+  "contract": 2028,
+  "age": 27,
+  "foot": "prawa"
+ },
+ "29928": {
+  "mv": 0.5,
+  "peak": 0.0,
+  "contract": 2026,
+  "age": 34,
+  "foot": "prawa"
+ },
+ "416317": {
+  "mv": 0.85,
+  "peak": 0.0,
+  "contract": 2029,
+  "age": 22,
+  "foot": "prawa"
  }
 }
